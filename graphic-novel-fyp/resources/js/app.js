@@ -5,6 +5,7 @@ import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
+import { InertiaProgress } from '@inertiajs/progress';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
@@ -17,7 +18,11 @@ createInertiaApp({
             .use(ZiggyVue, Ziggy)
             .mount(el);
     },
+    // This will now include a progress bar at the top of the page
+    // You can customize it in several ways
     progress: {
         color: '#4B5563',
+        showSpinner: true
     },
 });
+

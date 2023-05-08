@@ -19,13 +19,47 @@ use Inertia\Inertia;
 Route::get('/', function () {
     // Instead of returning Blade view, you're returning client-side view
     // The base directory is assumed to be resources/js/Pages
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+
+    // When propping, make sure to accept it in the vue component
+    return Inertia::render(
+        'Welcome',
+        [
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            'laravelVersion' => Application::VERSION,
+            'phpVersion' => PHP_VERSION,
+            'name' => 'John Doe',
+            'frameworks' => [
+                'Laravel',
+                'React',
+                'Vue',
+                'Angular',
+                'Tailwind'
+            ],
+        ]
+    );
+});
+
+// TEST ROUTES ////////////////////////
+
+Route::get('/users', function () {
+    // sleep(2);
+    return Inertia::render('Users', [
+        'time' => now()->toTimeString(),
     ]);
 });
+
+Route::get('/home', function () {
+    return Inertia::render('Home');
+});
+
+Route::post('/testpost', function () {
+    // dd('Testing post request...');
+    dd(request()->all());
+    // dump(request('foo'));
+});
+
+//////////////////////////////////////
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -37,4 +71,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

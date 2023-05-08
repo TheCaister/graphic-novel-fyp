@@ -16,11 +16,25 @@ defineProps({
         type: String,
         required: true,
     },
-});
+    name: {
+        type: String,
+    },
+    frameworks: {
+        type: Array,
+    },
+    }
+);
 </script>
 
 <template>
     <Head title="Welcome" />
+
+    <!-- Vue for -->
+    <div>
+        <ul>
+            <li v-for="framework of frameworks" v-text="framework"></li>
+        </ul>
+    </div>
 
     <div
         class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white"
