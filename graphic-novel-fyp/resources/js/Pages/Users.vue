@@ -1,7 +1,7 @@
 <template>
     <h1>Users let's go!!</h1>
 
-    <Layout></Layout>
+    <!-- <Layout></Layout> -->
 
     <div style="margin: 400px;">
         <p>The current time is {{ time }}.</p>
@@ -18,11 +18,27 @@ import { Link } from '@inertiajs/vue3';
 
 export default {
     components: {
-        Layout, Link,
+        Link,
     },
 
     props: {
         time: String,
 
-    }}
+    },
+    layout: Layout
+
+}
+
 </script>
+
+<!-- If you use script setup, imported components will automatically be registered -->
+<!-- <script setup>
+    import {Layout} from '../Shared/Layout.vue';
+
+import { Link } from '@inertiajs/vue3';
+
+// You can also define props like this
+defineProps({
+    time: String,
+})
+</script> -->
