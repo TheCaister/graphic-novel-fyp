@@ -5,13 +5,41 @@ import { createApp, h } from 'vue';
 import { Link, createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
-import { InertiaProgress } from '@inertiajs/progress';
+import Layout from './Shared/Layout.vue';
+
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
+    // resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
+    // Dynamic import
+    // resolve: name => {
+    //     // Dynamic imports return a promise
+    //     // import('./Pages/${}');
+
+    //     // Grabbing the default component from the page
+    //     let page = require(`./Pages/${name}`).default;
+
+    //     page.layout = Layout;
+    // },
+
+    // By awaiting, you can dynamically import pages in the case of large applications where a 
+    // single bundle is not ideal. This will allow you to code split your pages into separate bundles.
+    // Some pages might have their own dependencies?
+    resolve: async (name) => {
+        // Using the glob function, code splitting/lazy loading is enabled. Just omit the eager: true option.
+        const page = await resolvePageComponent(
+          `./Pages/${name}.vue`,
+          import.meta.glob("./Pages/**/*.vue")
+        );
+        // page.then((module) => {
+        //   module.default.layout = module.default.layout || Layout;
+        // });
+
+        page.default.layout ??= Layout;
+        return page;
+      },
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })
             .use(plugin)
