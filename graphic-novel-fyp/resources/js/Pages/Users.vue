@@ -3,6 +3,11 @@
 
     <!-- <Layout></Layout> -->
 
+    <ul>
+        <!-- Good practice to set the loop key -->
+        <li v-for="user in users" :key="user.id" v-text="user.name"></li>
+    </ul>
+
     <div style="margin: 400px;">
         <p>The current time is {{ time }}.</p>
 
@@ -20,9 +25,10 @@ export default {
         Link,
     },
 
+    // Be careful when propping. More info 
     props: {
         time: String,
-
+        users: Array,
     },
 
 }

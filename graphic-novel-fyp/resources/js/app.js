@@ -2,7 +2,7 @@ import './bootstrap';
 import '../css/app.css';
 
 import { createApp, h } from 'vue';
-import { Link, createInertiaApp } from '@inertiajs/vue3';
+import { Link, createInertiaApp, Head } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import Layout from './Shared/Layout.vue';
@@ -11,6 +11,7 @@ import Layout from './Shared/Layout.vue';
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 createInertiaApp({
+      // Setting title, accepts current title as a parameter
     title: (title) => `${title} - ${appName}`,
     // resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     // Dynamic import
@@ -47,6 +48,7 @@ createInertiaApp({
             // Now, you don't need to import it in every page
             // Be careful with this!! May not always be the best idea!!
             .component('Link', Link)
+            .component('Head', Head)
             .use(ZiggyVue, Ziggy)
             .mount(el);
     },
@@ -56,5 +58,7 @@ createInertiaApp({
         color: '#4B5563',
         showSpinner: true
     },
+
+
 });
 

@@ -1,10 +1,13 @@
 <template>
+    <Head>
+        <title>Epic Home</title>
+        <meta name="description" content="Home page">
+    </Head>
 
     <!-- <link href="/users">Users</link> -->
     <!-- <Nav></Nav> -->
 
-        <h1>Het is de home paginas</h1>
-
+    <h1>Het is de home paginas</h1>
 </template>
 
 <!-- <script>

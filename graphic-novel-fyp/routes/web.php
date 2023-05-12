@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -46,6 +47,7 @@ Route::get('/users', function () {
     // sleep(2);
     return Inertia::render('Users', [
         'time' => now()->toTimeString(),
+        'users' => User::all(),
     ]);
 });
 
