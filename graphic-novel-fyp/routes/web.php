@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -47,7 +48,18 @@ Route::get('/users', function () {
     // sleep(2);
     return Inertia::render('Users', [
         'time' => now()->toTimeString(),
-        'users' => User::all(),
+        'users' => User::query()
+            // Only run this function if the search query is present in the request
+            // With {}, you can use the $search variable
+            ->when(Request::input('search'), function ($query, $search) {
+                $query->where('name', 'LIKE', "%{$search}%");
+                // dd($search);
+            })
+            ->paginate(10, ['id', 'name'])
+            // withQueryString will keep the query string in the URL
+            ->withQueryString(),
+        // 'users' => User::all(),
+        'filters' => Request::only(['search']),
     ]);
 });
 
