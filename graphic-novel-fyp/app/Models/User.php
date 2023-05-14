@@ -41,4 +41,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // This is a mutator
+    // It will automatically hash the password when it is set
+    // Mutators are called when you set the value of an attribute
+    // To name a mutator, use set + the name of the attribute + Attribute
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 }

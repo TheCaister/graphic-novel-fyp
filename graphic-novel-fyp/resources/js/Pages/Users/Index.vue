@@ -1,5 +1,6 @@
 <template>
     <h1>Users let's go!!</h1>
+    <Link href="/users/create" class="text-blue-500">New User</Link>
 
     <!-- v-model - 2-way binding -->
     <input v-model="search" type="text" placeholder="Search...">
@@ -26,7 +27,7 @@
 <script setup>
 
 import { Link } from '@inertiajs/vue3';
-import Pagination from '../Shared/Pagination.vue';
+import Pagination from '../../Shared/Pagination.vue';
 import { ref, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
 
