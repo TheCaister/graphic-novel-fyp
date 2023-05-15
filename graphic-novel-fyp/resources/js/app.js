@@ -38,7 +38,11 @@ createInertiaApp({
         //   module.default.layout = module.default.layout || Layout;
         // });
 
-        page.default.layout ??= Layout;
+          if(page.default.layout === undefined) {
+            page.default.layout = Layout;
+          }
+
+        // page.default.layout ??= Layout;
         return page;
       },
     setup({ el, App, props, plugin }) {

@@ -18,6 +18,7 @@
         "vue": "^3.2.36"
     },
     "dependencies": {
-        "@inertiajs/progress": "^0.2.7"
+        "@inertiajs/progress": "^0.2.7",
+        "lodash": "^4.17.21"
     }
 }

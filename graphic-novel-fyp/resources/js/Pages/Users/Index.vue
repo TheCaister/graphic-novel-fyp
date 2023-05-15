@@ -31,6 +31,15 @@ import Pagination from '../../Shared/Pagination.vue';
 import { ref, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
 
+// With throttle, the function will only be called once every specified time
+// E.g., throttle it to trigger every 500ms
+// Better responsiveness, but more requests since it can be called as you type
+import throttle from 'lodash/throttle';
+
+// With debounce, the function will only be called the specified time after something has happened
+// No matter how many times the event is triggered, the function will only be called once that time has passed
+import debounce from 'lodash/debounce';
+
 
 let props = defineProps({
     time: String,
@@ -44,7 +53,7 @@ let props = defineProps({
 let search = ref(props.filters.search);
 
 // Watch for changes in search
-watch(search, (value) => {
+watch(search, debounce((value) => {
     console.log('Changed: ' + value);
     
     // Make a GET request to /users
@@ -62,7 +71,7 @@ watch(search, (value) => {
         // Replace the current URL. This means that the URL won't be added to the browser history
         replace: true,
     });
-});
+}, 500));
 
 </script>
 
