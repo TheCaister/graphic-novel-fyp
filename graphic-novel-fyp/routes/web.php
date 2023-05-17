@@ -19,6 +19,10 @@ use Inertia\Inertia;
 |
 */
 
+Route::get('/tailwind', function () {
+    return Inertia::render('TailwindPractice');
+});
+
 // Using group, you can apply middleware to all routes in the group
 Route::middleware('auth')->group(function () {
 
