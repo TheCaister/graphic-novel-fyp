@@ -15,7 +15,7 @@ return new class extends Migration
 
         Schema::create('elements', function (Blueprint $table) {
             $table->id('element_id');
-            $table->bigInteger('owner_id');
+            $table->unsignedBigInteger('owner_id');
             $table->foreign('owner_id')->references('id')->on('user');
             $table->string('type');
             $table->longText('content');

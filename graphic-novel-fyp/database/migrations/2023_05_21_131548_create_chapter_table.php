@@ -15,7 +15,7 @@ return new class extends Migration
 
         Schema::create('chapter', function (Blueprint $table) {
             $table->id('chapter_id');
-            $table->bigInteger('series_id');
+            $table->unsignedBigInteger('series_id');
             $table->foreign('series_id')->references('series_id')->on('series');
             $table->integer('chapter_number');
             $table->string('chapter_title');

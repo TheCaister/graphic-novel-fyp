@@ -15,7 +15,7 @@ return new class extends Migration
 
         Schema::create('page', function (Blueprint $table) {
             $table->id('page_id');
-            $table->bigInteger('chapter_id');
+            $table->unsignedBigInteger('chapter_id');
             $table->foreign('chapter_id')->references('chapter_id')->on('chapter');
             $table->bigInteger('page_number');
             $table->string('page_image');

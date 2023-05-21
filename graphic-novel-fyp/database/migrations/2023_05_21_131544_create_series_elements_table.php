@@ -15,9 +15,9 @@ return new class extends Migration
 
         Schema::create('series_elements', function (Blueprint $table) {
             $table->id('series_elements_id');
-            $table->bigInteger('series_id');
+            $table->unsignedBigInteger('series_id');
             $table->foreign('series_id')->references('series_id')->on('series');
-            $table->bigInteger('element_id');
+            $table->unsignedBigInteger('element_id');
             $table->foreign('element_id')->references('element_id')->on('element');
         });
 

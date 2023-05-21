@@ -15,7 +15,7 @@ return new class extends Migration
 
         Schema::create('pages_elements', function (Blueprint $table) {
             $table->id('pages_elements_id');
-            $table->bigInteger('page_id');
+            $table->unsignedBigInteger('page_id');
             $table->foreign('page_id')->references('page_id')->on('page');
 
             $table->unsignedBigInteger('element_id');

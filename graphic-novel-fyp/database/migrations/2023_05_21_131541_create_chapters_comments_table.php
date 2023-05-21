@@ -15,9 +15,9 @@ return new class extends Migration
 
         Schema::create('chapters_comments', function (Blueprint $table) {
             $table->id('chapters_comments_id');
-            $table->bigInteger('chapter_id');
+            $table->unsignedBigInteger('chapter_id');
             $table->foreign('chapter_id')->references('chapter_id')->on('chapter');
-            $table->bigInteger('comment_id');
+            $table->unsignedBigInteger('comment_id');
             $table->foreign('comment_id')->references('comment_id')->on('comments');
         });
 
