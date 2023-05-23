@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('pages_elements', function (Blueprint $table) {
             $table->id('pages_elements_id');
             $table->unsignedBigInteger('page_id');
-            $table->foreign('page_id')->references('page_id')->on('page');
+            $table->foreign('page_id')->references('page_id')->on('pages')->cascadeOnDelete();
 
             $table->unsignedBigInteger('element_id');
-            $table->foreign('element_id')->references('element_id')->on('elements');
+            $table->foreign('element_id')->references('element_id')->on('elements')->cascadeOnDelete();
         });
 
         Schema::enableForeignKeyConstraints();

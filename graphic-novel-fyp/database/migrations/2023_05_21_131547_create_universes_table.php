@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('universes', function (Blueprint $table) {
             $table->id('universe_id');
             $table->unsignedBigInteger('owner_id');
-            $table->foreign('owner_id')->references('id')->on('user');
+            $table->foreign('owner_id')->references('id')->on('users')->cascadeOnDelete();
             $table->string('universe_name');
         });
 

@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('page', function (Blueprint $table) {
+        Schema::create('pages', function (Blueprint $table) {
             $table->id('page_id');
             $table->unsignedBigInteger('chapter_id');
-            $table->foreign('chapter_id')->references('chapter_id')->on('chapter');
+            $table->foreign('chapter_id')->references('chapter_id')->on('chapters')->cascadeOnDelete();
             $table->bigInteger('page_number');
             $table->string('page_image');
         });

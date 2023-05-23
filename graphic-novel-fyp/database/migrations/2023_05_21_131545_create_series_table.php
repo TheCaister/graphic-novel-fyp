@@ -21,7 +21,7 @@ return new class extends Migration
 
             $table->id('series_id');
             $table->unsignedBigInteger('universe_id');
-            $table->foreign('universe_id')->references('universe_id')->on('universes');
+            $table->foreign('universe_id')->references('universe_id')->on('universes')->cascadeOnDelete();
             $table->string('series_title');
             $table->enum('series_genre', $series_genres);
             $table->longText('series_summary');

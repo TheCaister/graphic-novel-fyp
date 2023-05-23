@@ -28,7 +28,7 @@ class UserFactory extends Factory
             'date_of_birth' => $this->faker->date(),
             'is_banned' => $this->faker->boolean,
             'bio' => $this->faker->text,
-            'profile_pic' => $this->faker->word,
+            'profile_picture' => $this->faker->word,
             'remember_token' => $this->faker->word,
             'created_at' => $this->faker->dateTime(),
         ];

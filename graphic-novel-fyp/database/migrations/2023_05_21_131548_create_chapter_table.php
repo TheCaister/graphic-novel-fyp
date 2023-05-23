@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('chapter', function (Blueprint $table) {
+        Schema::create('chapters', function (Blueprint $table) {
             $table->id('chapter_id');
             $table->unsignedBigInteger('series_id');
-            $table->foreign('series_id')->references('series_id')->on('series');
+            $table->foreign('series_id')->references('series_id')->on('series')->cascadeOnDelete();
             $table->integer('chapter_number');
             $table->string('chapter_title');
             $table->string('chapter_thumbnail');

@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('approved_moderators', function (Blueprint $table) {
             $table->id('approved_moderators_id');
             $table->unsignedBigInteger('approver_id');
-            $table->foreign('approver_id')->references('id')->on('user');
+            $table->foreign('approver_id')->references('id')->on('users')->cascadeOnDelete();
             $table->unsignedBigInteger('approvee_id');
-            $table->foreign('approvee_id')->references('id')->on('user');
+            $table->foreign('approvee_id')->references('id')->on('users')->cascadeOnDelete();
         });
 
         Schema::enableForeignKeyConstraints();

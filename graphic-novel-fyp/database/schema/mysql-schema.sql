@@ -14,14 +14,14 @@ CREATE TABLE `approved_moderators` (
   PRIMARY KEY (`approved_moderators_id`),
   KEY `approved_moderators_approver_id_foreign` (`approver_id`),
   KEY `approved_moderators_approvee_id_foreign` (`approvee_id`),
-  CONSTRAINT `approved_moderators_approvee_id_foreign` FOREIGN KEY (`approvee_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `approved_moderators_approver_id_foreign` FOREIGN KEY (`approver_id`) REFERENCES `user` (`id`)
+  CONSTRAINT `approved_moderators_approvee_id_foreign` FOREIGN KEY (`approvee_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `approved_moderators_approver_id_foreign` FOREIGN KEY (`approver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `chapter`;
+DROP TABLE IF EXISTS `chapters`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `chapter` (
+CREATE TABLE `chapters` (
   `chapter_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `series_id` bigint unsigned NOT NULL,
   `chapter_number` int NOT NULL,
@@ -31,8 +31,8 @@ CREATE TABLE `chapter` (
   `comments_enabled` tinyint(1) NOT NULL,
   `scheduled_publish` timestamp NOT NULL,
   PRIMARY KEY (`chapter_id`),
-  KEY `chapter_series_id_foreign` (`series_id`),
-  CONSTRAINT `chapter_series_id_foreign` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`)
+  KEY `chapters_series_id_foreign` (`series_id`),
+  CONSTRAINT `chapters_series_id_foreign` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `chapters_comments`;
@@ -45,8 +45,8 @@ CREATE TABLE `chapters_comments` (
   PRIMARY KEY (`chapters_comments_id`),
   KEY `chapters_comments_chapter_id_foreign` (`chapter_id`),
   KEY `chapters_comments_comment_id_foreign` (`comment_id`),
-  CONSTRAINT `chapters_comments_chapter_id_foreign` FOREIGN KEY (`chapter_id`) REFERENCES `chapter` (`chapter_id`),
-  CONSTRAINT `chapters_comments_comment_id_foreign` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`comment_id`)
+  CONSTRAINT `chapters_comments_chapter_id_foreign` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`) ON DELETE CASCADE,
+  CONSTRAINT `chapters_comments_comment_id_foreign` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`comment_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `chapters_elements`;
@@ -59,8 +59,8 @@ CREATE TABLE `chapters_elements` (
   PRIMARY KEY (`chapter_elements_id`),
   KEY `chapters_elements_chapter_id_foreign` (`chapter_id`),
   KEY `chapters_elements_element_id_foreign` (`element_id`),
-  CONSTRAINT `chapters_elements_chapter_id_foreign` FOREIGN KEY (`chapter_id`) REFERENCES `chapter` (`chapter_id`),
-  CONSTRAINT `chapters_elements_element_id_foreign` FOREIGN KEY (`element_id`) REFERENCES `element` (`element_id`)
+  CONSTRAINT `chapters_elements_chapter_id_foreign` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`) ON DELETE CASCADE,
+  CONSTRAINT `chapters_elements_element_id_foreign` FOREIGN KEY (`element_id`) REFERENCES `elements` (`element_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `comments`;
@@ -75,8 +75,8 @@ CREATE TABLE `comments` (
   PRIMARY KEY (`comment_id`),
   KEY `comments_commenter_id_foreign` (`commenter_id`),
   KEY `comments_replying_to_foreign` (`replying_to`),
-  CONSTRAINT `comments_commenter_id_foreign` FOREIGN KEY (`commenter_id`) REFERENCES `users` (`id`),
-  CONSTRAINT `comments_replying_to_foreign` FOREIGN KEY (`replying_to`) REFERENCES `comments` (`comment_id`)
+  CONSTRAINT `comments_commenter_id_foreign` FOREIGN KEY (`commenter_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `comments_replying_to_foreign` FOREIGN KEY (`replying_to`) REFERENCES `comments` (`comment_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `compositions`;
@@ -89,7 +89,7 @@ CREATE TABLE `compositions` (
   `composition_file_path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`composition_id`),
   KEY `compositions_universe_id_foreign` (`universe_id`),
-  CONSTRAINT `compositions_universe_id_foreign` FOREIGN KEY (`universe_id`) REFERENCES `universes` (`universe_id`)
+  CONSTRAINT `compositions_universe_id_foreign` FOREIGN KEY (`universe_id`) REFERENCES `universes` (`universe_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `elements`;
@@ -104,7 +104,7 @@ CREATE TABLE `elements` (
   `hidden` tinyint(1) NOT NULL,
   PRIMARY KEY (`element_id`),
   KEY `elements_owner_id_foreign` (`owner_id`),
-  CONSTRAINT `elements_owner_id_foreign` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`)
+  CONSTRAINT `elements_owner_id_foreign` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `failed_jobs`;
@@ -132,8 +132,8 @@ CREATE TABLE `followers` (
   PRIMARY KEY (`followers_id`),
   KEY `followers_follower_id_foreign` (`follower_id`),
   KEY `followers_followee_id_foreign` (`followee_id`),
-  CONSTRAINT `followers_followee_id_foreign` FOREIGN KEY (`followee_id`) REFERENCES `user` (`id`),
-  CONSTRAINT `followers_follower_id_foreign` FOREIGN KEY (`follower_id`) REFERENCES `user` (`id`)
+  CONSTRAINT `followers_followee_id_foreign` FOREIGN KEY (`followee_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `followers_follower_id_foreign` FOREIGN KEY (`follower_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `migrations`;
@@ -146,17 +146,17 @@ CREATE TABLE `migrations` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `page`;
+DROP TABLE IF EXISTS `pages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `page` (
+CREATE TABLE `pages` (
   `page_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `chapter_id` bigint unsigned NOT NULL,
   `page_number` bigint NOT NULL,
   `page_image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`page_id`),
-  KEY `page_chapter_id_foreign` (`chapter_id`),
-  CONSTRAINT `page_chapter_id_foreign` FOREIGN KEY (`chapter_id`) REFERENCES `chapter` (`chapter_id`)
+  KEY `pages_chapter_id_foreign` (`chapter_id`),
+  CONSTRAINT `pages_chapter_id_foreign` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `pages_elements`;
@@ -169,8 +169,8 @@ CREATE TABLE `pages_elements` (
   PRIMARY KEY (`pages_elements_id`),
   KEY `pages_elements_page_id_foreign` (`page_id`),
   KEY `pages_elements_element_id_foreign` (`element_id`),
-  CONSTRAINT `pages_elements_element_id_foreign` FOREIGN KEY (`element_id`) REFERENCES `elements` (`element_id`),
-  CONSTRAINT `pages_elements_page_id_foreign` FOREIGN KEY (`page_id`) REFERENCES `page` (`page_id`)
+  CONSTRAINT `pages_elements_element_id_foreign` FOREIGN KEY (`element_id`) REFERENCES `elements` (`element_id`) ON DELETE CASCADE,
+  CONSTRAINT `pages_elements_page_id_foreign` FOREIGN KEY (`page_id`) REFERENCES `pages` (`page_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `password_reset_tokens`;
@@ -215,7 +215,7 @@ CREATE TABLE `series` (
   `rating` double(8,2) NOT NULL,
   PRIMARY KEY (`series_id`),
   KEY `series_universe_id_foreign` (`universe_id`),
-  CONSTRAINT `series_universe_id_foreign` FOREIGN KEY (`universe_id`) REFERENCES `universes` (`universe_id`)
+  CONSTRAINT `series_universe_id_foreign` FOREIGN KEY (`universe_id`) REFERENCES `universes` (`universe_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `series_comments`;
@@ -228,8 +228,8 @@ CREATE TABLE `series_comments` (
   PRIMARY KEY (`series_comments_id`),
   KEY `series_comments_series_id_foreign` (`series_id`),
   KEY `series_comments_comment_id_foreign` (`comment_id`),
-  CONSTRAINT `series_comments_comment_id_foreign` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`comment_id`),
-  CONSTRAINT `series_comments_series_id_foreign` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`)
+  CONSTRAINT `series_comments_comment_id_foreign` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`comment_id`) ON DELETE CASCADE,
+  CONSTRAINT `series_comments_series_id_foreign` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `series_elements`;
@@ -242,8 +242,8 @@ CREATE TABLE `series_elements` (
   PRIMARY KEY (`series_elements_id`),
   KEY `series_elements_series_id_foreign` (`series_id`),
   KEY `series_elements_element_id_foreign` (`element_id`),
-  CONSTRAINT `series_elements_element_id_foreign` FOREIGN KEY (`element_id`) REFERENCES `element` (`element_id`),
-  CONSTRAINT `series_elements_series_id_foreign` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`)
+  CONSTRAINT `series_elements_element_id_foreign` FOREIGN KEY (`element_id`) REFERENCES `elements` (`element_id`) ON DELETE CASCADE,
+  CONSTRAINT `series_elements_series_id_foreign` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `universes`;
@@ -255,7 +255,7 @@ CREATE TABLE `universes` (
   `universe_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`universe_id`),
   KEY `universes_owner_id_foreign` (`owner_id`),
-  CONSTRAINT `universes_owner_id_foreign` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`)
+  CONSTRAINT `universes_owner_id_foreign` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_chapter_likes`;
@@ -268,8 +268,8 @@ CREATE TABLE `user_chapter_likes` (
   PRIMARY KEY (`user_chapter_rating_id`),
   KEY `user_chapter_likes_user_id_foreign` (`user_id`),
   KEY `user_chapter_likes_chapter_id_foreign` (`chapter_id`),
-  CONSTRAINT `user_chapter_likes_chapter_id_foreign` FOREIGN KEY (`chapter_id`) REFERENCES `chapter` (`chapter_id`),
-  CONSTRAINT `user_chapter_likes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+  CONSTRAINT `user_chapter_likes_chapter_id_foreign` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`) ON DELETE CASCADE,
+  CONSTRAINT `user_chapter_likes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_series_rating`;
@@ -283,8 +283,8 @@ CREATE TABLE `user_series_rating` (
   PRIMARY KEY (`user_series_rating_id`),
   KEY `user_series_rating_user_id_foreign` (`user_id`),
   KEY `user_series_rating_series_id_foreign` (`series_id`),
-  CONSTRAINT `user_series_rating_series_id_foreign` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`),
-  CONSTRAINT `user_series_rating_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+  CONSTRAINT `user_series_rating_series_id_foreign` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`) ON DELETE CASCADE,
+  CONSTRAINT `user_series_rating_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users`;

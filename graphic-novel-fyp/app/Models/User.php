@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Model
 {
@@ -22,7 +23,7 @@ class User extends Model
         'date_of_birth',
         'is_banned',
         'bio',
-        'profile_pic',
+        'profile_picture',
     ];
 
     /**
@@ -47,4 +48,9 @@ class User extends Model
         'is_banned' => 'boolean',
         'created_at' => 'timestamp',
     ];
+
+    public function universes(): HasMany
+    {
+        return $this->hasMany(Universe::class, 'owner_id', 'id');
+    }
 }

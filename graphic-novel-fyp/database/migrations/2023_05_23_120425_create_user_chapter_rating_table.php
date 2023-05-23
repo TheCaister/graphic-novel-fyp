@@ -15,9 +15,9 @@ return new class extends Migration
         Schema::create('user_chapter_likes', function (Blueprint $table) {
             $table->id('user_chapter_rating_id');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('user');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->unsignedBigInteger('chapter_id');
-            $table->foreign('chapter_id')->references('chapter_id')->on('chapter');
+            $table->foreign('chapter_id')->references('chapter_id')->on('chapters')->cascadeOnDelete();
 
         });
         Schema::enableForeignKeyConstraints();

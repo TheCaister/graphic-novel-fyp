@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('followers', function (Blueprint $table) {
             $table->id('followers_id');
             $table->unsignedBigInteger('follower_id');
-            $table->foreign('follower_id')->references('id')->on('user');
+            $table->foreign('follower_id')->references('id')->on('users')->cascadeOnDelete();
             $table->unsignedBigInteger('followee_id');
-            $table->foreign('followee_id')->references('id')->on('user');
+            $table->foreign('followee_id')->references('id')->on('users')->cascadeOnDelete();
         });
 
         Schema::enableForeignKeyConstraints();

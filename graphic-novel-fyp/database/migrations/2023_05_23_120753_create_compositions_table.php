@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create('compositions', function (Blueprint $table) {
             $table->id('composition_id');
             $table->unsignedBigInteger('universe_id');
-            $table->foreign('universe_id')->references('universe_id')->on('universes');
+            $table->foreign('universe_id')->references('universe_id')->on('universes')->cascadeOnDelete();
             // Create a long text column
             $table->longText('composition_content');
             // Create a nullable column that represents a file path

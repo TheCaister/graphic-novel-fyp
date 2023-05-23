@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('series_elements', function (Blueprint $table) {
             $table->id('series_elements_id');
             $table->unsignedBigInteger('series_id');
-            $table->foreign('series_id')->references('series_id')->on('series');
+            $table->foreign('series_id')->references('series_id')->on('series')->cascadeOnDelete();
             $table->unsignedBigInteger('element_id');
-            $table->foreign('element_id')->references('element_id')->on('element');
+            $table->foreign('element_id')->references('element_id')->on('elements')->cascadeOnDelete();
         });
 
         Schema::enableForeignKeyConstraints();

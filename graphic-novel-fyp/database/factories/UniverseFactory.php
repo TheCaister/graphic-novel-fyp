@@ -22,7 +22,7 @@ class UniverseFactory extends Factory
     public function definition(): array
     {
         return [
-            'universe_id' => $this->faker->word,
+            // 'universe_id' => $this->faker->randomNumber(),
             'owner_id' => User::factory(),
             'universe_name' => $this->faker->word,
         ];

@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('series_comments', function (Blueprint $table) {
             $table->id('series_comments_id');
             $table->unsignedBigInteger('series_id');
-            $table->foreign('series_id')->references('series_id')->on('series');
+            $table->foreign('series_id')->references('series_id')->on('series')->cascadeOnDelete();
             $table->unsignedBigInteger('comment_id');
-            $table->foreign('comment_id')->references('comment_id')->on('comments');
+            $table->foreign('comment_id')->references('comment_id')->on('comments')->cascadeOnDelete();
         });
 
         Schema::enableForeignKeyConstraints();

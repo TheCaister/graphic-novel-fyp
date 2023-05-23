@@ -18,9 +18,9 @@ return new class extends Migration
 
             $table->id('user_series_rating_id');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('user');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->unsignedBigInteger('series_id');
-            $table->foreign('series_id')->references('series_id')->on('series');
+            $table->foreign('series_id')->references('series_id')->on('series')->cascadeOnDelete();
 
             // Users can rate a series from 1 to 5
             $table->integer('rating');
