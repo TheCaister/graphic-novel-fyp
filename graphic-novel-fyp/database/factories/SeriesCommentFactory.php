@@ -23,7 +23,6 @@ class SeriesCommentFactory extends Factory
     public function definition(): array
     {
         return [
-            'series_comments_id' => $this->faker->word,
             'series_id' => Series::factory()->create()->series_id,
             'comment_id' => Comment::factory()->create()->comment_id,
         ];

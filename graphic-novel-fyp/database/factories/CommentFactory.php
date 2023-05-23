@@ -22,7 +22,6 @@ class CommentFactory extends Factory
     public function definition(): array
     {
         return [
-            'comment_id' => $this->faker->word,
             'commenter_id' => User::factory(),
             'replying_to' => Comment::factory()->create()->comment_id,
             'comment_content' => $this->faker->numberBetween(-100000, 100000),

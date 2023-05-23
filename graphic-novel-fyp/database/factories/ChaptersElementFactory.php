@@ -23,7 +23,6 @@ class ChaptersElementFactory extends Factory
     public function definition(): array
     {
         return [
-            'chapters_elements_id' => $this->faker->word,
             'chapter_id' => Chapter::factory()->create()->chapter_id,
             'element_id' => Element::factory()->create()->element_id,
         ];

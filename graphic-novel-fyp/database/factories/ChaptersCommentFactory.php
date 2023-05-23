@@ -23,7 +23,6 @@ class ChaptersCommentFactory extends Factory
     public function definition(): array
     {
         return [
-            'chapters_comments_id' => $this->faker->word,
             'chapter_id' => Chapter::factory()->create()->chapter_id,
             'comment_id' => Comment::factory()->create()->comment_id,
         ];

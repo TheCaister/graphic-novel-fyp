@@ -22,13 +22,14 @@ class SeriesFactory extends Factory
     public function definition(): array
     {
         return [
-            'series_id' => $this->faker->word,
             'universe_id' => Universe::factory()->create()->universe_id,
             'series_title' => $this->faker->word,
-            'series_genre' => $this->faker->randomElement(/** enum_attributes **/),
+            'series_genre' => $this->faker->randomElement(['ACTION','ADVENTURE','COMEDY','DRAMA','FANTASY','HORROR','MYSTERY','ROMANCE','THRILLER']),
             'series_summary' => $this->faker->text,
             'series_thumbnail' => $this->faker->word,
-            'rating' => $this->faker->randomFloat(0, 0, 9999999999.),
+            // rating is a random integer between 1 and 5
+            // 'rating' => $this->faker->numberBetween(1, 5),
+            'rating' => 0,
         ];
     }
 }

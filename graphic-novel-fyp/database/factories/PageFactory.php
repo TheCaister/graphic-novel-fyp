@@ -22,7 +22,6 @@ class PageFactory extends Factory
     public function definition(): array
     {
         return [
-            'page_id' => $this->faker->word,
             'chapter_id' => Chapter::factory()->create()->chapter_id,
             'page_number' => $this->faker->numberBetween(-100000, 100000),
             'page_image' => $this->faker->word,

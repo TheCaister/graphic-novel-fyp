@@ -23,7 +23,6 @@ class PagesElementFactory extends Factory
     public function definition(): array
     {
         return [
-            'pages_elements_id' => $this->faker->word,
             'page_id' => Page::factory()->create()->page_id,
             'element_id' => Element::factory()->create()->element_id,
         ];

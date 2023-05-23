@@ -22,7 +22,6 @@ class ElementFactory extends Factory
     public function definition(): array
     {
         return [
-            'element_id' => $this->faker->word,
             'owner_id' => User::factory(),
             'type' => $this->faker->word,
             'content' => $this->faker->paragraphs(3, true),

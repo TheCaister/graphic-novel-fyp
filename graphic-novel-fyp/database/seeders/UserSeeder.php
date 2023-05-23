@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Series;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -24,12 +25,10 @@ class UserSeeder extends Seeder
             'is_admin' => true,
         ]);
 
-        // User::factory(10)
-        // ->has(Universe::factory()->count(3), 'universes')
-        // ->create();
+        User::factory(10)
+        ->has(Universe::factory(1)
+        ->has(Series::factory()), 'universes')
+        ->create();
 
-        Universe::factory(10)->create([
-            'owner_id' => 1,
-        ]);
     }
 }

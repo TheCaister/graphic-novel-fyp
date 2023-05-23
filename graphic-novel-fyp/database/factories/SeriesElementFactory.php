@@ -23,7 +23,6 @@ class SeriesElementFactory extends Factory
     public function definition(): array
     {
         return [
-            'series_elements_id' => $this->faker->word,
             'series_id' => Series::factory()->create()->series_id,
             'element_id' => Element::factory()->create()->element_id,
         ];
