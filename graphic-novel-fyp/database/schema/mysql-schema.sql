@@ -25,9 +25,9 @@ CREATE TABLE `chapter` (
   `chapter_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `series_id` bigint unsigned NOT NULL,
   `chapter_number` int NOT NULL,
-  `chapter_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `chapter_thumbnail` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `chapter_notes` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `chapter_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `chapter_thumbnail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `chapter_notes` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `comments_enabled` tinyint(1) NOT NULL,
   `scheduled_publish` timestamp NOT NULL,
   PRIMARY KEY (`chapter_id`),
@@ -79,14 +79,27 @@ CREATE TABLE `comments` (
   CONSTRAINT `comments_replying_to_foreign` FOREIGN KEY (`replying_to`) REFERENCES `comments` (`comment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `compositions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `compositions` (
+  `composition_id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `universe_id` bigint unsigned NOT NULL,
+  `composition_content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `composition_file_path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`composition_id`),
+  KEY `compositions_universe_id_foreign` (`universe_id`),
+  CONSTRAINT `compositions_universe_id_foreign` FOREIGN KEY (`universe_id`) REFERENCES `universes` (`universe_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `elements`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `elements` (
   `element_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `owner_id` bigint unsigned NOT NULL,
-  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL,
   `hidden` tinyint(1) NOT NULL,
   PRIMARY KEY (`element_id`),
@@ -99,11 +112,11 @@ DROP TABLE IF EXISTS `failed_jobs`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `failed_jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
@@ -128,7 +141,7 @@ DROP TABLE IF EXISTS `migrations`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `migrations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -140,7 +153,7 @@ CREATE TABLE `page` (
   `page_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `chapter_id` bigint unsigned NOT NULL,
   `page_number` bigint NOT NULL,
-  `page_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `page_image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`page_id`),
   KEY `page_chapter_id_foreign` (`chapter_id`),
   CONSTRAINT `page_chapter_id_foreign` FOREIGN KEY (`chapter_id`) REFERENCES `chapter` (`chapter_id`)
@@ -164,8 +177,8 @@ DROP TABLE IF EXISTS `password_reset_tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -175,11 +188,11 @@ DROP TABLE IF EXISTS `personal_access_tokens`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `personal_access_tokens` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `tokenable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tokenable_id` bigint unsigned NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text COLLATE utf8mb4_unicode_ci,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -195,10 +208,10 @@ DROP TABLE IF EXISTS `series`;
 CREATE TABLE `series` (
   `series_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `universe_id` bigint unsigned NOT NULL,
-  `series_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `series_genre` enum('ACTION','ADVENTURE','COMEDY','DRAMA','FANTASY','HORROR','MYSTERY','ROMANCE','THRILLER') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `series_summary` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `series_thumbnail` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `series_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `series_genre` enum('ACTION','ADVENTURE','COMEDY','DRAMA','FANTASY','HORROR','MYSTERY','ROMANCE','THRILLER') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `series_summary` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `series_thumbnail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `rating` double(8,2) NOT NULL,
   PRIMARY KEY (`series_id`),
   KEY `series_universe_id_foreign` (`universe_id`),
@@ -239,10 +252,39 @@ DROP TABLE IF EXISTS `universes`;
 CREATE TABLE `universes` (
   `universe_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `owner_id` bigint unsigned NOT NULL,
-  `universe_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `universe_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`universe_id`),
   KEY `universes_owner_id_foreign` (`owner_id`),
   CONSTRAINT `universes_owner_id_foreign` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `user_chapter_likes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_chapter_likes` (
+  `user_chapter_rating_id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint unsigned NOT NULL,
+  `chapter_id` bigint unsigned NOT NULL,
+  PRIMARY KEY (`user_chapter_rating_id`),
+  KEY `user_chapter_likes_user_id_foreign` (`user_id`),
+  KEY `user_chapter_likes_chapter_id_foreign` (`chapter_id`),
+  CONSTRAINT `user_chapter_likes_chapter_id_foreign` FOREIGN KEY (`chapter_id`) REFERENCES `chapter` (`chapter_id`),
+  CONSTRAINT `user_chapter_likes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `user_series_rating`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_series_rating` (
+  `user_series_rating_id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint unsigned NOT NULL,
+  `series_id` bigint unsigned NOT NULL,
+  `rating` int NOT NULL,
+  PRIMARY KEY (`user_series_rating_id`),
+  KEY `user_series_rating_user_id_foreign` (`user_id`),
+  KEY `user_series_rating_series_id_foreign` (`series_id`),
+  CONSTRAINT `user_series_rating_series_id_foreign` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`),
+  CONSTRAINT `user_series_rating_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users`;
@@ -250,18 +292,18 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `date_of_birth` date NOT NULL DEFAULT '2023-03-09',
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `date_of_birth` timestamp NULL DEFAULT NULL,
   `is_banned` tinyint(1) NOT NULL DEFAULT '0',
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
-  `bio` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `profile_pic` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `bio` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `profile_picture` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -290,3 +332,6 @@ INSERT INTO `migrations` VALUES (14,'2023_05_21_131550_create_followers_table',1
 INSERT INTO `migrations` VALUES (15,'2023_05_21_131551_create_series_comments_table',1);
 INSERT INTO `migrations` VALUES (16,'2023_05_21_131552_create_approved_moderators_table',1);
 INSERT INTO `migrations` VALUES (17,'2023_05_21_131553_create_page_table',1);
+INSERT INTO `migrations` VALUES (18,'2023_05_23_115934_create_user_series_rating_table',1);
+INSERT INTO `migrations` VALUES (19,'2023_05_23_120425_create_user_chapter_rating_table',1);
+INSERT INTO `migrations` VALUES (20,'2023_05_23_120753_create_compositions_table',1);
