@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('commenter_id')->references('id')->on('users')->cascadeOnDelete();
             $table->unsignedBigInteger('replying_to')->nullable();
             $table->foreign('replying_to')->references('comment_id')->on('comments')->cascadeOnDelete();
-            $table->bigInteger('comment_content');
+            $table->string('comment_content');
             $table->timestamp('created_at');
         });
 

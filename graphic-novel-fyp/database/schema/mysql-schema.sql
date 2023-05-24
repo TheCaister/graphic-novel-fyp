@@ -70,7 +70,7 @@ CREATE TABLE `comments` (
   `comment_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `commenter_id` bigint unsigned NOT NULL,
   `replying_to` bigint unsigned DEFAULT NULL,
-  `comment_content` bigint NOT NULL,
+  `comment_content` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL,
   PRIMARY KEY (`comment_id`),
   KEY `comments_commenter_id_foreign` (`commenter_id`),

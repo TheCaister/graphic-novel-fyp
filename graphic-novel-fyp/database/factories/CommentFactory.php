@@ -22,9 +22,10 @@ class CommentFactory extends Factory
     public function definition(): array
     {
         return [
-            'commenter_id' => User::factory(),
-            'replying_to' => Comment::factory()->create()->comment_id,
-            'comment_content' => $this->faker->numberBetween(-100000, 100000),
+            // 'commenter_id' => User::factory(),
+
+            // 'replying_to' => Comment::factory()->create()->comment_id,
+            'comment_content' => $this->faker->text,
             'created_at' => $this->faker->dateTime(),
         ];
     }
