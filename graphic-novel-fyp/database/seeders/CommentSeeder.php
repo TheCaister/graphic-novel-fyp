@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Chapter;
+use App\Models\ChaptersComment;
 use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -22,11 +24,13 @@ class CommentSeeder extends Seeder
         )->create();
 
         // Create 10 replies to a random comment
-        Comment::factory(100)->
-        sequence(
-            fn ($sequence) => [
-                'commenter_id' => User::inRandomOrder()->first()->id,
-                'replying_to' => Comment::inRandomOrder()->first()->comment_id,]
-        )->create();
+        // Comment::factory(100)->
+        // sequence(
+        //     fn ($sequence) => [
+        //         'commenter_id' => User::inRandomOrder()->first()->id,
+        //         'replying_to' => Comment::inRandomOrder()->first()->comment_id,]
+        // )->create();
+
+        
     }
 }

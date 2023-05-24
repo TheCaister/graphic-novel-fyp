@@ -23,8 +23,8 @@ class ChaptersCommentFactory extends Factory
     public function definition(): array
     {
         return [
-            'chapter_id' => Chapter::factory()->create()->chapter_id,
-            'comment_id' => Comment::factory()->create()->comment_id,
+            // 'chapter_id' => Chapter::factory()->create()->chapter_id,
+            // 'comment_id' => Comment::factory()->create()->comment_id,
         ];
     }
 }

@@ -21,6 +21,10 @@ return new class extends Migration
             $table->foreign('replying_to')->references('comment_id')->on('comments')->cascadeOnDelete();
             $table->string('comment_content');
             $table->timestamp('created_at');
+
+            // Creating a polymorphic relationship between comments and chapters and series
+            $table->unsignedBigInteger('commentable_id');
+            $table->string('commentable_type');
         });
 
         Schema::enableForeignKeyConstraints();

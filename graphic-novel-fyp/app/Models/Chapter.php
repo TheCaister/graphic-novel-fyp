@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Chapter extends Model
 {
@@ -47,5 +48,19 @@ class Chapter extends Model
     public function pages(): HasMany
     {
         return $this->hasMany(Page::class);
+    }
+
+    // Get all of the chapter's comments.
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    // Delete all comments associated with the chapter.
+    function delete()
+    {
+        // $this->pages()->delete();
+        $this->comments()->delete();
+        parent::delete();
     }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Comment extends Model
 {
@@ -21,6 +22,8 @@ class Comment extends Model
         'commenter_id',
         'replying_to',
         'comment_content',
+        'commentable_id',
+        'commentable_type',
     ];
 
     /**
@@ -43,5 +46,11 @@ class Comment extends Model
     public function comment(): BelongsTo
     {
         return $this->belongsTo(Comment::class, 'replying_to', 'comment_id');
+    }
+
+    // Get the parent commentable model (chapter or series).
+    public function commentable() : MorphTo
+    {
+        return $this->morphTo();
     }
 }

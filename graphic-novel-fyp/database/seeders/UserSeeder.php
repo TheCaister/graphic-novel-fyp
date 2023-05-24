@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Chapter;
+use App\Models\Comment;
 use App\Models\Page;
 use App\Models\Series;
 use App\Models\User;
@@ -30,6 +31,10 @@ class UserSeeder extends Seeder
         User::factory(10)
             ->has(Universe::factory(1)
                 ->has(Series::factory()
+                    ->has(Comment::factory(3)
+                        ->sequence(
+                            fn ($sequence) => ['commenter_id' => User::inRandomOrder()->first()->id]
+                        ))
                     // For every chapter, create 5 pages, with the page_number starting at 1, incrementing by 1 until 5
 
                     ->has(Chapter::factory()
@@ -39,7 +44,12 @@ class UserSeeder extends Seeder
                                 ->sequence(
                                     fn ($sequence) => ['page_number' => ($sequence->index % 5) + 1]
                                 )
-                        ))))
+                        )
+                        ->has(Comment::factory(3)
+                            ->sequence(
+                                fn ($sequence) => ['commenter_id' => User::inRandomOrder()->first()->id]
+                            ))
+                            )))
             ->create();
     }
 }
