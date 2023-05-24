@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Chapter extends Model
 {
@@ -41,5 +42,10 @@ class Chapter extends Model
     public function series(): BelongsTo
     {
         return $this->belongsTo(Series::class, 'series_id', 'series_id');
+    }
+
+    public function pages(): HasMany
+    {
+        return $this->hasMany(Page::class);
     }
 }

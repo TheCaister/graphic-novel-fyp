@@ -22,7 +22,7 @@ class ChapterFactory extends Factory
     public function definition(): array
     {
         return [
-            'series_id' => Series::factory()->create()->series_id,
+            // 'series_id' => Series::factory()->create()->series_id,
             'chapter_number' => $this->faker->numberBetween(-10000, 10000),
             'chapter_title' => $this->faker->word,
             'chapter_thumbnail' => $this->faker->word,

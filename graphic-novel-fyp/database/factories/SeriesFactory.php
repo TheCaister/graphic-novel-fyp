@@ -22,7 +22,7 @@ class SeriesFactory extends Factory
     public function definition(): array
     {
         return [
-            'universe_id' => Universe::factory()->create()->universe_id,
+            // 'universe_id' => Universe::factory()->create()->universe_id,
             'series_title' => $this->faker->word,
             'series_genre' => $this->faker->randomElement(['ACTION','ADVENTURE','COMEDY','DRAMA','FANTASY','HORROR','MYSTERY','ROMANCE','THRILLER']),
             'series_summary' => $this->faker->text,

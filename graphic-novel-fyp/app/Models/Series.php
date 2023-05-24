@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Series extends Model
 {
@@ -39,5 +40,10 @@ class Series extends Model
     public function universe(): BelongsTo
     {
         return $this->belongsTo(Universe::class, 'universe_id', 'universe_id');
+    }
+
+    public function chapters(): HasMany
+    {
+        return $this->hasMany(Chapter::class);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Chapter;
+use App\Models\Page;
 use App\Models\Series;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -26,9 +28,10 @@ class UserSeeder extends Seeder
         ]);
 
         User::factory(10)
-        ->has(Universe::factory(1)
-        ->has(Series::factory()), 'universes')
-        ->create();
-
+            ->has(Universe::factory(1)
+                ->has(Series::factory()
+                    ->has(Chapter::factory()
+                        ->has(Page::factory(5)))))
+            ->create();
     }
 }
