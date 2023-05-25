@@ -28,13 +28,16 @@ class UserSeeder extends Seeder
             'is_admin' => true,
         ]);
 
+        User::factory(50)->create();
+
         User::factory(10)
             ->has(Universe::factory(1)
                 ->has(Series::factory()
-                    ->has(Comment::factory(3)
-                        ->sequence(
-                            fn ($sequence) => ['commenter_id' => User::inRandomOrder()->first()->id]
-                        ))
+                    // ->has(Comment::factory(3)
+                    //     ->sequence(
+                    //         fn ($sequence) => ['commenter_id' => User::inRandomOrder()->first()->id]
+                    //     )
+                    //     ->hasReplies(3))
                     // For every chapter, create 5 pages, with the page_number starting at 1, incrementing by 1 until 5
 
                     ->has(Chapter::factory()
@@ -45,10 +48,10 @@ class UserSeeder extends Seeder
                                     fn ($sequence) => ['page_number' => ($sequence->index % 5) + 1]
                                 )
                         )
-                        ->has(Comment::factory(3)
-                            ->sequence(
-                                fn ($sequence) => ['commenter_id' => User::inRandomOrder()->first()->id]
-                            ))
+                        // ->has(Comment::factory(3)
+                        //     ->sequence(
+                        //         fn ($sequence) => ['commenter_id' => User::inRandomOrder()->first()->id]
+                        //     ))
                             )))
             ->create();
     }

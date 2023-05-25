@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Model
@@ -52,5 +53,16 @@ class User extends Model
     public function universes(): HasMany
     {
         return $this->hasMany(Universe::class, 'owner_id', 'id');
+    }
+
+    public function followers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'followee_id');
+    }
+
+    // Retrieves the users that follow this user
+    public function followees(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'followers', 'followee_id', 'follower_id');
     }
 }
