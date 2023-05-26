@@ -32,4 +32,5 @@ class SeriesFactory extends Factory
             'rating' => 0,
         ];
     }
+
 }

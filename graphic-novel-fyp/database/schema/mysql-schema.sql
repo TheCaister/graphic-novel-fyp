@@ -35,20 +35,6 @@ CREATE TABLE `chapters` (
   CONSTRAINT `chapters_series_id_foreign` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `chapters_comments`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `chapters_comments` (
-  `chapters_comments_id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `chapter_id` bigint unsigned NOT NULL,
-  `comment_id` bigint unsigned NOT NULL,
-  PRIMARY KEY (`chapters_comments_id`),
-  KEY `chapters_comments_chapter_id_foreign` (`chapter_id`),
-  KEY `chapters_comments_comment_id_foreign` (`comment_id`),
-  CONSTRAINT `chapters_comments_chapter_id_foreign` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`) ON DELETE CASCADE,
-  CONSTRAINT `chapters_comments_comment_id_foreign` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`comment_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `chapters_elements`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -92,6 +78,19 @@ CREATE TABLE `compositions` (
   PRIMARY KEY (`composition_id`),
   KEY `compositions_universe_id_foreign` (`universe_id`),
   CONSTRAINT `compositions_universe_id_foreign` FOREIGN KEY (`universe_id`) REFERENCES `universes` (`universe_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `elementables`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `elementables` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `element_id` bigint unsigned NOT NULL,
+  `elementable_id` bigint unsigned NOT NULL,
+  `elementable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `elementables_element_id_foreign` (`element_id`),
+  CONSTRAINT `elementables_element_id_foreign` FOREIGN KEY (`element_id`) REFERENCES `elements` (`element_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `elements`;
@@ -220,20 +219,6 @@ CREATE TABLE `series` (
   CONSTRAINT `series_universe_id_foreign` FOREIGN KEY (`universe_id`) REFERENCES `universes` (`universe_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `series_comments`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `series_comments` (
-  `series_comments_id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `series_id` bigint unsigned NOT NULL,
-  `comment_id` bigint unsigned NOT NULL,
-  PRIMARY KEY (`series_comments_id`),
-  KEY `series_comments_series_id_foreign` (`series_id`),
-  KEY `series_comments_comment_id_foreign` (`comment_id`),
-  CONSTRAINT `series_comments_comment_id_foreign` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`comment_id`) ON DELETE CASCADE,
-  CONSTRAINT `series_comments_series_id_foreign` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `series_elements`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -322,18 +307,17 @@ INSERT INTO `migrations` VALUES (2,'2014_10_12_100000_create_password_reset_toke
 INSERT INTO `migrations` VALUES (3,'2019_08_19_000000_create_failed_jobs_table',1);
 INSERT INTO `migrations` VALUES (4,'2019_12_14_000001_create_personal_access_tokens_table',1);
 INSERT INTO `migrations` VALUES (5,'2023_05_21_131540_create_element_table',1);
-INSERT INTO `migrations` VALUES (6,'2023_05_21_131541_create_chapters_comments_table',1);
-INSERT INTO `migrations` VALUES (7,'2023_05_21_131542_create_pages_elements_table',1);
-INSERT INTO `migrations` VALUES (8,'2023_05_21_131544_create_series_elements_table',1);
-INSERT INTO `migrations` VALUES (9,'2023_05_21_131545_create_series_table',1);
-INSERT INTO `migrations` VALUES (10,'2023_05_21_131546_create_chapters_elements_table',1);
-INSERT INTO `migrations` VALUES (11,'2023_05_21_131547_create_universes_table',1);
-INSERT INTO `migrations` VALUES (12,'2023_05_21_131548_create_chapter_table',1);
-INSERT INTO `migrations` VALUES (13,'2023_05_21_131549_create_comments_table',1);
-INSERT INTO `migrations` VALUES (14,'2023_05_21_131550_create_followers_table',1);
-INSERT INTO `migrations` VALUES (15,'2023_05_21_131551_create_series_comments_table',1);
-INSERT INTO `migrations` VALUES (16,'2023_05_21_131552_create_approved_moderators_table',1);
-INSERT INTO `migrations` VALUES (17,'2023_05_21_131553_create_page_table',1);
-INSERT INTO `migrations` VALUES (18,'2023_05_23_115934_create_user_series_rating_table',1);
-INSERT INTO `migrations` VALUES (19,'2023_05_23_120425_create_user_chapter_rating_table',1);
-INSERT INTO `migrations` VALUES (20,'2023_05_23_120753_create_compositions_table',1);
+INSERT INTO `migrations` VALUES (6,'2023_05_21_131542_create_pages_elements_table',1);
+INSERT INTO `migrations` VALUES (7,'2023_05_21_131544_create_series_elements_table',1);
+INSERT INTO `migrations` VALUES (8,'2023_05_21_131545_create_series_table',1);
+INSERT INTO `migrations` VALUES (9,'2023_05_21_131546_create_chapters_elements_table',1);
+INSERT INTO `migrations` VALUES (10,'2023_05_21_131547_create_universes_table',1);
+INSERT INTO `migrations` VALUES (11,'2023_05_21_131548_create_chapter_table',1);
+INSERT INTO `migrations` VALUES (12,'2023_05_21_131549_create_comments_table',1);
+INSERT INTO `migrations` VALUES (13,'2023_05_21_131550_create_followers_table',1);
+INSERT INTO `migrations` VALUES (14,'2023_05_21_131552_create_approved_moderators_table',1);
+INSERT INTO `migrations` VALUES (15,'2023_05_21_131553_create_page_table',1);
+INSERT INTO `migrations` VALUES (16,'2023_05_23_115934_create_user_series_rating_table',1);
+INSERT INTO `migrations` VALUES (17,'2023_05_23_120425_create_user_chapter_rating_table',1);
+INSERT INTO `migrations` VALUES (18,'2023_05_23_120753_create_compositions_table',1);
+INSERT INTO `migrations` VALUES (19,'2023_05_26_174608_create_elementables_table',1);

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Series extends Model
 {
@@ -53,11 +54,17 @@ class Series extends Model
         return $this->morphMany(Comment::class, 'commentable');
     }
 
+    public function elements(): MorphToMany{
+        return $this->morphToMany(Element::class, 'elementable');
+    }
+
     // Delete all comments associated with the chapter.
     function delete()
     {
         // $this->pages()->delete();
         $this->comments()->delete();
+        $this->elements()->delete();
+
         parent::delete();
     }
 }

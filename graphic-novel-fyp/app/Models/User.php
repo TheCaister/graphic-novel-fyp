@@ -60,6 +60,11 @@ class User extends Model
         return $this->belongsToMany(User::class, 'followers', 'follower_id', 'followee_id');
     }
 
+    public function elements(): HasMany
+    {
+        return $this->hasMany(Element::class, 'owner_id', 'id');
+    }
+
     // Retrieves the users that follow this user
     public function followees(): BelongsToMany
     {

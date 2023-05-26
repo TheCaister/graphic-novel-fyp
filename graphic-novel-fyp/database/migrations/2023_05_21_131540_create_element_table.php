@@ -21,6 +21,8 @@ return new class extends Migration
             $table->longText('content');
             $table->timestamp('created_at');
             $table->boolean('hidden');
+
+      
         });
 
         Schema::enableForeignKeyConstraints();
