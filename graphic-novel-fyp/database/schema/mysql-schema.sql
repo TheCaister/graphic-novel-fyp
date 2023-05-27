@@ -86,7 +86,7 @@ DROP TABLE IF EXISTS `elementables`;
 CREATE TABLE `elementables` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `element_id` bigint unsigned NOT NULL,
-  `elementable_id` bigint unsigned NOT NULL,
+  `elementable_id` bigint unsigned DEFAULT NULL,
   `elementable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `elementables_element_id_foreign` (`element_id`),

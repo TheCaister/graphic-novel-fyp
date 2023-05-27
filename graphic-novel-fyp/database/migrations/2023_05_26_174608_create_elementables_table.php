@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreign('element_id')->references('element_id')->on('elements')->cascadeOnDelete();
 
             // Creating a polymorphic relationship between elements and pages, chapters, series and universes
-            $table->unsignedBigInteger('elementable_id');
+            $table->unsignedBigInteger('elementable_id')->nullable();
             $table->string('elementable_type');
         });
     }
