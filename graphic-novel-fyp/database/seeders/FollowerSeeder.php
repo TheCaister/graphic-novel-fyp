@@ -21,7 +21,7 @@ class FollowerSeeder extends Seeder
             $numToFollow = rand(0, 10);
             $usersToFollow = User::all()->random($numToFollow);
             foreach ($usersToFollow as $userToFollow) {
-                if ($user->id !== $userToFollow->id && !$user->followers->contains($userToFollow)) {
+                if ($user->id !== $userToFollow->id) {
                     $user->followers()->attach($userToFollow->id);
                 }
             }
