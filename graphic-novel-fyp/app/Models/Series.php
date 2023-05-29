@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -54,10 +55,15 @@ class Series extends Model
         return $this->morphMany(Comment::class, 'commentable');
     }
 
-    public function elements(): MorphToMany{
+    public function elements(): MorphToMany
+    {
         return $this->morphToMany(Element::class, 'elementable');
     }
 
+    public function userRatings(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'user_series_rating', 'series_id', 'user_id');
+    }
     // Delete all comments associated with the chapter.
     function delete()
     {

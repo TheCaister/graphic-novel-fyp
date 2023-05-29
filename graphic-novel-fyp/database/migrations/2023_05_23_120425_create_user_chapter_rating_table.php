@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
         Schema::create('user_chapter_likes', function (Blueprint $table) {
-            $table->id('user_chapter_rating_id');
+            $table->id('user_chapter_like_id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->unsignedBigInteger('chapter_id');

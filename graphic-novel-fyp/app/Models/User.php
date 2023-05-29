@@ -70,4 +70,14 @@ class User extends Model
     {
         return $this->belongsToMany(User::class, 'followers', 'followee_id', 'follower_id');
     }
+
+    public function likedChapters(): BelongsToMany
+    {
+        return $this->belongsToMany(Chapter::class, 'user_chapter_likes', 'user_id', 'chapter_id');
+    }
+
+    public function ratedSeries(): BelongsToMany
+    {
+        return $this->belongsToMany(Series::class, 'user_series_rating', 'user_id', 'series_id');
+    }
 }
