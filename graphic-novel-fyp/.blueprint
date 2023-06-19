@@ -1,0 +1,69 @@
+created:
+    - database/factories/ElementFactory.php
+    - database/factories/ChaptersCommentFactory.php
+    - database/factories/PagesElementFactory.php
+    - database/factories/UserFactory.php
+    - database/factories/SeriesElementFactory.php
+    - database/factories/SeriesFactory.php
+    - database/factories/ChaptersElementFactory.php
+    - database/factories/UniverseFactory.php
+    - database/factories/ChapterFactory.php
+    - database/factories/CommentFactory.php
+    - database/factories/FollowerFactory.php
+    - database/factories/SeriesCommentFactory.php
+    - database/factories/ApprovedModeratorFactory.php
+    - database/factories/PageFactory.php
+    - database/migrations/2023_05_22_131611_create_elements_table.php
+    - database/migrations/2023_05_22_131612_create_chapters_comments_table.php
+    - database/migrations/2023_05_22_131613_create_pages_elements_table.php
+    - database/migrations/2023_05_22_131614_create_users_table.php
+    - database/migrations/2023_05_22_131615_create_series_elements_table.php
+    - database/migrations/2023_05_22_131616_create_series_table.php
+    - database/migrations/2023_05_22_131617_create_chapters_elements_table.php
+    - database/migrations/2023_05_22_131618_create_universes_table.php
+    - database/migrations/2023_05_22_131619_create_chapters_table.php
+    - database/migrations/2023_05_22_131620_create_comments_table.php
+    - database/migrations/2023_05_22_131621_create_followers_table.php
+    - database/migrations/2023_05_22_131622_create_series_comments_table.php
+    - database/migrations/2023_05_22_131623_create_approved_moderators_table.php
+    - database/migrations/2023_05_22_131624_create_pages_table.php
+    - app/Models/Element.php
+    - app/Models/ChaptersComment.php
+    - app/Models/PagesElement.php
+    - app/Models/User.php
+    - app/Models/SeriesElement.php
+    - app/Models/Series.php
+    - app/Models/ChaptersElement.php
+    - app/Models/Universe.php
+    - app/Models/Chapter.php
+    - app/Models/Comment.php
+    - app/Models/Follower.php
+    - app/Models/SeriesComment.php
+    - app/Models/ApprovedModerator.php
+    - app/Models/Page.php
+models:
+    Connection: { id: false, connection_id: 'integer primary', first_user_id: 'integer foreign:users.id', second_user_id: 'integer foreign:users.id', time_created: dateTime }
+    QualificationsVacancy: { id: false, qualifications_vacancies_id: increments, qualification_id: 'integer foreign:qualifications.qualification_id', vacancy_id: 'integer foreign:vacancies.vacancy_id' }
+    AnimalSpecy: { id: false, species_id: 'integer primary', species_name: string, category: enum, can_fly: boolean, can_swim: boolean, can_climb: boolean, eating_style: enum, produces_toxins: boolean, size: enum, speed: enum, num_appendages: enum }
+    QualificationsUser: { id: false, qualifications_users_id: increments, user_id: 'integer foreign:users.id', qualification_id: 'integer foreign:qualifications.qualification_id', date_obtained: date }
+    SkillsUser: { id: false, skills_users_id: increments, user_id: 'integer foreign:users.id', skill_id: 'integer foreign:skills.skill_id', skill_level: 'enum nullable' }
+    SkillsVacancy: { id: false, skills_vacancies_id: 'integer primary', skill_id: 'increments nullable foreign:skills.skill_id', vacancy_id: 'integer foreign:vacancies.vacancy_id', skill_level: 'enum nullable' }
+    Qualification: { id: false, qualification_id: increments, qualification_name: string, qualification_description: 'text nullable' }
+    Organisation: { id: false, organisation_id: increments, organisation_name: string, owner_id: 'integer foreign:users.id', time_created: dateTime, address: 'string nullable', email: 'string nullable', contact_number: 'string nullable', description: 'text nullable', picture: 'string nullable', size: bigInteger }
+    User: { id: id, is_admin: boolean, username: string, password: string, email: string, date_of_birth: date, is_banned: boolean, bio: 'text nullable', profile_pic: 'string nullable', remember_token: 'string nullable', created_at: 'timestamp nullable' }
+    UsersVacancy: { id: false, users_vacancies_id: increments, user_id: 'integer foreign:users.id', vacancy_id: 'integer foreign:vacancies.vacancy_id', time_joined: dateTime }
+    Vacancy: { id: false, vacancy_id: increments, time_created: dateTime, organisation_id: 'integer foreign:organisations.organisation_id', vacancy_title: string, vacancy_description: 'text nullable', category_requirement: 'enum nullable', can_fly_requirement: 'boolean nullable', can_swim_requirement: 'boolean nullable', can_climb_requirement: 'boolean nullable', eating_style_requirement: 'enum nullable', produces_toxins_requirement: 'boolean nullable', size_requirement: 'enum nullable', speed_requirement: 'enum nullable', num_appendages_requirement: 'enum nullable', salary_range_lower: bigInteger, salary_range_upper: bigInteger }
+    Skill: { id: false, skill_id: increments, skill_name: string, skill_description: 'text nullable' }
+    Element: { id: false, element_id: bigIncrements, owner_id: 'bigInteger foreign:user.id', type: string, content: longText, created_at: timestamp, hidden: boolean }
+    ChaptersComment: { id: false, chapters_comments_id: bigIncrements, chapter_id: 'bigInteger foreign:chapter.chapter_id', comment_id: 'bigInteger foreign:comments.comment_id' }
+    PagesElement: { id: false, pages_elements_id: bigIncrements, page_id: 'bigInteger foreign:page.page_id', element_id: 'bigInteger foreign:element.element_id' }
+    SeriesElement: { id: false, series_elements_id: bigIncrements, series_id: 'bigInteger foreign:series.series_id', element_id: 'bigInteger foreign:element.element_id' }
+    Series: { id: false, series_id: bigIncrements, universe_id: 'bigInteger foreign:universes.universe_id', series_title: string, series_genre: enum, series_summary: longText, series_thumbnail: string, rating: float }
+    ChaptersElement: { id: false, chapters_elements_id: bigIncrements, chapter_id: 'bigInteger foreign:chapter.chapter_id', element_id: 'bigInteger foreign:element.element_id' }
+    Universe: { id: false, universe_id: bigIncrements, owner_id: 'bigInteger foreign:user.id', universe_name: string }
+    Chapter: { id: false, chapter_id: bigIncrements, series_id: 'bigInteger foreign:series.series_id', chapter_number: integer, chapter_title: string, chapter_thumbnail: string, chapter_notes: longText, comments_enabled: boolean, scheduled_publish: timestamp }
+    Comment: { id: false, comment_id: bigIncrements, commenter_id: 'bigInteger foreign:user.id', replying_to: 'bigInteger nullable foreign:comments.comment_id', comment_content: bigInteger, created_at: timestamp }
+    Follower: { id: id, follower_id: 'bigInteger foreign:user.id', followee_id: 'bigInteger foreign:user.id' }
+    SeriesComment: { id: false, series_comments_id: bigIncrements, series_id: 'bigInteger foreign:series.series_id', comment_id: 'bigInteger foreign:comments.comment_id' }
+    ApprovedModerator: { id: id, approver_id: 'bigInteger foreign:user.id', approvee_id: 'bigInteger foreign:user.id' }
+    Page: { id: false, page_id: bigIncrements, chapter_id: 'bigInteger foreign:chapter.chapter_id', page_number: bigInteger, page_image: string }
