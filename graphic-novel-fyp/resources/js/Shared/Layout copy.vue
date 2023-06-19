@@ -8,8 +8,15 @@
 
     <section class="p-6 bg-gray-200">
         <header class="flex">
-            
-            <button class="w-16"><img src="/assets/black_page.jpg" alt=""></button>
+            <h1 class="font-bold text-lg">
+                My Epic App
+            </h1>
+
+            <p class="text-sm ml-4">
+                <!-- Get stuff in shared by every page by accessing $page.props -->
+                Welcome back, {{ username }}
+            </p>
+
             <Nav/>
         </header>
     </section>

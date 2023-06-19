@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Series;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
@@ -38,16 +39,13 @@ Route::middleware('auth')->group(function () {
                 'canRegister' => Route::has('register'),
                 'laravelVersion' => Application::VERSION,
                 'phpVersion' => PHP_VERSION,
-                'name' => 'John Doe',
-                'frameworks' => [
-                    'Laravel',
-                    'React',
-                    'Vue',
-                    'Angular',
-                    'Tailwind'
-                ],
+                // 'name' => 'John Doe',
+                'name' => Auth::user()->username,
+                'series' => Series::all(),
             ]
         );
+
+
     });
 
     // TEST ROUTES ////////////////////////
