@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
             // FollowerSeeder::class,
             // CommentSeeder::class,
             // ElementSeeder::class,
-            RatingLikeSeeder::class,
+            // RatingLikeSeeder::class,
+            ModeratorSeeder::class,
         ]);
         // \App\Models\User::factory(100)->create();
         

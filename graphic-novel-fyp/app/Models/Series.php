@@ -60,6 +60,11 @@ class Series extends Model
         return $this->morphToMany(Element::class, 'elementable');
     }
 
+    public function moderators(): MorphToMany
+    {
+        return $this->morphToMany(User::class, 'moderatable', 'approved_moderators', 'moderatable_id', 'moderator_id', 'series_id');
+    }
+
     public function userRatings(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_series_rating', 'series_id', 'user_id');

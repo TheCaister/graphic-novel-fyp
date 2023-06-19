@@ -9,13 +9,12 @@ DROP TABLE IF EXISTS `approved_moderators`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `approved_moderators` (
   `approved_moderators_id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `approver_id` bigint unsigned NOT NULL,
-  `approvee_id` bigint unsigned NOT NULL,
+  `moderator_id` bigint unsigned NOT NULL,
+  `moderatable_id` bigint unsigned DEFAULT NULL,
+  `moderatable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`approved_moderators_id`),
-  KEY `approved_moderators_approver_id_foreign` (`approver_id`),
-  KEY `approved_moderators_approvee_id_foreign` (`approvee_id`),
-  CONSTRAINT `approved_moderators_approvee_id_foreign` FOREIGN KEY (`approvee_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `approved_moderators_approver_id_foreign` FOREIGN KEY (`approver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+  KEY `approved_moderators_moderator_id_foreign` (`moderator_id`),
+  CONSTRAINT `approved_moderators_moderator_id_foreign` FOREIGN KEY (`moderator_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `chapters`;

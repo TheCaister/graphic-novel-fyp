@@ -48,6 +48,11 @@ class Universe extends Model
         return $this->morphToMany(Element::class, 'elementable');
     }
 
+    public function moderators(): MorphToMany
+    {
+        return $this->morphToMany(User::class, 'moderatable', 'approved_moderators', 'moderatable_id', 'moderator_id', 'universe_id');
+    }
+
     function delete()
     {
         $this->elements()->delete();

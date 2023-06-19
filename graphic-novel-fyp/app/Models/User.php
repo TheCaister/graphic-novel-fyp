@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class User extends Model
 {
@@ -79,5 +80,15 @@ class User extends Model
     public function ratedSeries(): BelongsToMany
     {
         return $this->belongsToMany(Series::class, 'user_series_rating', 'user_id', 'series_id');
+    }
+
+    public function moderatableUniverses(): MorphToMany
+    {
+        return $this->morphedByMany(Universe::class, 'moderatable', 'approved_moderators', 'moderator_id', 'moderatable_id', 'id', 'universe_id');
+    }
+
+    public function moderatableSeries(): MorphToMany
+    {
+        return $this->morphedByMany(Series::class, 'moderatable', 'approved_moderators', 'moderator_id', 'moderatable_id', 'id', 'series_id');
     }
 }
