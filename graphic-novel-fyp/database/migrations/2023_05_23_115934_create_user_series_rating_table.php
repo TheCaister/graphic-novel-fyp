@@ -11,18 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('chapters', function (Blueprint $table) {
-            $table->id('chapter_id');
+        Schema::create('user_series_rating', function (Blueprint $table) {
+
+            $table->id('user_series_rating_id');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->unsignedBigInteger('series_id');
             $table->foreign('series_id')->references('series_id')->on('series')->cascadeOnDelete();
-            $table->integer('chapter_number');
-            $table->string('chapter_title');
-            $table->string('chapter_thumbnail');
-            $table->longText('chapter_notes');
-            $table->boolean('comments_enabled');
-            $table->timestamp('scheduled_publish');
+
+            // Users can rate a series from 1 to 5
+            $table->integer('rating');
         });
 
         Schema::enableForeignKeyConstraints();
@@ -33,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('chapter');
+        Schema::dropIfExists('user_series_rating');
     }
 };

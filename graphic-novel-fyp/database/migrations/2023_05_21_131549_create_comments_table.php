@@ -15,11 +15,16 @@ return new class extends Migration
 
         Schema::create('comments', function (Blueprint $table) {
             $table->id('comment_id');
-            $table->bigInteger('commenter_id');
-            $table->bigInteger('replying_to')->nullable();
-            $table->foreign('replying_to')->references('comment_id')->on('comments');
-            $table->bigInteger('comment_content');
+            $table->unsignedBigInteger('commenter_id');
+            $table->foreign('commenter_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->unsignedBigInteger('replying_to')->nullable();
+            $table->foreign('replying_to')->references('comment_id')->on('comments')->cascadeOnDelete();
+            $table->string('comment_content');
             $table->timestamp('created_at');
+
+            // Creating a polymorphic relationship between comments and chapters and series
+            $table->unsignedBigInteger('commentable_id');
+            $table->string('commentable_type');
         });
 
         Schema::enableForeignKeyConstraints();

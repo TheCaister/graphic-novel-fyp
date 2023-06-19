@@ -12,15 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::disableForeignKeyConstraints();
-
-        Schema::create('pages', function (Blueprint $table) {
-            $table->id('page_id');
+        Schema::create('user_chapter_likes', function (Blueprint $table) {
+            $table->id('user_chapter_like_id');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->unsignedBigInteger('chapter_id');
             $table->foreign('chapter_id')->references('chapter_id')->on('chapters')->cascadeOnDelete();
-            $table->bigInteger('page_number');
-            $table->string('page_image');
-        });
 
+        });
         Schema::enableForeignKeyConstraints();
     }
 
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('page');
+        Schema::dropIfExists('user_chapter_rating');
     }
 };

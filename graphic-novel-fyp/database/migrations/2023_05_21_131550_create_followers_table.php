@@ -15,10 +15,10 @@ return new class extends Migration
 
         Schema::create('followers', function (Blueprint $table) {
             $table->id('followers_id');
-            $table->bigInteger('follower_id');
-            $table->foreign('follower_id')->references('id')->on('user');
-            $table->bigInteger('followee_id');
-            $table->foreign('followee_id')->references('id')->on('user');
+            $table->unsignedBigInteger('follower_id');
+            $table->foreign('follower_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->unsignedBigInteger('followee_id');
+            $table->foreign('followee_id')->references('id')->on('users')->cascadeOnDelete();
         });
 
         Schema::enableForeignKeyConstraints();

@@ -6,6 +6,8 @@ use App\Models\Chapter;
 use App\Models\Page;
 use App\Models\Series;
 use App\Models\User;
+use App\Models\Comment;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Universe;
 

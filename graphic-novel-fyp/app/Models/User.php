@@ -2,31 +2,36 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $fillable = [
-        'name',
-        'email',
+        'is_admin',
+        'username',
         'password',
+        'email',
+        'date_of_birth',
+        'is_banned',
+        'bio',
+        'profile_picture',
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $hidden = [
         'password',
@@ -34,20 +39,56 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
+     * The attributes that should be cast to native types.
      *
-     * @var array<string, string>
+     * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'id' => 'integer',
+        'is_admin' => 'boolean',
+        'date_of_birth' => 'date',
+        'is_banned' => 'boolean',
+        'created_at' => 'timestamp',
     ];
 
-    // This is a mutator
-    // It will automatically hash the password when it is set
-    // Mutators are called when you set the value of an attribute
-    // To name a mutator, use set + the name of the attribute + Attribute
-    public function setPasswordAttribute($value)
+    public function universes(): HasMany
     {
-        $this->attributes['password'] = bcrypt($value);
+        return $this->hasMany(Universe::class, 'owner_id', 'id');
+    }
+
+    public function followers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'followee_id');
+    }
+
+    public function elements(): HasMany
+    {
+        return $this->hasMany(Element::class, 'owner_id', 'id');
+    }
+
+    // Retrieves the users that follow this user
+    public function followees(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'followers', 'followee_id', 'follower_id');
+    }
+
+    public function likedChapters(): BelongsToMany
+    {
+        return $this->belongsToMany(Chapter::class, 'user_chapter_likes', 'user_id', 'chapter_id');
+    }
+
+    public function ratedSeries(): BelongsToMany
+    {
+        return $this->belongsToMany(Series::class, 'user_series_rating', 'user_id', 'series_id');
+    }
+
+    public function moderatableUniverses(): MorphToMany
+    {
+        return $this->morphedByMany(Universe::class, 'moderatable', 'approved_moderators', 'moderator_id', 'moderatable_id', 'id', 'universe_id');
+    }
+
+    public function moderatableSeries(): MorphToMany
+    {
+        return $this->morphedByMany(Series::class, 'moderatable', 'approved_moderators', 'moderator_id', 'moderatable_id', 'id', 'series_id');
     }
 }
