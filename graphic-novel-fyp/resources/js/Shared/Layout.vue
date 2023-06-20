@@ -18,17 +18,21 @@
         <slot/>
     </section>
 
+    <Footer/>
 </template>
 
 <script>
 import Nav from './Nav.vue';
 import { Head } from '@inertiajs/vue3';
+import Footer from './Footer.vue';
+
 
 export default {
     components: {
-        Nav,
-        Head
-    },
+    Nav,
+    Head,
+    Footer
+},
 
     computed: {
         // Get stuff in shared by every page by accessing $page.props
