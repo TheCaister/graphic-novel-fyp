@@ -37,13 +37,16 @@ Route::middleware('auth')->group(function () {
             [
                 'canLogin' => Route::has('login'),
                 'canRegister' => Route::has('register'),
+                'laravelVersion' => Application::VERSION,
+                'phpVersion' => PHP_VERSION,
+                // 'name' => 'John Doe',
                 'name' => Auth::user()->username,
                 'series' => Series::all(),
             ]
         );
 
 
-    })->name('home');
+    });
 
     // TEST ROUTES ////////////////////////
 
@@ -116,28 +119,11 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Dashboard');
     })->middleware(['auth', 'verified'])->name('dashboard');
 
-    // Route::middleware('auth')->group(function () {
-    //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    //     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    // });
+    Route::middleware('auth')->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
 });
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
-    Route::get('/profile/{user}/edit', [ProfileController::class, 'editOther'])->name('profile.editOther');
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile/{user}/personal', [ProfileController::class, 'updateOtherPersonal'])->name('profile.updateOtherPersonal');
-    Route::patch('/profile/personal', [ProfileController::class, 'updatePersonal'])->name('profile.updatePersonal');
-    Route::patch('/profile/{user}', [ProfileController::class, 'updateOther'])->name('profile.updateOther');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::delete('/users/{user}', [ProfileController::class, 'destroyOther']);
-});
-
-// Make a group of routes that will display series
-// Route::group(function () {
-//     Route::get('/genre', []);
-// });
 
 require __DIR__ . '/auth.php';

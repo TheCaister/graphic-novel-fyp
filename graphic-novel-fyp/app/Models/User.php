@@ -57,7 +57,7 @@ class User extends Authenticatable
         return $this->hasMany(Universe::class, 'owner_id', 'id');
     }
 
-    public function followers(): BelongsToMany
+    public function followees(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'followers', 'follower_id', 'followee_id');
     }
@@ -68,7 +68,7 @@ class User extends Authenticatable
     }
 
     // Retrieves the users that follow this user
-    public function followees(): BelongsToMany
+    public function followers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'followers', 'followee_id', 'follower_id');
     }
