@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Series;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class SeriesController extends Controller
@@ -36,11 +37,28 @@ class SeriesController extends Controller
 
     // Show the series
     public function show(Series $series){
+        // dd($series->chapters);
+        
+        // Get the chapters for the series as a list
+        $chapters = $series->chapters()->get();
+
+        // Query the user_series_rating table to get the average rating for the series and round it to 2 decimal places
+        $series->rating = round(DB::table('user_series_rating')->where('series_id', $series->series_id)->avg('rating'), 2);
+
+        // For each chapter, add the amount of likes it has
+        foreach ($chapters as $chapter) {
+            // Query the user_chapter_likes table for the amount of likes
+            $chapter->likes = DB::table('user_chapter_likes')->where('chapter_id', $chapter->chapter_id)->count();
+        }
+
+        // dd($chapters);
+
         return Inertia::render('Series/Show', [
             'series' => $series,
             'universe' => $series->universe(),
-            'chapters' => $series->chapters()->get(),
-            // 'author' => $series->author(),
+            'chapters' => $chapters,
+            // the author is the owner of this series' universe
+            'author' => $series->universe->owner,
         ]);
     }
 

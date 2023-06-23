@@ -40,7 +40,7 @@ class UserSeeder extends Seeder
                     //     ->hasReplies(3))
                     // For every chapter, create 5 pages, with the page_number starting at 1, incrementing by 1 until 5
 
-                    ->has(Chapter::factory()
+                    ->has(Chapter::factory(5)
                         ->has(
                             Page::factory(5)
                                 // Using this sequence, we can create 5 pages, with the page_number starting at 1, incrementing by 1 until 5

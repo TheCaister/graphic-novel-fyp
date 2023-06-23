@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SeriesController;
 use App\Models\Series;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -136,8 +137,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Make a group of routes that will display series
-// Route::group(function () {
-//     Route::get('/genre', []);
-// });
+
+Route::get('/series/{series}', [SeriesController::class, 'show']);
 
 require __DIR__ . '/auth.php';

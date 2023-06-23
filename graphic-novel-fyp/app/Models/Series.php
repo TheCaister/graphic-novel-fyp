@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 class Series extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'series_id';
     public $timestamps = false;
 
     /**
@@ -47,7 +48,7 @@ class Series extends Model
 
     public function chapters(): HasMany
     {
-        return $this->hasMany(Chapter::class);
+        return $this->hasMany(Chapter::class, 'series_id', 'series_id');
     }
 
     public function comments(): MorphMany
