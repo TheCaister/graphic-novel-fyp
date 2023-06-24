@@ -17,6 +17,8 @@
                 <NavLink href="/series/popular" :active="$page.component === 'Popular'">POPULAR</NavLink>
             </li>
 
+            
+
             <!-- Here's how you can submit POST requests -->
             <!-- Inertia has an event listener that sends this request -->
             <!-- Inertia uses Axios -->

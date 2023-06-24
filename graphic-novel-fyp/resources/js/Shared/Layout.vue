@@ -13,13 +13,29 @@
 
 
             <Link :href="route('home')">
-                <img src="/assets/black_page.jpg" alt="" width="50" height="50">
+            <img src="/assets/black_page.jpg" alt="" width="50" height="50">
             </Link>
 
             <Link>
-                
+
             </Link>
             <Nav />
+
+            <!-- Place a "publish" button -->
+            <Link href="/series/create" class="ml-auto">Publish</Link>
+
+            <!-- Place a "User" button with the user's profile picture and username -->
+            <Link href="/user/main" class="ml-auto">
+            <div class="flex items-center ml-4">
+                <img src="/assets/black_page.jpg" alt="" width="50" height="50">
+                <span class="ml-2">{{ username }}</span>
+            </div>
+            </Link>
+
+
+            <!-- Place a "search" button that expands to a searchbar when clicked -->
+            <button class="ml-4">Search</button>
+
         </header>
     </section>
 

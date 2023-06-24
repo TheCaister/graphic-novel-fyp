@@ -44,7 +44,9 @@ defineProps({
 
         <RecentlyAdded :series="$page.props.series" />
 
-        <div v-if="canLogin" class="sm:fixed sm:top-0 sm:right-0 p-6 text-right">
+        <!--  class="sm:fixed sm:top-0 sm:right-0 p-6 text-right" -->
+
+        <div v-if="canLogin">
             <Link
                 v-if="$page.props.auth.user"
                 :href="route('dashboard')"

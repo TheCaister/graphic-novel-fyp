@@ -134,6 +134,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::delete('/users/{user}', [ProfileController::class, 'destroyOther']);
+    Route::get('/user/main', [ProfileController::class, 'main'])->name('user.main');
 });
 
 // Make a group of routes that will display series
