@@ -12,6 +12,7 @@ class Comment extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    protected $primaryKey = 'comment_id';
 
     /**
      * The attributes that are mass assignable.

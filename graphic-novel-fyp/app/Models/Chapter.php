@@ -14,6 +14,13 @@ class Chapter extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    protected $primaryKey = 'chapter_id';
+    protected $appends = ['url'];
+
+    public function getUrlAttribute()
+    {
+        return route('chapters.show', $this->chapter_id);
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -49,7 +56,7 @@ class Chapter extends Model
 
     public function pages(): HasMany
     {
-        return $this->hasMany(Page::class);
+        return $this->hasMany(Page::class, 'chapter_id', 'chapter_id');
     }
 
  

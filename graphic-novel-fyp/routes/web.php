@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeriesController;
 use App\Models\Series;
@@ -140,5 +141,10 @@ Route::middleware('auth')->group(function () {
 // Make a group of routes that will display series
 
 Route::get('/series/{series}', [SeriesController::class, 'show']);
+
+// Route::get('/series/{series}/chapters/{chapter}', [ChapterController::class, 'show']);
+
+// Trying out resource
+Route::resource('chapters', ChapterController::class);
 
 require __DIR__ . '/auth.php';

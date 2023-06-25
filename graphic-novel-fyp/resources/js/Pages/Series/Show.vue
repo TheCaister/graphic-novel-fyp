@@ -17,7 +17,10 @@
     <p class="text-gray-700 text-base mb-4">{{ series.series_summary }}</p>
 
     <!-- Button to go to the first chapter -->
-    <a :href="`/series/${series.series_id}/chapters/${chapters[0].chapter_id}`" class="text-blue-500 hover:text-blue-700">First chapter</a>
+    <Link :href="`${chapters[0].url}`" class="text-blue-500 hover:text-blue-700">First chapter</Link>
+
+
+    <!-- <a :href="`route('chapters.show', {{ chapters[0] }})`" class="text-blue-500 hover:text-blue-700">First chapter</a> -->
 
     <!-- Loop through and display every chapter -->
     <div class="grid grid-cols-3 gap-4">
@@ -29,19 +32,21 @@
                 <p class="text-gray-700 text-base mb-4">Likes: {{ chapter.likes }}</p>
                 <h2 class="text-xl font-bold mb-2">{{ chapter.chapter_title }}</h2>
                 <p class="text-gray-700 text-base">{{ chapter.chapter_notes }}</p>
-                <a :href="`/series/${series.series_id}/chapters/${chapter.id}`" class="text-blue-500 hover:text-blue-700">Read</a>
+                <Link :href="`${chapter.url}`" class="text-blue-500 hover:text-blue-700">Read</Link>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+
+
     export default {
         props: {
             series: Object,
             universe: Object,
             chapters: Array,
             author: Object,
-        }
+        },
     }
 </script>

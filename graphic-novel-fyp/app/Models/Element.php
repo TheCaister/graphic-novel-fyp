@@ -12,6 +12,7 @@ class Element extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    protected $primaryKey = 'element_id';
 
     /**
      * The attributes that are mass assignable.

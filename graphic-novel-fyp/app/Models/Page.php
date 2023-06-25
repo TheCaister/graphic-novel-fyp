@@ -11,6 +11,7 @@ class Page extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    protected $primaryKey = 'page_id';
 
     /**
      * The attributes that are mass assignable.

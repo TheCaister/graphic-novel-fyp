@@ -12,6 +12,7 @@ class Universe extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    protected $primaryKey = 'universe_id';
 
     /**
      * The attributes that are mass assignable.
