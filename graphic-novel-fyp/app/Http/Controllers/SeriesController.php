@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Series;
+use App\Models\Universe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -11,10 +12,10 @@ class SeriesController extends Controller
 {
     // Create some CRUD functions for the Series model
     // Create a new series
-    public function create()
+    public function create(Universe $universe)
     {
         return Inertia::render('Series/Create', [
-            // 'universes' => auth()->user()->universes()->get(),
+            'universe' => $universe,
         ]);
     }
 

@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\ChapterController;
+use App\Http\Controllers\ElementController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeriesController;
+use App\Http\Controllers\UniverseController;
 use App\Models\Series;
 use App\Models\User;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -145,6 +146,10 @@ Route::get('/publish', [SeriesController::class, 'publish'])->name('publish');
 // Route::get('/series/{series}/chapters/{chapter}', [ChapterController::class, 'show']);
 
 // Trying out resource
+Route::resource('universes', UniverseController::class);
 Route::resource('chapters', ChapterController::class);
+Route::resource('elements', ElementController::class);
+
+
 
 require __DIR__ . '/auth.php';

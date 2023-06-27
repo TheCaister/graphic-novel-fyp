@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chapter;
+use App\Models\Series;
 use COM;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -20,9 +21,15 @@ class ChapterController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Series $series)
     {
-        //
+        // Return the create page, passing in the series
+        return Inertia::render(
+            'Chapters/Create',
+            [
+                'series' => $series,
+            ]
+        );
     }
 
     /**
@@ -47,9 +54,8 @@ class ChapterController extends Controller
 
             // paginate the pages
             'pages' => $chapter->pages()->paginate(1),
-            
-        ]);
 
+        ]);
     }
 
     /**
@@ -61,7 +67,6 @@ class ChapterController extends Controller
         return Inertia::render('Chapters/Edit', [
             'chapter' => $chapter,
         ]);
-
     }
 
     /**
@@ -82,6 +87,4 @@ class ChapterController extends Controller
 
         return redirect()->route('series.show', $series_id);
     }
-
-    
 }
