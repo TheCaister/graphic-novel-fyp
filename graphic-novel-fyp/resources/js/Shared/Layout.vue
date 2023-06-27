@@ -14,6 +14,8 @@
 
             <Link :href="route('home')">
             <img src="/assets/black_page.jpg" alt="" width="50" height="50">
+            <!-- <img src="" alt="" width="50" height="50"> -->
+
             </Link>
 
             <Link>
@@ -22,12 +24,13 @@
             <Nav />
 
             <!-- Place a "publish" button -->
-            <Link href="/series/create" class="ml-auto">Publish</Link>
+            <Link href="/publish" class="ml-auto">Publish</Link>
 
             <!-- Place a "User" button with the user's profile picture and username -->
             <Link href="/user/main" class="ml-auto">
             <div class="flex items-center ml-4">
                 <img src="/assets/black_page.jpg" alt="" width="50" height="50">
+                <!-- <img src="" alt="" width="50" height="50"> -->
                 <span class="ml-2">{{ username }}</span>
             </div>
             </Link>

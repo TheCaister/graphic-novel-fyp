@@ -119,5 +119,15 @@ class SeriesController extends Controller
         ]);
     }
 
+    public function publish(){
+        // Get all the universes that the user owns
+        $universes = auth()->user()->universes;
 
+        // Return the publish page
+        return Inertia::render('Series/Publish', [
+            // Eager loading is when you load a model with its relationships
+            'universes' => $universes->load('series'),
+            
+        ]);
+    }
 }

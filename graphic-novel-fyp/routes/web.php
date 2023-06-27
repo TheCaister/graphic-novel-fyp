@@ -43,8 +43,6 @@ Route::middleware('auth')->group(function () {
                 'series' => Series::all(),
             ]
         );
-
-
     })->name('home');
 
     // TEST ROUTES ////////////////////////
@@ -69,7 +67,7 @@ Route::middleware('auth')->group(function () {
                     'can' => [
                         'edit' => Auth::user()->can('edit', $user),
                     ]
-                    ]),
+                ]),
             // 'users' => User::all(),
             'filters' => Request::only(['search']),
 
@@ -141,6 +139,8 @@ Route::middleware('auth')->group(function () {
 // Make a group of routes that will display series
 
 Route::get('/series/{series}', [SeriesController::class, 'show']);
+
+Route::get('/publish', [SeriesController::class, 'publish'])->name('publish');
 
 // Route::get('/series/{series}/chapters/{chapter}', [ChapterController::class, 'show']);
 

@@ -43,7 +43,10 @@ class ChapterController extends Controller
             'series' => $chapter->series,
             'chapter' => $chapter,
             // 'series' => $chapter->series,
-            'pages' => $chapter->pages,
+            // 'pages' => $chapter->pages,
+
+            // paginate the pages
+            'pages' => $chapter->pages()->paginate(1),
             
         ]);
 
@@ -79,4 +82,6 @@ class ChapterController extends Controller
 
         return redirect()->route('series.show', $series_id);
     }
+
+    
 }

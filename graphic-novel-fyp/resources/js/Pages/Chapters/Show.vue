@@ -14,11 +14,32 @@
 
     <!-- Page component with findPage(pageNumber) passed as prop -->
     <Pages :page="findPage(pageNumber)" />
+
+    <!-- Tailwind pagination component -->
+    <!-- <TailwindPagination
+        :data="laravelData"
+        @pagination-change-page="getResults"
+    /> -->
 </template>
 
 <script>
 
 import Pages from './Components/Pages.vue'
+
+// import ref from 'vue'
+// import pagination from 'laravel-vue-pagination'
+
+
+// Vue.component('pagination', pagination);
+
+// const laravelData = ref({})
+
+// const getResults = async (page = 1) => {
+//     const response = await fetch(`/api/chapters/${this.chapter.chapter_id}/pages?page=${page}`)
+//     laravelData.value = await response.json()
+// }
+
+// getResults()
 
 let pageNumber = 0;
 
@@ -26,19 +47,21 @@ export default {
     props: {
         chapter: Object,
         series: Object,
-        universe: Object,
+        // universe: Object,
         pages: Array,
 
     },
 
     components: {
         Pages,
+        // TailwindPagination,
     },
 
     // Set the page number to the page number of the first page
     data() {
         return {
-            pageNumber: 1,
+            // pageNumber: 1,
+            pageNumber: this.pages[0].page_number,
         }
     },
 
@@ -46,8 +69,6 @@ export default {
     methods: {
         findPage(pageNumber) {
             return this.pages.find(page => page.page_number === pageNumber);
-
-            
         }
     },
 }

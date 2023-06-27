@@ -42,7 +42,7 @@ class Page extends Model
 
     public function elements(): MorphToMany
     {
-        return $this->morphToMany(Element::class, 'elementable');
+        return $this->morphToMany(Element::class, 'elementable', 'elementables', 'elementable_id', 'element_id');
     }
 
     function delete()

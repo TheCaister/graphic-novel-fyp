@@ -15,7 +15,6 @@ class Series extends Model
     use HasFactory;
     protected $primaryKey = 'series_id';
     public $timestamps = false;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -58,7 +57,7 @@ class Series extends Model
 
     public function elements(): MorphToMany
     {
-        return $this->morphToMany(Element::class, 'elementable');
+        return $this->morphToMany(Element::class, 'elementable', 'elementables', 'elementable_id', 'element_id');
     }
 
     public function moderators(): MorphToMany

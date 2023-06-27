@@ -41,12 +41,12 @@ class Universe extends Model
 
     public function series(): HasMany
     {
-        return $this->hasMany(Series::class);
+        return $this->hasMany(Series::class, 'universe_id', 'universe_id');
     }
 
     public function elements(): MorphToMany
     {
-        return $this->morphToMany(Element::class, 'elementable');
+        return $this->morphToMany(Element::class, 'elementable', 'elementables', 'elementable_id', 'element_id');
     }
 
     public function moderators(): MorphToMany
