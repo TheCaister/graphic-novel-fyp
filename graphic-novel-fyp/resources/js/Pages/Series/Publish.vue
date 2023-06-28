@@ -7,14 +7,16 @@
         </button>
 
         <div v-for="universe in universes" :key="universe.universe_id" class="p-4">
+            <h1 class="text-3xl font-bold mb-2">
+                <Link :href="`/universes/${universe.universe_id}`">{{ universe.universe_name }}</Link>
+            </h1>
+
             <!-- Create a button that creates a series -->
             <button class="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded">
                 <Link :href="`/series/create/`">Create Series</Link>
             </button>
 
-            <h1 class="text-3xl font-bold mb-2">
-                <Link :href="`/universes/${universe.universe_id}`">{{ universe.universe_name }}</Link>
-            </h1>
+
             <div v-for="series in universe.series" :key="series.series_id" class="p-4">
                 <h1 class="text-3xl font-bold mb-2">
                     <Link :href="`/series/${series.series_id}`">{{ series.series_title }}</Link>

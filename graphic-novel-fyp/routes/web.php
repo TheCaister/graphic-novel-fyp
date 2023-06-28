@@ -139,7 +139,7 @@ Route::middleware('auth')->group(function () {
 
 // Make a group of routes that will display series
 
-Route::get('/series/{series}', [SeriesController::class, 'show']);
+// Route::get('/series/{series}', [SeriesController::class, 'show']);
 
 Route::get('/publish', [SeriesController::class, 'publish'])->name('publish');
 
@@ -149,6 +149,7 @@ Route::get('/publish', [SeriesController::class, 'publish'])->name('publish');
 Route::resource('universes', UniverseController::class);
 Route::resource('chapters', ChapterController::class);
 Route::resource('elements', ElementController::class);
+Route::resource('series', SeriesController::class);
 
 
 

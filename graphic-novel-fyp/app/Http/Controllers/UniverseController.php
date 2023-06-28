@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Universe;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -29,7 +30,18 @@ class UniverseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $formFields = $request->validate([
+            'universe_name' => 'required',
+        ]);
+
+        $formFields['owner_id'] = auth()->id();
+
+        // dd($formFields);
+
+        Universe::create($formFields);
+
+        return redirect()->route('home');
     }
 
     /**
