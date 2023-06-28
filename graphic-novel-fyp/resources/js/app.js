@@ -6,6 +6,13 @@ import { Link, createInertiaApp, Head } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import Layout from './Shared/Layout.vue';
+import Label from '@/Components/Forms/Label.vue';
+import TextInput from '@/Components/Forms/TextInput.vue';
+import ImageLabel from '@/Components/Forms/ImageLabel.vue';
+import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue';
+import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue';
+import BaseInput from '@/Components/Forms/BaseInput.vue';
+import TextAreaInput from '@/Components/Forms/TextAreaInput.vue';
 
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
@@ -48,11 +55,19 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })
             .use(plugin)
+
             // Register the <Link> component as a global component
             // Now, you don't need to import it in every page
             // Be careful with this!! May not always be the best idea!!
             .component('Link', Link)
             .component('Head', Head)
+            .component('Label', Label)
+            .component('TextInput', TextInput)
+            .component('ImageLabel', ImageLabel)
+            .component('PrimaryButton', PrimaryButton)
+            .component('SecondaryButton', SecondaryButton)
+            .component('BaseInput', BaseInput)
+            .component('TextAreaInput', TextAreaInput)
             .use(ZiggyVue, Ziggy)
             .mount(el);
     },
