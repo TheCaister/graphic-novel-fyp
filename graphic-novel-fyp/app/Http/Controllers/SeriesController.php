@@ -24,16 +24,27 @@ class SeriesController extends Controller
     {
         // Validate the request
         $formFields = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
             'universe_id' => 'required',
+            'series_title' => 'required',
+            'series_genre' => 'required',
+            'series_summary' => 'required',
         ]);
+
+        if ($request->hasFile('series_thumbnail')) {
+            $formFields['series_thumbnail'] = $request->file('series_thumbnail')->store('series_thumbnails', 'public');
+        }
+        else{
+            // Set it to the black image
+            $formFields['series_thumbnail'] = 'series_thumbnails/black.png';
+        }
+
+        $formFields['rating'] = 0;
 
         // Create the series
         $series = Series::create($formFields);
 
         // Redirect to the series page
-        return redirect()->route('series.show', $series->id);
+        return redirect()->route('publish');
     }
 
     // Show the series

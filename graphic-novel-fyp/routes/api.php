@@ -20,3 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Route::get('/chapters/{chapter}/pages', [PageController::class, 'index'])->name('pages.index');
+
+// Api call to get all universes owned by the user. The function is called getUniverses
+Route::get('/universes/{user}', [App\Http\Controllers\UniverseController::class, 'getUniverses'])->name('universes.getUniverses');
+

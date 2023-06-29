@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Universe;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -74,5 +75,17 @@ class UniverseController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    // Return universes in JSON format
+    public function getUniverses(User $user)
+    {
+        // Get all universe owned by the user
+        $universes = $user->universes;
+
+        // Return dd in JSON format
+        // dd($universes);
+
+        return response()->json($universes);
     }
 }

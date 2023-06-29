@@ -5,8 +5,27 @@
         </div>
 
         <div class="flex flex-col gap-5 md:w-full">
+            <!-- Dropdown for all universes -->
+            <div>
+                <Label>Universe</Label>
+                <select v-model="form.universe_id" class="border-2 border-black rounded-md p-2">
+                    <option v-for="universe in universes" :key="universe.universe_id" :value="universe.universe_id">
+                        {{ universe.universe_name }}
+                    </option>
+                </select>
+            </div>
+
             <div>
                 <BaseInput for="series_title" v-model="form.series_title" label="Series Title" type="text" />
+            </div>
+
+            <div>
+                <Label>Genre</Label>
+                <select v-model="form.series_genre" class="border-2 border-black rounded-md p-2">
+                    <option v-for="genre in genres" :key="genre" :value="genre">
+                        {{ genre }}
+                    </option>
+                </select>
             </div>
 
             <div>
@@ -15,11 +34,8 @@
 
             <div>
                 <Label>Series Thumbnail</Label>
-                <ImageLabel/>
+                <ImageLabel />
             </div>
-
-            <!-- Dropdown for all universes -->
-
 
             <div class="flex justify-center gap-2 md:gap-5">
                 <a href="">
@@ -39,6 +55,7 @@
 
 <script>
 import { useForm } from '@inertiajs/vue3';
+// import axios from 'axios';
 
 export default {
     data() {
@@ -53,7 +70,8 @@ export default {
                 'MYSTERY',
                 'ROMANCE',
                 'THRILLER',
-            ]
+            ],
+            universes: [],
         }
     }
     ,
@@ -70,11 +88,12 @@ export default {
             form,
         }
     },
-    props: {
-        universes: {
-            type: Array,
-            required: true
-        }
+    mounted() {
+
+        // Make a call to the API to get all the universes, passing in the user's ID
+        axios.get('/api/universes/' + this.$attrs.auth.user.id).then(response => {
+            this.universes = response.data
+        }).catch(error => console.log(error))
     }
 }
 </script>
