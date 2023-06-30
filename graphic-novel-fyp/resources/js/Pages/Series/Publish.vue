@@ -25,7 +25,8 @@
                 <p>Genre: {{ series.series_genre }}</p>
                 <!-- Create a button that adds an episode -->
                 <button class="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded">
-                    <Link :href="`/episodes/create/${series.series_id}`">Add Episode</Link>
+                    <!-- <Link :href="`/chapters/create/${series.series_id}`">Add Episode</Link> -->
+                    <Link :href="route('chapters.create', series.series_id)">Add Episode</Link>
                 </button>
 
                 <!-- <img src="/assets/black_page.jpg" alt=""> -->

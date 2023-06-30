@@ -25,3 +25,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/universes/{user}', [App\Http\Controllers\UniverseController::class, 'getUniverses'])->name('universes.get-universes');
 
 Route::get('chapters/{chapter}/pages', [App\Http\Controllers\PageController::class, 'getChapterPages'])->name('pages.chapter-pages');
+
+Route::get('series/{universe}', [App\Http\Controllers\SeriesController::class, 'getSeries'])->name('series.get-series');

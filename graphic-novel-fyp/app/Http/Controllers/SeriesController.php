@@ -142,4 +142,12 @@ class SeriesController extends Controller
             
         ]);
     }
+
+    public function getSeries(Universe $universe){
+        // Get all the series in the universe
+        $series = $universe->series;
+
+        // Return the series as a json response
+        return response()->json($series);
+    }
 }
