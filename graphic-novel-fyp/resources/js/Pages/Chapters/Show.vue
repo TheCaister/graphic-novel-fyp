@@ -4,7 +4,7 @@
 
     <!-- Show the series title, with a link going to it -->
     <Link :href="`/series/${series.series_id}`">
-        <p class="text-gray-700 text-base mb-4">Series: {{ series.series_title }}</p>
+    <p class="text-gray-700 text-base mb-4">Series: {{ series.series_title }}</p>
     </Link>
 
     <div class="flex">
@@ -12,8 +12,8 @@
         <p class="text-gray-700 text-base mb-4">Chapter {{ chapter.chapter_number }}</p>
     </div>
 
-    <!-- Page component with findPage(pageNumber) passed as prop -->
-    <Pages :page="findPage(pageNumber)" />
+    <!-- Page component with pages[pageNumber] passed as prop -->
+    <Pages v-if="pageLoaded" :page="pages[pageNumber - 1]" @previousPage="changePage(-1)" @nextPage="changePage(1)" />
 
     <!-- Tailwind pagination component -->
     <!-- <TailwindPagination
@@ -26,50 +26,54 @@
 
 import Pages from './Components/Pages.vue'
 
-// import ref from 'vue'
-// import pagination from 'laravel-vue-pagination'
-
-
-// Vue.component('pagination', pagination);
-
-// const laravelData = ref({})
-
-// const getResults = async (page = 1) => {
-//     const response = await fetch(`/api/chapters/${this.chapter.chapter_id}/pages?page=${page}`)
-//     laravelData.value = await response.json()
-// }
-
-// getResults()
-
-let pageNumber = 0;
-
 export default {
     props: {
         chapter: Object,
         series: Object,
-        // universe: Object,
-        pages: Array,
-
     },
 
     components: {
         Pages,
-        // TailwindPagination,
     },
 
     // Set the page number to the page number of the first page
     data() {
         return {
-            // pageNumber: 1,
-            pageNumber: this.pages[0].page_number,
+            pages: [],
+            pageNumber: 1,
+            pageLoaded: false,
         }
     },
 
     // Find the page object with the page number
     methods: {
-        findPage(pageNumber) {
-            return this.pages.find(page => page.page_number === pageNumber);
-        }
+
+        // Method to change the page number
+        changePage(pageNumber) {
+            this.pageNumber = this.pageNumber + pageNumber;
+
+            // If the page number is less than 1, set it to the last page
+            if (this.pageNumber < 1) {
+                this.pageNumber = this.pages.length;
+            }
+            // If the page number is greater than the last page, set it to the first page
+            else if (this.pageNumber > this.pages.length) {
+                this.pageNumber = 1;
+            }
+        },
     },
+
+    mounted() {
+
+        axios.get('/api/chapters/' + this.chapter.chapter_id + '/pages')
+            .then(response => {
+                this.pages = response.data;
+                this.pageNumber = this.pages[0].page_number;
+                this.pageLoaded = true;
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
 }
 </script>

@@ -13,6 +13,11 @@
     <!-- Series rating -->
     <p class="text-gray-700 text-base mb-4">Rating: {{ series.rating }}</p>
 
+    <!-- Create a button to bring up a rating overlay -->
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+        Rate
+    </button>
+
     <!-- Series description -->
     <p class="text-gray-700 text-base mb-4">{{ series.series_summary }}</p>
 
@@ -49,4 +54,6 @@
             author: Object,
         },
     }
+
+    
 </script>
