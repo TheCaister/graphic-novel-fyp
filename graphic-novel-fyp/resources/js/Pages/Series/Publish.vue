@@ -13,7 +13,7 @@
 
             <!-- Create a button that creates a series -->
             <button class="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded">
-                <Link :href="`/series/create/`">Create Series</Link>
+                <Link :href="`${universe.universe_id}/series/create/`">Create Series</Link>
             </button>
 
 
@@ -26,7 +26,7 @@
                 <!-- Create a button that adds an episode -->
                 <button class="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded">
                     <!-- <Link :href="`/chapters/create/${series.series_id}`">Add Episode</Link> -->
-                    <Link :href="route('chapters.create', series.series_id)">Add Episode</Link>
+                    <Link :href="`${series.series_id}/chapters/create/`">Add Episode</Link>
                 </button>
 
                 <!-- <img src="/assets/black_page.jpg" alt=""> -->

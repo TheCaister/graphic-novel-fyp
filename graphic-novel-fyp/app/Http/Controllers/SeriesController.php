@@ -15,7 +15,8 @@ class SeriesController extends Controller
     public function create(Universe $universe)
     {
         return Inertia::render('Series/Create', [
-            'universe' => $universe,
+            'universe' => $universe
+            
         ]);
     }
 

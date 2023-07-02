@@ -137,18 +137,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/user/main', [ProfileController::class, 'main'])->name('user.main');
 });
 
-// Make a group of routes that will display series
-
-// Route::get('/series/{series}', [SeriesController::class, 'show']);
 
 Route::get('/publish', [SeriesController::class, 'publish'])->name('publish');
 
-// Route::get('/series/{series}/chapters/{chapter}', [ChapterController::class, 'show']);
-
 // Trying out resource
 Route::resource('universes', UniverseController::class);
+
+Route::get('{series}/chapters/create', [ChapterController::class, 'create'])->name('chapter.create');
 Route::resource('chapters', ChapterController::class);
 Route::resource('elements', ElementController::class);
+
+Route::get('{universe}/series/create', [SeriesController::class, 'create'])->name('series.create');
 Route::resource('series', SeriesController::class);
 
 

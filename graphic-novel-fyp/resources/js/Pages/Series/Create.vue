@@ -57,6 +57,12 @@
 import { useForm } from '@inertiajs/vue3';
 
 export default {
+    props: {
+        // universe is an object
+        universe: {
+            type: Object,
+        },
+    },
     data() {
         return {
             genres: [
@@ -93,6 +99,11 @@ export default {
         axios.get('/api/universes/' + this.$attrs.auth.user.id).then(response => {
             this.universes = response.data
         }).catch(error => console.log(error))
+
+        // If the universe prop is not null, then set the universe_id to the universe's ID
+        if (this.universe != null) {
+            this.form.universe_id = this.universe.universe_id
+        }
     }
 }
 </script>

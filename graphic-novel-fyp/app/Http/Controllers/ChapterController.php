@@ -23,11 +23,14 @@ class ChapterController extends Controller
      */
     public function create(Series $series)
     {
+        // Get the universe of the series
+        $universe = $series->universe;
         // Return the create page, passing in the series
         return Inertia::render(
             'Chapters/Create',
             [
-                'series' => $series,
+                'passedUniverse' => $universe,
+                'passedSeries' => $series,
             ]
         );
     }

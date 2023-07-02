@@ -110,10 +110,24 @@
 import { useForm } from '@inertiajs/vue3';
 
 export default {
+    props: {
+        // universe is an object
+        passedUniverse: {
+            type: Object,
+        },
+        // series is an object
+        passedSeries: {
+            type: Object,
+        },
+    },
     data() {
         return {
             universes: [],
             series: [],
+            selected: {
+                universe: '',
+                series: '',
+            }
         }
     }
     ,
@@ -137,6 +151,7 @@ export default {
         updateSeries(universe_id) {
             axios.get('/api/series/' + universe_id).then(response => {
                 this.series = response.data
+                this.selected.series = this.series[0].series_id
             }).catch(error => console.log(error))
         }
     },
@@ -147,11 +162,23 @@ export default {
             this.universes = response.data
 
             this.updateSeries(this.universes[0].universe_id)
+
+            this.selected.universe = this.universes[0].universe_id
         }).catch(error => console.log(error))
 
-        // for (let i = 0; i < this.universes.length; i++) {
-        //     this.updateSeries(this.universes[i].universe_id)
-        // }
+        // If universe is passed in, set the selected universe to the universe ID
+        if (this.universe) {
+            // this.selected.universe = this.passedUniverse.universe_id
+            this.form.universe_id = this.passedUniverse.universe_id
+
+        }
+
+        // If series is passed in, set the selected series to the series ID
+        if (this.series) {
+            // this.selected.series = this.passedSeries.series_id
+            this.form.series_id = this.passedSeries.series_id
+
+        }
     }
 }
 </script>
