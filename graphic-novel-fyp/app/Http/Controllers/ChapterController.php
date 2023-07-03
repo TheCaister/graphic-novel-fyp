@@ -41,6 +41,31 @@ class ChapterController extends Controller
     public function store(Request $request)
     {
         //
+        $formFields = $request->validate([
+            'series_id' => 'required',
+            'chapter_title' => 'required',
+            'chapter_notes' => 'required',
+            'comments_enabled' => 'required',
+        ]);
+
+        if($request->hasFile('chapter_thumbnail')){
+            $formFields['chapter_thumbnail'] = $request->file('chapter_thumbnail')->store('chapter_thumbnails', 'public');
+        }
+        else{
+            // Set it to the black image
+            $formFields['chapter_thumbnail'] = 'chapter_thumbnails/black.png';
+        }
+
+        // From the series, get the highest chapter number. Then, add to it to get the next chapter number
+        $nextChapterNumber = Chapter::where('series_id', $formFields['series_id'])->max('chapter_number') + 1;
+
+        $formFields['chapter_number'] = $nextChapterNumber;
+
+        $chapter = Chapter::create($formFields);
+
+        return redirect()->route('series.show', $chapter->series->series_id);
+
+
     }
 
     /**

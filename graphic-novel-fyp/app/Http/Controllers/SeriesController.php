@@ -151,4 +151,38 @@ class SeriesController extends Controller
         // Return the series as a json response
         return response()->json($series);
     }
+
+    public function genres(){
+        return Inertia::render('Series/Genres');
+    }
+
+    public function getGenres(){
+        // dd('hello');
+        // Populate array with genres
+        $genres = array(
+            'ACTION',
+            'ADVENTURE',
+            'COMEDY',
+            'DRAMA',
+            'FANTASY',
+            'HORROR',
+            'MYSTERY',
+            'ROMANCE',
+            'THRILLER',
+        );
+
+        // Return the genres as a json response
+        return response()->json($genres);
+    }
+
+    public function getGenreSeries(Request $request){
+        // Get the genre from the request
+        $genre = $request->genre;
+
+        // Get all the series with the genre
+        $series = Series::where('series_genre', $genre)->get();
+
+        // Return the series as a json response
+        return response()->json($series);
+    }
 }

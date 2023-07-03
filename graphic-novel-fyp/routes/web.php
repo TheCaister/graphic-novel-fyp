@@ -148,6 +148,7 @@ Route::resource('chapters', ChapterController::class);
 Route::resource('elements', ElementController::class);
 
 Route::get('{universe}/series/create', [SeriesController::class, 'create'])->name('series.create');
+Route::get('/series/genres',[SeriesController::class, 'genres'])->name('series.genres');
 Route::resource('series', SeriesController::class);
 
 

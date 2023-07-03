@@ -28,7 +28,7 @@ CREATE TABLE `chapters` (
   `chapter_thumbnail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `chapter_notes` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `comments_enabled` tinyint(1) NOT NULL,
-  `scheduled_publish` timestamp NOT NULL,
+  `scheduled_publish` timestamp,
   PRIMARY KEY (`chapter_id`),
   KEY `chapters_series_id_foreign` (`series_id`),
   CONSTRAINT `chapters_series_id_foreign` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`) ON DELETE CASCADE

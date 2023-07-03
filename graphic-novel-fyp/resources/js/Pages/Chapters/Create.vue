@@ -5,34 +5,19 @@
         </div>
 
         <div class="flex flex-col gap-5 md:w-full">
-            <!-- Dropdown for all universes. When a universe is selected, call updateSeries, passing in the universe ID -->
+
+            <!-- Display series title -->
             <div>
-                <Label>Universe</Label>
-                <select v-model="form.universe_id" class="border-2 border-black rounded-md p-2"
-                    @change="updateSeries(form.universe_id)">
-                    <option v-for="universe in universes" :key="universe.universe_id" :value="universe.universe_id">
-                        {{ universe.universe_title }}
-                    </option>
-                </select>
+                <Label>Series Title: {{ passedSeries.series_title }}</Label>
             </div>
 
 
-            <!-- Dropdown for all series -->
             <div>
-                <Label>Series</Label>
-                <select v-model="form.series_id" class="border-2 border-black rounded-md p-2">
-                    <option v-for="series in series" :key="series.series_id" :value="series.series_id">
-                        {{ series.series_title }}
-                    </option>
-                </select>
+                <BaseInput for="chapter_title" v-model="form.chapter_title" label="Chapter Title" type="text" />
             </div>
 
             <div>
-                <BaseInput for="chapter_title" v-model="form.series_title" label="Chapter Title" type="text" />
-            </div>
-
-            <div>
-                <TextAreaInput for="chapter_notes" v-model="form.series_summary" label="Chapter Notes" type="text" />
+                <TextAreaInput for="chapter_notes" v-model="form.chapter_notes" label="Chapter Notes" type="text" />
             </div>
 
             <div>
@@ -58,24 +43,26 @@
                 <input type="checkbox" v-model="form.comments_enabled" />
             </div>
 
-            <!-- Create a radio input between immediate publish and scheduled publish.If scheduled is selected, make these pickers accessible -->
+            <!-- Create a radio input between immediate publish and scheduled publish.If scheduled is selected, make these pickers accessible. Immediate is the default choice -->
             <div>
                 <Label>Publish</Label>
-                <div class="flex flex-row gap-5">
+                <div class="flex flex-row gap-2">
                     <div>
-                        <input type="radio" v-model="form.scheduled_publish" value="immediate" />
-                        <Label>Immediate</Label>
+                        <input type="radio" id="immediate" name="publish" value="immediate" checked="checked"
+                            v-model="form.scheduled_publish" />
+                        <label for="immediate">Immediate</label>
                     </div>
 
                     <div>
-                        <input type="radio" v-model="form.scheduled_publish" value="scheduled" />
-                        <Label>Scheduled</Label>
+                        <input type="radio" id="scheduled" name="publish" value="scheduled"
+                            v-model="form.scheduled_publish" />
+                        <label for="scheduled">Scheduled</label>
                     </div>
                 </div>
             </div>
 
-            <!-- Create a date and time picker that only appears when Scheduled is selected -->
-            <div>
+            <!-- Create a date and time picker that only appears when isScheduled is true -->
+            <div v-if="form.scheduled_publish == 'scheduled'">
                 <div>
                     <Label>Date</Label>
                     <input type="date" v-model="form.scheduled_date" />
@@ -86,9 +73,6 @@
                     <input type="time" v-model="form.scheduled_time" />
                 </div>
             </div>
-
-
-
 
             <div class="flex justify-center gap-2 md:gap-5">
                 <a href="">
@@ -111,26 +95,11 @@ import { useForm } from '@inertiajs/vue3';
 
 export default {
     props: {
-        // universe is an object
-        passedUniverse: {
-            type: Object,
-        },
         // series is an object
         passedSeries: {
             type: Object,
         },
     },
-    data() {
-        return {
-            universes: [],
-            series: [],
-            selected: {
-                universe: '',
-                series: '',
-            }
-        }
-    }
-    ,
     setup() {
         const form = useForm({
             series_id: '',
@@ -145,40 +114,8 @@ export default {
             form,
         }
     },
-    methods: {
-
-        // Make a call to the API to get all the series, passing in a universe ID
-        updateSeries(universe_id) {
-            axios.get('/api/series/' + universe_id).then(response => {
-                this.series = response.data
-                this.selected.series = this.series[0].series_id
-            }).catch(error => console.log(error))
-        }
-    },
     mounted() {
-
-        // Make a call to the API to get all the universes, passing in the user's ID
-        axios.get('/api/universes/' + this.$attrs.auth.user.id).then(response => {
-            this.universes = response.data
-
-            this.updateSeries(this.universes[0].universe_id)
-
-            this.selected.universe = this.universes[0].universe_id
-        }).catch(error => console.log(error))
-
-        // If universe is passed in, set the selected universe to the universe ID
-        if (this.universe) {
-            // this.selected.universe = this.passedUniverse.universe_id
-            this.form.universe_id = this.passedUniverse.universe_id
-
-        }
-
-        // If series is passed in, set the selected series to the series ID
-        if (this.series) {
-            // this.selected.series = this.passedSeries.series_id
-            this.form.series_id = this.passedSeries.series_id
-
-        }
-    }
+        this.form.series_id = this.passedSeries.series_id;
+    },
 }
 </script>
