@@ -147,6 +147,7 @@ Route::get('{series}/chapters/create', [ChapterController::class, 'create'])->na
 Route::resource('chapters', ChapterController::class);
 Route::resource('elements', ElementController::class);
 
+Route::get('/series/popular', [SeriesController::class, 'popular'])->name('series.popular');
 Route::get('{universe}/series/create', [SeriesController::class, 'create'])->name('series.create');
 Route::get('/series/genres',[SeriesController::class, 'genres'])->name('series.genres');
 Route::resource('series', SeriesController::class);

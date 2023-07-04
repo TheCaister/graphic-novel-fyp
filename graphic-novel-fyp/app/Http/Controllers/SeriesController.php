@@ -16,7 +16,7 @@ class SeriesController extends Controller
     {
         return Inertia::render('Series/Create', [
             'universe' => $universe
-            
+
         ]);
     }
 
@@ -33,8 +33,7 @@ class SeriesController extends Controller
 
         if ($request->hasFile('series_thumbnail')) {
             $formFields['series_thumbnail'] = $request->file('series_thumbnail')->store('series_thumbnails', 'public');
-        }
-        else{
+        } else {
             // Set it to the black image
             $formFields['series_thumbnail'] = 'series_thumbnails/black.png';
         }
@@ -49,9 +48,10 @@ class SeriesController extends Controller
     }
 
     // Show the series
-    public function show(Series $series){
+    public function show(Series $series)
+    {
         // dd($series->chapters);
-        
+
         // Get the chapters for the series as a list
         $chapters = $series->chapters()->get();
 
@@ -132,7 +132,8 @@ class SeriesController extends Controller
         ]);
     }
 
-    public function publish(){
+    public function publish()
+    {
         // Get all the universes that the user owns
         $universes = auth()->user()->universes;
 
@@ -140,11 +141,12 @@ class SeriesController extends Controller
         return Inertia::render('Series/Publish', [
             // Eager loading is when you load a model with its relationships
             'universes' => $universes->load('series'),
-            
+
         ]);
     }
 
-    public function getSeries(Universe $universe){
+    public function getSeries(Universe $universe)
+    {
         // Get all the series in the universe
         $series = $universe->series;
 
@@ -152,11 +154,13 @@ class SeriesController extends Controller
         return response()->json($series);
     }
 
-    public function genres(){
+    public function genres()
+    {
         return Inertia::render('Series/Genres');
     }
 
-    public function getGenres(){
+    public function getGenres()
+    {
         // dd('hello');
         // Populate array with genres
         $genres = array(
@@ -175,7 +179,8 @@ class SeriesController extends Controller
         return response()->json($genres);
     }
 
-    public function getGenreSeries(Request $request){
+    public function getGenreSeries(Request $request)
+    {
         // Get the genre from the request
         $genre = $request->genre;
 
@@ -184,5 +189,32 @@ class SeriesController extends Controller
 
         // Return the series as a json response
         return response()->json($series);
+    }
+
+    public function getPopularSeries(Request $request)
+    {
+        // Get genre from the request
+        $genre = $request->genre;
+
+        // dd($genre);
+
+        // Get the top 10 series with the highest rating. If no genre is specified, get the top 10 series with the highest rating
+        if ($genre == null) {
+            $series = Series::orderBy('rating', 'desc')->take(10)->get();
+        } else {
+            $series = Series::where('series_genre', $genre)->orderBy('rating', 'desc')->take(10)->get();
+        }
+
+        // Attach the universe to each series
+        foreach ($series as $seriesSingle) {
+            $seriesSingle->universe = $seriesSingle->universe;
+        }
+
+        // Return the series as a json response
+        return response()->json($series);
+    }
+
+    public function popular(){
+        return Inertia::render('Series/Popular');
     }
 }

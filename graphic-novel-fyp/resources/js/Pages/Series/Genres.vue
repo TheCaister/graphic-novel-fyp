@@ -76,10 +76,6 @@ export default {
         changeGenre(genre) {
             this.selectedGenre = genre
             this.getSeries(genre)
-
-            // Update the URL to include the selected genre
-            const urlParams = new URLSearchParams(window.location.search);
-            urlParams.set('genre', genre);
         }
     },
     mounted() {
@@ -87,17 +83,7 @@ export default {
             this.genres = response.data
             this.genresLoaded = true
 
-
-            // Get the genre from the URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const genre = urlParams.get('genre');
-
-            // If genre is not null, set the selected genre to the genre from the URL. Otherwise, set it to the first genre in the list
-            if (genre != null) {
-                this.selectedGenre = genre
-            } else {
-                this.selectedGenre = this.genres[0]
-            }
+            this.selectedGenre = this.genres[0]
 
             this.getSeries(this.selectedGenre)
         }).catch(error => console.log(error))

@@ -37,10 +37,10 @@
                 </div>
             </div>
 
-            <!-- Create a checkbox to enable/disable comments -->
+            <!-- Create a checkbox to enable/disable comments. Set the value to the value in comments_enabled -->
             <div>
                 <Label>Enable Comments</Label>
-                <input type="checkbox" v-model="form.comments_enabled" />
+                <input type="checkbox" v-model="form.comments_enabled" :checked="form.comments_enabled"/>
             </div>
 
             <!-- Create a radio input between immediate publish and scheduled publish.If scheduled is selected, make these pickers accessible. Immediate is the default choice -->
@@ -115,6 +115,7 @@ export default {
         }
     },
     mounted() {
+        this.form.comments_enabled = 1;
         this.form.series_id = this.passedSeries.series_id;
     },
 }

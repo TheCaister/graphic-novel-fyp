@@ -28,6 +28,8 @@ Route::get('/universes/{user}', [App\Http\Controllers\UniverseController::class,
 
 Route::get('/chapters/{chapter}/pages', [App\Http\Controllers\PageController::class, 'getChapterPages'])->name('pages.chapter-pages');
 
+Route::get('/series/popular', [App\Http\Controllers\SeriesController::class, 'getPopularSeries'])->name('series.get-popular-series');
+
 Route::get('/series/genres', [App\Http\Controllers\SeriesController::class, 'getGenreSeries'])->name('series.get-genre-series');
 
 Route::get('/series/{universe}', [App\Http\Controllers\SeriesController::class, 'getSeries'])->name('series.get-series');
