@@ -20,11 +20,18 @@
         :data="laravelData"
         @pagination-change-page="getResults"
     /> -->
+
+    <!-- Comments component with comments passed as prop -->
+    <p v-if="comments.length === 0">There are no comments yet.</p>
+    <Comments v-if="commentsLoaded" :comments="comments"></Comments>
+    <div v-else>
+        <p>Loading comments...</p>
+    </div>
 </template>
 
 <script>
-
 import Pages from './Components/Pages.vue'
+import Comments from '../../Components/Comments.vue'
 
 export default {
     props: {
@@ -34,6 +41,7 @@ export default {
 
     components: {
         Pages,
+        Comments,
     },
 
     // Set the page number to the page number of the first page
@@ -42,6 +50,8 @@ export default {
             pages: [],
             pageNumber: 1,
             pageLoaded: false,
+            comments: [],
+            commentsLoaded: false,
         }
     },
 
@@ -74,6 +84,18 @@ export default {
             .catch(error => {
                 console.log(error);
             })
+
+        axios.get('/api/comments', {
+            params: {
+                commentable_id: this.chapter.chapter_id,
+                commentable_type: 'chapter',
+            }
+        }).then(response => {
+            this.comments = response.data
+            this.commentsLoaded = true
+
+            console.log(this.comments)
+        }).catch(error => console.log(error))
     }
 }
 </script>

@@ -35,7 +35,7 @@
 <script>
 import NavLink from '@/Shared/NavLink.vue';
 import Dashboard from '../Dashboard.vue';
-import Comments from './Components/Comments.vue';
+import Comments from './Comments.vue';
 import Show from './Components/Show.vue';
 import Following from './Components/Following.vue';
 import AccountSettings from './Components/AccountSettings.vue';

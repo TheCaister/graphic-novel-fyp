@@ -35,3 +35,5 @@ Route::get('/series/genres', [App\Http\Controllers\SeriesController::class, 'get
 Route::get('/series/{universe}', [App\Http\Controllers\SeriesController::class, 'getSeries'])->name('series.get-series');
 
 Route::get('/genres', [SeriesController::class, 'getGenres'])->name('series.get-genres');
+
+Route::get('/comments', [App\Http\Controllers\CommentController::class, 'getComments'])->name('comments.get-comments');

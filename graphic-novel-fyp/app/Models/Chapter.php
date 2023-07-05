@@ -83,4 +83,9 @@ class Chapter extends Model
     public function elements(): MorphToMany{
         return $this->morphToMany(Element::class, 'elementable', 'elementables', 'elementable_id', 'element_id');
     }
+
+    public function name(): string
+    {
+        return $this->chapter_title;
+    }
 }

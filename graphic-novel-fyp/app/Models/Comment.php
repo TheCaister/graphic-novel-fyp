@@ -36,7 +36,6 @@ class Comment extends Model
     protected $casts = [
         'commenter_id' => 'integer',
         'replying_to' => 'integer',
-        'comment_content' => 'integer',
         'created_at' => 'timestamp',
     ];
 
@@ -44,11 +43,6 @@ class Comment extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    // public function comment(): BelongsTo
-    // {
-    //     return $this->belongsTo(Comment::class, 'replying_to', 'comment_id');
-    // }
 
     public function replies(): HasMany
     {

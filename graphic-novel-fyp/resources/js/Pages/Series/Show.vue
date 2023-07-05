@@ -41,19 +41,50 @@
             </div>
         </div>
     </div>
+
+    <h1>Comments</h1>
+    <!-- Say there are no comments if there are none -->
+    <p v-if="comments.length === 0">There are no comments yet.</p>
+    <Comments v-if="commentsLoaded" :comments="comments"></Comments>
+    <div v-else>
+        <p>Loading comments...</p>
+    </div>
 </template>
 
 <script>
+import Comments from '../../Components/Comments.vue'
+
+export default {
+    props: {
+        series: Object,
+        universe: Object,
+        chapters: Array,
+        author: Object,
+    },
+    components: {
+        Comments,
+    },
+    data() {
+        return {
+            comments: [],
+            commentsLoaded: false,
+        }
+    },
+    mounted() {
+        axios.get('/api/comments', {
+            params: {
+                commentable_id: this.series.series_id,
+                commentable_type: 'series',
+            }
+        }).then(response => {
+            this.comments = response.data
+            this.commentsLoaded = true
+
+            console.log(this.comments)
+        }).catch(error => console.log(error))
+    },
+
+}
 
 
-    export default {
-        props: {
-            series: Object,
-            universe: Object,
-            chapters: Array,
-            author: Object,
-        },
-    }
-
-    
 </script>

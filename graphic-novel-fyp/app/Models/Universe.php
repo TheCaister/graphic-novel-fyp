@@ -44,6 +44,11 @@ class Universe extends Model
         return $this->hasMany(Series::class, 'universe_id', 'universe_id');
     }
 
+    public function name(): string
+    {
+        return $this->universe_name;
+    }
+
     public function elements(): MorphToMany
     {
         return $this->morphToMany(Element::class, 'elementable', 'elementables', 'elementable_id', 'element_id');
