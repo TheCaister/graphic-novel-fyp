@@ -71,10 +71,23 @@ class CommentController extends Controller
         // Check if the request has a user_id
         if ($request->has('user_id')) {
             $comments = $this->getUserComments($request->user_id);
-        }
-        else if ($request->has('commentable_id')) {
+        } else if ($request->has('commentable_id')) {
             $comments = $this->getCommentableComments($request->commentable_id, $request->commentable_type);
         }
+
+        if ($request->attach_replies) {
+            // Filter out comments that are replies
+            $comments = $comments->filter(function ($comment) {
+                return $comment->replying_to == null;
+            });
+
+            // Attach replies to the comments
+            $comments = $comments->map(function ($comment) {
+                $comment->replies = $comment->replies()->get();
+                return $comment;
+            });
+        }
+
 
         // dd($comments);
 
@@ -104,11 +117,12 @@ class CommentController extends Controller
         return $comments;
     }
 
-    public function getCommentableComments(string $commentable_id, string $commentable_type){
+    public function getCommentableComments(string $commentable_id, string $commentable_type)
+    {
         $commentable_type = 'App\Models\\' . ucfirst($commentable_type);
-        
+
         $comments = Comment::where('commentable_id', $commentable_id)->where('commentable_type', $commentable_type)->with('commenter')->get();
-   
+
         return $comments;
     }
 }

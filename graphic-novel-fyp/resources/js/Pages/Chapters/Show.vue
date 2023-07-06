@@ -89,6 +89,7 @@ export default {
             params: {
                 commentable_id: this.chapter.chapter_id,
                 commentable_type: 'chapter',
+                attach_replies: true,
             }
         }).then(response => {
             this.comments = response.data

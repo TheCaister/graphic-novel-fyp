@@ -75,6 +75,7 @@ export default {
             params: {
                 commentable_id: this.series.series_id,
                 commentable_type: 'series',
+                attach_replies: true,
             }
         }).then(response => {
             this.comments = response.data
