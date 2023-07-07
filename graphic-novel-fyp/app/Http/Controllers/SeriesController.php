@@ -106,8 +106,8 @@ class SeriesController extends Controller
         // Delete the series
         $series->delete();
 
-        // Redirect to the series page
-        return redirect()->route('series.index');
+        // Redirect to the previous page
+        return redirect()->back();
     }
 
     // Show all series

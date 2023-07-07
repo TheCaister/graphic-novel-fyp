@@ -31,7 +31,7 @@ class UniverseController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $formFields = $request->validate([
             'universe_name' => 'required',
         ]);
@@ -48,9 +48,18 @@ class UniverseController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Universe $universe)
     {
         //
+        // Attach each series to the universe
+        $universe->series = $universe->series;
+
+        return Inertia::render(
+            'Universes/Show',
+            [
+                'universe' => $universe,
+            ]
+        );
     }
 
     /**
@@ -72,16 +81,26 @@ class UniverseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Universe $universe)
     {
         //
+        $universe->delete();
+
+        return redirect()->route('home');
     }
 
     // Return universes in JSON format
-    public function getUniverses(User $user)
+    public function getUniverses(Request $request)
     {
-        // Get all universe owned by the user
-        $universes = $user->universes;
+        // Get all universe owned by the user in the request
+        $universes = Universe::where('owner_id', $request->user_id)->get();
+
+        // If with_series is true, attach each series to the universe
+        if ($request->with_series) {
+            foreach ($universes as $universe) {
+                $universe->series = $universe->series;
+            }
+        }
 
         // Return dd in JSON format
         // dd($universes);

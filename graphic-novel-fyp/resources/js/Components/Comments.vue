@@ -49,10 +49,6 @@
 
         </div>
 
-        <div v-else>
-            No replies
-        </div>
-
 
 
     </div>
@@ -79,7 +75,8 @@ export default {
 .fade-enter-from {
     /* Start from the top of the screen */
     opacity: 0;
-    transform: translateY(-100px);
+   transform: rotate3d(1, 43, 23, 64deg); 
+
 }
 
 .fade-enter-to {
@@ -87,11 +84,13 @@ export default {
 }
 
 .fade-enter-active {
-    transition: all 0.5s ease;
+    transition: all 1s ease;
 }
 
 .fade-leave-from {
     opacity: 1;
+
+
 }
 
 .fade-leave-to {

@@ -2,7 +2,6 @@
 <template>
     <div class="flex justify-center space-x-10">
 
-        <!-- Make a button to change currentTabComponent to Dashboard -->
         <button @click='currentTabComponent = "Dashboard"'
             :class="{ 'font-bold underline': currentTabComponent === 'Dashboard' }">
             Dashboard
@@ -22,8 +21,8 @@
             Profile Page
         </button>
 
-        <button @click='currentTabComponent = "AccountSettings"'
-            :class="{ 'font-bold underline': currentTabComponent === 'AccountSettings' }">
+        <button @click='currentTabComponent = "Edit"'
+            :class="{ 'font-bold underline': currentTabComponent === 'Edit' }">
             Account Settings
         </button>
 
@@ -39,6 +38,7 @@ import Comments from './Comments.vue';
 import Show from './Components/Show.vue';
 import Following from './Components/Following.vue';
 import AccountSettings from './Components/AccountSettings.vue';
+import Edit from './Edit.vue';
 
 export default {
     props: {
@@ -57,6 +57,7 @@ export default {
         Show,
         Following,
         AccountSettings,
+        Edit,
     },
 
     data() {
@@ -68,7 +69,6 @@ export default {
     computed: {
         currentProperties() {
             if(this.currentTabComponent === 'Show') {
-
                 return {
                     user: this.user,
                     follower_count: this.follower_count,
