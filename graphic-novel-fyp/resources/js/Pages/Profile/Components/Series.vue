@@ -45,6 +45,9 @@
 import { Inertia } from '@inertiajs/inertia'
 
 export default {
+    props: {
+        user: Object,
+    },
     data() {
         return {
             universes: [],
@@ -65,7 +68,7 @@ export default {
     mounted() {
         axios.get('/api/universes/', {
             params: {
-                user_id: this.$parent.$parent.$attrs.auth.user.id,
+                user_id: this.user.id,
                 with_series: true,
             }
         }).then(response => {

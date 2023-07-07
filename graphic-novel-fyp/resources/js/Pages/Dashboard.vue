@@ -18,19 +18,19 @@ import { Head } from '@inertiajs/vue3';
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
 
-    <Series>
-        
-    </Series>
+        <Series :user="this.$parent.$attrs.auth.user">
+
+        </Series>
+    </AuthenticatedLayout>
 </template>
 
 <script>
 
 import Series from './Profile/Components/Series.vue';
-    export default {
-        components: {
-            Series,
-        },
-    };
+export default {
+    components: {
+        Series,
+    },
+};
 </script>
