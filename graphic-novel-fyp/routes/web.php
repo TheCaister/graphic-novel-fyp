@@ -134,7 +134,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::delete('/users/{user}', [ProfileController::class, 'destroyOther']);
+    
     Route::get('/user/main', [ProfileController::class, 'main'])->name('user.main');
+    Route::get('/user/main/dashboard', [ProfileController::class, 'dashboard'])->name('user.main.dashboard');
+    Route::get('user/main/comments', [ProfileController::class, 'comments'])->name('user.main.comments');
+    Route::get('user/main/following', [ProfileController::class, 'following'])->name('user.main.following');
+    Route::get('user/main/show', [ProfileController::class, 'showMain'])->name('user.main.show');
+    Route::get('user/main/edit', [ProfileController::class, 'editMain'])->name('user.main.edit');
 });
 
 

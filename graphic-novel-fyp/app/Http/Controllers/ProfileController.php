@@ -123,4 +123,40 @@ class ProfileController extends Controller
             'user' => auth()->user(),
         ]);
     }
+
+    public function dashboard()
+    {
+        return Inertia::render('Profile/Main', [
+            'user' => auth()->user(),
+            'passed_tab' => 'Dashboard',
+        ]);
+    }
+
+    public function comments(){
+        return Inertia::render('Profile/Main', [
+            'user' => auth()->user(),
+            'passed_tab' => 'Comments',
+        ]);
+    }
+
+    public function following(){
+        return Inertia::render('Profile/Main', [
+            'user' => auth()->user(),
+            'passed_tab' => 'Following',
+        ]);
+    }
+
+    public function showMain(){
+        return Inertia::render('Profile/Main', [
+            'user' => auth()->user(),
+            'passed_tab' => 'Show',
+        ]);
+    }
+
+    public function editMain(){
+        return Inertia::render('Profile/Main', [
+            'user' => auth()->user(),
+            'passed_tab' => 'Edit',
+        ]);
+    }
 }
