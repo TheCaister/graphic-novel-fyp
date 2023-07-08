@@ -62,6 +62,7 @@ class Universe extends Model
     function delete()
     {
         $this->elements()->delete();
+        $this->series()->delete();
 
         parent::delete();
     }

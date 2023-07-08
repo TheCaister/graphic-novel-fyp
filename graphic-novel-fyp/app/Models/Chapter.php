@@ -74,7 +74,7 @@ class Chapter extends Model
     // Delete all comments associated with the chapter.
     function delete()
     {
-        // $this->pages()->delete();
+        $this->pages()->delete();
         $this->comments()->delete();
         $this->elements()->delete();
         parent::delete();

@@ -54,4 +54,12 @@ class Comment extends Model
     {
         return $this->morphTo();
     }
+
+    public function delete()
+    {
+        // Delete all replies to this comment
+        $this->replies()->delete();
+        // Delete the comment
+        return parent::delete();
+    }
 }

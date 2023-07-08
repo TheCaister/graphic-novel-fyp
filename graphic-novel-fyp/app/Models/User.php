@@ -92,4 +92,16 @@ class User extends Authenticatable
     {
         return $this->morphedByMany(Series::class, 'moderatable', 'approved_moderators', 'moderator_id', 'moderatable_id', 'id', 'series_id');
     }
+
+    public function delete()
+    {
+        $this->universes()->delete();
+        $this->followees()->detach();
+        $this->followers()->detach();
+        $this->likedChapters()->detach();
+        $this->ratedSeries()->detach();
+        $this->moderatableUniverses()->detach();
+        $this->moderatableSeries()->detach();
+        parent::delete();
+    }
 }

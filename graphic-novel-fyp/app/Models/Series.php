@@ -78,6 +78,7 @@ class Series extends Model
     function delete()
     {
         // $this->pages()->delete();
+        $this->chapters()->delete();
         $this->comments()->delete();
         $this->elements()->delete();
 
