@@ -22,7 +22,16 @@
 
             <div>
                 <Label>Chapter Thumbnail</Label>
-                <ImageLabel />
+                <!-- <ImageLabel /> -->
+
+                <file-pond name="test" ref="pond" class-name="my-pond" label-idle="Chapter Thumbnail"
+                    accepted-file-types="image/jpeg, image/png" v-bind:files="myFiles" v-on:init="handleFilePondInit" />
+            </div>
+
+            <div>
+                <file-pond name="test" ref="pond" class-name="my-pond" label-idle="Drop files here..." allow-multiple="true"
+                    allow-reorder="true" accepted-file-types="image/jpeg, image/png" v-bind:files="myFiles"
+                    v-on:init="handleFilePondInit" />
             </div>
 
             <!-- Create a list of buttons for Preview PC, Preview Mobile and Save Draft -->
@@ -40,7 +49,7 @@
             <!-- Create a checkbox to enable/disable comments. Set the value to the value in comments_enabled -->
             <div>
                 <Label>Enable Comments</Label>
-                <input type="checkbox" v-model="form.comments_enabled" :checked="form.comments_enabled"/>
+                <input type="checkbox" v-model="form.comments_enabled" :checked="form.comments_enabled" />
             </div>
 
             <!-- Create a radio input between immediate publish and scheduled publish.If scheduled is selected, make these pickers accessible. Immediate is the default choice -->
@@ -93,12 +102,28 @@
 <script>
 import { useForm } from '@inertiajs/vue3';
 
+import vueFilePond from 'vue-filepond';
+
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+
+import 'filepond/dist/filepond.min.css';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+
+const FilePond = vueFilePond(
+    FilePondPluginFileValidateType,
+    FilePondPluginImagePreview,
+);
+
 export default {
     props: {
         // series is an object
         passedSeries: {
             type: Object,
         },
+    },
+    components: {
+        FilePond,
     },
     setup() {
         const form = useForm({

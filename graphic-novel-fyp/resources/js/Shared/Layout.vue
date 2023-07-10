@@ -22,12 +22,8 @@
             <Link :href="route('home')">
             <img src="/assets/black_page.jpg" alt="" width="50" height="50">
             <!-- <img src="" alt="" width="50" height="50"> -->
-
             </Link>
-
-            <Link>
-
-            </Link>
+            
             <Nav />
 
             <!-- Place a "publish" button -->

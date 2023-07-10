@@ -217,4 +217,14 @@ class SeriesController extends Controller
     public function popular(){
         return Inertia::render('Series/Popular');
     }
+
+    public function getRecentSeries(){
+        // From series table, get the 10 most recent series
+        $series = Series::orderBy('created_at', 'desc')->take(10)->get();
+
+
+
+        // Return the series as a json response
+        return response()->json($series);
+    }
 }

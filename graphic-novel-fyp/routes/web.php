@@ -27,24 +27,26 @@ Route::get('/tailwind', function () {
     return Inertia::render('TailwindPractice');
 });
 
+Route::get('/', function () {
+    // Instead of returning Blade view, you're returning client-side view
+    // The base directory is assumed to be resources/js/Pages
+
+    // When propping, make sure to accept it in the vue component
+    return Inertia::render(
+        'Welcome',
+        [
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            // 'name' => Auth::user()->username,
+            // 'series' => Series::all(),
+        ]
+    );
+})->name('home');
+
 // Using group, you can apply middleware to all routes in the group
 Route::middleware('auth')->group(function () {
 
-    Route::get('/', function () {
-        // Instead of returning Blade view, you're returning client-side view
-        // The base directory is assumed to be resources/js/Pages
-
-        // When propping, make sure to accept it in the vue component
-        return Inertia::render(
-            'Welcome',
-            [
-                'canLogin' => Route::has('login'),
-                'canRegister' => Route::has('register'),
-                'name' => Auth::user()->username,
-                'series' => Series::all(),
-            ]
-        );
-    })->name('home');
+ 
 
     // TEST ROUTES ////////////////////////
 
