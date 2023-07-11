@@ -5,6 +5,7 @@ use App\Http\Controllers\ElementController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\UniverseController;
+use App\Http\Controllers\UploadController;
 use App\Models\Series;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -145,6 +146,8 @@ Route::middleware('auth')->group(function () {
     Route::get('user/main/edit', [ProfileController::class, 'editMain'])->name('user.main.edit');
 });
 
+
+Route::post('/upload', [UploadController::class, 'store'])->name('upload.store');
 
 Route::get('/publish', [SeriesController::class, 'publish'])->name('publish');
 

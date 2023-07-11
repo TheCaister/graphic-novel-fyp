@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Chapter;
 use App\Models\Series;
+use App\Models\TemporaryFile;
 use COM;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -49,20 +50,25 @@ class ChapterController extends Controller
             'comments_enabled' => 'required',
         ]);
 
-        if($request->hasFile('chapter_thumbnail')){
-            $formFields['chapter_thumbnail'] = $request->file('chapter_thumbnail')->store('chapter_thumbnails', 'public');
-        }
-        else{
-            // Set it to the black image
-            $formFields['chapter_thumbnail'] = 'chapter_thumbnails/black.png';
-        }
-
         // From the series, get the highest chapter number. Then, add to it to get the next chapter number. If there are no chapters, set the chapter number to 1.
         $nextChapterNumber = Chapter::where('series_id', $formFields['series_id'])->max('chapter_number') + 1;
 
         $formFields['chapter_number'] = $nextChapterNumber;
 
         $chapter = Chapter::create($formFields);
+
+        $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
+
+        if ($tempThumbnail) {
+
+            $chapter->addMedia(storage_path('app/public/uploads/chapter_thumbnail/tmp/' . $request->upload . '/' . $tempThumbnail->filename))
+                ->toMediaCollection('chapter_thumbnails');
+
+            $chapter->chapter_thumbnail = $chapter->getFirstMediaUrl('chapter_thumbnails');
+
+            rmdir(storage_path('app/public/uploads/chapter_thumbnail/tmp/' . $request->upload));
+            $tempThumbnail->delete();
+        }
 
         return redirect()->route('series.show', $chapter->series->series_id);
     }

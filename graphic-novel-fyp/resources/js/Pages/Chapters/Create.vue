@@ -24,15 +24,25 @@
                 <Label>Chapter Thumbnail</Label>
                 <!-- <ImageLabel /> -->
 
-                <file-pond name="test" ref="pond" class-name="my-pond" label-idle="Chapter Thumbnail"
-                    accepted-file-types="image/jpeg, image/png" v-bind:files="myFiles" v-on:init="handleFilePondInit" />
+                <!-- <file-pond name="upload" label-idle="Chapter Thumbnail" accepted-file-types="image/jpeg, image/png" :server="{
+                    url: '/upload?media=chapter_thumbnail',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                }" /> -->
+
+                <file-pond name="upload" label-idle="Chapter Thumbnail" accepted-file-types="image/jpeg, image/png" :server="{
+                    url: '/upload?media=chapter_thumbnail',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                }" />
             </div>
 
-            <div>
-                <file-pond name="test" ref="pond" class-name="my-pond" label-idle="Drop files here..." allow-multiple="true"
-                    allow-reorder="true" accepted-file-types="image/jpeg, image/png" v-bind:files="myFiles"
-                    v-on:init="handleFilePondInit" />
-            </div>
+            <!-- <div>
+                <file-pond name="test2" label-idle="Pages" allow-multiple="true" allow-reorder="true"
+                    accepted-file-types="image/jpeg, image/png" server="/upload" />
+            </div> -->
 
             <!-- Create a list of buttons for Preview PC, Preview Mobile and Save Draft -->
             <div class="flex flex-col md:flex-row gap-5">
@@ -125,11 +135,16 @@ export default {
     components: {
         FilePond,
     },
+    data() {
+        return {
+            csrfToken: document.querySelector('meta[name="csrf-token"]').content,
+        };
+    },
     setup() {
         const form = useForm({
             series_id: '',
             chapter_title: '',
-            chapter_thumbnail: '',
+            upload: '',
             chapter_notes: '',
             comments_enabled: '',
             scheduled_publish: '',
