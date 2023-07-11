@@ -31,12 +31,13 @@
                     }
                 }" /> -->
 
-                <file-pond name="upload" label-idle="Chapter Thumbnail" accepted-file-types="image/jpeg, image/png" :server="{
-                    url: '/upload?media=chapter_thumbnail',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    }
-                }" />
+                <file-pond name="upload" label-idle="Chapter Thumbnail" accepted-file-types="image/jpeg, image/png"
+                    @processfile="handleFilePondThumbnailProcess" :server="{
+                        url: '/upload?media=chapter_thumbnail',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        }
+                    }" />
             </div>
 
             <!-- <div>
@@ -125,6 +126,8 @@ const FilePond = vueFilePond(
     FilePondPluginImagePreview,
 );
 
+
+
 export default {
     props: {
         // series is an object
@@ -140,6 +143,7 @@ export default {
             csrfToken: document.querySelector('meta[name="csrf-token"]').content,
         };
     },
+
     setup() {
         const form = useForm({
             series_id: '',
@@ -153,6 +157,12 @@ export default {
         return {
             form,
         }
+    },
+    methods: {
+        handleFilePondThumbnailProcess(error, file) {
+            // Update the form with the file ids
+            this.form.upload = file.serverId;
+        },
     },
     mounted() {
         this.form.comments_enabled = 1;

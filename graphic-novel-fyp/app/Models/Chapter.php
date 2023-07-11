@@ -9,10 +9,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Chapter extends Model
+class Chapter extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
     public $timestamps = false;
     protected $primaryKey = 'chapter_id';
     protected $appends = ['url'];

@@ -10,6 +10,8 @@ class UploadController extends Controller
     //
     public function store(Request $request){
 
+        // dd($request->all());
+
         // Check if $request->media is set. If not, return an empty string
         $media = $request->media ?? '';
         
@@ -36,6 +38,6 @@ class UploadController extends Controller
             return $folder;
         }
 
-        return '';
+        return 'nope';
     }
 }

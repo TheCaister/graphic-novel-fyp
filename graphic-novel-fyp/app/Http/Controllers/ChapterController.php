@@ -55,16 +55,20 @@ class ChapterController extends Controller
 
         $formFields['chapter_number'] = $nextChapterNumber;
 
+        $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
+
+        dd($request);
+
         $chapter = Chapter::create($formFields);
 
-        $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
+
 
         if ($tempThumbnail) {
 
             $chapter->addMedia(storage_path('app/public/uploads/chapter_thumbnail/tmp/' . $request->upload . '/' . $tempThumbnail->filename))
                 ->toMediaCollection('chapter_thumbnails');
 
-            $chapter->chapter_thumbnail = $chapter->getFirstMediaUrl('chapter_thumbnails');
+            // $chapter->chapter_thumbnail = $chapter->getFirstMediaUrl('chapter_thumbnails');
 
             rmdir(storage_path('app/public/uploads/chapter_thumbnail/tmp/' . $request->upload));
             $tempThumbnail->delete();
