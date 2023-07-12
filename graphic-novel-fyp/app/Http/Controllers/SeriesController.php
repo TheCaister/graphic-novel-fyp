@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Series;
+use App\Models\TemporaryFile;
 use App\Models\Universe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,13 +17,14 @@ class SeriesController extends Controller
     {
         return Inertia::render('Series/Create', [
             'universe' => $universe
-
         ]);
     }
 
     // Store the new series
     public function store(Request $request)
     {
+        // dd($request->all());
+
         // Validate the request
         $formFields = $request->validate([
             'universe_id' => 'required',
@@ -40,8 +42,20 @@ class SeriesController extends Controller
 
         $formFields['rating'] = 0;
 
+        $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
+
         // Create the series
         $series = Series::create($formFields);
+
+        if($tempThumbnail){
+            // $series->addMedia(storage_path('app/public/uploads/series_thumbnail/tmp/' . $tempThumbnail->folder . '/' . $tempThumbnail->filename))->toMediaCollection('series_thumbnail');
+
+            $series->addMedia(storage_path('/uploads/series_thumbnail/tmp/'.$tempThumbnail->folder.'/'.$tempThumbnail->filename, 'public'))->toMediaCollection('series_thumbnail');
+
+            rmdir(storage_path('app/public/uploads/series_thumbnail/tmp/' . $tempThumbnail->folder));
+
+            $tempThumbnail->delete();
+        }
 
         // Redirect to the series page
         return redirect()->route('publish');
@@ -65,6 +79,11 @@ class SeriesController extends Controller
         }
 
         // dd($chapters);
+
+        // For the series, attach the link to the series_thumbnail from the media table
+        $series->series_thumbnail = $series->getFirstMediaUrl('series_thumbnail');
+
+        // dd($series->series_thumbnail);
 
         return Inertia::render('Series/Show', [
             'series' => $series,
@@ -187,6 +206,11 @@ class SeriesController extends Controller
         // Get all the series with the genre
         $series = Series::where('series_genre', $genre)->get();
 
+        // Attach series_thumbnail to each series
+        foreach ($series as $seriesSingle) {
+            $seriesSingle->series_thumbnail = $seriesSingle->getFirstMediaUrl('series_thumbnail');
+        }
+
         // Return the series as a json response
         return response()->json($series);
     }
@@ -208,6 +232,9 @@ class SeriesController extends Controller
         // Attach the universe to each series
         foreach ($series as $seriesSingle) {
             $seriesSingle->universe = $seriesSingle->universe;
+
+            // Also attach the series_thumbnail to each series
+            $seriesSingle->series_thumbnail = $seriesSingle->getFirstMediaUrl('series_thumbnail');
         }
 
         // Return the series as a json response
@@ -223,6 +250,10 @@ class SeriesController extends Controller
         $series = Series::orderBy('created_at', 'desc')->take(10)->get();
 
 
+        // Attach the series_thumbnail to each series
+        foreach ($series as $seriesSingle) {
+            $seriesSingle->series_thumbnail = $seriesSingle->getFirstMediaUrl('series_thumbnail');
+        }
 
         // Return the series as a json response
         return response()->json($series);

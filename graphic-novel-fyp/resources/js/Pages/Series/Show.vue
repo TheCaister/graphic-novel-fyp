@@ -1,4 +1,9 @@
 <template>
+    <!-- Show the series_thumbnail. If it doesn't exist, show black -->
+    <div class="w-full h-96 bg-black">
+        <img :src="`${series.series_thumbnail}`" alt="Series Thumbnail" class="w-full h-full object-cover" />
+    </div>
+
     <div>
         <!-- Series title -->
         <h1 class="text-3xl font-bold mb-2">{{ series.series_title }}</h1>

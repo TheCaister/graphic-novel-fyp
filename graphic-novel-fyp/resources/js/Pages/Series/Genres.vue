@@ -31,7 +31,11 @@
                 <Link :href="'/series/' + series.series_id">
                     <div class="flex flex-col gap-1">
                         <div class="flex flex-row gap-1">
-                            <img src="/assets/black_page.jpg" class="w-10 h-10 rounded-full" />
+                            <!-- Show the series_thumbnail. If it doesn't exist, make it black -->
+                            <img :src="`${series.series_thumbnail}`" alt="Series Thumbnail" class="w-10 h-10 rounded-full" />
+
+
+                            <!-- <img src="/assets/black_page.jpg" class="w-10 h-10 rounded-full" /> -->
                             <p class="font-bold">{{ series.series_title }}</p>
                         </div>
                         <p class="text-sm">{{ series.series_summary }}</p>

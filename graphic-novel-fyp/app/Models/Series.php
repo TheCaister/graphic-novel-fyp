@@ -9,12 +9,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Series extends Model
+class Series extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
     protected $primaryKey = 'series_id';
     public $timestamps = false;
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('series_thumbnail')->singleFile();
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -77,6 +86,8 @@ class Series extends Model
     // Delete all comments associated with the chapter.
     function delete()
     {
+        
+
         // $this->pages()->delete();
         $this->chapters()->delete();
         $this->comments()->delete();

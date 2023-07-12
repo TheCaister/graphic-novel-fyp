@@ -34,7 +34,15 @@
 
             <div>
                 <Label>Series Thumbnail</Label>
-                <ImageLabel />
+                <!-- <ImageLabel /> -->
+
+                <file-pond name="upload" label-idle="Series Thumbnail" accepted-file-types="image/jpeg, image/png"
+                    @processfile="handleFilePondThumbnailProcess" :server="{
+                        url: '/upload?media=series_thumbnail',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        }
+                    }" />
             </div>
 
             <div class="flex justify-center gap-2 md:gap-5">
@@ -56,12 +64,28 @@
 <script>
 import { useForm } from '@inertiajs/vue3';
 
+import vueFilePond from 'vue-filepond';
+
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+
+import 'filepond/dist/filepond.min.css';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+
+const FilePond = vueFilePond(
+    FilePondPluginFileValidateType,
+    FilePondPluginImagePreview,
+);
+
 export default {
     props: {
         // universe is an object
         universe: {
             type: Object,
         },
+    },
+    components: {
+        FilePond,
     },
     data() {
         return {
@@ -77,6 +101,7 @@ export default {
                 'THRILLER',
             ],
             universes: [],
+            csrfToken: document.querySelector('meta[name="csrf-token"]').content,
         }
     }
     ,
@@ -87,17 +112,38 @@ export default {
             series_summary: '',
             series_thumbnail: '',
             series_genre: '',
+            upload: '',
         });
 
         return {
             form,
         }
     },
+    methods: {
+        handleFilePondThumbnailProcess(error, file) {
+            // console.log(file.serverId);
+
+            // Update the form with the file ids
+            this.form.upload = file.serverId;
+
+            console.log(this.form.upload)
+        },
+    },
     mounted() {
 
         // Make a call to the API to get all the universes, passing in the user's ID
-        axios.get('/api/universes/' + this.$attrs.auth.user.id).then(response => {
+        // axios.get('/api/universes/' + this.$attrs.auth.user.id).then(response => {
+        //     this.universes = response.data
+        // }).catch(error => console.log(error))
+
+        axios.get('/api/universes/', {
+            params: {
+                user_id: this.$attrs.auth.user.id,
+                // with_series: true,
+            }
+        }).then(response => {
             this.universes = response.data
+            this.universeLoaded = true
         }).catch(error => console.log(error))
 
         // If the universe prop is not null, then set the universe_id to the universe's ID

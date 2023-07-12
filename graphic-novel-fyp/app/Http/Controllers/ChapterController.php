@@ -57,7 +57,7 @@ class ChapterController extends Controller
 
         $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
 
-        dd($request);
+        // dd($request);
 
         $chapter = Chapter::create($formFields);
 
