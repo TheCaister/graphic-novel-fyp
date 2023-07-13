@@ -43,6 +43,7 @@ class ChapterController extends Controller
     {
         //
         // dd($request->all());
+
         $formFields = $request->validate([
             'series_id' => 'required',
             'chapter_title' => 'required',
@@ -61,10 +62,7 @@ class ChapterController extends Controller
 
         $chapter = Chapter::create($formFields);
 
-
-
         if ($tempThumbnail) {
-
             $chapter->addMedia(storage_path('app/public/uploads/chapter_thumbnail/tmp/' . $request->upload . '/' . $tempThumbnail->filename))
                 ->toMediaCollection('chapter_thumbnails');
 
@@ -73,6 +71,39 @@ class ChapterController extends Controller
             rmdir(storage_path('app/public/uploads/chapter_thumbnail/tmp/' . $request->upload));
             $tempThumbnail->delete();
         }
+
+        // Go through each page in request->pages
+        if ($request->pages) {
+            $pageNumber = 1;
+
+            foreach ($request->pages as $page) {
+                // Get the temporary file
+                $tempPage = TemporaryFile::where('folder', $page)->first();
+
+                if ($tempPage) {
+                    // Create a page
+                    $curPage = $chapter->pages()->create([
+                        'page_number' => $pageNumber,
+                        'page_image' => '',
+                    ]);
+
+                    // Add the page to the chapter
+                    $curPage->addMedia(storage_path('app/public/uploads/pages/tmp/' . $page . '/' . $tempPage->filename))
+                        ->toMediaCollection('page_image');
+
+                    $curPage->page_image = $curPage->getFirstMediaUrl('page_image');
+
+                    $curPage->save();
+
+                    $pageNumber++;
+
+                    rmdir(storage_path('app/public/uploads/pages/tmp/' . $page));
+                    $tempPage->delete();
+                }
+            }
+        }
+
+
 
         return redirect()->route('series.show', $chapter->series->series_id);
     }

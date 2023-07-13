@@ -48,14 +48,17 @@ class SeriesController extends Controller
         $series = Series::create($formFields);
 
         if($tempThumbnail){
-            // $series->addMedia(storage_path('app/public/uploads/series_thumbnail/tmp/' . $tempThumbnail->folder . '/' . $tempThumbnail->filename))->toMediaCollection('series_thumbnail');
-
-            $series->addMedia(storage_path('/uploads/series_thumbnail/tmp/'.$tempThumbnail->folder.'/'.$tempThumbnail->filename, 'public'))->toMediaCollection('series_thumbnail');
+            $series->addMedia(storage_path('app/public/uploads/series_thumbnail/tmp/'.$tempThumbnail->folder.'/'.$tempThumbnail->filename))->toMediaCollection('series_thumbnail');
 
             rmdir(storage_path('app/public/uploads/series_thumbnail/tmp/' . $tempThumbnail->folder));
 
+            // Set series thumbnail to the uploaded thumbnail
+            $series->series_thumbnail = $series->getFirstMediaUrl('series_thumbnail');
+            $series->save();
+
             $tempThumbnail->delete();
         }
+        
 
         // Redirect to the series page
         return redirect()->route('publish');
@@ -77,13 +80,6 @@ class SeriesController extends Controller
             // Query the user_chapter_likes table for the amount of likes
             $chapter->likes = DB::table('user_chapter_likes')->where('chapter_id', $chapter->chapter_id)->count();
         }
-
-        // dd($chapters);
-
-        // For the series, attach the link to the series_thumbnail from the media table
-        $series->series_thumbnail = $series->getFirstMediaUrl('series_thumbnail');
-
-        // dd($series->series_thumbnail);
 
         return Inertia::render('Series/Show', [
             'series' => $series,
@@ -206,11 +202,6 @@ class SeriesController extends Controller
         // Get all the series with the genre
         $series = Series::where('series_genre', $genre)->get();
 
-        // Attach series_thumbnail to each series
-        foreach ($series as $seriesSingle) {
-            $seriesSingle->series_thumbnail = $seriesSingle->getFirstMediaUrl('series_thumbnail');
-        }
-
         // Return the series as a json response
         return response()->json($series);
     }
@@ -232,9 +223,6 @@ class SeriesController extends Controller
         // Attach the universe to each series
         foreach ($series as $seriesSingle) {
             $seriesSingle->universe = $seriesSingle->universe;
-
-            // Also attach the series_thumbnail to each series
-            $seriesSingle->series_thumbnail = $seriesSingle->getFirstMediaUrl('series_thumbnail');
         }
 
         // Return the series as a json response
@@ -248,12 +236,6 @@ class SeriesController extends Controller
     public function getRecentSeries(){
         // From series table, get the 10 most recent series
         $series = Series::orderBy('created_at', 'desc')->take(10)->get();
-
-
-        // Attach the series_thumbnail to each series
-        foreach ($series as $seriesSingle) {
-            $seriesSingle->series_thumbnail = $seriesSingle->getFirstMediaUrl('series_thumbnail');
-        }
 
         // Return the series as a json response
         return response()->json($series);

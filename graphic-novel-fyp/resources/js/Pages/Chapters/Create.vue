@@ -24,13 +24,6 @@
                 <Label>Chapter Thumbnail</Label>
                 <!-- <ImageLabel /> -->
 
-                <!-- <file-pond name="upload" label-idle="Chapter Thumbnail" accepted-file-types="image/jpeg, image/png" :server="{
-                    url: '/upload?media=chapter_thumbnail',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    }
-                }" /> -->
-
                 <file-pond name="upload" label-idle="Chapter Thumbnail" accepted-file-types="image/jpeg, image/png"
                     @processfile="handleFilePondThumbnailProcess" :server="{
                         url: '/upload?media=chapter_thumbnail',
@@ -39,11 +32,18 @@
                         }
                     }" />
             </div>
-
-            <!-- <div>
-                <file-pond name="test2" label-idle="Pages" allow-multiple="true" allow-reorder="true"
-                    accepted-file-types="image/jpeg, image/png" server="/upload" />
-            </div> -->
+            <div>
+                <file-pond name="upload" label-idle="Pages" allow-multiple="true" allow-reorder="true"
+                @processfile="handleFilePondPagesProcess" 
+                @removefile="handleFilePondPagesRemoveFile"
+                accepted-file-types="image/jpeg, image/png" :server="{
+                        url: '/upload?media=pages',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        }
+                    }
+                        " />
+            </div>
 
             <!-- Create a list of buttons for Preview PC, Preview Mobile and Save Draft -->
             <div class="flex flex-col md:flex-row gap-5">
@@ -149,6 +149,7 @@ export default {
             series_id: '',
             chapter_title: '',
             upload: '',
+            pages: [],
             chapter_notes: '',
             comments_enabled: '',
             scheduled_publish: '',
@@ -162,6 +163,14 @@ export default {
         handleFilePondThumbnailProcess(error, file) {
             // Update the form with the file ids
             this.form.upload = file.serverId;
+        },
+        handleFilePondPagesProcess(error, file) {
+            // Update the form with the file ids
+            this.form.pages.push(file.serverId);
+        },
+        handleFilePondPagesRemoveFile(error, file) {
+            // Update the form with the file ids
+            this.form.pages = this.form.pages.filter((item) => item !== file.serverId);
         },
     },
     mounted() {
