@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ElementController extends Controller
 {
@@ -61,4 +62,12 @@ class ElementController extends Controller
     {
         //
     }
+
+    public function elementsforge(){
+        
+        return Inertia::render('Profile/Main', [
+            'user' => auth()->user(),
+            'passed_tab' => 'ElementsForge',
+        ]);
+    }    
 }

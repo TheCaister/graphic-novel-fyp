@@ -116,9 +116,9 @@ Route::middleware('auth')->group(function () {
 
     //////////////////////////////////////
 
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');
+    // Route::get('/dashboard', function () {
+    //     return Inertia::render('Dashboard');
+    // })->middleware(['auth', 'verified'])->name('dashboard');
 
     // Route::middleware('auth')->group(function () {
     //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -139,7 +139,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/users/{user}', [ProfileController::class, 'destroyOther']);
     
     Route::get('/user/main', [ProfileController::class, 'main'])->name('user.main');
-    Route::get('/user/main/dashboard', [ProfileController::class, 'dashboard'])->name('user.main.dashboard');
+    Route::get('/user/main/dashboard', [ProfileController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+
+    // Route::get('/dashboard', [ProfileController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+
     Route::get('user/main/comments', [ProfileController::class, 'comments'])->name('user.main.comments');
     Route::get('user/main/following', [ProfileController::class, 'following'])->name('user.main.following');
     Route::get('user/main/show', [ProfileController::class, 'showMain'])->name('user.main.show');
@@ -154,6 +157,7 @@ Route::get('/publish', [SeriesController::class, 'publish'])->name('publish');
 // Trying out resource
 Route::resource('universes', UniverseController::class);
 
+//////////////////////// SERIES ROUTES ////////////////////////
 Route::get('{series}/chapters/create', [ChapterController::class, 'create'])->name('chapter.create');
 Route::resource('chapters', ChapterController::class);
 Route::resource('elements', ElementController::class);
@@ -163,6 +167,8 @@ Route::get('{universe}/series/create', [SeriesController::class, 'create'])->nam
 Route::get('/series/genres',[SeriesController::class, 'genres'])->name('series.genres');
 Route::resource('series', SeriesController::class);
 
+////////////////////////// ELEMENT ROUTES ////////////////////////
+Route::get('user/main/elementsforge', [ElementController::class, 'elementsforge'])->name('user.main.elementsforge');
 
 
 require __DIR__ . '/auth.php';

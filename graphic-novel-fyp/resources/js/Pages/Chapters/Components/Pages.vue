@@ -7,8 +7,10 @@
         <div class="h-full relative">
             <div class="absolute top-0 left-0 w-1/2 h-full" @click="$emit('previousPage')"></div>
             <div class="absolute top-0 right-0 w-1/2 h-full" @click="$emit('nextPage')"></div>
-            <img :src="`https://pm1.aminoapps.com/7375/5c45e9a5626c875433b0fff3a30c7b7aaa354a8cr1-1286-1037v2_uhq.jpg`"
-                alt="" class="h-full">
+            
+            <img :src="`${page.page_image}`" alt="Page" @error="showDefaultPage" class="h-full">
+
+         
         </div>
     </div>
 </template>
@@ -17,6 +19,12 @@
 export default {
     props: {
         page: Object,
-    }
+    },
+    methods: {
+        // Show a black page if the image doesn't load
+        showDefaultPage(event) {
+            event.target.src = 'https://media.istockphoto.com/id/1142986365/vector/error-with-glitch-effect-on-screen-error-404-page-not-found-flat-design-modern-vector.jpg?s=612x612&w=0&k=20&c=E0Y1GZsaRrEk-a2eW49WKCjRFd9SS1MitZ6Vly1HAs8=';
+        },
+    },
 }
 </script>

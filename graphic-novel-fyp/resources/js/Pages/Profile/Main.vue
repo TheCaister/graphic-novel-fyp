@@ -24,18 +24,23 @@
         </Link>
 
         <Link href="/user/main/show">
-        <button @click='currentTabComponent = "Show"'
-            :class="{ 'font-bold underline': currentTabComponent === 'Show' }">
+        <button @click='currentTabComponent = "Show"' :class="{ 'font-bold underline': currentTabComponent === 'Show' }">
             Show
         </button>
         </Link>
 
         <Link href="/user/main/edit">
-        <button @click='currentTabComponent = "Edit"'
-            :class="{ 'font-bold underline': currentTabComponent === 'Edit' }">
+        <button @click='currentTabComponent = "Edit"' :class="{ 'font-bold underline': currentTabComponent === 'Edit' }">
             Account Settings
         </button>
         </Link>
+
+        <Link href="/user/main/elementsforge">
+        <button @click='currentTabComponent = "ElementsForge"'
+            :class="{ 'font-bold underline': currentTabComponent === 'ElementsForge' }">
+            Elements Forge</button>
+        </Link>
+
 
     </div>
 
@@ -50,6 +55,7 @@ import Show from './Components/Show.vue';
 import Following from './Components/Following.vue';
 import AccountSettings from './Components/AccountSettings.vue';
 import Edit from './Edit.vue';
+import ElementsForge from '../Elements/ElementsForge.vue';
 
 export default {
     props: {
@@ -72,6 +78,7 @@ export default {
         Following,
         AccountSettings,
         Edit,
+        ElementsForge,
     },
 
     data() {
