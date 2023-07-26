@@ -32,6 +32,8 @@
 <script>
 import Pages from './Components/Pages.vue'
 import Comments from '../../Components/Comments.vue'
+import APICalls from '../../Utilities/APICalls.js'
+
 
 export default {
     props: {
@@ -74,29 +76,20 @@ export default {
     },
 
     mounted() {
+        APICalls.getPagesByChapterId(this.chapter.chapter_id).then(response => {
+            this.pages = response.data;
+            this.pageNumber = this.pages[0].page_number;
+            this.pageLoaded = true;
+        }).catch(error => {
+            console.log(error);
+        })
 
-        axios.get('/api/chapters/' + this.chapter.chapter_id + '/pages')
-            .then(response => {
-                this.pages = response.data;
-                this.pageNumber = this.pages[0].page_number;
-                this.pageLoaded = true;
-            })
-            .catch(error => {
-                console.log(error);
-            })
-
-        axios.get('/api/comments', {
-            params: {
-                commentable_id: this.chapter.chapter_id,
-                commentable_type: 'chapter',
-                attach_replies: true,
-            }
-        }).then(response => {
-            this.comments = response.data
-            this.commentsLoaded = true
-
-            console.log(this.comments)
-        }).catch(error => console.log(error))
+        APICalls.getComments(this.chapter.chapter_id, 'chapter', true).then(response => {
+            this.comments = response.data;
+            this.commentsLoaded = true;
+        }).catch(error => {
+            console.log(error);
+        })
     }
 }
 </script>

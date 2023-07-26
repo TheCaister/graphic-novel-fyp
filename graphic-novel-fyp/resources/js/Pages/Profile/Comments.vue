@@ -30,6 +30,9 @@
 </template>
 
 <script>
+import APICalls from '@/Utilities/APICalls'
+import { usePage } from '@inertiajs/vue3'
+
 export default {
     data() {
         return {
@@ -38,17 +41,13 @@ export default {
         }
     },
     mounted() {
-        // console.log(this.$attrs)
-        axios.get('/api/comments', {
-            params: {
-                // Get user from attrs
-                user_id: this.$parent.$attrs.auth.user.id,
-            }
-        }).then(response => {
+        const page = usePage()
+
+        APICalls.getUserComments(page.props.auth.user.id).then(response => {
             this.comments = response.data
             this.commentsLoaded = true
 
-            console.log(this.comments)
+            // console.log(this.comments)
         }).catch(error => console.log(error))
     }
 }

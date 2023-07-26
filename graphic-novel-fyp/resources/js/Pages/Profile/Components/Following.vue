@@ -19,7 +19,8 @@
 </template>
     
 <script>
-
+import APICalls from '@/Utilities/APICalls'
+import { usePage } from '@inertiajs/vue3'
 
 export default {
 
@@ -31,15 +32,13 @@ export default {
     },
 
     mounted() {
-        axios.get('/api/followings', {
-            params: {
-                user_id: this.$parent.$parent.$attrs.auth.user.id,
-            }
-        }).then(response => {
+
+        const page = usePage()
+        const authId = page.props.auth.user.id
+
+        APICalls.getFollowings(authId).then(response => {
             this.followings = response.data
             this.followingLoaded = true
-
-            console.log(this.following)
         }).catch(error => console.log(error))
     },
 }

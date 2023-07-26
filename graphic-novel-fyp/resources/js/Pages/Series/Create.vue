@@ -72,6 +72,9 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
+import APICalls from '@/Utilities/APICalls'
+import { usePage } from '@inertiajs/vue3'
+
 const FilePond = vueFilePond(
     FilePondPluginFileValidateType,
     FilePondPluginImagePreview,
@@ -130,18 +133,9 @@ export default {
         },
     },
     mounted() {
+        const page = usePage()
 
-        // Make a call to the API to get all the universes, passing in the user's ID
-        // axios.get('/api/universes/' + this.$attrs.auth.user.id).then(response => {
-        //     this.universes = response.data
-        // }).catch(error => console.log(error))
-
-        axios.get('/api/universes/', {
-            params: {
-                user_id: this.$attrs.auth.user.id,
-                // with_series: true,
-            }
-        }).then(response => {
+        APICalls.getUniversesByUserId(page.props.auth.user.id).then(response => {
             this.universes = response.data
             this.universeLoaded = true
         }).catch(error => console.log(error))

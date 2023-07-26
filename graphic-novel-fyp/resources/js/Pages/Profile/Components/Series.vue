@@ -42,12 +42,11 @@
 </template>
 
 <script>
+import APICalls from '@/Utilities/APICalls'
 import { Inertia } from '@inertiajs/inertia'
+import { usePage } from '@inertiajs/vue3'
 
 export default {
-    props: {
-        user: Object,
-    },
     data() {
         return {
             universes: [],
@@ -66,12 +65,9 @@ export default {
         }
     },
     mounted() {
-        axios.get('/api/universes/', {
-            params: {
-                user_id: this.user.id,
-                with_series: true,
-            }
-        }).then(response => {
+        const page = usePage()
+
+        APICalls.getUniversesByUserId(page.props.auth.user.id, true).then(response => {
             this.universes = response.data
             this.universeLoaded = true
         }).catch(error => console.log(error))

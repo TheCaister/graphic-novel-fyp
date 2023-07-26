@@ -102,9 +102,6 @@ class UniverseController extends Controller
             }
         }
 
-        // Return dd in JSON format
-        // dd($universes);
-
         return response()->json($universes);
     }
 }

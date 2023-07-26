@@ -17,7 +17,6 @@ import TextAreaInput from '@/Components/Forms/TextAreaInput.vue';
 
 
 
-
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 createInertiaApp({

@@ -19,7 +19,7 @@ import { Head } from '@inertiajs/vue3';
             </div>
         </div>
 
-        <Series :user="this.$parent.$attrs.auth.user">
+        <Series>
 
         </Series>
     </AuthenticatedLayout>
@@ -28,9 +28,10 @@ import { Head } from '@inertiajs/vue3';
 <script>
 
 import Series from './Profile/Components/Series.vue';
+
 export default {
     components: {
         Series,
-    },
+    }
 };
 </script>
