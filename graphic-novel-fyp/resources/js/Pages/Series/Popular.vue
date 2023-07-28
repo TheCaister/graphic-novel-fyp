@@ -25,6 +25,8 @@
 <script>
 import PopularList from './Components/PopularList.vue'
 
+import APICalls from '@/Utilities/APICalls'
+
 export default {
     components: {
         PopularList
@@ -49,25 +51,20 @@ export default {
         // Function to get all series of a genre
         getSeries(genre) {
             this.genreSeriesLoaded = false
-            axios.get('/api/series/popular', {
-                params: {
-                    genre: this.selectedGenre,
-                }
-            }).then(response => {
+
+            APICalls.getPopularSeries(genre).then(response => {
                 this.genreSeries = response.data
                 this.genreSeriesLoaded = true
-
-                // console.log(this.genreSeriesLoaded)
             }).catch(error => console.log(error))
         }
     },
     mounted() {
-        axios.get('/api/series/popular').then(response => {
+        APICalls.getPopularSeries().then(response => {
             this.series = response.data
             this.seriesLoaded = true
         }).catch(error => console.log(error))
 
-        axios.get('/api/genres').then(response => {
+        APICalls.getAllGenres().then(response => {
             this.genres = response.data
             this.genresLoaded = true
 
@@ -75,7 +72,7 @@ export default {
 
             this.getSeries(this.selectedGenre)
 
-  
+
         }).catch(error => console.log(error))
     }
 }

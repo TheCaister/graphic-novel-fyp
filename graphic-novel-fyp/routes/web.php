@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\ChapterController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ElementController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\UniverseController;
 use App\Http\Controllers\UploadController;
-use App\Models\Series;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
@@ -38,8 +38,6 @@ Route::get('/', function () {
         [
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
-            // 'name' => Auth::user()->username,
-            // 'series' => Series::all(),
         ]
     );
 })->name('home');
@@ -170,5 +168,7 @@ Route::resource('series', SeriesController::class);
 ////////////////////////// ELEMENT ROUTES ////////////////////////
 Route::get('user/main/elementsforge', [ElementController::class, 'elementsforge'])->name('user.main.elementsforge');
 
+////////////////////////// COMMENT ROUTES ////////////////////////
+Route::resource('comments', CommentController::class);
 
 require __DIR__ . '/auth.php';

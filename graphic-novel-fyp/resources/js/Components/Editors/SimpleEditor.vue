@@ -50,7 +50,10 @@ export default {
             content: this.modelValue,
             onUpdate: () => {
                 // HTML
-                this.$emit('update:modelValue', this.editor.getHTML())
+                // Emit only the text in the editor, excluding the HTML tags
+                this.$emit('update:modelValue', this.editor.getHTML().replace(/<[^>]+>/g, ''))
+                
+                // this.$emit('update:modelValue', this.editor.getHTML())
 
                 // JSON
                 // this.$emit('update:modelValue', this.editor.getJSON())

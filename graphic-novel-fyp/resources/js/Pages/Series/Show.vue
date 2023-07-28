@@ -48,6 +48,13 @@
     </div>
 
     <h1>Comments</h1>
+
+    <!-- CreateComment with the entire width of the screen -->
+    <div class="w-full">
+        <CreateComment @comment-created="updateComments()" commentable-type="App\Models\Series" :commentable-id="series.series_id"/>
+    </div>
+
+
     <!-- Say there are no comments if there are none -->
     <p v-if="comments.length === 0">There are no comments yet.</p>
     <Comments v-if="commentsLoaded" :comments="comments"></Comments>
@@ -58,6 +65,8 @@
 
 <script>
 import Comments from '../../Components/Comments.vue'
+import CreateComment from '../../Components/Comments/CreateComment.vue'
+import APICalls from '@/Utilities/APICalls'
 
 export default {
     props: {
@@ -68,6 +77,7 @@ export default {
     },
     components: {
         Comments,
+        CreateComment
     },
     data() {
         return {
@@ -76,19 +86,25 @@ export default {
         }
     },
     mounted() {
-        axios.get('/api/comments', {
-            params: {
-                commentable_id: this.series.series_id,
-                commentable_type: 'series',
-                attach_replies: true,
-            }
-        }).then(response => {
-            this.comments = response.data
-            this.commentsLoaded = true
 
-            console.log(this.comments)
-        }).catch(error => console.log(error))
+        APICalls.getComments(this.series.series_id, 'series', true).then(response => {
+            this.comments = response.data.comments;
+            // console.log(this.comments);
+            this.commentsLoaded = true;
+        }).catch(error => {
+            console.log(error);
+        })
     },
+    methods: {
+        updateComments() {
+            APICalls.getComments(this.series.series_id, 'series', true).then(response => {
+                this.comments = response.data.comments;
+                this.commentsLoaded = true;
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+    }
 
 }
 

@@ -29,17 +29,17 @@
             <!-- Create a small card for each series, using the series title, thumbnail and include a link -->
             <div class="bg-gray-200 hover:bg-gray-300 rounded-lg px-3 py-1">
                 <Link :href="'/series/' + series.series_id">
-                    <div class="flex flex-col gap-1">
-                        <div class="flex flex-row gap-1">
-                            <!-- Show the series_thumbnail. If it doesn't exist, make it black -->
-                            <img :src="`${series.series_thumbnail}`" alt="Series Thumbnail" class="w-10 h-10 rounded-full" />
+                <div class="flex flex-col gap-1">
+                    <div class="flex flex-row gap-1">
+                        <!-- Show the series_thumbnail. If it doesn't exist, make it black -->
+                        <img :src="`${series.series_thumbnail}`" alt="Series Thumbnail" class="w-10 h-10 rounded-full" />
 
 
-                            <!-- <img src="/assets/black_page.jpg" class="w-10 h-10 rounded-full" /> -->
-                            <p class="font-bold">{{ series.series_title }}</p>
-                        </div>
-                        <p class="text-sm">{{ series.series_summary }}</p>
+                        <!-- <img src="/assets/black_page.jpg" class="w-10 h-10 rounded-full" /> -->
+                        <p class="font-bold">{{ series.series_title }}</p>
                     </div>
+                    <p class="text-sm">{{ series.series_summary }}</p>
+                </div>
                 </Link>
             </div>
 
@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import APICalls from '@/Utilities/APICalls'
+
 export default {
     data() {
         return {
@@ -67,11 +69,7 @@ export default {
 
             this.seriesLoaded = false;
 
-            axios.get('/api/series/genres', {
-                params: {
-                    genre: this.selectedGenre,
-                }
-            }).then(response => {
+            APICalls.getSeriesByGenre(this.selectedGenre).then(response => {
                 this.series = response.data
                 this.seriesLoaded = true
             }).catch(error => console.log(error))
@@ -83,7 +81,7 @@ export default {
         }
     },
     mounted() {
-        axios.get('/api/genres').then(response => {
+        APICalls.getAllGenres().then(response => {
             this.genres = response.data
             this.genresLoaded = true
 

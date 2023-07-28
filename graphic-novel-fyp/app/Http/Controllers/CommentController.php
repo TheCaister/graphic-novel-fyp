@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Js;
 
 class CommentController extends Controller
 {
@@ -28,7 +29,15 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Create a new comment, using commentable_type and commentable_id
+        $comment = Comment::create([
+            'commenter_id' => $request->commenter_id,
+            'commentable_type' => $request->commentable_type,
+            'commentable_id' => $request->commentable_id,
+            'comment_content' => $request->comment_content,
+        ]);
+
+
     }
 
     /**
@@ -70,9 +79,14 @@ class CommentController extends Controller
 
         // Check if the request has a user_id
         if ($request->has('user_id')) {
+            // Get comments, with the latest comments first
+
             $comments = $this->getUserComments($request->user_id);
         } else if ($request->has('commentable_id')) {
             $comments = $this->getCommentableComments($request->commentable_id, $request->commentable_type);
+
+            // Reverse the comments so that the latest comments are at the bottom
+
         }
 
         if ($request->attach_replies) {
@@ -88,11 +102,9 @@ class CommentController extends Controller
             });
         }
 
-
-        // dd($comments);
-
-        // Return the comments as a JSON response
-        return response()->json($comments);
+        return response()->json([
+            'comments' => $comments->values(),
+        ]);
     }
 
     // getUserComments() returns the comments made by a user, passing in the user_id as a parameter

@@ -42,7 +42,6 @@ export default {
             }
         })
     },
-    // create getPopularSeries, with optional genre parameter
     getPopularSeries(genre) {
         return axios.get('/api/series/popular', {
             params: {
@@ -50,7 +49,6 @@ export default {
             }
         })
     },
-
     getAllGenres() {
         return axios.get('/api/genres')
     }

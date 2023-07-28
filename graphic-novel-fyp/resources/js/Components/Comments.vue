@@ -1,6 +1,6 @@
 <template>
     <!-- Display every comment -->
-    <div v-for="comment in comments" :key="comment.comment_id">
+    <div v-for="comment in comments.slice().reverse()" :key="comment.comment_id">
         <!-- Display profile photo -->
         <div class="flex-shrink-0">
             <img class="h-10 w-10 rounded-full" src="/assets/black_page.jpg" alt="">
@@ -42,15 +42,8 @@
                     </div>
 
                 </div>
-
             </TransitionGroup>
-
-
-
         </div>
-
-
-
     </div>
 </template>
 
@@ -61,12 +54,6 @@ export default {
             type: Array,
         }
     },
-    mounted() {
-        // For each comment, attach a display_replies boolean
-        this.comments.forEach(comment => {
-            comment.display_replies = false
-        })
-    }
 
 }
 </script>

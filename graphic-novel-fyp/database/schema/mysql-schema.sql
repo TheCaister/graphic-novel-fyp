@@ -42,9 +42,9 @@ CREATE TABLE `comments` (
   `commenter_id` bigint unsigned NOT NULL,
   `replying_to` bigint unsigned DEFAULT NULL,
   `comment_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL,
   `commentable_id` bigint unsigned NOT NULL,
   `commentable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`comment_id`),
   KEY `comments_commenter_id_foreign` (`commenter_id`),
   KEY `comments_replying_to_foreign` (`replying_to`),
@@ -306,3 +306,7 @@ INSERT INTO `migrations` VALUES (16,'2023_07_09_140136_change-series-table',2);
 INSERT INTO `migrations` VALUES (17,'2023_07_11_160300_create_temporary_files_table',3);
 INSERT INTO `migrations` VALUES (18,'2023_07_11_173943_create_media_table',4);
 INSERT INTO `migrations` VALUES (19,'2023_07_11_175210_update_chapter',5);
+INSERT INTO `migrations` VALUES (20,'2023_07_28_132654_add_date_default',6);
+INSERT INTO `migrations` VALUES (21,'2022_07_28_132654_add_date_default',7);
+INSERT INTO `migrations` VALUES (22,'2021_07_28_132654_add_date_default',8);
+INSERT INTO `migrations` VALUES (23,'2020_07_28_132654_add_date_default',9);

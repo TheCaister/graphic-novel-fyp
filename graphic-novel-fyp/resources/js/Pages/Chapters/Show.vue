@@ -21,6 +21,11 @@
         @pagination-change-page="getResults"
     /> -->
 
+    <div class="w-full">
+        <CreateComment @comment-created="updateComments()" commentable-type="App\Models\Chapter" :commentable-id="chapter.chapter_id"/>
+    </div>
+
+
     <!-- Comments component with comments passed as prop -->
     <p v-if="comments.length === 0">There are no comments yet.</p>
     <Comments v-if="commentsLoaded" :comments="comments"></Comments>
@@ -32,6 +37,7 @@
 <script>
 import Pages from './Components/Pages.vue'
 import Comments from '../../Components/Comments.vue'
+import CreateComment from '../../Components/Comments/CreateComment.vue'
 import APICalls from '../../Utilities/APICalls.js'
 
 
@@ -44,6 +50,7 @@ export default {
     components: {
         Pages,
         Comments,
+        CreateComment
     },
 
     // Set the page number to the page number of the first page
@@ -73,6 +80,15 @@ export default {
                 this.pageNumber = 1;
             }
         },
+
+        updateComments() {
+            APICalls.getComments(this.chapter.chapter_id, 'chapter', true).then(response => {
+                this.comments = response.data.comments;
+                this.commentsLoaded = true;
+            }).catch(error => {
+                console.log(error);
+            })
+        }
     },
 
     mounted() {
@@ -85,7 +101,7 @@ export default {
         })
 
         APICalls.getComments(this.chapter.chapter_id, 'chapter', true).then(response => {
-            this.comments = response.data;
+            this.comments = response.data.comments;
             this.commentsLoaded = true;
         }).catch(error => {
             console.log(error);
