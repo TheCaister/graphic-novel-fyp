@@ -39,3 +39,5 @@ Route::get('/genres', [SeriesController::class, 'getGenres'])->name('series.get-
 Route::get('/comments', [App\Http\Controllers\CommentController::class, 'getComments'])->name('comments.get-comments');
 
 Route::get('/followings', [App\Http\Controllers\FollowerController::class, 'getFollowings'])->name('followings.get-followings');
+
+Route::post('/series/rate', [App\Http\Controllers\SeriesController::class, 'rateSeries'])->name('series.rate');

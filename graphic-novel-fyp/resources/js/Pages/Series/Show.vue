@@ -1,8 +1,14 @@
 <template>
+    <RateSeriesModal :isOpen="this.isOpen" :series="this.series" @close="this.isOpen = false"/>
     <!-- Show the series_thumbnail. If it doesn't exist, show black -->
-    <div class="w-full h-96 bg-black">
+
+    <!-- <div class="w-full h-96 bg-black">
         <img :src="`${series.series_thumbnail}`" alt="Series Thumbnail" class="w-full h-full object-cover" />
-    </div>
+    </div> -->
+
+    <p>
+        {{ series.series_id }}
+    </p>
 
     <div>
         <!-- Series title -->
@@ -19,7 +25,7 @@
     <p class="text-gray-700 text-base mb-4">Rating: {{ series.rating }}</p>
 
     <!-- Create a button to bring up a rating overlay -->
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" @click="isOpen = true">
         Rate
     </button>
 
@@ -66,6 +72,7 @@
 <script>
 import Comments from '../../Components/Comments.vue'
 import CreateComment from '../../Components/Comments/CreateComment.vue'
+import RateSeriesModal from '../../Components/Modals/RateSeriesModal.vue'
 import APICalls from '@/Utilities/APICalls'
 
 export default {
@@ -77,12 +84,14 @@ export default {
     },
     components: {
         Comments,
-        CreateComment
+        CreateComment,
+        RateSeriesModal,
     },
     data() {
         return {
             comments: [],
             commentsLoaded: false,
+            isOpen: false,
         }
     },
     mounted() {
