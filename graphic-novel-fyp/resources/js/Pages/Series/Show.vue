@@ -1,5 +1,5 @@
 <template>
-    <RateSeriesModal :isOpen="this.isOpen" :series="this.series" @close="this.isOpen = false"/>
+    <RateSeriesModal :isOpen="this.isOpen" :series="this.series" @close="this.isOpen = false" />
     <!-- Show the series_thumbnail. If it doesn't exist, show black -->
 
     <!-- <div class="w-full h-96 bg-black">
@@ -57,12 +57,15 @@
 
     <!-- CreateComment with the entire width of the screen -->
     <div class="w-full">
-        <CreateComment @comment-created="updateComments()" commentable-type="App\Models\Series" :commentable-id="series.series_id"/>
+        <CreateComment @comment-created="updateComments()" commentable-type="App\Models\Series"
+            :commentable-id="series.series_id" />
     </div>
 
 
     <!-- Say there are no comments if there are none -->
     <p v-if="comments.length === 0">There are no comments yet.</p>
+    <!-- <Comments @comment-deleted="updateComments()" v-if="commentsLoaded" :comments="comments"></Comments> -->
+
     <Comments v-if="commentsLoaded" :comments="comments"></Comments>
     <div v-else>
         <p>Loading comments...</p>
@@ -112,7 +115,7 @@ export default {
             }).catch(error => {
                 console.log(error);
             })
-        }
+        },
     }
 
 }

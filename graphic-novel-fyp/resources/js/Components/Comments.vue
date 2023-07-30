@@ -1,18 +1,8 @@
 <template>
     <!-- Display every comment -->
     <div v-for="comment in comments.slice().reverse()" :key="comment.comment_id">
-        <!-- Display profile photo -->
-        <div class="flex-shrink-0">
-            <img class="h-10 w-10 rounded-full" src="/assets/black_page.jpg" alt="">
-        </div>
-        <div class="ml-4">
-            <div class="text-sm font-medium text-gray-900">
-                {{ comment.commenter_id }}
-            </div>
-            <div class="text-sm text-gray-500">
-                {{ comment.comment_content }}
-            </div>
-        </div>
+
+        <CommentSingle @deleteComment="deleteComment" :comment="comment" />
 
         <!-- Indent and display every reply -->
         <!-- Only display replies if they exist -->
@@ -26,35 +16,36 @@
 
             <TransitionGroup name="fade">
                 <div v-if="comment.display_replies" v-for="reply in comment.replies" :key="reply.comment_id" class="px-20">
-                    <div class="flex items-center">
-                        <!-- Display profile photo -->
-                        <div class="flex-shrink-0">
-                            <img class="h-10 w-10 rounded-full" src="/assets/black_page.jpg" alt="">
-                        </div>
-                        <div class="ml-4">
-                            <div class="text-sm font-medium text-gray-900">
-                                {{ reply.commenter_id }}
-                            </div>
-                            <div class="text-sm text-gray-500">
-                                {{ reply.comment_content }}
-                            </div>
-                        </div>
-                    </div>
-
+                    <CommentSingle @deleteComment="deleteComment" :comment="reply" />
                 </div>
+
             </TransitionGroup>
         </div>
     </div>
 </template>
 
 <script>
+import CommentSingle from './CommentSingle.vue';
+import { Inertia } from '@inertiajs/inertia';
+
 export default {
+    components: {
+        CommentSingle,
+    },
     props: {
         comments: {
             type: Array,
         }
     },
+    emits: ['commentDeleted'],
 
+    methods: {
+        deleteComment(comment_id) {
+
+            // Use Inertia.delete to delete the comment, preserving the scroll position
+            Inertia.delete(route('comments.destroy', comment_id))
+        },
+    }
 }
 </script>
 
@@ -62,7 +53,7 @@ export default {
 .fade-enter-from {
     /* Start from the top of the screen */
     opacity: 0;
-   transform: rotate3d(1, 43, 23, 64deg); 
+    transform: rotate3d(1, 43, 23, 64deg);
 
 }
 

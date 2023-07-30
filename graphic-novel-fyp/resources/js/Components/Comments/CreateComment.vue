@@ -68,8 +68,6 @@ export default {
         this.form.commentable_type = this.commentableType;
         this.form.commentable_id = this.commentableId;
         this.form.commenter_id = page.props.auth.user.id;
-
-        // console.log(page.props)
     },
 
 }

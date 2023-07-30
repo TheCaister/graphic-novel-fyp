@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Js;
 
 class CommentController extends Controller
 {
@@ -37,7 +36,7 @@ class CommentController extends Controller
             'comment_content' => $request->comment_content,
         ]);
 
-
+        return redirect()->back();
     }
 
     /**
@@ -67,9 +66,17 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Comment $comment)
     {
-        //
+        
+        // Remove all replies to the comment
+        $comment->replies()->delete();
+
+        // Delete the comment
+        $comment->delete();
+
+        // dd($comment);
+        return redirect()->back();
     }
 
     public function getComments(Request $request)

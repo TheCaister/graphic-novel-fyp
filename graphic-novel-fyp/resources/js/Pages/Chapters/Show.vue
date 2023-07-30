@@ -22,13 +22,14 @@
     /> -->
 
     <div class="w-full">
-        <CreateComment @comment-created="updateComments()" commentable-type="App\Models\Chapter" :commentable-id="chapter.chapter_id"/>
+        <CreateComment @comment-created="updateComments()" commentable-type="App\Models\Chapter"
+            :commentable-id="chapter.chapter_id" />
     </div>
 
 
     <!-- Comments component with comments passed as prop -->
     <p v-if="comments.length === 0">There are no comments yet.</p>
-    <Comments v-if="commentsLoaded" :comments="comments"></Comments>
+    <Comments @comment-deleted="updateComments()" v-if="commentsLoaded" :comments="comments"></Comments>
     <div v-else>
         <p>Loading comments...</p>
     </div>
