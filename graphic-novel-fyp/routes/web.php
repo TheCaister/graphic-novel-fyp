@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\UniverseController;
 use App\Http\Controllers\UploadController;
+use App\Models\Series;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
@@ -157,6 +158,7 @@ Route::resource('universes', UniverseController::class);
 
 //////////////////////// SERIES ROUTES ////////////////////////
 Route::get('{series}/chapters/create', [ChapterController::class, 'create'])->name('chapter.create');
+Route::get('{series}/chapters/manage', [SeriesController::class, 'manageChapters'])->name('chapter.manage');
 Route::resource('chapters', ChapterController::class);
 Route::resource('elements', ElementController::class);
 

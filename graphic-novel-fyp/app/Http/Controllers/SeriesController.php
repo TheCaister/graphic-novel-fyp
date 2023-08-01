@@ -94,6 +94,7 @@ class SeriesController extends Controller
     public function edit(Series $series)
     {
         return Inertia::render('Series/Edit', [
+            'universe' => $series->universe,
             'series' => $series,
         ]);
     }
@@ -267,5 +268,13 @@ class SeriesController extends Controller
         // Return an Inertia response that goes back to the previous page
         return redirect()->back();
 
+    }
+
+    public function manageChapters(Series $series){
+
+        // Return the manage chapter page
+        return Inertia::render('Chapters/ManageChapters', [
+            'chapters' => $series->chapters,
+        ]);
     }
 }

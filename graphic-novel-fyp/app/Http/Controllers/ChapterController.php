@@ -133,6 +133,7 @@ class ChapterController extends Controller
     {
         //
         return Inertia::render('Chapters/Edit', [
+            'passedSeries' => $chapter->series,
             'chapter' => $chapter,
         ]);
     }

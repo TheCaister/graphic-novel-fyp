@@ -10,7 +10,7 @@
             </div>
 
        
-
+            
 
             <div class="flex-shrink-0">
                 <!-- <img class="h-10 w-10 rounded-full" :src="comment.user.profile_photo_url" alt=""> -->
@@ -44,7 +44,7 @@ export default {
         const page = usePage()
 
         APICalls.getUserComments(page.props.auth.user.id).then(response => {
-            this.comments = response.data
+            this.comments = response.data.comments
             this.commentsLoaded = true
 
             // console.log(this.comments)

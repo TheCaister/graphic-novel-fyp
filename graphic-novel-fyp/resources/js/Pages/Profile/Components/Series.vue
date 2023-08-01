@@ -24,9 +24,9 @@
 
                 <!-- Delete and edit buttons -->
                 <div>
-                    <button @click="editUniverse(universe.universe_id)" class="text-sm text-gray-500">
+                    <Link :href="route('universes.edit', universe.universe_id)" class="text-sm text-gray-500">
                         Edit
-                    </button>
+                    </Link>
                     <button @click="deleteUniverse(universe.universe_id)" class="text-sm text-gray-500">
                         Delete
                     </button>
@@ -63,17 +63,17 @@
                         class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
 
                     <!-- Create a button to edit the series -->
-                    <button type="button" @click="editSeries(series.series_id)"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</button>
+                    <Link type="button" :href="route('series.edit', series.series_id)"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</Link>
 
                     <!-- Create button to add chapter -->
                     <button type="button" @click="addChapter(series.series_id)"
                         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Add Chapter</button>
 
                     <!-- Create button to manage chapters -->
-                    <button type="button" @click="manageChapters(series.series_id)"
+                    <Link :href="`/${series.series_id}/chapters/manage/`"
                         class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Manage
-                        Chapters</button>
+                        Chapters</Link>
 
                     <!-- Create button to manage elements -->
                     <button type="button" @click="manageElements('series', series.series_id)"
@@ -118,15 +118,9 @@ export default {
         }).catch(error => console.log(error))
     },
     methods: {
-        editSeries(series_id) {
-        },
         addChapter(series_id) {
             // Inertia.get(route('chapters.create', series_id))
             Inertia.get(`/${series_id}/chapters/create/`)
-        },
-        manageChapters(series_id) {
-        },
-        editUniverse(universe_id) {
         },
         deleteUniverse(universe_id) {
             if (confirm('Are you sure you want to delete this universe?')) {
