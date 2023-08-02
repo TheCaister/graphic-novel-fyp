@@ -37,8 +37,13 @@
                 <!-- <ImageLabel /> -->
 
                 <file-pond name="upload" label-idle="Series Thumbnail" accepted-file-types="image/jpeg, image/png"
-                    @processfile="handleFilePondThumbnailProcess" :server="{
-                        url: '/upload?media=series_thumbnail',
+                    @processfile="handleFilePondThumbnailProcess" @removefile="handleFilePondThumbnailRemove" :server="{
+                        process: {
+                            url: '/upload?media=series_thumbnail',
+                        },
+                        revert: {
+                            url: '/api/series/' + this.form.upload + '/thumbnail',
+                        },
                         headers: {
                             'X-CSRF-TOKEN': csrfToken
                         }
@@ -130,6 +135,10 @@ export default {
             this.form.upload = file.serverId;
 
             console.log(this.form.upload)
+        },
+
+        handleFilePondThumbnailRemove(error, file) {
+            this.form.upload = '';
         },
     },
     mounted() {

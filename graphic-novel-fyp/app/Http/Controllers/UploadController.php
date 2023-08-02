@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\TemporaryFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UploadController extends Controller
 {
@@ -55,5 +56,24 @@ class UploadController extends Controller
         }
 
         return 'nope';
+    }
+    
+    public function deleteSeriesThumbnail(string $serverId){
+        // Get the temporary file
+        $temporaryFile = TemporaryFile::where('folder', $serverId)->first();
+        
+        if($temporaryFile){
+            // Get full path of the file
+            $fullPath = $temporaryFile->getFullPath('series_thumbnail');
+
+
+            if(Storage::disk('public')->exists($fullPath)){
+                Storage::disk('public')->delete($fullPath);
+
+            }
+        }
+
+        // Delete the temporary file from the database
+        $temporaryFile->delete();
     }
 }

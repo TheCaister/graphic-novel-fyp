@@ -51,5 +51,8 @@ export default {
     },
     getAllGenres() {
         return axios.get('/api/genres')
+    },
+    deleteSeriesThumbnail(serverId) {
+        return axios.delete('/api/series/' + serverId + '/thumbnail')
     }
 }

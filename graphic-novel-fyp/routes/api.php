@@ -41,3 +41,5 @@ Route::get('/comments', [App\Http\Controllers\CommentController::class, 'getComm
 Route::get('/followings', [App\Http\Controllers\FollowerController::class, 'getFollowings'])->name('followings.get-followings');
 
 Route::post('/series/rate', [App\Http\Controllers\SeriesController::class, 'rateSeries'])->name('series.rate');
+
+Route::delete('/series/{serverId}/thumbnail', [App\Http\Controllers\UploadController::class, 'deleteSeriesThumbnail'])->name('series.delete-thumbnail');

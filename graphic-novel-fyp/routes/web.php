@@ -173,4 +173,7 @@ Route::get('user/main/elementsforge', [ElementController::class, 'elementsforge'
 ////////////////////////// COMMENT ROUTES ////////////////////////
 Route::resource('comments', CommentController::class);
 
+////////////////////////// MEDIA ROUTES ////////////////////////
+// http://localhost/upload?media=series_thumbnail 
+
 require __DIR__ . '/auth.php';
