@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="form.post(route('universes.store'))" class="p-10 flex flex-col items-center gap-5">
+    <form @submit.prevent="form.put(route('universes.update', form.universe_id))" class="p-10 flex flex-col items-center gap-5">
         <!-- Form Title -->
         <div>
             <p class="font-bold text-2xl md:text-3xl">Edit Universe</p>
@@ -38,6 +38,7 @@ export default {
     },
     setup() {
         const form = useForm({
+            universe_id: '',
             universe_name: ''
         });
 
@@ -46,6 +47,7 @@ export default {
         }
     },
     mounted() {
+        this.form.universe_id = this.universe.universe_id;
         this.form.universe_name = this.universe.universe_name;
     },  
 }

@@ -119,9 +119,13 @@ class ProfileController extends Controller
 
     public function main()
     {
-        return Inertia::render('Profile/Main', [
-            'user' => auth()->user(),
-        ]);
+        // direct to dashboard
+        return redirect()->route('dashboard');
+
+        // return Inertia::render('Profile/Main', [
+        //     'user' => auth()->user(),
+        //     'passed_tab' => 'Dashboard',
+        // ]);
     }
 
     public function dashboard()

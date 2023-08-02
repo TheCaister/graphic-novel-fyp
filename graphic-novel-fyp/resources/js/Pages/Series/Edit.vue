@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="form.post(route('series.store'))" class="p-10 flex flex-col items-center gap-5">
+    <form @submit.prevent="form.put(route('series.update', form.series_id))" class="p-10 flex flex-col items-center gap-5">
         <div>
             <p class="font-bold text-2xl md:text-3xl">Edit Series</p>
         </div>
@@ -104,6 +104,7 @@ export default {
     ,
     setup() {
         const form = useForm({
+            series_id: '',
             series_title: '',
             series_summary: '',
             series_thumbnail: '',
@@ -127,6 +128,7 @@ export default {
     },
     mounted() {
         // Set the form values
+        this.form.series_id = this.series.series_id;
         this.form.series_title = this.series.series_title;
         this.form.series_summary = this.series.series_summary;
         this.form.series_genre = this.series.series_genre;

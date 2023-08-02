@@ -77,9 +77,17 @@ class UniverseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Universe $universe)
     {
         //
+        $formFields = $request->validate([
+            'universe_name' => 'required',
+        ]);
+
+        $universe->update($formFields);
+        
+        // Redirect back to the dashboard
+        return redirect()->route('home');
     }
 
     /**

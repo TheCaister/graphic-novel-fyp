@@ -141,9 +141,21 @@ class ChapterController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Chapter $chapter)
     {
         //
+        // Get series id of the chapter
+        $series_id = $chapter->series->series_id;
+
+        $formFields = $request->validate([
+            'chapter_title' => 'required',
+            'chapter_notes' => 'required',
+            'comments_enabled' => 'required',
+        ]);
+
+        $chapter->update($formFields);
+
+        return redirect()->route('chapter.manage', $series_id);
     }
 
     /**

@@ -104,16 +104,26 @@ class SeriesController extends Controller
     {
         // Validate the request
         $formFields = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'universe_id' => 'required',
+            // 'title' => 'required',
+            // 'description' => 'required',
+            // 'universe_id' => 'required',
+            'series_title' => 'required',
+            'series_genre' => 'required',
         ]);
+
+        // Add series summary to the form fields
+        $formFields['series_summary'] = $request->series_summary;
+
 
         // Update the series
         $series->update($formFields);
 
+        
+
         // Redirect to the series page
-        return redirect()->route('series.show', $series->id);
+        // return redirect()->route('series.show', $series->id);
+
+        return redirect()->route('dashboard');
     }
 
     // Delete the series

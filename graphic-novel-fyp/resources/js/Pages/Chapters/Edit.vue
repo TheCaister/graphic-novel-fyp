@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="form.post(route('chapters.store'))" class="p-10 flex flex-col items-center gap-5">
+    <form @submit.prevent="form.put(route('chapters.update', form.chapter_id))" class="p-10 flex flex-col items-center gap-5">
         <div>
             <p class="font-bold text-2xl md:text-3xl">Edit Chapter</p>
         </div>
@@ -148,6 +148,7 @@ export default {
 
     setup() {
         const form = useForm({
+            chapter_id: '',
             chapter_title: '',
             upload: '',
             pages: [],
@@ -175,6 +176,7 @@ export default {
         },
     },
     mounted() {
+        this.form.chapter_id = this.chapter.chapter_id;
         this.form.comments_enabled = 1;
 
         this.form.chapter_title = this.chapter.chapter_title;
