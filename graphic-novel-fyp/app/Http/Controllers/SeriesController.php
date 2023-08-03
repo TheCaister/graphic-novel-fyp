@@ -47,8 +47,8 @@ class SeriesController extends Controller
         // Create the series
         $series = Series::create($formFields);
 
-        if($tempThumbnail){
-            $series->addMedia(storage_path('app/public/uploads/series_thumbnail/tmp/'.$tempThumbnail->folder.'/'.$tempThumbnail->filename))->toMediaCollection('series_thumbnail');
+        if ($tempThumbnail) {
+            $series->addMedia(storage_path('app/public/uploads/series_thumbnail/tmp/' . $tempThumbnail->folder . '/' . $tempThumbnail->filename))->toMediaCollection('series_thumbnail');
 
             rmdir(storage_path('app/public/uploads/series_thumbnail/tmp/' . $tempThumbnail->folder));
 
@@ -58,7 +58,7 @@ class SeriesController extends Controller
 
             $tempThumbnail->delete();
         }
-        
+
 
         // Redirect to the series page
         return redirect()->route('publish');
@@ -93,9 +93,34 @@ class SeriesController extends Controller
     // Edit the series
     public function edit(Series $series)
     {
+        $files = [];
+
+        // If the series has a thumbnail...
+        if ($series->series_thumbnail) {
+            // Prepare files for filepond. Get the URL of the files
+            $filePath = $series->getFirstMediaUrl('series_thumbnail');
+
+            // Get rid of localhost in the URL
+            $filePath = str_replace('http://localhost', '', $filePath);
+
+            // In a files array, add the source and the options. Set type to local
+            $files = [
+                [
+                    'source' => $filePath,
+                    'options' => [
+                        'type' => 'local',
+                    ],
+                ],
+            ];
+        }
+
+
+
+
         return Inertia::render('Series/Edit', [
             'universe' => $series->universe,
             'series' => $series,
+            'passedFiles' => $files,
         ]);
     }
 
@@ -114,11 +139,33 @@ class SeriesController extends Controller
         // Add series summary to the form fields
         $formFields['series_summary'] = $request->series_summary;
 
+        // If upload is empty, remove the series_thumbnail from the series media collection
+        if ($request->upload == '') {
+            $series->clearMediaCollection('series_thumbnail');
+
+            // Set series thumbnail to null
+            $series->series_thumbnail = '';
+        }
+
+        $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
+
+        if ($tempThumbnail) {
+            $series->addMedia(storage_path('app/public/uploads/series_thumbnail/tmp/' . $tempThumbnail->folder . '/' . $tempThumbnail->filename))->toMediaCollection('series_thumbnail');
+
+            rmdir(storage_path('app/public/uploads/series_thumbnail/tmp/' . $tempThumbnail->folder));
+
+            // Set series thumbnail to the uploaded thumbnail
+            $series->series_thumbnail = $series->getFirstMediaUrl('series_thumbnail');
+            // $series->save();
+
+            $tempThumbnail->delete();
+        }
+
 
         // Update the series
         $series->update($formFields);
 
-        
+
 
         // Redirect to the series page
         // return redirect()->route('series.show', $series->id);
@@ -240,11 +287,13 @@ class SeriesController extends Controller
         return response()->json($series);
     }
 
-    public function popular(){
+    public function popular()
+    {
         return Inertia::render('Series/Popular');
     }
 
-    public function getRecentSeries(){
+    public function getRecentSeries()
+    {
         // From series table, get the 10 most recent series
         $series = Series::orderBy('created_at', 'desc')->take(10)->get();
 
@@ -252,7 +301,8 @@ class SeriesController extends Controller
         return response()->json($series);
     }
 
-    public function rateSeries(Request $request){
+    public function rateSeries(Request $request)
+    {
         // Get the series id and rating from the request
         $series_id = $request->series_id;
         $rating = $request->rating;
@@ -264,11 +314,11 @@ class SeriesController extends Controller
         $userSeriesRating = DB::table('user_series_rating')->where('user_id', $user_id)->where('series_id', $series_id)->first();
 
         // If the user has already rated the series, update the rating
-        if($userSeriesRating){
+        if ($userSeriesRating) {
             DB::table('user_series_rating')->where('user_id', $user_id)->where('series_id', $series_id)->update(['rating' => $rating]);
         }
         // If the user has not rated the series, create a new rating
-        else{
+        else {
             DB::table('user_series_rating')->insert(['user_id' => $user_id, 'series_id' => $series_id, 'rating' => $rating]);
         }
 
@@ -277,10 +327,10 @@ class SeriesController extends Controller
 
         // Return an Inertia response that goes back to the previous page
         return redirect()->back();
-
     }
 
-    public function manageChapters(Series $series){
+    public function manageChapters(Series $series)
+    {
 
         // Return the manage chapter page
         return Inertia::render('Chapters/ManageChapters', [

@@ -31,9 +31,26 @@
                 <Label>Series Thumbnail</Label>
                 <!-- <ImageLabel /> -->
 
-                <file-pond name="upload" label-idle="Series Thumbnail" accepted-file-types="image/jpeg, image/png"
-                    @processfile="handleFilePondThumbnailProcess" :server="{
+                <!-- <file-pond name="upload" label-idle="Series Thumbnail" accepted-file-types="image/jpeg, image/png"
+                    :files="passedFiles" @processfile="handleFilePondThumbnailProcess" :server="{
                         url: '/upload?media=series_thumbnail',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        }
+                    }" /> -->
+
+                <file-pond name="upload" label-idle="Series Thumbnail" accepted-file-types="image/jpeg, image/png"
+                    :files="passedFiles" @processfile="handleFilePondThumbnailProcess"
+                    @removefile="handleFilePondThumbnailRemove" :server="{
+                        process: {
+                            url: '/upload?media=series_thumbnail',
+                        },
+                        revert: {
+                            url: '/api/series/' + this.form.upload + '/thumbnail',
+                        },
+                        load: {
+                            url: '/',
+                        },
                         headers: {
                             'X-CSRF-TOKEN': csrfToken
                         }
@@ -41,14 +58,14 @@
             </div>
 
             <div class="flex justify-center gap-2 md:gap-5">
-                <a href="">
+                <Link :href="route('dashboard')">
                     <SecondaryButton class="flex flex-row gap-1 items-center">
                         <span class="material-symbols-rounded">
                             arrow_back
                         </span>
                         Go Back
                     </SecondaryButton>
-                </a>
+                </Link>
 
                 <PrimaryButton>Save Changes</PrimaryButton>
             </div>
@@ -80,6 +97,9 @@ export default {
         series: {
             type: Object,
         },
+        passedFiles: {
+            type: Array,
+        },
     },
     components: {
         FilePond,
@@ -107,7 +127,7 @@ export default {
             series_id: '',
             series_title: '',
             series_summary: '',
-            series_thumbnail: '',
+            // series_thumbnail: '',
             series_genre: '',
             upload: '',
         });
@@ -125,6 +145,10 @@ export default {
 
             console.log(this.form.upload)
         },
+
+        handleFilePondThumbnailRemove(error, file) {
+            this.form.upload = '';
+        },
     },
     mounted() {
         // Set the form values
@@ -132,7 +156,7 @@ export default {
         this.form.series_title = this.series.series_title;
         this.form.series_summary = this.series.series_summary;
         this.form.series_genre = this.series.series_genre;
-        
+
     }
 }
 </script>
