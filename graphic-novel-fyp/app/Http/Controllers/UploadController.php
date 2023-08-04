@@ -35,7 +35,7 @@ class UploadController extends Controller
             ]);
 
             return $folder;
-        } 
+        }
         // For multiple files
         else if ($request->hasFile('uploads')) {
             $files = $request->file('uploads');
@@ -51,25 +51,46 @@ class UploadController extends Controller
                 ]);
             }
             return $folder;
-
-            
         }
 
         return 'nope';
     }
-    
-    public function deleteSeriesThumbnail(string $serverId){
+
+    public function deleteSeriesThumbnail(string $serverId)
+    {
         // Get the temporary file
         $temporaryFile = TemporaryFile::where('folder', $serverId)->first();
-        
-        if($temporaryFile){
+
+        if ($temporaryFile) {
             // Get full path of the file
             $fullPath = $temporaryFile->getFullPath('series_thumbnail');
 
 
-            if(Storage::disk('public')->exists($fullPath)){
+            if (Storage::disk('public')->exists($fullPath)) {
                 Storage::disk('public')->delete($fullPath);
+            }
+        }
 
+        // Delete the temporary file from the database
+        $temporaryFile->delete();
+    }
+
+    public function deletePageImage(string $serverId)
+    {
+        // If serverId is empty, return
+        if ($serverId == '') {
+            return;
+        }
+
+        // Get the temporary file
+        $temporaryFile = TemporaryFile::where('folder', $serverId)->first();
+
+        if ($temporaryFile) {
+            // Get full path of the file
+            $fullPath = $temporaryFile->getFullPath('pages');
+
+            if (Storage::disk('public')->exists($fullPath)) {
+                Storage::disk('public')->delete($fullPath);
             }
         }
 

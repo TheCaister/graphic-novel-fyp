@@ -64,9 +64,11 @@ class ChapterController extends Controller
 
         if ($tempThumbnail) {
             $chapter->addMedia(storage_path('app/public/uploads/chapter_thumbnail/tmp/' . $request->upload . '/' . $tempThumbnail->filename))
-                ->toMediaCollection('chapter_thumbnails');
+                ->toMediaCollection('chapter_thumbnail');
 
-            // $chapter->chapter_thumbnail = $chapter->getFirstMediaUrl('chapter_thumbnails');
+            $chapter->chapter_thumbnail = $chapter->getFirstMediaUrl('chapter_thumbnail');
+
+            $chapter->save();
 
             rmdir(storage_path('app/public/uploads/chapter_thumbnail/tmp/' . $request->upload));
             $tempThumbnail->delete();
@@ -132,9 +134,48 @@ class ChapterController extends Controller
     public function edit(Chapter $chapter)
     {
         //
+
+        $chapterThumbnail = [];
+
+        // dd($chapter->getFirstMediaUrl('chapter_thumbnail'));
+
+        if ($chapter->chapter_thumbnail) {
+            $filePath = $chapter->getFirstMediaUrl('chapter_thumbnail');
+
+            $filePath = str_replace('http://localhost', '', $filePath);
+
+            $chapterThumbnail = [
+                [
+                    'source' => $filePath,
+                    'options' => [
+                        'type' => 'local',
+                    ],
+                ]
+            ];
+        }
+
+        // Initiliase array to store chapter pages. It has size of the number of pages in the chapter
+        $chapterPages = [];
+
+        foreach ($chapter->pages as $page) {
+            $filePath = $page->getFirstMediaUrl('page_image');
+
+            $filePath = str_replace('http://localhost', '', $filePath);
+
+            // Add the page to the array
+            $chapterPages[] = [
+                'source' => $filePath,
+                'options' => [
+                    'type' => 'local',
+                ],
+            ];
+        }
+
         return Inertia::render('Chapters/Edit', [
             'passedSeries' => $chapter->series,
             'chapter' => $chapter,
+            'passedChapterThumbnail' => $chapterThumbnail,
+            'passedChapterPages' => $chapterPages,
         ]);
     }
 
@@ -163,6 +204,12 @@ class ChapterController extends Controller
      */
     public function destroy(Chapter $chapter)
     {
+        $chapter->clearMediaCollection('chapter_thumbnail');
+
+        foreach ($chapter->pages as $page) {
+            $page->clearMediaCollection('page_image');
+        }
+        
         $series_id = $chapter->series->series_id;
         $chapter->delete();
 

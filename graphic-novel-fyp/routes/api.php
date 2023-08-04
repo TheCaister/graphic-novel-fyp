@@ -43,3 +43,5 @@ Route::get('/followings', [App\Http\Controllers\FollowerController::class, 'getF
 Route::post('/series/rate', [App\Http\Controllers\SeriesController::class, 'rateSeries'])->name('series.rate');
 
 Route::delete('/series/{serverId}/thumbnail', [App\Http\Controllers\UploadController::class, 'deleteSeriesThumbnail'])->name('series.delete-thumbnail');
+
+Route::delete('/pages/{serverId}', [App\Http\Controllers\UploadController::class, 'deletePageImage'])->name('pages.delete-image');

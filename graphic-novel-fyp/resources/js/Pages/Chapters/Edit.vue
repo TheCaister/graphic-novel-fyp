@@ -1,5 +1,6 @@
 <template>
-    <form @submit.prevent="form.put(route('chapters.update', form.chapter_id))" class="p-10 flex flex-col items-center gap-5">
+    <form @submit.prevent="form.put(route('chapters.update', form.chapter_id))"
+        class="p-10 flex flex-col items-center gap-5">
         <div>
             <p class="font-bold text-2xl md:text-3xl">Edit Chapter</p>
         </div>
@@ -24,16 +25,33 @@
                 <Label>Chapter Thumbnail</Label>
                 <!-- <ImageLabel /> -->
 
-                <file-pond name="upload" label-idle="Chapter Thumbnail" accepted-file-types="image/jpeg, image/png"
+                <!-- <file-pond name="upload" label-idle="Chapter Thumbnail" accepted-file-types="image/jpeg, image/png"
                     @processfile="handleFilePondThumbnailProcess" :server="{
                         url: '/upload?media=chapter_thumbnail',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        }
+                    }" /> -->
+
+                <file-pond name="upload" label-idle="Chapter Thumbnail" accepted-file-types="image/jpeg, image/png"
+                    :files="passedChapterThumbnail" @processfile="handleFilePondThumbnailProcess"
+                    @removefile="handleFilePondThumbnailRemove" :server="{
+                        process: {
+                            url: '/upload?media=chapter_thumbnail',
+                        },
+                        revert: {
+                            url: '/api/series/' + this.form.upload + '/thumbnail',
+                        },
+                        load: {
+                            url: '/',
+                        },
                         headers: {
                             'X-CSRF-TOKEN': csrfToken
                         }
                     }" />
             </div>
             <div>
-                <file-pond name="upload" label-idle="Pages" allow-multiple="true" allow-reorder="true"
+                <!-- <file-pond name="upload" label-idle="Pages" allow-multiple="true" allow-reorder="true"
                     @processfile="handleFilePondPagesProcess" @removefile="handleFilePondPagesRemoveFile"
                     accepted-file-types="image/jpeg, image/png" :server="{
                         url: '/upload?media=pages',
@@ -41,7 +59,27 @@
                             'X-CSRF-TOKEN': csrfToken
                         }
                     }
-                        " />
+                        " /> -->
+
+                <file-pond name="upload" label-idle="Pages" allow-multiple="true" allow-reorder="true"
+                    :files="passedChapterPages" @processfile="handleFilePondPagesProcess"
+                    @removefile="handleFilePondPagesRemoveFile" 
+                    @onreorderfiles="handleFilePondPagesReorderFiles"
+                    :beforeRemoveFile="handleFilePondPagesBeforeRemoveFile"
+                    accepted-file-types="image/jpeg, image/png" :server="{
+                        process: {
+                            url: '/upload?media=pages',
+                        },
+                        revert: {
+                            url: '/api/pages/' + this.pageToBeDeleted,
+                        },
+                        load: {
+                            url: '/',
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        }
+                    }" />
             </div>
 
             <!-- Create a list of buttons for Preview PC, Preview Mobile and Save Draft -->
@@ -136,6 +174,14 @@ export default {
         chapter: {
             type: Object,
         },
+
+        passedChapterThumbnail: {
+            type: Array,
+        },
+
+        passedChapterPages: {
+            type: Array,
+        },
     },
     components: {
         FilePond,
@@ -143,6 +189,7 @@ export default {
     data() {
         return {
             csrfToken: document.querySelector('meta[name="csrf-token"]').content,
+            pageToBeDeleted: '',
         };
     },
 
@@ -166,6 +213,9 @@ export default {
             // Update the form with the file ids
             this.form.upload = file.serverId;
         },
+        handleFilePondThumbnailRemove(error, file) {
+            this.form.upload = '';
+        },
         handleFilePondPagesProcess(error, file) {
             // Update the form with the file ids
             this.form.pages.push(file.serverId);
@@ -173,6 +223,28 @@ export default {
         handleFilePondPagesRemoveFile(error, file) {
             // Update the form with the file ids
             this.form.pages = this.form.pages.filter((item) => item !== file.serverId);
+        },
+        handleFilePondPagesBeforeRemoveFile(item) {
+
+            // Return a promise that prints 'hi' to the console when resolved
+            return new Promise((resolve, reject) => {
+
+                // if item doesn't have a serverId, set this.pageToBeDeleted to empty string
+                
+                if (item.serverId.source == '') {
+                    this.pageToBeDeleted = '';
+                } else {
+                    this.pageToBeDeleted = item.serverId;
+                }
+
+                // resolve with true to remove item from pond
+                resolve(true);
+            });
+        },
+        handleFilePondPagesReorderFiles(files, origin, target) {
+            // Reorder the pages array in the form
+
+
         },
     },
     mounted() {

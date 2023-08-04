@@ -25,6 +25,11 @@ class Chapter extends Model implements HasMedia
         return route('chapters.show', $this->chapter_id);
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('chapter_thumbnail')->singleFile();
+    }
+
     /**
      * The attributes that are mass assignable.
      *
