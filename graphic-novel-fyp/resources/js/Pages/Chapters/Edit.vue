@@ -1,6 +1,5 @@
 <template>
-    <form @submit.prevent="form.put(route('chapters.update', form.chapter_id))"
-        class="p-10 flex flex-col items-center gap-5">
+    <form @submit.prevent="submitForm()" class="p-10 flex flex-col items-center gap-5">
         <div>
             <p class="font-bold text-2xl md:text-3xl">Edit Chapter</p>
         </div>
@@ -51,22 +50,12 @@
                     }" />
             </div>
             <div>
-                <!-- <file-pond name="upload" label-idle="Pages" allow-multiple="true" allow-reorder="true"
-                    @processfile="handleFilePondPagesProcess" @removefile="handleFilePondPagesRemoveFile"
-                    accepted-file-types="image/jpeg, image/png" :server="{
-                        url: '/upload?media=pages',
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken
-                        }
-                    }
-                        " /> -->
 
                 <file-pond name="upload" label-idle="Pages" allow-multiple="true" allow-reorder="true"
                     :files="passedChapterPages" @processfile="handleFilePondPagesProcess"
-                    @removefile="handleFilePondPagesRemoveFile" 
-                    @onreorderfiles="handleFilePondPagesReorderFiles"
-                    :beforeRemoveFile="handleFilePondPagesBeforeRemoveFile"
-                    accepted-file-types="image/jpeg, image/png" :server="{
+                    @removefile="handleFilePondPagesRemoveFile" @reorderfiles="handleFilePondPagesReorderFiles"
+                    :beforeRemoveFile="handleFilePondPagesBeforeRemoveFile" accepted-file-types="image/jpeg, image/png"
+                    :server="{
                         process: {
                             url: '/upload?media=pages',
                         },
@@ -218,11 +207,28 @@ export default {
         },
         handleFilePondPagesProcess(error, file) {
             // Update the form with the file ids
-            this.form.pages.push(file.serverId);
+
+            // Push to the beginning of the array
+            this.form.pages.unshift({
+                serverId: file.serverId,
+                source: '',
+            });
         },
         handleFilePondPagesRemoveFile(error, file) {
-            // Update the form with the file ids
-            this.form.pages = this.form.pages.filter((item) => item !== file.serverId);
+
+            // Go through the form.pages array and if a page has an empty serverId, set it to source
+            this.form.pages.forEach(page => {
+                if (!page.hasOwnProperty('serverId')) {
+                    page.serverId = page.source;
+                }
+            });
+
+            // Update the form with the file ids. Check if either the serverId or source of the page is equal to the pageToBeDeleted
+            this.form.pages = this.form.pages.filter(page => page.serverId != this.pageToBeDeleted);
+
+            
+
+            // console.log(this.form.pages);
         },
         handleFilePondPagesBeforeRemoveFile(item) {
 
@@ -230,21 +236,41 @@ export default {
             return new Promise((resolve, reject) => {
 
                 // if item doesn't have a serverId, set this.pageToBeDeleted to empty string
-                
-                if (item.serverId.source == '') {
-                    this.pageToBeDeleted = '';
-                } else {
-                    this.pageToBeDeleted = item.serverId;
-                }
+                // console.log(item.serverId)
+
+                this.pageToBeDeleted = item.serverId;
 
                 // resolve with true to remove item from pond
                 resolve(true);
             });
         },
         handleFilePondPagesReorderFiles(files, origin, target) {
-            // Reorder the pages array in the form
+
+            // Clear form.pages
+            this.form.pages = [];
+
+            // Loop through files and push to form.pages
+            files.forEach(file => {
+                this.form.pages.push({
+                    serverId: file.serverId,
+                });
+            });
+
+            // log all file names
+            // files.forEach(file => console.log(file.filename));
+
+        },
+        submitForm() {
+            this.form.pages.forEach(page => {
+
+                // If serverId doesn't exist, create a serverId
+                if (!page.hasOwnProperty('serverId')) {
+                    page.serverId = page.source;
+                }
+            });
 
 
+            this.form.put(route('chapters.update', this.form.chapter_id));
         },
     },
     mounted() {
@@ -255,6 +281,8 @@ export default {
         this.form.chapter_notes = this.chapter.chapter_notes;
         this.form.comments_enabled = this.chapter.comments_enabled;
         this.form.scheduled_publish = this.chapter.scheduled_publish;
+
+        this.form.pages = this.passedChapterPages;
 
         // Set thumbnail and pages, possibly by calling an API endpoint
 

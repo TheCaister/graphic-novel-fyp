@@ -155,15 +155,17 @@ class ChapterController extends Controller
         }
 
         // Initiliase array to store chapter pages. It has size of the number of pages in the chapter
-        $chapterPages = [];
+        $chapterPagesToReturn = [];
+        // Create array that holds all pages in the chapter, sorted by page number
+        $pagesInOrder = $chapter->pages()->orderBy('page_number')->get();
 
-        foreach ($chapter->pages as $page) {
+        foreach ($pagesInOrder as $page) {
             $filePath = $page->getFirstMediaUrl('page_image');
 
             $filePath = str_replace('http://localhost', '', $filePath);
 
             // Add the page to the array
-            $chapterPages[] = [
+            $chapterPagesToReturn[] = [
                 'source' => $filePath,
                 'options' => [
                     'type' => 'local',
@@ -175,7 +177,7 @@ class ChapterController extends Controller
             'passedSeries' => $chapter->series,
             'chapter' => $chapter,
             'passedChapterThumbnail' => $chapterThumbnail,
-            'passedChapterPages' => $chapterPages,
+            'passedChapterPages' => $chapterPagesToReturn,
         ]);
     }
 
@@ -185,6 +187,8 @@ class ChapterController extends Controller
     public function update(Request $request, Chapter $chapter)
     {
         //
+        // dd($request->pages);
+
         // Get series id of the chapter
         $series_id = $chapter->series->series_id;
 
@@ -194,7 +198,104 @@ class ChapterController extends Controller
             'comments_enabled' => 'required',
         ]);
 
+        if ($request->upload == '') {
+            $chapter->clearMediaCollection('chapter_thumbnail');
+
+            // Set series thumbnail to null
+            $chapter->chapter_thumbnail = '';
+        }
+
+        $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
+
+        if ($tempThumbnail) {
+            $chapter->addMedia(storage_path('app/public/uploads/chapter_thumbnail/tmp/' . $tempThumbnail->folder . '/' . $tempThumbnail->filename))->toMediaCollection('chapter_thumbnail');
+
+            rmdir(storage_path('app/public/uploads/chapter_thumbnail/tmp/' . $tempThumbnail->folder));
+
+            // Set series thumbnail to the uploaded thumbnail
+            $chapter->chapter_thumbnail = $chapter->getFirstMediaUrl('chapter_thumbnail');
+
+            $tempThumbnail->delete();
+        }
+
         $chapter->update($formFields);
+
+   
+
+        // Get all pages in the chapter
+        $chapterPages = $chapter->pages;
+
+        // Extract the "serverId" of each page in request->pages and store it in an array
+        $requestPagesServerIdArray = [];
+
+        foreach ($request->pages as $index=>$page) {
+            $requestPagesServerIdArray[$index] = $page['serverId'];
+        }
+
+        // dd($requestPagesServerIdArray);
+
+        // For each page in chapterPages, check if its source is in request->pages. If it is not, delete it. Otherwise, set its page number to the index of the page in request->pages + 1
+        foreach ($chapterPages as $page) {
+            $pageSource = $page->getFirstMediaUrl('page_image');
+
+            $pageSource = str_replace('http://localhost', '', $pageSource);
+
+            // dd($pageSource, $requestPagesServerIdArray);
+
+            if (!in_array($pageSource, $requestPagesServerIdArray)) {
+                // dd('page not found...');
+
+                $page->clearMediaCollection('page_image');
+
+                $page->delete();
+            } else {
+
+                $page->page_number = array_search($pageSource, $requestPagesServerIdArray) + 1;
+
+                // Delete the page from request->pages. You can get the index by subtracting 1 from the page number
+                unset($requestPagesServerIdArray[$page->page_number - 1]);
+
+                $page->save();
+            }
+        }
+
+        // Get the size of request->pages
+        $requestPagesSize = count($requestPagesServerIdArray);
+
+        // dd($requestPagesServerIdArray);
+
+        // After this, all pages that weren't present in request->pages have been deleted. Now, we need to add the new pages to the chapter, with page number being the index of the page in request->pages + 1
+        foreach ($requestPagesServerIdArray as $i => $serverId) {
+            // dd($serverId);
+
+            // Get the temporary file
+            $tempPage = TemporaryFile::where('folder', $serverId)->first();
+
+            if ($tempPage) {
+
+                // Create a page
+                $curPage = $chapter->pages()->create([
+                    'page_number' => $i + 1,
+                    'page_image' => '',
+                ]);
+
+                // Add the page to the chapter
+                $curPage->addMedia(storage_path('app/public/uploads/pages/tmp/' . $tempPage->folder . '/' . $tempPage->filename))
+                    ->toMediaCollection('page_image');
+
+                $curPage->page_image = $curPage->getFirstMediaUrl('page_image');
+
+                $curPage->save();
+
+                rmdir(storage_path('app/public/uploads/pages/tmp/' . $tempPage->folder));
+                $tempPage->delete();
+            }
+        }
+        
+        // dd all page images in the chapter
+        // dd($chapter->pages->pluck('page_number'));
+
+
 
         return redirect()->route('chapter.manage', $series_id);
     }
