@@ -8,6 +8,10 @@
                         <PrimaryButton>Edit Chapter</PrimaryButton>
                     </Link>
                     
+                    <Link :href="`/elements/assign?type=chapters&content_id=${chapter.chapter_id}`">
+                        <PrimaryButton>Manage Elements</PrimaryButton>
+                    </Link>
+
                     <!-- Make button to send delete request -->
                     <PrimaryButton>Delete Chapter</PrimaryButton>
                 </div>

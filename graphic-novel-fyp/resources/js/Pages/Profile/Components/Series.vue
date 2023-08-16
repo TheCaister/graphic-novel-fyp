@@ -76,10 +76,19 @@
                         Chapters</Link>
 
                     <!-- Create button to manage elements -->
-                    <button type="button" @click="manageElements('series', series.series_id)"
+                    <!-- <button type="button" @click="manageElements('series', series.series_id)"
                         class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded">Manage
                         Elements</button>
-
+ -->
+                    <!-- Create button to manage elements -->
+                  
+                    <Link type="button" :href="`/elements/assign?type=series&content_id=${series.series_id}`"
+                        class="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded">Manage
+                        Elements</Link>
+ 
+ 
+ 
+ 
                 </div>
             </div>
         </div>
@@ -127,8 +136,6 @@ export default {
                 Inertia.delete(route('universes.destroy', universe_id))
             }
         },
-        manageElements(type, id) {
-        }
     }
 }
 </script>

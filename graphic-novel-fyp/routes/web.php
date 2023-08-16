@@ -160,7 +160,6 @@ Route::resource('universes', UniverseController::class);
 Route::get('{series}/chapters/create', [ChapterController::class, 'create'])->name('chapter.create');
 Route::get('{series}/chapters/manage', [SeriesController::class, 'manageChapters'])->name('chapter.manage');
 Route::resource('chapters', ChapterController::class);
-Route::resource('elements', ElementController::class);
 
 Route::get('/series/popular', [SeriesController::class, 'popular'])->name('series.popular');
 Route::get('{universe}/series/create', [SeriesController::class, 'create'])->name('series.create');
@@ -170,6 +169,9 @@ Route::resource('series', SeriesController::class);
 ////////////////////////// ELEMENT ROUTES ////////////////////////
 Route::get('user/main/elementsforge', [ElementController::class, 'elementsforge'])->name('user.main.elementsforge');
 
+Route::get('/elements/assign', [ElementController::class, 'assign'])->name('elements.assign');
+
+Route::resource('elements', ElementController::class);
 ////////////////////////// COMMENT ROUTES ////////////////////////
 Route::resource('comments', CommentController::class);
 
