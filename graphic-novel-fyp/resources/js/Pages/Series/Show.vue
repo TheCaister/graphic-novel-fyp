@@ -51,6 +51,10 @@
                 <Link :href="`${chapter.url}`" class="text-blue-500 hover:text-blue-700">Read</Link>
             </div>
         </div>
+
+        <div>
+            <ElementsList :elements="elements" />
+        </div>
     </div>
 
     <h1>Comments</h1>
@@ -77,6 +81,7 @@ import Comments from '../../Components/Comments.vue'
 import CreateComment from '../../Components/Comments/CreateComment.vue'
 import RateSeriesModal from '../../Components/Modals/RateSeriesModal.vue'
 import APICalls from '@/Utilities/APICalls'
+import ElementsList from '@/Pages/Elements/ElementsList.vue'
 
 export default {
     props: {
@@ -89,12 +94,14 @@ export default {
         Comments,
         CreateComment,
         RateSeriesModal,
+        ElementsList
     },
     data() {
         return {
             comments: [],
             commentsLoaded: false,
             isOpen: false,
+            elements: [],
         }
     },
     mounted() {
@@ -103,6 +110,12 @@ export default {
             this.comments = response.data.comments;
             // console.log(this.comments);
             this.commentsLoaded = true;
+        }).catch(error => {
+            console.log(error);
+        })
+
+        APICalls.getElements('series', this.series.series_id).then(response => {
+            this.elements = response.data.elements;
         }).catch(error => {
             console.log(error);
         })

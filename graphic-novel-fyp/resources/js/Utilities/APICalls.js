@@ -54,5 +54,13 @@ export default {
     },
     deleteSeriesThumbnail(serverId) {
         return axios.delete('/api/series/' + serverId + '/thumbnail')
+    },
+    getElements(type, id){
+        return axios.get('/api/elements', {
+            params: {
+                type: type,
+                content_id: id,
+            }
+        })
     }
 }

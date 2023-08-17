@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chapter;
+use App\Models\Element;
 use App\Models\Page;
 use App\Models\Series;
 use App\Models\Universe;
@@ -40,9 +41,12 @@ class ElementController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Element $element)
     {
         //
+        return Inertia::render('Elements/Show', [
+            'element' => $element,
+        ]);
     }
 
     /**
@@ -82,13 +86,13 @@ class ElementController extends Controller
     {
 
         // Get the type of content. It could be universes, series, chapters, or pages. With content_id, we can get the content.
-        
+
         // Set content to nothing
         $content = null;
         $subcontent = null;
 
-          // Create a new selectedContent vartiable to pass to the view. It will contain the type of content, along with the name of the content.
-          $selectedContent = [
+        // Create a new selectedContent vartiable to pass to the view. It will contain the type of content, along with the name of the content.
+        $selectedContent = [
             'type' => $request->type,
             // 'name' => $content->name,
         ];
@@ -109,7 +113,7 @@ class ElementController extends Controller
             case 'chapters':
                 $content = Chapter::find($request->content_id);
                 $selectedContent['name'] = $content->chapter_title;
-                
+
                 $subcontent = $content->pages;
                 break;
             case 'pages':
@@ -124,6 +128,36 @@ class ElementController extends Controller
             'content' => $content,
             'elements' => $content->elements,
             // 'subContentList' => $subcontent,
+        ]);
+    }
+
+    public function getElements(Request $request)
+    {
+        // Get the type of content. It could be universes, series, chapters, or pages. With content_id, we can get the content.
+
+        // Set content to nothing
+        $content = null;
+
+        // Create a switch statement to determine the type of content
+        switch ($request->type) {
+            case 'universes':
+                $content = Universe::find($request->content_id);
+                break;
+            case 'series':
+                $content = Series::find($request->content_id);
+                break;
+            case 'chapters':
+                $content = Chapter::find($request->content_id);
+                break;
+            case 'pages':
+                $content = Page::find($request->content_id);
+                break;
+        }
+
+        $elements = $content->elements;
+
+        return response()->json([
+            'elements' => $elements,
         ]);
     }
 }

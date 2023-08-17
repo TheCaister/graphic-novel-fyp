@@ -33,6 +33,7 @@
     <div v-else>
         <p>Loading comments...</p>
     </div>
+    <ElementsList :elements="elements" />
 </template>
 
 <script>
@@ -40,6 +41,7 @@ import Pages from './Components/Pages.vue'
 import Comments from '../../Components/Comments.vue'
 import CreateComment from '../../Components/Comments/CreateComment.vue'
 import APICalls from '../../Utilities/APICalls.js'
+import ElementsList from '@/Pages/Elements/ElementsList.vue'
 
 
 export default {
@@ -51,7 +53,8 @@ export default {
     components: {
         Pages,
         Comments,
-        CreateComment
+        CreateComment,
+        ElementsList
     },
 
     // Set the page number to the page number of the first page
@@ -62,6 +65,7 @@ export default {
             pageLoaded: false,
             comments: [],
             commentsLoaded: false,
+            elements: [],
         }
     },
 
@@ -104,6 +108,12 @@ export default {
         APICalls.getComments(this.chapter.chapter_id, 'chapter', true).then(response => {
             this.comments = response.data.comments;
             this.commentsLoaded = true;
+        }).catch(error => {
+            console.log(error);
+        })
+
+        APICalls.getElements('chapters', this.chapter.chapter_id).then(response => {
+            this.elements = response.data.elements;
         }).catch(error => {
             console.log(error);
         })
