@@ -92,8 +92,7 @@ export default {
 
     props: {
         modelValue: {
-            type: String,
-            default: '',
+            type: Object,
         },
     },
 
@@ -169,7 +168,7 @@ export default {
                 // this.$emit('update:modelValue', this.editor.getHTML())
 
                 // JSON
-                // this.$emit('update:modelValue', this.editor.getJSON())
+                this.$emit('update:modelValue', this.editor.getJSON())
                 // console.log(this.editor.getJSON());
             },
         })

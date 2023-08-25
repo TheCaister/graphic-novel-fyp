@@ -310,3 +310,4 @@ INSERT INTO `migrations` VALUES (20,'2023_07_28_132654_add_date_default',6);
 INSERT INTO `migrations` VALUES (21,'2022_07_28_132654_add_date_default',7);
 INSERT INTO `migrations` VALUES (22,'2021_07_28_132654_add_date_default',8);
 INSERT INTO `migrations` VALUES (23,'2020_07_28_132654_add_date_default',9);
+INSERT INTO `migrations` VALUES (24,'2023_08_25_185318_elements_created_at',10);

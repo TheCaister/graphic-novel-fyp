@@ -36,6 +36,26 @@ class ElementController extends Controller
     public function store(Request $request)
     {
         //
+        // dd($request->all());
+
+        // dd($content);
+
+        // Store new element in database
+        $element = Element::create([
+            'owner_id' => auth()->user()->id,
+            'type' => $request->type,
+            'content' => json_encode($request->content),
+            'created_at' => now(),
+            'hidden' => $request->hidden,
+        ]);
+
+        // dd($element);
+
+        // Redirect to the element page
+
+        return redirect()->route('elements.show', $element->element_id);
+
+
     }
 
     /**
@@ -52,17 +72,27 @@ class ElementController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Element $element)
     {
         //
+        return Inertia::render('Elements/Edit', [
+            'element' => $element,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Element $element)
     {
-        //
+
+        $element->update([
+            'content' => json_encode($request->content),
+            'hidden' => $request->hidden,
+            'type' => $request->type,
+        ]);
+
+        return redirect()->route('elements.show', $element->element_id);
     }
 
     /**

@@ -23,6 +23,7 @@ class Element extends Model
         'element_id',
         'owner_id',
         'type',
+        'created_at',
         'content',
         'hidden',
     ];
