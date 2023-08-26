@@ -26,8 +26,13 @@ class ElementController extends Controller
     public function create()
     {
         //
+        // dd(request()->all());
 
-        return Inertia::render('Elements/Create');
+        return Inertia::render('Elements/Create',
+            [
+                'elementable' => request()->contentType,
+                'elementable_id' => request()->contentId,
+            ]);
     }
 
     /**
@@ -35,7 +40,7 @@ class ElementController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
         // dd($request->all());
 
         // dd($content);
@@ -49,6 +54,14 @@ class ElementController extends Controller
             'hidden' => $request->hidden,
         ]);
 
+        
+        $elementable = $this->getElementable($request->elementable, $request->elementable_id);
+
+        // Attach the element to the content
+        $elementable->elements()->attach($element->element_id);        
+
+        // dd($elementable);
+        
         // dd($element);
 
         // Redirect to the element page
@@ -63,9 +76,14 @@ class ElementController extends Controller
      */
     public function show(Element $element)
     {
-        //
+
+
         return Inertia::render('Elements/Show', [
             'element' => $element,
+            'universes' => $element->universes,
+            'series' => $element->series,
+            'chapters' => $element->chapters,
+            'pages' => $element->pages,
         ]);
     }
 
@@ -152,6 +170,7 @@ class ElementController extends Controller
         }
 
         // dd($type);
+        // dd($content->elements);
 
         return Inertia::render('Elements/AssignElements', [
             'selectedContent' => $selectedContent,
@@ -169,25 +188,52 @@ class ElementController extends Controller
         $content = null;
 
         // Create a switch statement to determine the type of content
-        switch ($request->type) {
-            case 'universes':
-                $content = Universe::find($request->content_id);
-                break;
-            case 'series':
-                $content = Series::find($request->content_id);
-                break;
-            case 'chapters':
-                $content = Chapter::find($request->content_id);
-                break;
-            case 'pages':
-                $content = Page::find($request->content_id);
-                break;
-        }
+        // switch ($request->type) {
+        //     case 'universes':
+        //         $content = Universe::find($request->content_id);
+        //         break;
+        //     case 'series':
+        //         $content = Series::find($request->content_id);
+        //         break;
+        //     case 'chapters':
+        //         $content = Chapter::find($request->content_id);
+        //         break;
+        //     case 'pages':
+        //         $content = Page::find($request->content_id);
+        //         break;
+        // }
+
+        $content = $this->getElementable($request->type, $request->content_id);
 
         $elements = $content->elements;
 
         return response()->json([
             'elements' => $elements,
         ]);
+    }
+
+    public function getElementable($type, $id)
+    {
+
+        // Set content to nothing
+        $content = null;
+
+        // Create a switch statement to determine the type of content
+        switch ($type) {
+            case 'universes':
+                $content = Universe::find($id);
+                break;
+            case 'series':
+                $content = Series::find($id);
+                break;
+            case 'chapters':
+                $content = Chapter::find($id);
+                break;
+            case 'pages':
+                $content = Page::find($id);
+                break;
+        }
+
+        return $content;
     }
 }

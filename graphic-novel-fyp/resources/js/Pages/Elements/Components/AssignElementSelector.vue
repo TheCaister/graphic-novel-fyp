@@ -12,25 +12,39 @@
     <div v-else>
         <ul>
             <li v-for="element in elements">
-                {{ element.element_id }}
+                <Link :href="route('elements.show', element.element_id)">
+                     {{ element.element_id }}
+
+                </Link>
             </li>
         </ul>
     </div>
 
     <div>
-        <Link :href="route('elements.create')">
-            Add new element
+        <Link :href="route('elements.create', {
+            contentType: contentType,
+            contentId: contentId
+        })">
+        Add new element
         </Link>
     </div>
 </template>
 
 <script>
-    export default {
-        props: {
-            elements: {
-                type: Array,
-                required: true
-            }
+export default {
+    props: {
+        elements: {
+            type: Array,
+            required: true
+        },
+        contentType: {
+            type: String,
+            required: true
+        },
+        contentId: {
+            type: Number,
+            required: true
         }
     }
+}
 </script>

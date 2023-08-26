@@ -1,9 +1,9 @@
 <template>
     <h1>
-        Create a new element
+        Edit element
     </h1>
 
-    <form @submit.prevent="form.post(route('elements.store'))">
+    <form @submit.prevent="form.put(route('elements.update', element.element_id))">
         <!-- Create a dropdown to select the type of element you want to create -->
         <select>
             <option value="basic">Basic</option>
@@ -40,12 +40,10 @@ export default {
         SimpleEditor
     },
     props: {
-        elementable: {
-            type: String,
-        },
-        elementable_id: {
-            type: Number,
-        },
+        element: {
+            type: Object,
+            required: true
+        }
     },
     data() {
         return {
@@ -56,13 +54,17 @@ export default {
                 type: 'test',
                 content: null,
                 hidden: false,
-                elementable: this.elementable,
-                elementable_id: this.elementable_id,
             }),
         }
     },
-    methods: {
-    }
+    mounted() {
+        this.form.title = this.element.title
+        this.form.image = this.element.image
+        this.form.type = this.element.type
+        this.form.hidden = this.element.hidden
+
+        this.form.content = JSON.parse(this.element.content)
+    },
 }
 
 </script>

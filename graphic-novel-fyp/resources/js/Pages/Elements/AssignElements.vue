@@ -11,7 +11,7 @@
             <ContentSelector :contentList="computedSubContentList" :contentType="computedSubContentType" :parentContent="content"/>
         </div>
         <div class="w-1/2">
-            <AssignElementSelector :elements="elements" />
+            <AssignElementSelector :elements="elements" :contentType="selectedContent.type" :contentId="computedContentID" />
         </div>
     </div>
 </template>
@@ -19,6 +19,7 @@
 <script>
 import ContentSelector from '@/Pages/Elements/Components/ContentSelector.vue'
 import AssignElementSelector from '@/Pages/Elements/Components/AssignElementSelector.vue'
+import APICalls from '@/Utilities/APICalls'
 
 export default {
     props: {
@@ -32,7 +33,7 @@ export default {
         },
         elements: {
             type: Array,
-            required: true
+            default: []
         }
 
 
@@ -72,7 +73,47 @@ export default {
                 default:
                     return ''
             }
+        },
+        computedContentID(){
+            switch (this.selectedContent.type) {
+                case 'universes':
+                    return this.content.universe_id
+                case 'series':
+                    return this.content.series_id
+                case 'chapters':
+                    return this.content.chapter_id
+                case 'pages':
+                    return this.content.page_id
+                default:
+                    return 0
+            }
         }
+        // retrievedElements(){
+        //     let content_id;
+
+        //     switch(this.selectedContent.type){
+        //         case 'universes':
+        //             content_id = this.selectedContent.universe_id;
+        //             break;
+        //         case 'series':
+        //             content_id = this.selectedContent.series_id;
+        //             break;
+        //         case 'chapters':
+        //             content_id = this.selectedContent.chapter_id;
+        //             break;
+        //         default:
+        //             content_id = 0;
+
+
+        //     }
+
+        //     APICalls.getElements(this.selectedContent.type, content_id).then(response => {
+        //         this.elements = response.data.elements;
+        //         console.log(this.elements);
+        //     }).catch(error => {
+        //         console.log(error);
+        //     })
+        // }
 
     }
 }
