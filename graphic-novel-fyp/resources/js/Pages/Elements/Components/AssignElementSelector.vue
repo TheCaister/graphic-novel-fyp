@@ -12,10 +12,18 @@
     <div v-else>
         <ul>
             <li v-for="element in elements">
-                <Link :href="route('elements.show', element.element_id)">
-                     {{ element.element_id }}
+                <div class="flex">
+                    <input type="checkbox" :id="element.element_id" :name="element.element_id" :value="element.element_id">
+                    <label :for="element.element_id">
+                        {{ element.element_id }}
+                        <img src="" alt="Page image">
+                    </label>
 
-                </Link>
+                    <Link :href="route('elements.show', element.element_id)">
+                    >
+                    </Link>
+                </div>
+
             </li>
         </ul>
     </div>

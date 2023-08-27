@@ -116,9 +116,12 @@ class ElementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Element $element)
     {
         //
+        $element->delete();
+
+        return redirect()->route('dashboard');
     }
 
     public function elementsforge()
@@ -186,22 +189,6 @@ class ElementController extends Controller
 
         // Set content to nothing
         $content = null;
-
-        // Create a switch statement to determine the type of content
-        // switch ($request->type) {
-        //     case 'universes':
-        //         $content = Universe::find($request->content_id);
-        //         break;
-        //     case 'series':
-        //         $content = Series::find($request->content_id);
-        //         break;
-        //     case 'chapters':
-        //         $content = Chapter::find($request->content_id);
-        //         break;
-        //     case 'pages':
-        //         $content = Page::find($request->content_id);
-        //         break;
-        // }
 
         $content = $this->getElementable($request->type, $request->content_id);
 

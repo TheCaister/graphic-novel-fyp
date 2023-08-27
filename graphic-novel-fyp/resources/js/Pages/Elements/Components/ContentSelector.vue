@@ -9,7 +9,8 @@
     <div v-else>
         <div v-if="contentType === 'series'">
             <div v-for="content in contentList" :key="content.series_id">
-                <input type="checkbox" :id="content.series_id" :name="content.series_title" :value="content.series_id">
+                <input type="checkbox" :id="content.series_id" :name="content.series_title" :value="content.series_id"
+                    @change="check(content.series_id, $event)" :checked="value.includes(content.series_id)">
                 <label :for="content.series_id">
                     {{ content.series_title }}
                     <!-- Make an arrow that point to a link -->
@@ -62,7 +63,8 @@
             </Link>
 
             <div v-for="content in contentList" :key="content.page_id">
-                <input type="checkbox" :id="content.page_id" :name="content.page_id" :value="content.page_id">
+                <input type="checkbox" :id="content.page_id" :name="content.page_id" :value="content.page_id"
+                    @change="updateModelValue(content.page_id)">
                 <label :for="content.page_id">
                     {{ content.page_id }}
                     <img :src="content.page_image" alt="Page image">
@@ -93,7 +95,34 @@ export default {
         contentList: {
             type: Array,
             required: true
-        }
-    }
+        },
+        value: {
+            type: Array,
+            required: true
+        },
+    },
+    // emits: ['update:value'],
+    setup(props, context) {
+        const check = (optionId, checked) => {
+            console.log(props.value)
+
+            // Check if the checkbox is checked
+            
+
+            // copy the value Array to avoid mutating props
+            let updatedValue = [...props.value];
+            // remove name if checked, else add name
+            if (checked.target.checked) {
+                updatedValue.push(optionId);
+            } else {
+                updatedValue.splice(updatedValue.indexOf(optionId), 1);
+            }
+            // emit the updated value
+            context.emit("update:value", updatedValue);
+        };
+        return {
+            check,
+        };
+    },
 }
 </script>

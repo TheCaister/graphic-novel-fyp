@@ -1,5 +1,4 @@
 <template>
-
     <h1>Element</h1>
 
     <!-- Created at... -->
@@ -19,13 +18,21 @@
     <!-- Edit button -->
     <div>
         <Link :href="route('elements.edit', element.element_id)">
-            <PrimaryButton>Edit</PrimaryButton>
+        <PrimaryButton>Edit</PrimaryButton>
+        </Link>
+
+        <PrimaryButton @click="destroy(element.element_id)"
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</PrimaryButton>
+
+        <Link href="#" @click="back">
+            <PrimaryButton>Back</PrimaryButton>
         </Link>
     </div>
-
 </template>
 
 <script>
+import { Inertia } from '@inertiajs/inertia'
+
 export default {
     props: {
         element: {
@@ -58,7 +65,16 @@ export default {
                 chapters: this.chapters,
                 pages: this.pages,
             }
-        }
+        },
+
+        destroy(element_id) {
+            if (confirm('Are you sure you want to delete this element?')) {
+                Inertia.delete(route('elements.destroy', element_id))
+            }
+        },
+        back() {
+            window.history.back();
+        },
     }
 }
 </script>

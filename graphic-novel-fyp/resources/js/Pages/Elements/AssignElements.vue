@@ -8,11 +8,17 @@
     <!-- Put contentselector and assignelementselector side by side -->
     <div class="flex flex-row">
         <div class="w-1/2">
-            <ContentSelector :contentList="computedSubContentList" :contentType="computedSubContentType" :parentContent="content"/>
+            <ContentSelector :contentList="computedSubContentList" :contentType="computedSubContentType" :parentContent="content" v-model:value="selectedContentCheckboxes"/>
         </div>
         <div class="w-1/2">
             <AssignElementSelector :elements="elements" :contentType="selectedContent.type" :contentId="computedContentID" />
         </div>
+    </div>
+
+    <div>
+        <!-- <Link href="#" @click="back"> -->
+            <PrimaryButton>Save</PrimaryButton>
+        <!-- </Link> -->
     </div>
 </template>
 
@@ -41,7 +47,7 @@ export default {
     data() {
         return {
             subContentList: [],
-
+            selectedContentCheckboxes: []
         }
     },
     components: {
@@ -88,32 +94,6 @@ export default {
                     return 0
             }
         }
-        // retrievedElements(){
-        //     let content_id;
-
-        //     switch(this.selectedContent.type){
-        //         case 'universes':
-        //             content_id = this.selectedContent.universe_id;
-        //             break;
-        //         case 'series':
-        //             content_id = this.selectedContent.series_id;
-        //             break;
-        //         case 'chapters':
-        //             content_id = this.selectedContent.chapter_id;
-        //             break;
-        //         default:
-        //             content_id = 0;
-
-
-        //     }
-
-        //     APICalls.getElements(this.selectedContent.type, content_id).then(response => {
-        //         this.elements = response.data.elements;
-        //         console.log(this.elements);
-        //     }).catch(error => {
-        //         console.log(error);
-        //     })
-        // }
 
     }
 }
