@@ -8,16 +8,18 @@
     <!-- Put contentselector and assignelementselector side by side -->
     <div class="flex flex-row">
         <div class="w-1/2">
-            <ContentSelector :contentList="computedSubContentList" :contentType="computedSubContentType" :parentContent="content" v-model:value="selectedContentCheckboxes"/>
+            <ContentSelector :contentList="computedSubContentList" :contentType="computedSubContentType"
+                :parentContent="content" v-model:value="selectedContentCheckboxes" />
         </div>
         <div class="w-1/2">
-            <AssignElementSelector :elements="elements" :contentType="selectedContent.type" :contentId="computedContentID" />
+            <AssignElementSelector :elements="elements" :contentType="selectedContent.type" :contentId="computedContentID"
+                v-model:value="selectedElementsCheckboxes" />
         </div>
     </div>
 
     <div>
         <!-- <Link href="#" @click="back"> -->
-            <PrimaryButton>Save</PrimaryButton>
+        <PrimaryButton @click="saveAssignment">Save</PrimaryButton>
         <!-- </Link> -->
     </div>
 </template>
@@ -25,6 +27,7 @@
 <script>
 import ContentSelector from '@/Pages/Elements/Components/ContentSelector.vue'
 import AssignElementSelector from '@/Pages/Elements/Components/AssignElementSelector.vue'
+import { useForm } from '@inertiajs/vue3'
 import APICalls from '@/Utilities/APICalls'
 
 export default {
@@ -47,7 +50,8 @@ export default {
     data() {
         return {
             subContentList: [],
-            selectedContentCheckboxes: []
+            selectedContentCheckboxes: [],
+            selectedElementsCheckboxes: [],
         }
     },
     components: {
@@ -55,7 +59,7 @@ export default {
         AssignElementSelector
     },
     computed: {
-        computedSubContentList(){
+        computedSubContentList() {
             // Go through a switch statement to set subContentList
             switch (this.selectedContent.type) {
                 case 'universes':
@@ -68,7 +72,7 @@ export default {
                     return []
             }
         },
-        computedSubContentType(){
+        computedSubContentType() {
             switch (this.selectedContent.type) {
                 case 'universes':
                     return 'series'
@@ -80,7 +84,7 @@ export default {
                     return ''
             }
         },
-        computedContentID(){
+        computedContentID() {
             switch (this.selectedContent.type) {
                 case 'universes':
                     return this.content.universe_id
@@ -95,6 +99,28 @@ export default {
             }
         }
 
+    },
+    methods: {
+        saveAssignment(){
+
+            // Create  a form object with the selectedContentCheckboxes and selectedElementsCheckboxes with useForm
+            const form = useForm({
+                selectedContent: this.selectedContentCheckboxes,
+                selectedElements: this.selectedElementsCheckboxes
+            })
+
+
+
+            form.post(route('elements.assignStore'), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    // Clear the comment field
+                    // this.form.comment_content = "";
+                    // Emit the commentCreated event
+                    // this.$emit('commentCreated');
+                }
+            });
+        }
     }
 }
 </script>

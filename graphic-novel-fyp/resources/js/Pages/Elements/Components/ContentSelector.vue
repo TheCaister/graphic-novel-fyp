@@ -10,7 +10,7 @@
         <div v-if="contentType === 'series'">
             <div v-for="content in contentList" :key="content.series_id">
                 <input type="checkbox" :id="content.series_id" :name="content.series_title" :value="content.series_id"
-                    @change="check(content.series_id, $event)" :checked="value.includes(content.series_id)">
+                    @change="check('series', content.series_id, $event)" :checked="value.includes(content.series_id)">
                 <label :for="content.series_id">
                     {{ content.series_title }}
                     <!-- Make an arrow that point to a link -->
@@ -35,7 +35,8 @@
             </Link>
 
             <div v-for="content in contentList" :key="content.chapter_id">
-                <input type="checkbox" :id="content.chapter_id" :name="content.chapter_title" :value="content.chapter_id">
+                <input type="checkbox" :id="content.chapter_id" :name="content.chapter_title" :value="content.chapter_id"
+                @change="check('chapters', content.chapter_id, $event)" :checked="value.includes(content.chapter_id)">
                 <label :for="content.chapter_id">
                     {{ content.chapter_title }}
                     <Link :href="`/elements/assign?type=chapters&content_id=${content.chapter_id}`">
@@ -64,7 +65,7 @@
 
             <div v-for="content in contentList" :key="content.page_id">
                 <input type="checkbox" :id="content.page_id" :name="content.page_id" :value="content.page_id"
-                    @change="updateModelValue(content.page_id)">
+                    @change="check('pages', content.page_id, $event)" :checked="value.includes(content.page_id)">
                 <label :for="content.page_id">
                     {{ content.page_id }}
                     <img :src="content.page_image" alt="Page image">
@@ -101,9 +102,8 @@ export default {
             required: true
         },
     },
-    // emits: ['update:value'],
     setup(props, context) {
-        const check = (optionId, checked) => {
+        const check = (optionType, optionId, checked) => {
             console.log(props.value)
 
             // Check if the checkbox is checked
@@ -113,7 +113,7 @@ export default {
             let updatedValue = [...props.value];
             // remove name if checked, else add name
             if (checked.target.checked) {
-                updatedValue.push(optionId);
+                updatedValue.push({optionId: optionId, optionType: optionType});
             } else {
                 updatedValue.splice(updatedValue.indexOf(optionId), 1);
             }

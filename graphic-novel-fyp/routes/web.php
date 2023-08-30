@@ -171,6 +171,8 @@ Route::get('user/main/elementsforge', [ElementController::class, 'elementsforge'
 
 Route::get('/elements/assign', [ElementController::class, 'assign'])->name('elements.assign');
 
+Route::post('/elements/assign', [ElementController::class, 'assignStore'])->name('elements.assignStore');
+
 Route::resource('elements', ElementController::class);
 ////////////////////////// COMMENT ROUTES ////////////////////////
 Route::resource('comments', CommentController::class);

@@ -28,11 +28,13 @@ class ElementController extends Controller
         //
         // dd(request()->all());
 
-        return Inertia::render('Elements/Create',
+        return Inertia::render(
+            'Elements/Create',
             [
                 'elementable' => request()->contentType,
                 'elementable_id' => request()->contentId,
-            ]);
+            ]
+        );
     }
 
     /**
@@ -40,7 +42,7 @@ class ElementController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         // dd($request->all());
 
         // dd($content);
@@ -54,21 +56,23 @@ class ElementController extends Controller
             'hidden' => $request->hidden,
         ]);
 
-        
+
         $elementable = $this->getElementable($request->elementable, $request->elementable_id);
 
         // Attach the element to the content
-        $elementable->elements()->attach($element->element_id);        
+        $elementable->elements()->attach($element->element_id);
 
+        $universe = $this->getUniverse($request->elementable, $request->elementable_id);
+
+        // Attach the element to the universe in case it gets detached from the subcontent
+        $universe->elements()->attach($element->element_id);
         // dd($elementable);
-        
+
         // dd($element);
 
         // Redirect to the element page
 
         return redirect()->route('elements.show', $element->element_id);
-
-
     }
 
     /**
@@ -183,6 +187,30 @@ class ElementController extends Controller
         ]);
     }
 
+    public function assignStore(Request $request)
+    {
+        // dd($request->all());
+
+        // I can either split the selected content into a separate array for each type of content, or I can iterate through the array and check the type of content for each element.
+
+        // $contentList = [];
+
+        foreach ($request->selectedContent as $content) {
+            // $contentList[] = $this->getElementable($content['optionType'], $content['optionId']);
+
+            $curContent =  $this->getElementable($content['optionType'], $content['optionId']);
+
+            foreach($request->selectedElements as $element) {
+                if($element['assign']) {
+                    $curContent->elements()->attach($element['optionId']);
+                }
+                else{
+                    $curContent->elements()->detach($element['optionId']);
+                }
+            }
+        }
+    }
+
     public function getElements(Request $request)
     {
         // Get the type of content. It could be universes, series, chapters, or pages. With content_id, we can get the content.
@@ -222,5 +250,25 @@ class ElementController extends Controller
         }
 
         return $content;
+    }
+
+    public function getUniverse($type, $id){
+    
+            $universe = null;
+
+            if($type == 'universes'){
+                $universe = Universe::find($id);
+            }
+            else if($type == 'series'){
+                $universe = Series::find($id)->universe;
+            }
+            else if($type == 'chapters'){
+                $universe = Chapter::find($id)->series->universe;
+            }
+            else if($type == 'pages'){
+                $universe = Page::find($id)->chapter->series->universe;
+            }
+
+            return $universe;
     }
 }
