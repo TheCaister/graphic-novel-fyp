@@ -8,7 +8,7 @@
     <!-- Put contentselector and assignelementselector side by side -->
     <div class="flex flex-row">
         <div class="w-1/2">
-            <ContentSelector :contentList="computedSubContentList" :contentType="computedSubContentType"
+            <ContentSelector :contentList="subContentList" :contentType="computedSubContentType"
                 :parentContent="content" v-model:value="selectedContentCheckboxes" />
         </div>
         <div class="w-1/2">
@@ -43,13 +43,16 @@ export default {
         elements: {
             type: Array,
             default: []
+        },
+        subContentList: {
+            type: Array,
+            default: []
         }
 
 
     },
     data() {
         return {
-            subContentList: [],
             selectedContentCheckboxes: [],
             selectedElementsCheckboxes: [],
         }
@@ -59,19 +62,19 @@ export default {
         AssignElementSelector
     },
     computed: {
-        computedSubContentList() {
-            // Go through a switch statement to set subContentList
-            switch (this.selectedContent.type) {
-                case 'universes':
-                    return this.content.series
-                case 'series':
-                    return this.content.chapters
-                case 'chapters':
-                    return this.subContentList = this.content.pages
-                default:
-                    return []
-            }
-        },
+        // computedSubContentList() {
+        //     // Go through a switch statement to set subContentList
+        //     switch (this.selectedContent.type) {
+        //         case 'universes':
+        //             return this.content.series
+        //         case 'series':
+        //             return this.content.chapters
+        //         case 'chapters':
+        //             return this.subContentList = this.content.pages
+        //         default:
+        //             return []
+        //     }
+        // },
         computedSubContentType() {
             switch (this.selectedContent.type) {
                 case 'universes':
@@ -121,6 +124,12 @@ export default {
                 }
             });
         }
+    },
+    mounted() {
+        console.log(this.selectedContent)
+        // console.log(this.content)
+        // console.log(this.elements)
+        // console.log(this.subContentList)
     }
 }
 </script>

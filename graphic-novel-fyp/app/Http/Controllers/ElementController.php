@@ -131,9 +131,8 @@ class ElementController extends Controller
     public function elementsforge()
     {
 
-        return Inertia::render('Profile/Main', [
-            'user' => auth()->user(),
-            'passed_tab' => 'ElementsForge',
+        return Inertia::render('Elements/ElementsForge', [
+            'universes' => auth()->user()->universes,
         ]);
     }
 
@@ -144,46 +143,56 @@ class ElementController extends Controller
 
         // Set content to nothing
         $content = null;
+
         $subcontent = null;
 
         // Create a new selectedContent vartiable to pass to the view. It will contain the type of content, along with the name of the content.
-        $selectedContent = [
-            'type' => $request->type,
-            // 'name' => $content->name,
-        ];
+        // $selectedContent = [
+        //     'type' => $request->type,
+        // ];
+
+        $selectedContent = $this->generateSelectedContent($request->type, $request->content_id);
+
+        $content = $this->getElementable($request->type, $request->content_id);
+        $subcontent = $this->getSubcontent($request->type, $request->content_id);
+
+        // dd($subcontent);
 
         // Create a switch statement to determine the type of content
-        switch ($request->type) {
-            case 'universes':
-                $content = Universe::find($request->content_id);
-                // Set name in selectedContent to the name of the universe
-                $selectedContent['name'] = $content->universe_name;
-                $subcontent = $content->series;
-                break;
-            case 'series':
-                $content = Series::find($request->content_id);
-                $selectedContent['name'] = $content->series_title;
-                $subcontent = $content->chapters;
-                break;
-            case 'chapters':
-                $content = Chapter::find($request->content_id);
-                $selectedContent['name'] = $content->chapter_title;
+        // switch ($request->type) {
+        //     case 'universes':
+        //         $content = Universe::find($request->content_id);
+        //         // Set name in selectedContent to the name of the universe
+        //         $selectedContent['name'] = $content->universe_name;
+        //         $subcontent = $content->series;
+        //         break;
+        //     case 'series':
+        //         $content = Series::find($request->content_id);
+        //         $selectedContent['name'] = $content->series_title;
+        //         $subcontent = $content->chapters;
+        //         break;
+        //     case 'chapters':
+        //         $content = Chapter::find($request->content_id);
+        //         $selectedContent['name'] = $content->chapter_title;
 
-                $subcontent = $content->pages;
-                break;
-            case 'pages':
-                $content = Page::find($request->content_id);
-                break;
-        }
+        //         $subcontent = $content->pages;
+        //         break;
+        //     case 'pages':
+        //         $content = Page::find($request->content_id);
+        //         break;
+        // }
 
         // dd($type);
         // dd($content->elements);
 
+        // Set $elements to the elements of the content, filter duplicates by using unique()
+        $elements = $content->elements->unique();
+
         return Inertia::render('Elements/AssignElements', [
             'selectedContent' => $selectedContent,
             'content' => $content,
-            'elements' => $content->elements,
-            // 'subContentList' => $subcontent,
+            'elements' => $elements,
+            'subContentList' => $subcontent,
         ]);
     }
 
@@ -200,15 +209,18 @@ class ElementController extends Controller
 
             $curContent =  $this->getElementable($content['optionType'], $content['optionId']);
 
-            foreach($request->selectedElements as $element) {
-                if($element['assign']) {
+            foreach ($request->selectedElements as $element) {
+                if ($element['assign']) {
                     $curContent->elements()->attach($element['optionId']);
-                }
-                else{
+                } else {
                     $curContent->elements()->detach($element['optionId']);
                 }
             }
         }
+
+        return redirect()->route('user.main.elementsforge');
+
+        // return redirect()->back();
     }
 
     public function getElements(Request $request)
@@ -252,23 +264,91 @@ class ElementController extends Controller
         return $content;
     }
 
-    public function getUniverse($type, $id){
-    
-            $universe = null;
+    public function getUniverse($type, $id)
+    {
 
-            if($type == 'universes'){
-                $universe = Universe::find($id);
-            }
-            else if($type == 'series'){
-                $universe = Series::find($id)->universe;
-            }
-            else if($type == 'chapters'){
-                $universe = Chapter::find($id)->series->universe;
-            }
-            else if($type == 'pages'){
-                $universe = Page::find($id)->chapter->series->universe;
-            }
+        $universe = null;
 
-            return $universe;
+        if ($type == 'universes') {
+            $universe = Universe::find($id);
+        } else if ($type == 'series') {
+            $universe = Series::find($id)->universe;
+        } else if ($type == 'chapters') {
+            $universe = Chapter::find($id)->series->universe;
+        } else if ($type == 'pages') {
+            $universe = Page::find($id)->chapter->series->universe;
+        }
+
+        return $universe;
+    }
+
+    public function getSubcontent($type, $id)
+    {
+        // Set content to nothing
+        $subcontent = null;
+
+        // Create a switch statement to determine the type of content
+        switch ($type) {
+            case 'universes':
+                $content = Universe::find($id);
+                $subcontent = $content->series;
+                break;
+            case 'series':
+                $content = Series::find($id);
+                $subcontent = $content->chapters;
+                break;
+            case 'chapters':
+                $content = Chapter::find($id);
+                $subcontent = $content->pages;
+                break;
+        }
+
+        return $subcontent;
+    }
+
+    public function generateSelectedContent($type, $id, $includeDescription = false)
+    {
+
+        $selectedContent = [
+            'type' => $type,
+        ];
+
+        // Create a switch statement to determine the type of content
+        switch ($type) {
+            case 'universes':
+                $content = Universe::find($id);
+                $selectedContent['name'] = $content->universe_name;
+                break;
+            case 'series':
+                $content = Series::find($id);
+                $selectedContent['name'] = $content->series_title;
+
+                if ($includeDescription) {
+                    $selectedContent['description'] = $content->series_summary;
+                }
+                break;
+            case 'chapters':
+                $content = Chapter::find($id);
+                $selectedContent['name'] = $content->chapter_title;
+
+                if ($includeDescription) {
+                    $selectedContent['description'] = $content->chapter_notes;
+                }
+                break;
+        }
+
+        return $selectedContent;
+    }
+
+    public function forgeShow(Request $request)
+    {
+
+        // dd($request->all());
+
+        return Inertia::render('Elements/Forge/Show', [
+            'selectedContent' => $this->generateSelectedContent($request->contentType, $request->contentId),
+            'content' => $this->getElementable($request->contentType, $request->contentId),
+            'subContentList' => $this->getSubcontent($request->contentType, $request->contentId),
+        ]);
     }
 }

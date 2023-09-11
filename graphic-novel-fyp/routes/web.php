@@ -177,6 +177,9 @@ Route::resource('elements', ElementController::class);
 ////////////////////////// COMMENT ROUTES ////////////////////////
 Route::resource('comments', CommentController::class);
 
+////////////////////////// FORGE ROUTES ////////////////////////
+Route::get('/forge/show', [ElementController::class, 'forgeShow'])->name('forge.show');
+
 ////////////////////////// MEDIA ROUTES ////////////////////////
 // http://localhost/upload?media=series_thumbnail 
 

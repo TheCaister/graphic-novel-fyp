@@ -36,8 +36,7 @@
         </Link>
 
         <Link href="/user/main/elementsforge">
-        <button @click='currentTabComponent = "ElementsForge"'
-            :class="{ 'font-bold underline': currentTabComponent === 'ElementsForge' }">
+        <button>
             Elements Forge</button>
         </Link>
 
@@ -55,7 +54,6 @@ import Show from './Components/Show.vue';
 import Following from './Components/Following.vue';
 import AccountSettings from './Components/AccountSettings.vue';
 import Edit from './Edit.vue';
-import ElementsForge from '../Elements/ElementsForge.vue';
 
 export default {
     props: {
@@ -78,7 +76,6 @@ export default {
         Following,
         AccountSettings,
         Edit,
-        ElementsForge,
     },
 
     data() {
