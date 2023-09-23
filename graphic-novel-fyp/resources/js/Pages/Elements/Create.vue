@@ -20,6 +20,10 @@
             </div>
         </div>
 
+        <div>
+            <MindMap />
+        </div>
+
 
         <!-- Make a button to go back and a button to create/save changes -->
         <div>
@@ -33,11 +37,13 @@
 import SimpleEditor from '@/Components/Editors/SimpleEditor.vue';
 import Edit from './SimpleElement/Edit.vue'
 import { useForm } from '@inertiajs/vue3'
+import MindMap from './Mindmap/MindMap.vue'
 
 export default {
     components: {
         Edit,
-        SimpleEditor
+        SimpleEditor,
+        MindMap
     },
     props: {
         elementable: {

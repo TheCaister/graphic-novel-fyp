@@ -23,6 +23,7 @@
         "@tiptap/pm": "^2.0.3",
         "@tiptap/starter-kit": "^2.0.3",
         "@tiptap/vue-3": "^2.0.3",
+        "@vue-flow/core": "^1.22.3",
         "filepond": "^4.30.4",
         "filepond-plugin-file-validate-type": "^1.2.8",
         "filepond-plugin-image-preview": "^4.6.11",

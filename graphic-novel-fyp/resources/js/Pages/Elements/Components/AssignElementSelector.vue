@@ -42,7 +42,8 @@
             <li v-for="element in elements">
                 <div class="flex">
                     <input type="checkbox" :id="element.element_id" :name="element.element_id" :value="element.element_id"
-                        @change="checkAssign(element.element_id, $event)" :checked="value.includes(element.element_id)">
+                        @change="checkAssign(element.element_id, $event)" :checked="value.includes(element.element_id)"
+                        :indeterminate="true">
                     <label :for="element.element_id">
                         {{ element.element_id }}
                         <img src="" alt="Page image">
@@ -122,7 +123,7 @@ export default {
 
             // console.log(checked.target.checked)
 
-            // I want to cycle between off, on and indeterminate
+            // I want to cycle between indeterminate, on and off
 
             // Find the element in value that matches the optionId, and add an 'assign' property to it. Depending on checked, assign true or false
             let updatedValue = [...props.value];
@@ -131,7 +132,6 @@ export default {
             console.log(element)
 
             if (element) {
-                console.log("element found")
                 if (element.assign) {
                     // Set to indeterminate
                     checked.target.indeterminate = true;
@@ -140,6 +140,10 @@ export default {
                 element.assign = checked.target.checked;
             }
             else {
+                updatedValue.push({
+                    optionId: optionId,
+                    assign: checked.target.checked
+                });
                 // checked.target.checked = false
             }
           
