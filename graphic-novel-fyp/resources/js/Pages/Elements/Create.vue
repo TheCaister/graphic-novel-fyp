@@ -20,8 +20,12 @@
             </div>
         </div>
 
-        <div>
+        <!-- <div>
             <MindMap />
+        </div> -->
+
+        <div>
+            <PanelPlanner />
         </div>
 
 
@@ -38,12 +42,14 @@ import SimpleEditor from '@/Components/Editors/SimpleEditor.vue';
 import Edit from './SimpleElement/Edit.vue'
 import { useForm } from '@inertiajs/vue3'
 import MindMap from './Mindmap/MindMap.vue'
+import PanelPlanner from './PanelPlanner/PanelPlanner.vue'
 
 export default {
     components: {
         Edit,
         SimpleEditor,
-        MindMap
+        MindMap,
+        PanelPlanner,
     },
     props: {
         elementable: {
