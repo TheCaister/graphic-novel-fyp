@@ -11,7 +11,7 @@ CREATE TABLE `approved_moderators` (
   `approved_moderators_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `moderator_id` bigint unsigned NOT NULL,
   `moderatable_id` bigint unsigned DEFAULT NULL,
-  `moderatable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `moderatable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`approved_moderators_id`),
   KEY `approved_moderators_moderator_id_foreign` (`moderator_id`),
   CONSTRAINT `approved_moderators_moderator_id_foreign` FOREIGN KEY (`moderator_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
@@ -24,11 +24,13 @@ CREATE TABLE `chapters` (
   `chapter_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `series_id` bigint unsigned NOT NULL,
   `chapter_number` int NOT NULL,
-  `chapter_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `chapter_thumbnail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `chapter_notes` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `chapter_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `chapter_thumbnail` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `chapter_notes` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `comments_enabled` tinyint(1) NOT NULL,
-  `scheduled_publish` timestamp NOT NULL,
+  `scheduled_publish` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`chapter_id`),
   KEY `chapters_series_id_foreign` (`series_id`),
   CONSTRAINT `chapters_series_id_foreign` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`) ON DELETE CASCADE
@@ -41,15 +43,29 @@ CREATE TABLE `comments` (
   `comment_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `commenter_id` bigint unsigned NOT NULL,
   `replying_to` bigint unsigned DEFAULT NULL,
-  `comment_content` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL,
+  `comment_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `commentable_id` bigint unsigned NOT NULL,
-  `commentable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `commentable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`comment_id`),
   KEY `comments_commenter_id_foreign` (`commenter_id`),
   KEY `comments_replying_to_foreign` (`replying_to`),
   CONSTRAINT `comments_commenter_id_foreign` FOREIGN KEY (`commenter_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `comments_replying_to_foreign` FOREIGN KEY (`replying_to`) REFERENCES `comments` (`comment_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `container_elements`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `container_elements` (
+  `container_element_id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `parent_element_id` bigint unsigned NOT NULL,
+  `child_element_id` bigint unsigned NOT NULL,
+  PRIMARY KEY (`container_element_id`),
+  KEY `container_elements_parent_element_id_foreign` (`parent_element_id`),
+  KEY `container_elements_child_element_id_foreign` (`child_element_id`),
+  CONSTRAINT `container_elements_child_element_id_foreign` FOREIGN KEY (`child_element_id`) REFERENCES `elements` (`element_id`),
+  CONSTRAINT `container_elements_parent_element_id_foreign` FOREIGN KEY (`parent_element_id`) REFERENCES `elements` (`element_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `elementables`;
@@ -58,11 +74,11 @@ DROP TABLE IF EXISTS `elementables`;
 CREATE TABLE `elementables` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `element_id` bigint unsigned NOT NULL,
-  `elementable_id` bigint unsigned DEFAULT NULL,
+  `elementable_id` bigint unsigned NOT NULL,
   `elementable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `elementables_element_id_foreign` (`element_id`),
-  CONSTRAINT `elementables_element_id_foreign` FOREIGN KEY (`element_id`) REFERENCES `elements` (`element_id`) ON DELETE CASCADE
+  CONSTRAINT `elementables_element_id_foreign` FOREIGN KEY (`element_id`) REFERENCES `elements` (`element_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `elements`;
@@ -70,14 +86,15 @@ DROP TABLE IF EXISTS `elements`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `elements` (
   `element_id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `owner_id` bigint unsigned NOT NULL,
-  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `element_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `element_thumbnail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `derived_element_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `derived_element_id` bigint unsigned NOT NULL,
   `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL,
   `hidden` tinyint(1) NOT NULL,
-  PRIMARY KEY (`element_id`),
-  KEY `elements_owner_id_foreign` (`owner_id`),
-  CONSTRAINT `elements_owner_id_foreign` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`element_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `failed_jobs`;
@@ -85,11 +102,11 @@ DROP TABLE IF EXISTS `failed_jobs`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `failed_jobs` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
@@ -109,14 +126,50 @@ CREATE TABLE `followers` (
   CONSTRAINT `followers_follower_id_foreign` FOREIGN KEY (`follower_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `media`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `media` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint unsigned NOT NULL,
+  `uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `collection_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mime_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `disk` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `conversions_disk` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `size` bigint unsigned NOT NULL,
+  `manipulations` json NOT NULL,
+  `custom_properties` json NOT NULL,
+  `generated_conversions` json NOT NULL,
+  `responsive_images` json NOT NULL,
+  `order_column` int unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `media_uuid_unique` (`uuid`),
+  KEY `media_model_type_model_id_index` (`model_type`,`model_id`),
+  KEY `media_order_column_index` (`order_column`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `migrations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `mindmap_elements`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `mindmap_elements` (
+  `mindmap_element_id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`mindmap_element_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `pages`;
@@ -126,18 +179,28 @@ CREATE TABLE `pages` (
   `page_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `chapter_id` bigint unsigned NOT NULL,
   `page_number` bigint NOT NULL,
-  `page_image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `page_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`page_id`),
   KEY `pages_chapter_id_foreign` (`chapter_id`),
   CONSTRAINT `pages_chapter_id_foreign` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `panel_planner_elements`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `panel_planner_elements` (
+  `panel_planner_element_id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`panel_planner_element_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `password_reset_tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -147,11 +210,11 @@ DROP TABLE IF EXISTS `personal_access_tokens`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `personal_access_tokens` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `tokenable_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text COLLATE utf8mb4_unicode_ci,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -167,14 +230,35 @@ DROP TABLE IF EXISTS `series`;
 CREATE TABLE `series` (
   `series_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `universe_id` bigint unsigned NOT NULL,
-  `series_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `series_genre` enum('ACTION','ADVENTURE','COMEDY','DRAMA','FANTASY','HORROR','MYSTERY','ROMANCE','THRILLER') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `series_summary` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `series_thumbnail` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `series_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `series_genre` enum('ACTION','ADVENTURE','COMEDY','DRAMA','FANTASY','HORROR','MYSTERY','ROMANCE','THRILLER') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `series_summary` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `series_thumbnail` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `rating` double(8,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`series_id`),
   KEY `series_universe_id_foreign` (`universe_id`),
   CONSTRAINT `series_universe_id_foreign` FOREIGN KEY (`universe_id`) REFERENCES `universes` (`universe_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `simple_text_elements`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `simple_text_elements` (
+  `simple_text_element_id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`simple_text_element_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `temporary_files`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `temporary_files` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `folder` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `filename` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `universes`;
@@ -183,7 +267,9 @@ DROP TABLE IF EXISTS `universes`;
 CREATE TABLE `universes` (
   `universe_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `owner_id` bigint unsigned NOT NULL,
-  `universe_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `universe_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`universe_id`),
   KEY `universes_owner_id_foreign` (`owner_id`),
   CONSTRAINT `universes_owner_id_foreign` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
@@ -223,18 +309,18 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `date_of_birth` timestamp NULL DEFAULT NULL,
   `is_banned` tinyint(1) NOT NULL DEFAULT '0',
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
-  `bio` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `profile_picture` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bio` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `profile_picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -261,3 +347,14 @@ INSERT INTO `migrations` VALUES (12,'2023_05_21_131553_create_page_table',1);
 INSERT INTO `migrations` VALUES (13,'2023_05_23_115934_create_user_series_rating_table',1);
 INSERT INTO `migrations` VALUES (14,'2023_05_23_120425_create_user_chapter_rating_table',1);
 INSERT INTO `migrations` VALUES (15,'2023_05_26_174608_create_elementables_table',1);
+INSERT INTO `migrations` VALUES (16,'2023_07_09_140136_change-series-table',2);
+INSERT INTO `migrations` VALUES (17,'2023_07_11_160300_create_temporary_files_table',3);
+INSERT INTO `migrations` VALUES (18,'2023_07_11_173943_create_media_table',4);
+INSERT INTO `migrations` VALUES (19,'2023_07_11_175210_update_chapter',5);
+INSERT INTO `migrations` VALUES (20,'2023_07_28_132654_add_date_default',6);
+INSERT INTO `migrations` VALUES (21,'2022_07_28_132654_add_date_default',7);
+INSERT INTO `migrations` VALUES (22,'2021_07_28_132654_add_date_default',8);
+INSERT INTO `migrations` VALUES (23,'2020_07_28_132654_add_date_default',9);
+INSERT INTO `migrations` VALUES (33,'2023_08_25_185318_elements_created_at',10);
+INSERT INTO `migrations` VALUES (37,'2023_09_30_122118_edits',11);
+INSERT INTO `migrations` VALUES (38,'2023_09_30_143355_timestamps',12);

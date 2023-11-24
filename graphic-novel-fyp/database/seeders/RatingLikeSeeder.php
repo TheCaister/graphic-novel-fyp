@@ -7,6 +7,7 @@ use App\Models\Series;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class RatingLikeSeeder extends Seeder
 {
@@ -35,6 +36,10 @@ class RatingLikeSeeder extends Seeder
             // $user->ratedSeries()->sync($random_series, ['rating' => rand(1, 5)]);
         });
 
-
+        // For each series, update their rating, using values from the user_series_rating table
+        Series::all()->each(function ($series) {
+            $series->rating = round(DB::table('user_series_rating')->where('series_id', $series->series_id)->avg('rating'), 2);
+            $series->save();
+        });
     }
 }

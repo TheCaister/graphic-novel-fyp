@@ -18,5 +18,20 @@ import { Head } from '@inertiajs/vue3';
                 </div>
             </div>
         </div>
+
+        <Series>
+
+        </Series>
     </AuthenticatedLayout>
 </template>
+
+<script>
+
+import Series from './Profile/Components/Series.vue';
+
+export default {
+    components: {
+        Series,
+    }
+};
+</script>

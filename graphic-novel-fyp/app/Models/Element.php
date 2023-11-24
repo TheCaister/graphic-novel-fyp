@@ -12,6 +12,7 @@ class Element extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    protected $primaryKey = 'element_id';
 
     /**
      * The attributes that are mass assignable.
@@ -22,6 +23,7 @@ class Element extends Model
         'element_id',
         'owner_id',
         'type',
+        'created_at',
         'content',
         'hidden',
     ];
@@ -44,21 +46,21 @@ class Element extends Model
 
     public function universes(): MorphToMany
     {
-        return $this->morphedByMany(Universe::class, 'elementable');
+        return $this->morphedByMany(Universe::class, 'elementable', 'elementables', 'element_id', 'elementable_id');
     }
 
     public function series(): MorphToMany
     {
-        return $this->morphedByMany(Series::class, 'elementable');
+        return $this->morphedByMany(Series::class, 'elementable', 'elementables', 'element_id', 'elementable_id');
     }
 
     public function chapters(): MorphToMany
     {
-        return $this->morphedByMany(Chapter::class, 'elementable');
+        return $this->morphedByMany(Chapter::class, 'elementable', 'elementables', 'element_id', 'elementable_id');
     }
 
     public function pages(): MorphToMany
     {
-        return $this->morphedByMany(Page::class, 'elementable');
+        return $this->morphedByMany(Page::class, 'elementable', 'elementables', 'element_id', 'elementable_id');
     }
 }

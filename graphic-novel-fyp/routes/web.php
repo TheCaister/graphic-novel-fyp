@@ -1,8 +1,14 @@
 <?php
 
+use App\Http\Controllers\ChapterController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ElementController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SeriesController;
+use App\Http\Controllers\UniverseController;
+use App\Http\Controllers\UploadController;
+use App\Models\Series;
 use App\Models\User;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,32 +29,24 @@ Route::get('/tailwind', function () {
     return Inertia::render('TailwindPractice');
 });
 
+Route::get('/', function () {
+    // Instead of returning Blade view, you're returning client-side view
+    // The base directory is assumed to be resources/js/Pages
+
+    // When propping, make sure to accept it in the vue component
+    return Inertia::render(
+        'Welcome',
+        [
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+        ]
+    );
+})->name('home');
+
 // Using group, you can apply middleware to all routes in the group
 Route::middleware('auth')->group(function () {
 
-    Route::get('/', function () {
-        // Instead of returning Blade view, you're returning client-side view
-        // The base directory is assumed to be resources/js/Pages
-
-        // When propping, make sure to accept it in the vue component
-        return Inertia::render(
-            'Welcome',
-            [
-                'canLogin' => Route::has('login'),
-                'canRegister' => Route::has('register'),
-                'laravelVersion' => Application::VERSION,
-                'phpVersion' => PHP_VERSION,
-                'name' => 'John Doe',
-                'frameworks' => [
-                    'Laravel',
-                    'React',
-                    'Vue',
-                    'Angular',
-                    'Tailwind'
-                ],
-            ]
-        );
-    });
+ 
 
     // TEST ROUTES ////////////////////////
 
@@ -72,7 +70,7 @@ Route::middleware('auth')->group(function () {
                     'can' => [
                         'edit' => Auth::user()->can('edit', $user),
                     ]
-                    ]),
+                ]),
             // 'users' => User::all(),
             'filters' => Request::only(['search']),
 
@@ -117,15 +115,72 @@ Route::middleware('auth')->group(function () {
 
     //////////////////////////////////////
 
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');
+    // Route::get('/dashboard', function () {
+    //     return Inertia::render('Dashboard');
+    // })->middleware(['auth', 'verified'])->name('dashboard');
 
-    Route::middleware('auth')->group(function () {
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    });
+    // Route::middleware('auth')->group(function () {
+    //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    //     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // });
 });
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
+    Route::get('/profile/{user}/edit', [ProfileController::class, 'editOther'])->name('profile.editOther');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile/{user}/personal', [ProfileController::class, 'updateOtherPersonal'])->name('profile.updateOtherPersonal');
+    Route::patch('/profile/personal', [ProfileController::class, 'updatePersonal'])->name('profile.updatePersonal');
+    Route::patch('/profile/{user}', [ProfileController::class, 'updateOther'])->name('profile.updateOther');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::delete('/users/{user}', [ProfileController::class, 'destroyOther']);
+    
+    Route::get('/user/main', [ProfileController::class, 'main'])->name('user.main');
+    Route::get('/user/main/dashboard', [ProfileController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+
+    // Route::get('/dashboard', [ProfileController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+
+    Route::get('user/main/comments', [ProfileController::class, 'comments'])->name('user.main.comments');
+    Route::get('user/main/following', [ProfileController::class, 'following'])->name('user.main.following');
+    Route::get('user/main/show', [ProfileController::class, 'showMain'])->name('user.main.show');
+    Route::get('user/main/edit', [ProfileController::class, 'editMain'])->name('user.main.edit');
+});
+
+
+Route::post('/upload', [UploadController::class, 'store'])->name('upload.store');
+
+Route::get('/publish', [SeriesController::class, 'publish'])->name('publish');
+
+// Trying out resource
+Route::resource('universes', UniverseController::class);
+
+//////////////////////// SERIES ROUTES ////////////////////////
+Route::get('{series}/chapters/create', [ChapterController::class, 'create'])->name('chapter.create');
+Route::get('{series}/chapters/manage', [SeriesController::class, 'manageChapters'])->name('chapter.manage');
+Route::resource('chapters', ChapterController::class);
+
+Route::get('/series/popular', [SeriesController::class, 'popular'])->name('series.popular');
+Route::get('{universe}/series/create', [SeriesController::class, 'create'])->name('series.create');
+Route::get('/series/genres',[SeriesController::class, 'genres'])->name('series.genres');
+Route::resource('series', SeriesController::class);
+
+////////////////////////// ELEMENT ROUTES ////////////////////////
+Route::get('user/main/elementsforge', [ElementController::class, 'elementsforge'])->name('user.main.elementsforge');
+
+Route::get('/elements/assign', [ElementController::class, 'assign'])->name('elements.assign');
+
+Route::post('/elements/assign', [ElementController::class, 'assignStore'])->name('elements.assignStore');
+
+Route::resource('elements', ElementController::class);
+////////////////////////// COMMENT ROUTES ////////////////////////
+Route::resource('comments', CommentController::class);
+
+////////////////////////// FORGE ROUTES ////////////////////////
+Route::get('/forge/show', [ElementController::class, 'forgeShow'])->name('forge.show');
+
+////////////////////////// MEDIA ROUTES ////////////////////////
+// http://localhost/upload?media=series_thumbnail 
 
 require __DIR__ . '/auth.php';

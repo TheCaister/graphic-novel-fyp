@@ -9,11 +9,26 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Chapter extends Model
+class Chapter extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
     public $timestamps = false;
+    protected $primaryKey = 'chapter_id';
+    protected $appends = ['url'];
+
+    public function getUrlAttribute()
+    {
+        return route('chapters.show', $this->chapter_id);
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('chapter_thumbnail')->singleFile();
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -49,7 +64,7 @@ class Chapter extends Model
 
     public function pages(): HasMany
     {
-        return $this->hasMany(Page::class);
+        return $this->hasMany(Page::class, 'chapter_id', 'chapter_id');
     }
 
  
@@ -67,13 +82,18 @@ class Chapter extends Model
     // Delete all comments associated with the chapter.
     function delete()
     {
-        // $this->pages()->delete();
+        $this->pages()->delete();
         $this->comments()->delete();
         $this->elements()->delete();
         parent::delete();
     }
 
     public function elements(): MorphToMany{
-        return $this->morphToMany(Element::class, 'elementable');
+        return $this->morphToMany(Element::class, 'elementable', 'elementables', 'elementable_id', 'element_id');
+    }
+
+    public function name(): string
+    {
+        return $this->chapter_title;
     }
 }

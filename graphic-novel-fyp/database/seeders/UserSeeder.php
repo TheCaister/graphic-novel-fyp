@@ -20,13 +20,27 @@ class UserSeeder extends Seeder
     {
         //
         // UserSeeder::class;
-        User::factory()->create([
-            'username' => 'Test User',
-            // Hash the password
-            'password' => bcrypt('password'),
-            'email' => 'test@test.com',
-            'is_admin' => true,
-        ]);
+        User::factory()
+            ->has(Universe::factory(2)
+                ->has(
+                    Series::factory(3)
+                        ->has(
+                            Chapter::factory(5)
+                                ->has(
+                                    Page::factory(5)
+                                        ->sequence(
+                                            fn ($sequence) => ['page_number' => ($sequence->index % 5) + 1]
+                                        )
+                                )
+                        )
+                ))
+            ->create([
+                'username' => 'Test User',
+                // Hash the password
+                'password' => bcrypt('test'),
+                'email' => 'test@test.com',
+                'is_admin' => true,
+            ]);
 
         User::factory(50)->create();
 
@@ -40,19 +54,20 @@ class UserSeeder extends Seeder
                     //     ->hasReplies(3))
                     // For every chapter, create 5 pages, with the page_number starting at 1, incrementing by 1 until 5
 
-                    ->has(Chapter::factory()
-                        ->has(
-                            Page::factory(5)
-                                // Using this sequence, we can create 5 pages, with the page_number starting at 1, incrementing by 1 until 5
-                                ->sequence(
-                                    fn ($sequence) => ['page_number' => ($sequence->index % 5) + 1]
-                                )
-                        )
+                    ->has(
+                        Chapter::factory(5)
+                            ->has(
+                                Page::factory(5)
+                                    // Using this sequence, we can create 5 pages, with the page_number starting at 1, incrementing by 1 until 5
+                                    ->sequence(
+                                        fn ($sequence) => ['page_number' => ($sequence->index % 5) + 1]
+                                    )
+                            )
                         // ->has(Comment::factory(3)
                         //     ->sequence(
                         //         fn ($sequence) => ['commenter_id' => User::inRandomOrder()->first()->id]
                         //     ))
-                            )))
+                    )))
             ->create();
     }
 }

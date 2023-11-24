@@ -9,11 +9,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Series extends Model
+class Series extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
+    protected $primaryKey = 'series_id';
     public $timestamps = false;
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('series_thumbnail')->singleFile();
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -47,7 +56,7 @@ class Series extends Model
 
     public function chapters(): HasMany
     {
-        return $this->hasMany(Chapter::class);
+        return $this->hasMany(Chapter::class, 'series_id', 'series_id');
     }
 
     public function comments(): MorphMany
@@ -57,12 +66,17 @@ class Series extends Model
 
     public function elements(): MorphToMany
     {
-        return $this->morphToMany(Element::class, 'elementable');
+        return $this->morphToMany(Element::class, 'elementable', 'elementables', 'elementable_id', 'element_id');
     }
 
     public function moderators(): MorphToMany
     {
         return $this->morphToMany(User::class, 'moderatable', 'approved_moderators', 'moderatable_id', 'moderator_id', 'series_id');
+    }
+
+    public function name(): string
+    {
+        return $this->series_title;
     }
 
     public function userRatings(): BelongsToMany
@@ -72,7 +86,10 @@ class Series extends Model
     // Delete all comments associated with the chapter.
     function delete()
     {
+        
+
         // $this->pages()->delete();
+        $this->chapters()->delete();
         $this->comments()->delete();
         $this->elements()->delete();
 

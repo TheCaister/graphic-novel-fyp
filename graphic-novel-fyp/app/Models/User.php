@@ -57,7 +57,7 @@ class User extends Authenticatable
         return $this->hasMany(Universe::class, 'owner_id', 'id');
     }
 
-    public function followers(): BelongsToMany
+    public function followees(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'followers', 'follower_id', 'followee_id');
     }
@@ -68,7 +68,7 @@ class User extends Authenticatable
     }
 
     // Retrieves the users that follow this user
-    public function followees(): BelongsToMany
+    public function followers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'followers', 'followee_id', 'follower_id');
     }
@@ -91,5 +91,17 @@ class User extends Authenticatable
     public function moderatableSeries(): MorphToMany
     {
         return $this->morphedByMany(Series::class, 'moderatable', 'approved_moderators', 'moderator_id', 'moderatable_id', 'id', 'series_id');
+    }
+
+    public function delete()
+    {
+        $this->universes()->delete();
+        $this->followees()->detach();
+        $this->followers()->detach();
+        $this->likedChapters()->detach();
+        $this->ratedSeries()->detach();
+        $this->moderatableUniverses()->detach();
+        $this->moderatableSeries()->detach();
+        parent::delete();
     }
 }

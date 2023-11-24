@@ -12,6 +12,7 @@ class Universe extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    protected $primaryKey = 'universe_id';
 
     /**
      * The attributes that are mass assignable.
@@ -40,12 +41,17 @@ class Universe extends Model
 
     public function series(): HasMany
     {
-        return $this->hasMany(Series::class);
+        return $this->hasMany(Series::class, 'universe_id', 'universe_id');
+    }
+
+    public function name(): string
+    {
+        return $this->universe_name;
     }
 
     public function elements(): MorphToMany
     {
-        return $this->morphToMany(Element::class, 'elementable');
+        return $this->morphToMany(Element::class, 'elementable', 'elementables', 'elementable_id', 'element_id');
     }
 
     public function moderators(): MorphToMany
@@ -56,6 +62,7 @@ class Universe extends Model
     function delete()
     {
         $this->elements()->delete();
+        $this->series()->delete();
 
         parent::delete();
     }
