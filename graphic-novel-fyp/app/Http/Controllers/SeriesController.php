@@ -40,8 +40,6 @@ class SeriesController extends Controller
             $formFields['series_thumbnail'] = 'series_thumbnails/black.png';
         }
 
-        $formFields['rating'] = 0;
-
         $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
 
         // Create the series
@@ -71,15 +69,6 @@ class SeriesController extends Controller
 
         // Get the chapters for the series as a list
         $chapters = $series->chapters()->get();
-
-        // Query the user_series_rating table to get the average rating for the series and round it to 2 decimal places
-        $series->rating = round(DB::table('user_series_rating')->where('series_id', $series->series_id)->avg('rating'), 2);
-
-        // For each chapter, add the amount of likes it has
-        foreach ($chapters as $chapter) {
-            // Query the user_chapter_likes table for the amount of likes
-            $chapter->likes = DB::table('user_chapter_likes')->where('chapter_id', $chapter->chapter_id)->count();
-        }
 
         return Inertia::render('Series/Show', [
             'series' => $series,
@@ -264,29 +253,6 @@ class SeriesController extends Controller
         return response()->json($series);
     }
 
-    public function getPopularSeries(Request $request)
-    {
-        // Get genre from the request
-        $genre = $request->genre;
-
-        // dd($genre);
-
-        // Get the top 10 series with the highest rating. If no genre is specified, get the top 10 series with the highest rating
-        if ($genre == null) {
-            $series = Series::orderBy('rating', 'desc')->take(10)->get();
-        } else {
-            $series = Series::where('series_genre', $genre)->orderBy('rating', 'desc')->take(10)->get();
-        }
-
-        // Attach the universe to each series
-        foreach ($series as $seriesSingle) {
-            $seriesSingle->universe = $seriesSingle->universe;
-        }
-
-        // Return the series as a json response
-        return response()->json($series);
-    }
-
     public function popular()
     {
         return Inertia::render('Series/Popular');
@@ -299,34 +265,6 @@ class SeriesController extends Controller
 
         // Return the series as a json response
         return response()->json($series);
-    }
-
-    public function rateSeries(Request $request)
-    {
-        // Get the series id and rating from the request
-        $series_id = $request->series_id;
-        $rating = $request->rating;
-
-        // Get the user id
-        $user_id = $request->user_id;
-
-        // Check if the user has already rated the series
-        $userSeriesRating = DB::table('user_series_rating')->where('user_id', $user_id)->where('series_id', $series_id)->first();
-
-        // If the user has already rated the series, update the rating
-        if ($userSeriesRating) {
-            DB::table('user_series_rating')->where('user_id', $user_id)->where('series_id', $series_id)->update(['rating' => $rating]);
-        }
-        // If the user has not rated the series, create a new rating
-        else {
-            DB::table('user_series_rating')->insert(['user_id' => $user_id, 'series_id' => $series_id, 'rating' => $rating]);
-        }
-
-        // Return a json response
-        // return response()->json(['message' => 'success']);
-
-        // Return an Inertia response that goes back to the previous page
-        return redirect()->back();
     }
 
     public function manageChapters(Series $series)

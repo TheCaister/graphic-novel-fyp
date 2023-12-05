@@ -5,9 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -59,10 +57,6 @@ class Series extends Model implements HasMedia
         return $this->hasMany(Chapter::class, 'series_id', 'series_id');
     }
 
-    public function comments(): MorphMany
-    {
-        return $this->morphMany(Comment::class, 'commentable');
-    }
 
     public function elements(): MorphToMany
     {
@@ -79,16 +73,9 @@ class Series extends Model implements HasMedia
         return $this->series_title;
     }
 
-    public function userRatings(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'user_series_rating', 'series_id', 'user_id');
-    }
     // Delete all comments associated with the chapter.
     function delete()
     {
-        
-
-        // $this->pages()->delete();
         $this->chapters()->delete();
         $this->comments()->delete();
         $this->elements()->delete();

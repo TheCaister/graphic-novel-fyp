@@ -27,31 +27,12 @@ CREATE TABLE `chapters` (
   `chapter_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `chapter_thumbnail` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `chapter_notes` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `comments_enabled` tinyint(1) NOT NULL,
   `scheduled_publish` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`chapter_id`),
   KEY `chapters_series_id_foreign` (`series_id`),
   CONSTRAINT `chapters_series_id_foreign` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `comments`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `comments` (
-  `comment_id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `commenter_id` bigint unsigned NOT NULL,
-  `replying_to` bigint unsigned DEFAULT NULL,
-  `comment_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `commentable_id` bigint unsigned NOT NULL,
-  `commentable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`comment_id`),
-  KEY `comments_commenter_id_foreign` (`commenter_id`),
-  KEY `comments_replying_to_foreign` (`replying_to`),
-  CONSTRAINT `comments_commenter_id_foreign` FOREIGN KEY (`commenter_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `comments_replying_to_foreign` FOREIGN KEY (`replying_to`) REFERENCES `comments` (`comment_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `container_elements`;
@@ -110,20 +91,6 @@ CREATE TABLE `failed_jobs` (
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `followers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `followers` (
-  `followers_id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `follower_id` bigint unsigned NOT NULL,
-  `followee_id` bigint unsigned NOT NULL,
-  PRIMARY KEY (`followers_id`),
-  KEY `followers_follower_id_foreign` (`follower_id`),
-  KEY `followers_followee_id_foreign` (`followee_id`),
-  CONSTRAINT `followers_followee_id_foreign` FOREIGN KEY (`followee_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `followers_follower_id_foreign` FOREIGN KEY (`follower_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `media`;
@@ -234,7 +201,6 @@ CREATE TABLE `series` (
   `series_genre` enum('ACTION','ADVENTURE','COMEDY','DRAMA','FANTASY','HORROR','MYSTERY','ROMANCE','THRILLER') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `series_summary` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `series_thumbnail` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `rating` double(8,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`series_id`),
   KEY `series_universe_id_foreign` (`universe_id`),
@@ -273,35 +239,6 @@ CREATE TABLE `universes` (
   PRIMARY KEY (`universe_id`),
   KEY `universes_owner_id_foreign` (`owner_id`),
   CONSTRAINT `universes_owner_id_foreign` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `user_chapter_likes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_chapter_likes` (
-  `user_chapter_like_id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint unsigned NOT NULL,
-  `chapter_id` bigint unsigned NOT NULL,
-  PRIMARY KEY (`user_chapter_like_id`),
-  KEY `user_chapter_likes_user_id_foreign` (`user_id`),
-  KEY `user_chapter_likes_chapter_id_foreign` (`chapter_id`),
-  CONSTRAINT `user_chapter_likes_chapter_id_foreign` FOREIGN KEY (`chapter_id`) REFERENCES `chapters` (`chapter_id`) ON DELETE CASCADE,
-  CONSTRAINT `user_chapter_likes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `user_series_rating`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_series_rating` (
-  `user_series_rating_id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint unsigned NOT NULL,
-  `series_id` bigint unsigned NOT NULL,
-  `rating` int NOT NULL,
-  PRIMARY KEY (`user_series_rating_id`),
-  KEY `user_series_rating_user_id_foreign` (`user_id`),
-  KEY `user_series_rating_series_id_foreign` (`series_id`),
-  CONSTRAINT `user_series_rating_series_id_foreign` FOREIGN KEY (`series_id`) REFERENCES `series` (`series_id`) ON DELETE CASCADE,
-  CONSTRAINT `user_series_rating_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `users`;

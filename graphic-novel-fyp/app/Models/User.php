@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -23,7 +21,6 @@ class User extends Authenticatable
         'username',
         'password',
         'email',
-        'date_of_birth',
         'is_banned',
         'bio',
         'profile_picture',
@@ -47,7 +44,6 @@ class User extends Authenticatable
     protected $casts = [
         'id' => 'integer',
         'is_admin' => 'boolean',
-        'date_of_birth' => 'date',
         'is_banned' => 'boolean',
         'created_at' => 'timestamp',
     ];
@@ -57,30 +53,9 @@ class User extends Authenticatable
         return $this->hasMany(Universe::class, 'owner_id', 'id');
     }
 
-    public function followees(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'followee_id');
-    }
-
     public function elements(): HasMany
     {
         return $this->hasMany(Element::class, 'owner_id', 'id');
-    }
-
-    // Retrieves the users that follow this user
-    public function followers(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class, 'followers', 'followee_id', 'follower_id');
-    }
-
-    public function likedChapters(): BelongsToMany
-    {
-        return $this->belongsToMany(Chapter::class, 'user_chapter_likes', 'user_id', 'chapter_id');
-    }
-
-    public function ratedSeries(): BelongsToMany
-    {
-        return $this->belongsToMany(Series::class, 'user_series_rating', 'user_id', 'series_id');
     }
 
     public function moderatableUniverses(): MorphToMany
@@ -96,10 +71,6 @@ class User extends Authenticatable
     public function delete()
     {
         $this->universes()->delete();
-        $this->followees()->detach();
-        $this->followers()->detach();
-        $this->likedChapters()->detach();
-        $this->ratedSeries()->detach();
         $this->moderatableUniverses()->detach();
         $this->moderatableSeries()->detach();
         parent::delete();

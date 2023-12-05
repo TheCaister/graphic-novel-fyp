@@ -26,8 +26,6 @@ Route::get('/universes', [App\Http\Controllers\UniverseController::class, 'getUn
 
 Route::get('/chapters/{chapter}/pages', [App\Http\Controllers\PageController::class, 'getChapterPages'])->name('pages.chapter-pages');
 
-Route::get('/series/popular', [App\Http\Controllers\SeriesController::class, 'getPopularSeries'])->name('series.get-popular-series');
-
 Route::get('/series/genres', [App\Http\Controllers\SeriesController::class, 'getGenreSeries'])->name('series.get-genre-series');
 
 Route::get('/series/recent', [App\Http\Controllers\SeriesController::class, 'getRecentSeries'])->name('series.get-recent-series');
@@ -41,8 +39,6 @@ Route::get('/comments', [App\Http\Controllers\CommentController::class, 'getComm
 Route::get('/followings', [App\Http\Controllers\FollowerController::class, 'getFollowings'])->name('followings.get-followings');
 
 Route::get('/elements', [App\Http\Controllers\ElementController::class, 'getElements'])->name('elements.get-elements');
-
-Route::post('/series/rate', [App\Http\Controllers\SeriesController::class, 'rateSeries'])->name('series.rate');
 
 Route::delete('/series/{serverId}/thumbnail', [App\Http\Controllers\UploadController::class, 'deleteSeriesThumbnail'])->name('series.delete-thumbnail');
 
