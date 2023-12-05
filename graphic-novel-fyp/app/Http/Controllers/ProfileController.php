@@ -49,9 +49,6 @@ class ProfileController extends Controller
         // Current user
         $user = User::all()->find($user->id);
 
-        // Get the number of followers
-        $follower_count = $user->followers()->count();
-
         // Get all universe that the user owns
         $universes = $user->universes()->get();
 
@@ -62,7 +59,6 @@ class ProfileController extends Controller
         }
 
         return Inertia::render('Profile/Show', [
-            'follower_count' => $follower_count,
             'user' => $user,
             'universes' => $universes,
             'series' => $series,
@@ -133,13 +129,6 @@ class ProfileController extends Controller
         return Inertia::render('Profile/Main', [
             'user' => auth()->user(),
             'passed_tab' => 'Dashboard',
-        ]);
-    }
-
-    public function following(){
-        return Inertia::render('Profile/Main', [
-            'user' => auth()->user(),
-            'passed_tab' => 'Following',
         ]);
     }
 

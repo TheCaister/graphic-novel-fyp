@@ -6,7 +6,6 @@ use App\Models\Series;
 use App\Models\TemporaryFile;
 use App\Models\Universe;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class SeriesController extends Controller

@@ -142,7 +142,6 @@ Route::middleware('auth')->group(function () {
 
     // Route::get('/dashboard', [ProfileController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
-    Route::get('user/main/following', [ProfileController::class, 'following'])->name('user.main.following');
     Route::get('user/main/show', [ProfileController::class, 'showMain'])->name('user.main.show');
     Route::get('user/main/edit', [ProfileController::class, 'editMain'])->name('user.main.edit');
 });
