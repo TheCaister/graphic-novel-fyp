@@ -48,7 +48,6 @@ class ChapterController extends Controller
             'series_id' => 'required',
             'chapter_title' => 'required',
             'chapter_notes' => 'required',
-            'comments_enabled' => 'required',
         ]);
 
         // From the series, get the highest chapter number. Then, add to it to get the next chapter number. If there are no chapters, set the chapter number to 1.
@@ -195,7 +194,6 @@ class ChapterController extends Controller
         $formFields = $request->validate([
             'chapter_title' => 'required',
             'chapter_notes' => 'required',
-            'comments_enabled' => 'required',
         ]);
 
         if ($request->upload == '') {

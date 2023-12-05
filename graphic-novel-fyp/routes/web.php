@@ -142,7 +142,6 @@ Route::middleware('auth')->group(function () {
 
     // Route::get('/dashboard', [ProfileController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
-    Route::get('user/main/comments', [ProfileController::class, 'comments'])->name('user.main.comments');
     Route::get('user/main/following', [ProfileController::class, 'following'])->name('user.main.following');
     Route::get('user/main/show', [ProfileController::class, 'showMain'])->name('user.main.show');
     Route::get('user/main/edit', [ProfileController::class, 'editMain'])->name('user.main.edit');
@@ -161,7 +160,6 @@ Route::get('{series}/chapters/create', [ChapterController::class, 'create'])->na
 Route::get('{series}/chapters/manage', [SeriesController::class, 'manageChapters'])->name('chapter.manage');
 Route::resource('chapters', ChapterController::class);
 
-Route::get('/series/popular', [SeriesController::class, 'popular'])->name('series.popular');
 Route::get('{universe}/series/create', [SeriesController::class, 'create'])->name('series.create');
 Route::get('/series/genres',[SeriesController::class, 'genres'])->name('series.genres');
 Route::resource('series', SeriesController::class);
@@ -174,8 +172,6 @@ Route::get('/elements/assign', [ElementController::class, 'assign'])->name('elem
 Route::post('/elements/assign', [ElementController::class, 'assignStore'])->name('elements.assignStore');
 
 Route::resource('elements', ElementController::class);
-////////////////////////// COMMENT ROUTES ////////////////////////
-Route::resource('comments', CommentController::class);
 
 ////////////////////////// FORGE ROUTES ////////////////////////
 Route::get('/forge/show', [ElementController::class, 'forgeShow'])->name('forge.show');

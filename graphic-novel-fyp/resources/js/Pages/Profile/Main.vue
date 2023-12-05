@@ -9,13 +9,6 @@
         </button>
         </Link>
 
-        <Link href="/user/main/comments">
-        <button @click='currentTabComponent = "Comments"'
-            :class="{ 'font-bold underline': currentTabComponent === 'Comments' }">
-            Comments
-        </button>
-        </Link>
-
         <Link href="/user/main/following">
         <button @click='currentTabComponent = "Following"'
             :class="{ 'font-bold underline': currentTabComponent === 'Following' }">
@@ -49,7 +42,6 @@
 <script>
 import NavLink from '@/Shared/NavLink.vue';
 import Dashboard from '../Dashboard.vue';
-import Comments from './Comments.vue';
 import Show from './Components/Show.vue';
 import Following from './Components/Following.vue';
 import AccountSettings from './Components/AccountSettings.vue';
@@ -71,7 +63,6 @@ export default {
     components: {
         NavLink,
         Dashboard,
-        Comments,
         Show,
         Following,
         AccountSettings,

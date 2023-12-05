@@ -27,7 +27,6 @@ class ChapterFactory extends Factory
             'chapter_title' => $this->faker->word,
             'chapter_thumbnail' => $this->faker->word,
             'chapter_notes' => $this->faker->text,
-            'comments_enabled' => $this->faker->boolean,
             'scheduled_publish' => $this->faker->dateTime(),
         ];
     }

@@ -82,13 +82,6 @@
                     <PrimaryButton>Save Draft</PrimaryButton>
                 </div>
             </div>
-
-            <!-- Create a checkbox to enable/disable comments. Set the value to the value in comments_enabled -->
-            <div>
-                <Label>Enable Comments</Label>
-                <input type="checkbox" v-model="form.comments_enabled" :checked="form.comments_enabled" />
-            </div>
-
             <!-- Create a radio input between immediate publish and scheduled publish.If scheduled is selected, make these pickers accessible. Immediate is the default choice -->
             <div>
                 <Label>Publish</Label>
@@ -189,7 +182,6 @@ export default {
             upload: '',
             pages: [],
             chapter_notes: '',
-            comments_enabled: '',
             scheduled_publish: '',
         });
 
@@ -275,11 +267,9 @@ export default {
     },
     mounted() {
         this.form.chapter_id = this.chapter.chapter_id;
-        this.form.comments_enabled = 1;
 
         this.form.chapter_title = this.chapter.chapter_title;
         this.form.chapter_notes = this.chapter.chapter_notes;
-        this.form.comments_enabled = this.chapter.comments_enabled;
         this.form.scheduled_publish = this.chapter.scheduled_publish;
 
         this.form.pages = this.passedChapterPages;

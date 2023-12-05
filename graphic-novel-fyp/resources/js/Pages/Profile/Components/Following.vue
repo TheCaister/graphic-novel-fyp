@@ -35,11 +35,6 @@ export default {
 
         const page = usePage()
         const authId = page.props.auth.user.id
-
-        APICalls.getFollowings(authId).then(response => {
-            this.followings = response.data
-            this.followingLoaded = true
-        }).catch(error => console.log(error))
     },
 }
 </script>

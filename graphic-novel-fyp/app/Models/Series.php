@@ -73,11 +73,9 @@ class Series extends Model implements HasMedia
         return $this->series_title;
     }
 
-    // Delete all comments associated with the chapter.
     function delete()
     {
         $this->chapters()->delete();
-        $this->comments()->delete();
         $this->elements()->delete();
 
         parent::delete();

@@ -34,10 +34,6 @@ Route::get('/series/{universe}', [App\Http\Controllers\SeriesController::class, 
 
 Route::get('/genres', [SeriesController::class, 'getGenres'])->name('series.get-genres');
 
-Route::get('/comments', [App\Http\Controllers\CommentController::class, 'getComments'])->name('comments.get-comments');
-
-Route::get('/followings', [App\Http\Controllers\FollowerController::class, 'getFollowings'])->name('followings.get-followings');
-
 Route::get('/elements', [App\Http\Controllers\ElementController::class, 'getElements'])->name('elements.get-elements');
 
 Route::delete('/series/{serverId}/thumbnail', [App\Http\Controllers\UploadController::class, 'deleteSeriesThumbnail'])->name('series.delete-thumbnail');

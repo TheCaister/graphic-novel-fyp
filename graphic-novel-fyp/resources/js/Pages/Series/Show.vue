@@ -56,29 +56,9 @@
             <ElementsList :elements="elements" />
         </div>
     </div>
-
-    <h1>Comments</h1>
-
-    <!-- CreateComment with the entire width of the screen -->
-    <div class="w-full">
-        <CreateComment @comment-created="updateComments()" commentable-type="App\Models\Series"
-            :commentable-id="series.series_id" />
-    </div>
-
-
-    <!-- Say there are no comments if there are none -->
-    <p v-if="comments.length === 0">There are no comments yet.</p>
-    <!-- <Comments @comment-deleted="updateComments()" v-if="commentsLoaded" :comments="comments"></Comments> -->
-
-    <Comments v-if="commentsLoaded" :comments="comments"></Comments>
-    <div v-else>
-        <p>Loading comments...</p>
-    </div>
 </template>
 
 <script>
-import Comments from '../../Components/Comments.vue'
-import CreateComment from '../../Components/Comments/CreateComment.vue'
 import RateSeriesModal from '../../Components/Modals/RateSeriesModal.vue'
 import APICalls from '@/Utilities/APICalls'
 import ElementsList from '@/Pages/Elements/ElementsList.vue'
@@ -91,45 +71,22 @@ export default {
         author: Object,
     },
     components: {
-        Comments,
-        CreateComment,
         RateSeriesModal,
         ElementsList
     },
     data() {
         return {
-            comments: [],
-            commentsLoaded: false,
             isOpen: false,
             elements: [],
         }
     },
     mounted() {
-
-        APICalls.getComments(this.series.series_id, 'series', true).then(response => {
-            this.comments = response.data.comments;
-            // console.log(this.comments);
-            this.commentsLoaded = true;
-        }).catch(error => {
-            console.log(error);
-        })
-
         APICalls.getElements('series', this.series.series_id).then(response => {
             this.elements = response.data.elements;
         }).catch(error => {
             console.log(error);
         })
     },
-    methods: {
-        updateComments() {
-            APICalls.getComments(this.series.series_id, 'series', true).then(response => {
-                this.comments = response.data.comments;
-                this.commentsLoaded = true;
-            }).catch(error => {
-                console.log(error);
-            })
-        },
-    }
 
 }
 

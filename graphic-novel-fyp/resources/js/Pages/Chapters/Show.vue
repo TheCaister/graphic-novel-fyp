@@ -21,25 +21,11 @@
         @pagination-change-page="getResults"
     /> -->
 
-    <div class="w-full">
-        <CreateComment @comment-created="updateComments()" commentable-type="App\Models\Chapter"
-            :commentable-id="chapter.chapter_id" />
-    </div>
-
-
-    <!-- Comments component with comments passed as prop -->
-    <p v-if="comments.length === 0">There are no comments yet.</p>
-    <Comments @comment-deleted="updateComments()" v-if="commentsLoaded" :comments="comments"></Comments>
-    <div v-else>
-        <p>Loading comments...</p>
-    </div>
     <ElementsList :elements="elements" />
 </template>
 
 <script>
 import Pages from './Components/Pages.vue'
-import Comments from '../../Components/Comments.vue'
-import CreateComment from '../../Components/Comments/CreateComment.vue'
 import APICalls from '../../Utilities/APICalls.js'
 import ElementsList from '@/Pages/Elements/ElementsList.vue'
 
@@ -52,7 +38,6 @@ export default {
 
     components: {
         Pages,
-        Comments,
         CreateComment,
         ElementsList
     },
@@ -63,8 +48,6 @@ export default {
             pages: [],
             pageNumber: 1,
             pageLoaded: false,
-            comments: [],
-            commentsLoaded: false,
             elements: [],
         }
     },
@@ -85,15 +68,6 @@ export default {
                 this.pageNumber = 1;
             }
         },
-
-        updateComments() {
-            APICalls.getComments(this.chapter.chapter_id, 'chapter', true).then(response => {
-                this.comments = response.data.comments;
-                this.commentsLoaded = true;
-            }).catch(error => {
-                console.log(error);
-            })
-        }
     },
 
     mounted() {
@@ -101,13 +75,6 @@ export default {
             this.pages = response.data;
             this.pageNumber = this.pages[0].page_number;
             this.pageLoaded = true;
-        }).catch(error => {
-            console.log(error);
-        })
-
-        APICalls.getComments(this.chapter.chapter_id, 'chapter', true).then(response => {
-            this.comments = response.data.comments;
-            this.commentsLoaded = true;
         }).catch(error => {
             console.log(error);
         })

@@ -40,7 +40,6 @@ class Chapter extends Model implements HasMedia
         'chapter_title',
         'chapter_thumbnail',
         'chapter_notes',
-        'comments_enabled',
         'scheduled_publish',
     ];
 
@@ -51,7 +50,6 @@ class Chapter extends Model implements HasMedia
      */
     protected $casts = [
         'series_id' => 'integer',
-        'comments_enabled' => 'boolean',
         'scheduled_publish' => 'timestamp',
     ];
 
@@ -65,7 +63,6 @@ class Chapter extends Model implements HasMedia
         return $this->hasMany(Page::class, 'chapter_id', 'chapter_id');
     }
 
-    // Delete all comments associated with the chapter.
     function delete()
     {
         $this->pages()->delete();

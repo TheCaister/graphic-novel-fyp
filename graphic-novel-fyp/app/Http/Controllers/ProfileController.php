@@ -136,13 +136,6 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function comments(){
-        return Inertia::render('Profile/Main', [
-            'user' => auth()->user(),
-            'passed_tab' => 'Comments',
-        ]);
-    }
-
     public function following(){
         return Inertia::render('Profile/Main', [
             'user' => auth()->user(),

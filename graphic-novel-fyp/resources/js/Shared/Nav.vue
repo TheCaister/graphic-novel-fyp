@@ -13,10 +13,6 @@
                 <NavLink href="/series/genres" :active="$page.component === 'Genres'">GENRES</NavLink>
             </li>
 
-            <li>
-                <NavLink href="/series/popular" :active="$page.component === 'Popular'">POPULAR</NavLink>
-            </li>
-
             
 
             <!-- Here's how you can submit POST requests -->

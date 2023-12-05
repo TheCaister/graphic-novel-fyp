@@ -253,11 +253,6 @@ class SeriesController extends Controller
         return response()->json($series);
     }
 
-    public function popular()
-    {
-        return Inertia::render('Series/Popular');
-    }
-
     public function getRecentSeries()
     {
         // From series table, get the 10 most recent series
