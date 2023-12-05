@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS `approved_moderators`;
 CREATE TABLE `approved_moderators` (
   `approved_moderators_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `moderator_id` bigint unsigned NOT NULL,
-  `moderatable_id` bigint unsigned DEFAULT NULL,
+  `moderatable_id` bigint unsigned NOT NULL,
   `moderatable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`approved_moderators_id`),
   KEY `approved_moderators_moderator_id_foreign` (`moderator_id`),
@@ -253,7 +253,6 @@ CREATE TABLE `users` (
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `date_of_birth` timestamp NULL DEFAULT NULL,
   `is_banned` tinyint(1) NOT NULL DEFAULT '0',
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
   `bio` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,

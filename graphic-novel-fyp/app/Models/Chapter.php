@@ -14,7 +14,7 @@ class Chapter extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
-    public $timestamps = false;
+    // public $timestamps = false;
     protected $primaryKey = 'chapter_id';
     protected $appends = ['url'];
 

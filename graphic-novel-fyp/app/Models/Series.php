@@ -15,7 +15,7 @@ class Series extends Model implements HasMedia
     use HasFactory;
     use InteractsWithMedia;
     protected $primaryKey = 'series_id';
-    public $timestamps = false;
+    // public $timestamps = false;
 
     public function registerMediaCollections(): void
     {
