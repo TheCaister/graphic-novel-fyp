@@ -14,20 +14,36 @@ defineProps({
 
 const form = useForm({
     email: '',
+    password: '',
+    password_confirmation: '',
 });
 
 const submit = () => {
-    form.post(route('password.email'));
+    form.post(route('user.resetPassword'));
+    
+    console.log(form);
+
+    
+};
+
+
+</script>
+
+<script>
+// Set the layout of the page to null
+export default {
+    layout: null,
 };
 </script>
 
+
 <template>
     <GuestLayout>
+
         <Head title="Forgot Password" />
 
         <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-            Forgot your password? No problem. Just let us know your email address and we will email you a password reset
-            link that will allow you to choose a new one.
+            Reset your password here.
         </div>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
@@ -38,24 +54,39 @@ const submit = () => {
             <div>
                 <InputLabel for="email" value="Email" />
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
+                <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autofocus
+                    autocomplete="email" />
 
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
+
+
+            <div class="mt-4">
+                <InputLabel for="password" value="Password" />
+
+                <TextInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required
+                    autocomplete="new-password" />
+
+                <InputError class="mt-2" :message="form.errors.password" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="password_confirmation" value="Confirm Password" />
+
+                <TextInput id="password_confirmation" type="password" class="mt-1 block w-full"
+                    v-model="form.password_confirmation" required autocomplete="new-password" />
+
+                <InputError class="mt-2" :message="form.errors.password_confirmation" />
+            </div>
+
             <div class="flex items-center justify-end mt-4">
                 <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Email Password Reset Link
+                    Reset Password
                 </PrimaryButton>
             </div>
         </form>
+
+
     </GuestLayout>
 </template>

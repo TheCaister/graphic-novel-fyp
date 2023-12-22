@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ElementController;
@@ -28,6 +29,9 @@ use Inertia\Inertia;
 Route::get('/tailwind', function () {
     return Inertia::render('TailwindPractice');
 });
+
+Route::post('forgot-password', [RegisteredUserController::class, 'resetPassword'])
+->name('user.resetPassword');
 
 Route::get('/', function () {
     // Instead of returning Blade view, you're returning client-side view

@@ -7,6 +7,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
+// Set the layout of the page to null
 
 defineProps({
     canResetPassword: {
@@ -30,16 +31,15 @@ const submit = () => {
 };
 </script>
 
-
+<!-- You can split script and script setup stuff -->
 <script>
-// Set the layout of the page to null
-export default {
-    layout: null,
-};
+    export default {
+        layout: null,
+    };
 </script>
 
 <template>
-    <GuestLayout>
+    <!-- <GuestLayout> -->
 
         <Head title="Log in" />
 
@@ -84,5 +84,5 @@ export default {
                 </PrimaryButton>
             </div>
         </form>
-    </GuestLayout>
+    <!-- </GuestLayout> -->
 </template>

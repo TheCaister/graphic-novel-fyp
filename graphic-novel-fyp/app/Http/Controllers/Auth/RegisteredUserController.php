@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
+use Illuminate\Validation\Rules\Password;
 use Inertia\Response;
 
 class RegisteredUserController extends Controller
@@ -48,5 +49,27 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+    public function resetPassword(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', Password::defaults(), 'confirmed'],
+        ]);
+
+        $user = User::where('email', $validated['email'])
+            ->first();
+
+        if (!$user) {
+            // Handle user not found error
+            return back()->withErrors(['email' => 'User not found']);
+        }
+
+        $request->user()->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return back();
     }
 }
