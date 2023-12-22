@@ -37,13 +37,8 @@ Route::get('/', function () {
     // Instead of returning Blade view, you're returning client-side view
     // The base directory is assumed to be resources/js/Pages
 
-    // When propping, make sure to accept it in the vue component
     return Inertia::render(
-        'Welcome',
-        [
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
-        ]
+        'Dashboard/Universe'
     );
 })->name('home');
 

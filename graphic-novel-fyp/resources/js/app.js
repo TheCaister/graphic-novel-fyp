@@ -10,7 +10,7 @@ import Layout from './Shared/Layout.vue';
 import Label from '@/Components/Forms/Label.vue';
 import TextInput from '@/Components/Forms/TextInput.vue';
 import ImageLabel from '@/Components/Forms/ImageLabel.vue';
-import PrimaryButton from '@/Components/Buttons/PrimaryButton.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/Buttons/SecondaryButton.vue';
 import BaseInput from '@/Components/Forms/BaseInput.vue';
 import TextAreaInput from '@/Components/Forms/TextAreaInput.vue';

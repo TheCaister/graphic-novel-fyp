@@ -9,9 +9,9 @@
                 <!-- <NavLink href="/users" :active="$page.component === 'Users'">All the epic users</NavLink> -->
             </li>
 
-            <li>
+            <!-- <li>
                 <NavLink href="/series/genres" :active="$page.component === 'Genres'">GENRES</NavLink>
-            </li>
+            </li> -->
 
             
 

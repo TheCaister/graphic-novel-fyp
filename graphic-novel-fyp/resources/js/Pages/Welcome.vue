@@ -22,18 +22,9 @@ defineProps({
 <template>
     <Head title="Welcome" />
 
-    <!-- Vue for -->
-    <!-- <div>
-        <ul>
-            <li v-for="framework of frameworks" v-text="framework"></li>
-        </ul>
-    </div> -->
-
     <div class="bg-red-500">
 
         <RecentlyAdded :series="this.series" />
-
-        <!--  class="sm:fixed sm:top-0 sm:right-0 p-6 text-right" -->
 
         <div v-if="canLogin">
 
