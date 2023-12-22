@@ -82,6 +82,12 @@ export default {
                 <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Log in
                 </PrimaryButton>
+
+                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    <Link v-if="canResetPassword" :href="route('register')">
+                    Don't have an account? Register here
+                    </Link>
+                </PrimaryButton>
             </div>
         </form>
     </GuestLayout>

@@ -30,7 +30,7 @@ Route::get('/tailwind', function () {
     return Inertia::render('TailwindPractice');
 });
 
-Route::post('forgot-password', [RegisteredUserController::class, 'resetPassword'])
+Route::post('user-reset-password', [RegisteredUserController::class, 'resetPassword'])
 ->name('user.resetPassword');
 
 Route::get('/', function () {
@@ -163,7 +163,7 @@ Route::get('{series}/chapters/create', [ChapterController::class, 'create'])->na
 Route::get('{series}/chapters/manage', [SeriesController::class, 'manageChapters'])->name('chapter.manage');
 Route::resource('chapters', ChapterController::class);
 
-Route::get('{universe}/series/create', [SeriesController::class, 'create'])->name('series.create');
+// Route::get('{universe}/series/create', [SeriesController::class, 'create'])->name('series.create');
 Route::get('/series/genres',[SeriesController::class, 'genres'])->name('series.genres');
 Route::resource('series', SeriesController::class);
 
