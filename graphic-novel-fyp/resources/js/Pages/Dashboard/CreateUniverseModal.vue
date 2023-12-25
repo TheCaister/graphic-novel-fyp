@@ -1,3 +1,11 @@
+<script setup>
+    const emit = defineEmits(['closeModal'])
+    function close () {
+            emit('closeModal');
+        };
+</script>
+
+
 <template>
     <div>
         <div class="text-lg bg-black shadow-lg rounded-lg p-8 w-4/5">
@@ -15,16 +23,17 @@
                     <InputError class="mt-2" :message="form.errors.email" /> -->
 
                     <div>
-                            <div>
-                                <InputLabel for="email" value="Email" />
-                                <TextInput id="email" type="email" class="mt-1 block w-full" required autofocus
-                                    autocomplete="username" />
-                                <InputError class="mt-2" message="" />
-                            </div>
+                        <div>
+                            <InputLabel for="email" value="Email" />
+                            <TextInput id="email" type="email" class="mt-1 block w-full" required autofocus
+                                autocomplete="username" />
+                            <InputError class="mt-2" message="" />
+                        </div>
                     </div>
                     <div class="flex justify-end">
                         <!-- Button to cancel and button to create -->
-                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        <button @click="close" type="submit"
+                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                             Cancel
                         </button>
                         <button type="submit"
@@ -38,6 +47,3 @@
         </div>
     </div>
 </template>
-
-<script setup>
-</script>

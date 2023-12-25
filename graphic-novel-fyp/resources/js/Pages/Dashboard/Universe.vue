@@ -19,9 +19,11 @@ const universes = [
     // Add more universes as needed
 ];
 
-// let isOpen = false;
-
 const isOpen = ref(false)
+
+const toggleModal = () => {
+    isOpen.value = !isOpen.value
+}
 
 // axios
 //     .get('/api/series/recent')
@@ -54,7 +56,7 @@ const isOpen = ref(false)
         </button>
 
         <Teleport to="body">
-            <create-universe-modal v-if="isOpen" @close="isOpen = false" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60"/>
+            <create-universe-modal v-if="isOpen" @closeModal="isOpen = false" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60"/>
         </Teleport>
 
     </div>
