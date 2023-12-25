@@ -38,7 +38,7 @@ Route::get('/', function () {
     // The base directory is assumed to be resources/js/Pages
 
     return Inertia::render(
-        'Dashboard/Universe'
+        'Dashboard/Dashboard'
     );
 })->name('home');
 
@@ -143,6 +143,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('user/main/show', [ProfileController::class, 'showMain'])->name('user.main.show');
     Route::get('user/main/edit', [ProfileController::class, 'editMain'])->name('user.main.edit');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard/{content-type}/{content-id}', function ($contentType, $contentId) {
+    
+    });
 });
 
 
