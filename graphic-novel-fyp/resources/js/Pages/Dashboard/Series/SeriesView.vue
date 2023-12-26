@@ -1,8 +1,8 @@
 <template>
     <!-- Loop through the universes and display them in cards -->
-    <div v-if="universeLoaded" class="w-full flex">
-        <div v-for="universe in universes" :key="universe.universe_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
-            <button @click="updateDashboard('SeriesView', universe.universe_id)" class="w-full">
+    <div v-if="seriesLoaded" class="w-full flex">
+        <div v-for="series in series" :key="series.series_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
+            <button @click="updateDashboard('ChapterView', series.series_id)" class="w-full">
                 <div class="h-64 bg-pink-300 flex items-center justify-center rounded-lg relative">
                     <!-- Create a button on the top right corner -->
                     <button @click="test" class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
@@ -15,7 +15,7 @@
                         class="w-full h-full object-cover" />
                     <div v-else class="text-white text-xl">U{{ universe.universe_id }}</div>
                 </div>
-                <p class="text-white pt-4">{{ universe.universe_name }}</p>
+                <p class="text-white pt-4">{{ universe.series_title }}</p>
             </button>
         </div>
 
@@ -27,7 +27,7 @@
                     add_circle
                 </span>
             </div>
-            <p class="text-white pt-4 text-center">Create Universe</p>
+            <p class="text-white pt-4 text-center">Create Series</p>
         </button>
 
     </div>
@@ -39,7 +39,7 @@
 
     <Teleport to="body">
         <Transition name="modal">
-            <create-universe-modal v-if="isOpen" @closeModal="isOpen = false; updateContentList()"
+            <create-series-modal v-if="isOpen" @closeModal="isOpen = false; updateContentList()"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
@@ -50,9 +50,8 @@
 
 import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
-import { usePage } from '@inertiajs/vue3';
-import { defineEmits, ref } from 'vue';
-import CreateUniverseModal from '../CreateUniverseModal.vue';
+import { defineEmits, ref, defineProps } from 'vue';
+import CreateSeriesModal from './CreateSeriesModal.vue';
 
 const emit = defineEmits(['updateDashboard'])
 
@@ -60,19 +59,22 @@ function updateDashboard(dashboardView, parentContentId) {
     emit('updateDashboard', dashboardView, parentContentId)
 }
 
-const page = usePage();
-
-const universes = ref([
-    { universe_id: 1, universe_name: "Universe 1" },
-    { universe_id: 2, universe_name: "Universe 2" },
-    { universe_id: 3, universe_name: "Universe 3" },
-
-    // Add more universes as needed
+const series = ref([
+    { series_title: "Series 1", series_genre: "Action", series_summary: "Summary of Series 1" },
+    { series_title: "Series 2", series_genre: "Fantasy", series_summary: "Summary of Series 2" },
+    { series_title: "Series 3", series_genre: "Sci-Fi", series_summary: "Summary of Series 3" },
 ]);
+
+const props = defineProps({
+    parentContentId: {
+        type: Number,
+        // required: true
+    },
+})
 
 const isOpen = ref(false)
 
-const universeLoaded = ref(false)
+const seriesLoaded = ref(false)
 
 onActivated(async () => {
     updateContentList()
@@ -84,17 +86,11 @@ onMounted(async () => {
 
 
 function updateContentList() {
-    console.log('updateContentList')
-    console.log(universes)
 
-    APICalls.getUniversesByUserId(page.props.auth.user.id, true).then(response => {
-        universes.value = response.data
-        universeLoaded.value = true
+    APICalls.getSeriesByUniverseId(props.parentContentId).then(response => {
+        series.value = response.data
+        seriesLoaded.value = true
     }).catch(error => console.log(error))
-}
-
-function test(){
-    console.log('test')
 }
 </script>
 

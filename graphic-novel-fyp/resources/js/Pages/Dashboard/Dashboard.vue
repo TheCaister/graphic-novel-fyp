@@ -13,25 +13,23 @@ const props = defineProps({
     },
     parentContentId: {
         type: Number,
+        default: 0,
     },
 });
 
 const dashboardView = ref(props.dashboardViewType)
+const parentContentIdNumber = ref(props.parentContentId)
 
 const DashboardViewComponent = computed(() => {
     // Switch statement to return the correct dashboard view
     switch (dashboardView.value) {
         case 'UniverseView':
-            console.log('Render UniverseView')
             return UniverseView
         case 'SeriesView':
-            console.log('Render SeriesView')
             return SeriesView
         case 'ChapterView':
-            console.log('Render ChapterView')
             return ChapterView
         case 'PageView':
-            console.log('Render PageView')
             return PageView
         default:
             return UniverseView
@@ -43,10 +41,11 @@ onMounted(async () => {
 })
 
 function updateDashboard(dashboardViewString, parentContentId) {
-    console.log('updateDashboard')
-    console.log(dashboardViewString)
-    console.log(parentContentId)
+   
+    parentContentIdNumber.value = parentContentId
     dashboardView.value = dashboardViewString
+
+    console.log("Parent:" + parentContentIdNumber.value)
 }
 </script>
 
@@ -84,10 +83,8 @@ function updateDashboard(dashboardViewString, parentContentId) {
 
         <!-- Make dynamic -->
         <KeepAlive>
-            <component :is="DashboardViewComponent" :parentContentId="props.parentContentId" @updateDashboard="updateDashboard" />
+            <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber" @updateDashboard="updateDashboard" />
         </KeepAlive>
-
-        <!-- <UniverseView /> -->
 
     </div>
 </template>

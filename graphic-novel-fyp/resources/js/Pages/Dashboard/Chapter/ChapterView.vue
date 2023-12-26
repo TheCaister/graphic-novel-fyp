@@ -52,7 +52,7 @@ import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
 import { usePage } from '@inertiajs/vue3';
 import { defineEmits, ref } from 'vue';
-import CreateUniverseModal from '../CreateUniverseModal.vue';
+// import CreateUniverseModal from '../CreateUniverseModal.vue';
 
 const emit = defineEmits(['updateDashboard'])
 

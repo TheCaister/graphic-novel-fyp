@@ -52,7 +52,7 @@ import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
 import { usePage } from '@inertiajs/vue3';
 import { defineEmits, ref } from 'vue';
-import CreateUniverseModal from '../CreateUniverseModal.vue';
+import CreateUniverseModal from './CreateUniverseModal.vue';
 
 const emit = defineEmits(['updateDashboard'])
 
@@ -87,7 +87,7 @@ function updateContentList() {
     console.log('updateContentList')
     console.log(universes)
 
-    APICalls.getUniversesByUserId(page.props.auth.user.id, true).then(response => {
+    APICalls.getUniversesByUserId(page.props.auth.user.id, false).then(response => {
         universes.value = response.data
         universeLoaded.value = true
     }).catch(error => console.log(error))
