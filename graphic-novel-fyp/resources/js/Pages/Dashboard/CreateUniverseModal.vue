@@ -41,7 +41,7 @@ onClickOutside(modal, () => {
 function submit() {
     form.post(route('universes.store'), {
         onFinish: () => {
-            console.log(form.universe_name)
+            // console.log(form.universe_name)
             close()}
     });
 };
@@ -52,7 +52,7 @@ function submit() {
     <div>
         <div ref="modal" class="text-lg bg-black shadow-lg rounded-lg p-8 w-4/5">
             <h2 class="text-4xl font-bold text-white ">Create Universe</h2>
-            <form @submit.prevent="form.post(route('universes.store'))">
+            <form @submit.prevent="submit">
                 <div class="flex">
 
                     <div class="w-1/2">
@@ -100,7 +100,11 @@ function submit() {
                                 class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                                 Cancel
                             </button>
-                            <PrimaryButton type="submit"  @click="submit"
+                            <!-- <PrimaryButton type="submit"  @click="submit"
+                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                Create
+                            </PrimaryButton> -->
+                            <PrimaryButton type="submit"
                                 class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                                 Create
                             </PrimaryButton>
