@@ -38,7 +38,10 @@ Route::get('/', function () {
     // The base directory is assumed to be resources/js/Pages
 
     return Inertia::render(
-        'Dashboard/Dashboard'
+        'Dashboard/Dashboard',
+        [
+            'dashboardViewType' => 'UniverseView',
+        ]
     );
 })->name('home');
 

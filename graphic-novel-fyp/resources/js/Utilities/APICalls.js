@@ -2,6 +2,10 @@ export default {
     getPagesByChapterId(chapterId) {
         return axios.get('/api/chapters/' + chapterId + '/pages')
     },
+    getSeriesByUniverseId(universeId) {
+        return axios.get('/api/series/' + universeId)
+    },
+
     getUniversesByUserId(userId, withSeries = false) {
         const withSeriesBool = withSeries ? 1 : 0
 

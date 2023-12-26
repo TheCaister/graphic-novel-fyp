@@ -1,23 +1,52 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
 import UniverseView from './Universe/UniverseView.vue';
-import { ref, defineProps } from 'vue'
+import SeriesView from './Series/SeriesView.vue';
+import ChapterView from './Chapter/ChapterView.vue';
+import PageView from './Page/PageView.vue';
+import { ref, defineProps, onMounted, computed } from 'vue'
 
 
 const props = defineProps({
-    contentType: {
+    dashboardViewType: {
         type: String,
     },
-    contentId: {
+    parentContentId: {
         type: Number,
     },
 });
 
-const contentList = ref([])
+const dashboardView = ref(props.dashboardViewType)
 
-function updateContentList() {
-    console.log('updateContentList')
-    console.log(contentList)
+const DashboardViewComponent = computed(() => {
+    // Switch statement to return the correct dashboard view
+    switch (dashboardView.value) {
+        case 'UniverseView':
+            console.log('Render UniverseView')
+            return UniverseView
+        case 'SeriesView':
+            console.log('Render SeriesView')
+            return SeriesView
+        case 'ChapterView':
+            console.log('Render ChapterView')
+            return ChapterView
+        case 'PageView':
+            console.log('Render PageView')
+            return PageView
+        default:
+            return UniverseView
+    }
+})
+
+onMounted(async () => {
+    console.log(props.dashboardViewType)
+})
+
+function updateDashboard(dashboardViewString, parentContentId) {
+    console.log('updateDashboard')
+    console.log(dashboardViewString)
+    console.log(parentContentId)
+    dashboardView.value = dashboardViewString
 }
 </script>
 
@@ -55,10 +84,10 @@ function updateContentList() {
 
         <!-- Make dynamic -->
         <KeepAlive>
-            <component :is="contentType" :contentId="contentId" />
+            <component :is="DashboardViewComponent" :parentContentId="props.parentContentId" @updateDashboard="updateDashboard" />
         </KeepAlive>
 
-        <UniverseView />
+        <!-- <UniverseView /> -->
 
     </div>
 </template>
