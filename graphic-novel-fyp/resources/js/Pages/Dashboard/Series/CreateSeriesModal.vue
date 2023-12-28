@@ -35,7 +35,7 @@ const form = useForm({
     series_title: '',
     series_summary: '',
     series_genre: '',
-    // universe_thumbnail: '',
+    // series_thumbnail: '',
 });
 
 const genres = ref([

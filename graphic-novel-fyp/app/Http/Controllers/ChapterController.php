@@ -48,12 +48,13 @@ class ChapterController extends Controller
             'series_id' => 'required',
             'chapter_title' => 'required',
             'chapter_notes' => 'required',
+            'chapter_number' => 'required',
         ]);
-
+      
         // From the series, get the highest chapter number. Then, add to it to get the next chapter number. If there are no chapters, set the chapter number to 1.
-        $nextChapterNumber = Chapter::where('series_id', $formFields['series_id'])->max('chapter_number') + 1;
+        // $nextChapterNumber = Chapter::where('series_id', $formFields['series_id'])->max('chapter_number') + 1;
 
-        $formFields['chapter_number'] = $nextChapterNumber;
+        // $formFields['chapter_number'] = $nextChapterNumber;
 
         $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
 
@@ -106,7 +107,8 @@ class ChapterController extends Controller
 
 
 
-        return redirect()->route('series.show', $chapter->series->series_id);
+        // return redirect()->route('series.show', $chapter->series->series_id);
+        return back();
     }
 
     /**

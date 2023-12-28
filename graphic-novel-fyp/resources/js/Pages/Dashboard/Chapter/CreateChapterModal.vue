@@ -149,8 +149,8 @@ onMounted(() => {
                             </div>
 
                             <div>
-                                <InputLabel for="series_summary" value="Description:" />
-                                <textarea id="series_summary" class="mt-1 block w-full" v-model="form.series_summary"
+                                <InputLabel for="chapter_notes" value="Description:" />
+                                <textarea id="chapter_notes" class="mt-1 block w-full" v-model="form.chapter_notes"
                                     autofocus></textarea>
                                 <InputError class="mt-2" message="" />
                             </div>
@@ -204,12 +204,7 @@ onMounted(() => {
 
 <style >
 #test .filepond--item {
-    width: calc(50% - 0.5em);
-}
-
-/* Change background color */
-#test .filepond--panel-root {
-    background-color: #000;
+    width: calc(33% - 0.5em);
 }
 </style>
 
