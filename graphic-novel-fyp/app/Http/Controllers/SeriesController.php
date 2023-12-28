@@ -262,6 +262,17 @@ class SeriesController extends Controller
         return response()->json($series);
     }
 
+public function getSeriesChapters(Series $series)
+    {
+        // dd($series->chapters);
+
+        // Get all the chapters in the series
+        $chapters = $series->chapters;
+
+        // Return the chapters as a json response
+        return response()->json($chapters);
+    }
+
     public function manageChapters(Series $series)
     {
 

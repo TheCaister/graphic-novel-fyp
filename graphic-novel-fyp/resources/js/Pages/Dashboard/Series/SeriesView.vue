@@ -14,9 +14,9 @@
                     <!-- <img v-if="universe.image" :src="universe.image" alt="Universe Image"
                         class="w-full h-full object-cover" />
                     <div v-else class="text-white text-xl">U{{ universe.universe_id }}</div> -->
-                    <div class="text-white text-xl">U{{ Hi}}</div>
+                    <div class="text-white text-xl">S{{ series.series_id }}</div>
                 </div>
-                <p class="text-white pt-4">{{ universe.series_title }}</p>
+                <p class="text-white pt-4">{{ series.series_title }}</p>
             </button>
         </div>
 

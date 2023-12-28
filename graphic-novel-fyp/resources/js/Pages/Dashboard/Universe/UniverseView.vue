@@ -57,6 +57,7 @@ import CreateUniverseModal from './CreateUniverseModal.vue';
 const emit = defineEmits(['updateDashboard'])
 
 function updateDashboard(dashboardView, parentContentId) {
+    console.log('updateDashboard')
     emit('updateDashboard', dashboardView, parentContentId)
 }
 

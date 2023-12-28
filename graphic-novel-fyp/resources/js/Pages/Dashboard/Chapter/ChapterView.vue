@@ -1,8 +1,8 @@
 <template>
     <!-- Loop through the universes and display them in cards -->
-    <div v-if="universeLoaded" class="w-full flex">
-        <div v-for="universe in universes" :key="universe.universe_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
-            <button @click="updateDashboard('SeriesView', universe.universe_id)" class="w-full">
+    <div v-if="chaptersLoaded" class="w-full flex">
+        <div v-for="chapter in chapters" :key="chapter.chapter_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
+            <button @click="updateDashboard('PageView', chapter.chapter_id)" class="w-full">
                 <div class="h-64 bg-pink-300 flex items-center justify-center rounded-lg relative">
                     <!-- Create a button on the top right corner -->
                     <button @click="test" class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
@@ -11,11 +11,11 @@
                         </span>
                     </button>
 
-                    <img v-if="universe.image" :src="universe.image" alt="Universe Image"
-                        class="w-full h-full object-cover" />
-                    <div v-else class="text-white text-xl">U{{ universe.universe_id }}</div>
+                    <!-- <img v-if="universe.image" :src="universe.image" alt="Universe Image"
+                        class="w-full h-full object-cover" /> -->
+                    <div class="text-white text-xl">C{{ chapter.chapter_id }}</div>
                 </div>
-                <p class="text-white pt-4">{{ universe.universe_name }}</p>
+                <p class="text-white pt-4">{{ chapter.chapter_title }}</p>
             </button>
         </div>
 
@@ -27,7 +27,7 @@
                     add_circle
                 </span>
             </div>
-            <p class="text-white pt-4 text-center">Create Universe</p>
+            <p class="text-white pt-4 text-center">Create Chapter</p>
         </button>
 
     </div>
@@ -51,7 +51,7 @@
 import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
 import { usePage } from '@inertiajs/vue3';
-import { defineEmits, ref } from 'vue';
+import { defineEmits, ref, defineProps } from 'vue';
 // import CreateUniverseModal from '../CreateUniverseModal.vue';
 
 const emit = defineEmits(['updateDashboard'])
@@ -62,17 +62,18 @@ function updateDashboard(dashboardView, parentContentId) {
 
 const page = usePage();
 
-const universes = ref([
-    { universe_id: 1, universe_name: "Universe 1" },
-    { universe_id: 2, universe_name: "Universe 2" },
-    { universe_id: 3, universe_name: "Universe 3" },
-
-    // Add more universes as needed
-]);
+const chapters = ref([]);
 
 const isOpen = ref(false)
 
-const universeLoaded = ref(false)
+const chaptersLoaded = ref(false)
+
+const props = defineProps({
+    parentContentId: {
+        type: Number,
+        required: true
+    },
+})
 
 onActivated(async () => {
     updateContentList()
@@ -84,17 +85,10 @@ onMounted(async () => {
 
 
 function updateContentList() {
-    console.log('updateContentList')
-    console.log(universes)
-
-    APICalls.getUniversesByUserId(page.props.auth.user.id, true).then(response => {
-        universes.value = response.data
-        universeLoaded.value = true
+    APICalls.getChaptersBySeriesId(props.parentContentId).then(response => {
+        chapters.value = response.data
+        chaptersLoaded.value = true
     }).catch(error => console.log(error))
-}
-
-function test(){
-    console.log('test')
 }
 </script>
 

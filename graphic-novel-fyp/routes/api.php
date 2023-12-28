@@ -30,7 +30,15 @@ Route::get('/series/genres', [App\Http\Controllers\SeriesController::class, 'get
 
 Route::get('/series/recent', [App\Http\Controllers\SeriesController::class, 'getRecentSeries'])->name('series.get-recent-series');
 
+Route::get('/series/{series}/chapters', [App\Http\Controllers\SeriesController::class, 'getSeriesChapters'])->name('chapters.get-series-chapters');
+
 Route::get('/series/{universe}', [App\Http\Controllers\SeriesController::class, 'getSeries'])->name('series.get-series');
+
+
+
+
+
+
 
 Route::get('/genres', [SeriesController::class, 'getGenres'])->name('series.get-genres');
 
