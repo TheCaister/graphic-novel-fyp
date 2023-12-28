@@ -58,7 +58,8 @@ class SeriesController extends Controller
 
 
         // Redirect to the series page
-        return redirect()->route('publish');
+        // return redirect()->route('publish');
+        return back();
     }
 
     // Show the series

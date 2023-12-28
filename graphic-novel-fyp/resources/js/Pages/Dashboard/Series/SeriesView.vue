@@ -11,9 +11,10 @@
                         </span>
                     </button>
 
-                    <img v-if="universe.image" :src="universe.image" alt="Universe Image"
+                    <!-- <img v-if="universe.image" :src="universe.image" alt="Universe Image"
                         class="w-full h-full object-cover" />
-                    <div v-else class="text-white text-xl">U{{ universe.universe_id }}</div>
+                    <div v-else class="text-white text-xl">U{{ universe.universe_id }}</div> -->
+                    <div class="text-white text-xl">U{{ Hi}}</div>
                 </div>
                 <p class="text-white pt-4">{{ universe.series_title }}</p>
             </button>
@@ -39,7 +40,7 @@
 
     <Teleport to="body">
         <Transition name="modal">
-            <create-series-modal v-if="isOpen" @closeModal="isOpen = false; updateContentList()"
+            <create-series-modal v-if="isOpen" @closeModal="isOpen = false; updateContentList()" :parentContentIdNumber="props.parentContentId"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 

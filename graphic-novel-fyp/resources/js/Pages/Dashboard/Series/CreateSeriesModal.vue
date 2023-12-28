@@ -3,7 +3,8 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { onClickOutside } from '@vueuse/core'
-import { ref } from 'vue'
+import { ref, onMounted, defineProps } from 'vue'
+import APICalls from '@/Utilities/APICalls';
 
 import { useForm } from '@inertiajs/vue3';
 
@@ -37,23 +38,23 @@ const form = useForm({
     // universe_thumbnail: '',
 });
 
-const genres = [
-    'ACTION',
-    'ADVENTURE',
-    'COMEDY',
-    'DRAMA',
-    'FANTASY',
-    'HORROR',
-    'MYSTERY',
-    'ROMANCE',
-    'THRILLER',
-]
+const genres = ref([
+])
+
+const props = defineProps({
+    parentContentIdNumber: {
+        type: Number,
+        required: true
+    },
+})
 
 onClickOutside(modal, () => {
     close()
 })
 
 function submit() {
+    form.universe_id = props.parentContentIdNumber
+
     form.post(route('series.store'), {
         onFinish: () => {
             // console.log(form.universe_name)
@@ -61,6 +62,13 @@ function submit() {
         }
     });
 };
+
+onMounted(() => {
+    APICalls.getAllGenres().then(response => {
+        genres.value = response.data
+    }).catch(error => console.log(error))
+}
+)
 </script>
 
 
@@ -103,7 +111,9 @@ function submit() {
 
                             <div>
                                 <InputLabel for="series_genre" value="Genre:" />
-                                <select v-model="form.series_genre" class="border-2 border-black rounded-md p-2 w-full">
+                                <select v-model="form.series_genre" class="border-2 border-black rounded-md p-2 w-full"
+                                    required>
+                                    <option disabled value="">Please select a genre</option>
                                     <option v-for="genre in genres" :key="genre" :value="genre">
                                         {{ genre }}
                                     </option>
@@ -113,7 +123,7 @@ function submit() {
 
                             <div>
                                 <InputLabel for="series_summary" value="Description:" />
-                                <textarea id="series_summary" class="mt-1 block w-full" v-model="form.series_summary" 
+                                <textarea id="series_summary" class="mt-1 block w-full" v-model="form.series_summary"
                                     autofocus></textarea>
                                 <InputError class="mt-2" message="" />
                             </div>

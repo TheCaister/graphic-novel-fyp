@@ -202,6 +202,7 @@ CREATE TABLE `series` (
   `series_summary` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `series_thumbnail` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`series_id`),
   KEY `series_universe_id_foreign` (`universe_id`),
   CONSTRAINT `series_universe_id_foreign` FOREIGN KEY (`universe_id`) REFERENCES `universes` (`universe_id`) ON DELETE CASCADE
@@ -294,3 +295,4 @@ INSERT INTO `migrations` VALUES (23,'2020_07_28_132654_add_date_default',9);
 INSERT INTO `migrations` VALUES (33,'2023_08_25_185318_elements_created_at',10);
 INSERT INTO `migrations` VALUES (37,'2023_09_30_122118_edits',11);
 INSERT INTO `migrations` VALUES (38,'2023_09_30_143355_timestamps',12);
+INSERT INTO `migrations` VALUES (39,'2023_12_28_150011_timestamps',13);
