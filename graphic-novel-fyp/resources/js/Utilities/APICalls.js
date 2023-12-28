@@ -22,6 +22,9 @@ export default {
     getChaptersBySeriesId(seriesId) {
         return axios.get('/api/series/' + seriesId + '/chapters')
     },
+    getPagesByChapterId(chapterId) {
+        return axios.get('/api/chapters/' + chapterId + '/pages')
+    },
     getSeriesByGenre(genre) {
         return axios.get('/api/series/genres', {
             params: {
