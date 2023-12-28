@@ -39,7 +39,7 @@
 
     <Teleport to="body">
         <Transition name="modal">
-            <create-universe-modal v-if="isOpen" @closeModal="isOpen = false; updateContentList()"
+            <create-chapter-modal v-if="isOpen" @closeModal="isOpen = false; updateContentList()" :parentContentIdNumber="props.parentContentId"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
@@ -53,6 +53,7 @@ import APICalls from '@/Utilities/APICalls';
 import { usePage } from '@inertiajs/vue3';
 import { defineEmits, ref, defineProps } from 'vue';
 // import CreateUniverseModal from '../CreateUniverseModal.vue';
+import CreateChapterModal from './CreateChapterModal.vue'
 
 const emit = defineEmits(['updateDashboard'])
 
