@@ -5,6 +5,7 @@ import SeriesView from './Series/SeriesView.vue';
 import ChapterView from './Chapter/ChapterView.vue';
 import PageView from './Page/PageView.vue';
 import { ref, defineProps, onMounted, computed } from 'vue'
+import APICalls from '@/Utilities/APICalls';
 
 
 const props = defineProps({
@@ -41,11 +42,22 @@ onMounted(async () => {
 })
 
 function updateDashboard(dashboardViewString, parentContentId) {
-   
+
     parentContentIdNumber.value = parentContentId
     dashboardView.value = dashboardViewString
 
     console.log("Parent:" + parentContentIdNumber.value)
+}
+
+function goBack(){
+    console.log("Go back")
+
+    APICalls.getParentContent(dashboardView.value, parentContentIdNumber.value).then(response => {
+        console.log(response.data)
+        updateDashboard(response.data.view, response.data.parentid)
+    }).catch(error => console.log(error))
+
+    // We need to update dashboardView and parentContentIdNumber. This is by passing in the current parentContentIdNumber and dashboardView value.
 }
 </script>
 
@@ -55,10 +67,11 @@ function updateDashboard(dashboardViewString, parentContentId) {
     <div class="flex justify-between mb-8">
 
         <div>
-            <PrimaryButton>
-                Go back
-            </PrimaryButton>
-
+            <div v-if="dashboardView != 'UniverseView'">
+                <PrimaryButton @click="goBack()">
+                    Go back
+                </PrimaryButton>
+            </div>
             <PrimaryButton>
                 Universe 1
             </PrimaryButton>
@@ -83,7 +96,8 @@ function updateDashboard(dashboardViewString, parentContentId) {
 
         <!-- Make dynamic -->
         <KeepAlive>
-            <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber" @updateDashboard="updateDashboard" />
+            <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber"
+                @updateDashboard="updateDashboard" />
         </KeepAlive>
 
     </div>

@@ -1,3 +1,5 @@
+import axios from "axios"
+
 export default {
     getPagesByChapterId(chapterId) {
         return axios.get('/api/chapters/' + chapterId + '/pages')
@@ -34,6 +36,14 @@ export default {
             params: {
                 type: type,
                 content_id: id,
+            }
+        })
+    },
+    getParentContent(type, id){
+        return axios.get('/api/content/get-parent', {
+            params: {
+                type: type,
+                id: id,
             }
         })
     }
