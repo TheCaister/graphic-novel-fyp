@@ -116,16 +116,22 @@ class ChapterController extends Controller
      */
     public function show(Chapter $chapter)
     {
-        //
-        return Inertia::render('Chapters/Show', [
-            'series' => $chapter->series,
-            'chapter' => $chapter,
-            // 'series' => $chapter->series,
-            // 'pages' => $chapter->pages,
+        // //
+        // return Inertia::render('Chapters/Show', [
+        //     'series' => $chapter->series,
+        //     'chapter' => $chapter,
+        //     // 'series' => $chapter->series,
+        //     // 'pages' => $chapter->pages,
 
-            // paginate the pages
-            'pages' => $chapter->pages()->paginate(1),
+        //     // paginate the pages
+        //     'pages' => $chapter->pages()->paginate(1),
 
+        // ]);
+
+        return Inertia::render('Dashboard/Dashboard',
+        [
+            'dashboardViewType' => 'PageView',
+            'parentContentId' => $chapter->chapter_id,   
         ]);
     }
 

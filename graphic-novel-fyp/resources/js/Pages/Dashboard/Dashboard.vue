@@ -1,5 +1,5 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import UniverseView from './Universe/UniverseView.vue';
 import SeriesView from './Series/SeriesView.vue';
 import ChapterView from './Chapter/ChapterView.vue';
@@ -49,14 +49,38 @@ function updateDashboard(dashboardViewString, parentContentId) {
     console.log("Parent:" + parentContentIdNumber.value)
 }
 
-function goBack(){
-    console.log("Go back")
+function goBack() {
 
-    APICalls.getParentContent(dashboardView.value, parentContentIdNumber.value).then(response => {
-        console.log(response.data)
-        updateDashboard(response.data.view, response.data.parentid)
-    }).catch(error => console.log(error))
+    // Say we're on a chapter view. We want to get back to the series view. On the chapter view, we have the series type and id. We'll use this to get the series view.
+    // APICalls.getParentContent(dashboardView.value, parentContentIdNumber.value).then(response => {
+    //     // let parentContent = ''
 
+    //     // switch (response.data.view) {
+    //     //     case 'UniverseView':
+    //     //         router.visit('/')
+    //     //     case 'SeriesView':
+    //     //         parentContent = 'universes'
+    //     //         break;
+    //     //     case 'ChapterView':
+    //     //         parentContent = 'series'
+    //     //         break;
+    //     //     case 'PageView':
+    //     //         parentContent = 'chapters'
+    //     //         break;
+    //     //     default:
+    //     //         router.visit('/')
+
+    //     // }
+
+    //     // console.log(response.data)
+
+    //     // console.log(response.data)
+    //     // router.visit(route(parentContent + '.show', response.data.parentid))
+    //     // updateDashboard(response.data.view, response.data.parentid)
+    // }).catch(error => console.log(error))
+    console.log("Parent:" + parentContentIdNumber.value)
+    // APICalls.getParentContent(dashboardView.value, parentContentIdNumber.value)
+    router.visit(route('content.get-parent', { type: dashboardView.value, id: parentContentIdNumber.value }))
     // We need to update dashboardView and parentContentIdNumber. This is by passing in the current parentContentIdNumber and dashboardView value.
 }
 </script>

@@ -52,14 +52,22 @@ class UniverseController extends Controller
     {
         //
         // Attach each series to the universe
-        $universe->series = $universe->series;
+        // $universe->series = $universe->series;
 
-        return Inertia::render(
-            'Universes/Show',
-            [
-                'universe' => $universe,
-            ]
-        );
+        // return Inertia::render(
+        //     'Universes/Show',
+        //     [
+        //         'universe' => $universe,
+        //     ]
+        // );
+
+        // dd($universe->universe_id);
+
+        return Inertia::render('Dashboard/Dashboard',
+        [
+            'dashboardViewType' => 'SeriesView',
+            'parentContentId' => $universe->universe_id,   
+        ]);
     }
 
     /**

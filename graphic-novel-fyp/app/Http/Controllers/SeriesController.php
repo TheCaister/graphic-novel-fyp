@@ -65,17 +65,10 @@ class SeriesController extends Controller
     // Show the series
     public function show(Series $series)
     {
-        // dd($series->chapters);
-
-        // Get the chapters for the series as a list
-        $chapters = $series->chapters()->get();
-
-        return Inertia::render('Series/Show', [
-            'series' => $series,
-            'universe' => $series->universe(),
-            'chapters' => $chapters,
-            // the author is the owner of this series' universe
-            'author' => $series->universe->owner,
+        return Inertia::render('Dashboard/Dashboard',
+        [
+            'dashboardViewType' => 'ChapterView',
+            'parentContentId' => $series->series_id,   
         ]);
     }
 

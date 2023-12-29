@@ -11,9 +11,10 @@ use App\Http\Controllers\UploadController;
 use App\Models\Series;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
+// use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,62 @@ Route::get('/', function () {
         ]
     );
 })->name('home');
+
+Route::get('/content/get-parent', function (Request $request) {
+
+    // dd($request->all());
+
+
+    $content_type = $request->type;
+    $content_id = $request->id;
+
+    // dd($content_type, $content_id);
+
+    $result = [
+        'show' => null,
+        'parentid' => null
+    ];
+
+    // Switch statement to determine which model to use
+    // For example, if we're currently on SeriesView, then the parent model is a Universe
+    switch ($content_type) {
+        case 'SeriesView':
+            // $model = App\Models\Universe::find($content_id);
+            // // dd($model);
+            // $parent = $model->universe;
+
+            // $result['view'] = 'universes';
+            // $result['parentid'] = null;
+            return redirect()->route('home');
+            // $result['parentid'] = $parent->universe_id;
+            // break;
+        case 'ChapterView':
+            $model = App\Models\Series::find($content_id);
+            $parent = $model->universe;
+
+            $result['show'] = 'universes';
+            $result['parentid'] = $parent->universe_id;
+            break;
+        case 'PageView':
+            $model = App\Models\Chapter::find($content_id);
+            $parent = $model->series;
+
+            $result['show'] = 'series';
+            $result['parentid'] = $parent->series_id;
+            break;
+        default:
+            return redirect()->route('home');
+            // $result['view'] = 'universes';
+            // $result['parentid'] = null;
+            // break;
+    }
+    // dd($result);
+    // // Return the parent model as a json response
+    // return response()->json($result);
+
+    // redirect to the correct view
+    return redirect()->route($result['show'] . '.show', [$result['parentid']]);
+})->name('content.get-parent');
 
 // Using group, you can apply middleware to all routes in the group
 Route::middleware('auth')->group(function () {

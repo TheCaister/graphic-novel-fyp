@@ -2,21 +2,21 @@
     <!-- Loop through the universes and display them in cards -->
     <div v-if="chaptersLoaded" class="w-full flex">
         <div v-for="chapter in chapters" :key="chapter.chapter_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
-            <button @click="updateDashboard('PageView', chapter.chapter_id)" class="w-full">
-                <div class="h-64 bg-pink-300 flex items-center justify-center rounded-lg relative">
-                    <!-- Create a button on the top right corner -->
-                    <button @click="test" class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
-                        <span class="material-symbols-outlined dark">
-                            pending
-                        </span>
-                    </button>
+            <Link :href='route("chapters.show", chapter.chapter_id)'>
+            <div class="h-64 bg-pink-300 flex items-center justify-center rounded-lg relative">
+                <!-- Create a button on the top right corner -->
+                <button @click="test" class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
+                    <span class="material-symbols-outlined dark">
+                        pending
+                    </span>
+                </button>
 
-                    <!-- <img v-if="universe.image" :src="universe.image" alt="Universe Image"
+                <!-- <img v-if="universe.image" :src="universe.image" alt="Universe Image"
                         class="w-full h-full object-cover" /> -->
-                    <div class="text-white text-xl">C{{ chapter.chapter_id }}</div>
-                </div>
-                <p class="text-white pt-4">{{ chapter.chapter_title }}</p>
-            </button>
+                <div class="text-white text-xl">C{{ chapter.chapter_id }}</div>
+            </div>
+            <p class="text-white pt-4">{{ chapter.chapter_title }}</p>
+            </Link>
         </div>
 
         <button @click="isOpen = true" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
@@ -39,7 +39,8 @@
 
     <Teleport to="body">
         <Transition name="modal">
-            <create-chapter-modal v-if="isOpen" @closeModal="isOpen = false; updateContentList()" :parentContentIdNumber="props.parentContentId"
+            <create-chapter-modal v-if="isOpen" @closeModal="isOpen = false; updateContentList()"
+                :parentContentIdNumber="props.parentContentId"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 

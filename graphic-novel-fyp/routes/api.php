@@ -4,6 +4,8 @@ use App\Http\Controllers\SeriesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use function PHPUnit\Framework\returnSelf;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -44,49 +46,7 @@ Route::get('/genres', [SeriesController::class, 'getGenres'])->name('series.get-
 
 Route::get('/elements', [App\Http\Controllers\ElementController::class, 'getElements'])->name('elements.get-elements');
 
-Route::get('/content/get-parent', function (Request $request) {
 
-    $content_type = $request->type;
-    $content_id = $request->id;
-    $result = [
-        'view' => null,
-        'parentid' => null
-    ];
-
-    // Switch statement to determine which model to use
-    // For example, if we're currently on SeriesView, then the parent model is a Universe
-    switch ($content_type) {
-        case 'series':
-            $model = App\Models\Series::find($content_id);
-            $parent = $model->universe;
-
-            $result['view'] = 'UniverseView';
-            $result['parentid'] = $parent->universe_id;
-            break;
-        case 'chapter':
-            $model = App\Models\Chapter::find($content_id);
-            $parent = $model->series;
-
-            $result['view'] = 'SeriesView';
-            $result['parentid'] = $model->series_id;
-            break;
-        case 'page':
-            $model = App\Models\Page::find($content_id);
-            $parent = $model->chapter;
-
-            $result['view'] = 'ChapterView';
-            $result['parentid'] = $model->chapter_id;
-            break;
-        default:
-            $result['view'] = 'UniverseView';
-            $result['parentid'] = null;
-            break;
-    }
-
-    // Return the parent model as a json response
-    return response()->json($result);
-    
-})->name('content.get-parent');
 
 Route::delete('/series/{serverId}/thumbnail', [App\Http\Controllers\UploadController::class, 'deleteSeriesThumbnail'])->name('series.delete-thumbnail');
 
