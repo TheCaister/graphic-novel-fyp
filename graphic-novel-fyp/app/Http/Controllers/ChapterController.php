@@ -58,8 +58,6 @@ class ChapterController extends Controller
 
         $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
 
-        // dd($request);
-
         $chapter = Chapter::create($formFields);
 
         if ($tempThumbnail) {
@@ -105,9 +103,6 @@ class ChapterController extends Controller
             }
         }
 
-
-
-        // return redirect()->route('series.show', $chapter->series->series_id);
         return back();
     }
 
@@ -116,17 +111,6 @@ class ChapterController extends Controller
      */
     public function show(Chapter $chapter)
     {
-        // //
-        // return Inertia::render('Chapters/Show', [
-        //     'series' => $chapter->series,
-        //     'chapter' => $chapter,
-        //     // 'series' => $chapter->series,
-        //     // 'pages' => $chapter->pages,
-
-        //     // paginate the pages
-        //     'pages' => $chapter->pages()->paginate(1),
-
-        // ]);
 
         return Inertia::render('Dashboard/Dashboard',
         [
@@ -140,11 +124,7 @@ class ChapterController extends Controller
      */
     public function edit(Chapter $chapter)
     {
-        //
-
         $chapterThumbnail = [];
-
-        // dd($chapter->getFirstMediaUrl('chapter_thumbnail'));
 
         if ($chapter->chapter_thumbnail) {
             $filePath = $chapter->getFirstMediaUrl('chapter_thumbnail');

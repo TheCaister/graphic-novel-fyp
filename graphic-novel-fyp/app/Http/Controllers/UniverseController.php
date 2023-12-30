@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TemporaryFile;
 use App\Models\Universe;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -38,9 +39,25 @@ class UniverseController extends Controller
 
         $formFields['owner_id'] = auth()->id();
 
+        $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
+
+        $universe = Universe::create($formFields);
+
+        if ($tempThumbnail) {
+            $universe->addMedia(storage_path('app/public/uploads/universe_thumbnail/tmp/' . $request->upload . '/' . $tempThumbnail->filename))
+                ->toMediaCollection('universe_thumbnail');
+
+            // $universe->chapter_thumbnail = $universe->getFirstMediaUrl('universe_thumbnail');
+
+            $universe->save();
+
+            rmdir(storage_path('app/public/uploads/universe_thumbnail/tmp/' . $request->upload));
+            $tempThumbnail->delete();
+        }
+
         // dd($formFields);
 
-        Universe::create($formFields);
+
 
         return redirect()->route('home');
     }
@@ -50,17 +67,6 @@ class UniverseController extends Controller
      */
     public function show(Universe $universe)
     {
-        //
-        // Attach each series to the universe
-        // $universe->series = $universe->series;
-
-        // return Inertia::render(
-        //     'Universes/Show',
-        //     [
-        //         'universe' => $universe,
-        //     ]
-        // );
-
         // dd($universe->universe_id);
 
         return Inertia::render('Dashboard/Dashboard',
@@ -115,13 +121,28 @@ class UniverseController extends Controller
         // Get all universe owned by the user in the request
         $universes = Universe::where('owner_id', $request->user_id)->get();
 
-        // If with_series is true, attach each series to the universe
-        if ($request->with_series) {
-            foreach ($universes as $universe) {
-                $universe->series = $universe->series;
+        foreach ($universes as $universe) {
+            $universe->thumbnail = $universe->getFirstMediaUrl('universe_thumbnail');
+            // dd($universe->thumbnail);
+
+            // dd($universe->getMedia());
+
+            // Call getMedia. If mediaItems is not empty, dd
+            // $mediaItems = $universe->getMedia();
+            // if ($mediaItems->count() !== 0) {
+            //     dd($mediaItems);
+                // $universe->thumbnail = $universe->getFirstMediaUrl('universe_thumbnail');
             }
-        }
 
         return response()->json($universes);
+
+        // If with_series is true, attach each series to the universe
+        // if ($request->with_series) {
+        //     foreach ($universes as $universe) {
+        //         $universe->series = $universe->series;
+        //     }
+        // }
+
+        // return response()->json($universes);
     }
 }

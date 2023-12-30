@@ -47,15 +47,8 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/content/get-parent', function (Request $request) {
-
-    // dd($request->all());
-
-
     $content_type = $request->type;
     $content_id = $request->id;
-
-    // dd($content_type, $content_id);
-
     $result = [
         'show' => null,
         'parentid' => null
@@ -65,15 +58,7 @@ Route::get('/content/get-parent', function (Request $request) {
     // For example, if we're currently on SeriesView, then the parent model is a Universe
     switch ($content_type) {
         case 'SeriesView':
-            // $model = App\Models\Universe::find($content_id);
-            // // dd($model);
-            // $parent = $model->universe;
-
-            // $result['view'] = 'universes';
-            // $result['parentid'] = null;
             return redirect()->route('home');
-            // $result['parentid'] = $parent->universe_id;
-            // break;
         case 'ChapterView':
             $model = App\Models\Series::find($content_id);
             $parent = $model->universe;
@@ -90,14 +75,7 @@ Route::get('/content/get-parent', function (Request $request) {
             break;
         default:
             return redirect()->route('home');
-            // $result['view'] = 'universes';
-            // $result['parentid'] = null;
-            // break;
     }
-    // dd($result);
-    // // Return the parent model as a json response
-    // return response()->json($result);
-
     // redirect to the correct view
     return redirect()->route($result['show'] . '.show', [$result['parentid']]);
 })->name('content.get-parent');
@@ -216,7 +194,6 @@ Route::post('/upload', [UploadController::class, 'store'])->name('upload.store')
 
 Route::get('/publish', [SeriesController::class, 'publish'])->name('publish');
 
-// Trying out resource
 Route::resource('universes', UniverseController::class);
 
 //////////////////////// SERIES ROUTES ////////////////////////

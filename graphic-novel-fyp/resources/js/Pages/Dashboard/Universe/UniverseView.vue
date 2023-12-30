@@ -11,7 +11,7 @@
                     </span>
                 </button>
 
-                <img v-if="universe.image" :src="universe.image" alt="Universe Image" class="w-full h-full object-cover" />
+                <img v-if="universe.thumbnail" :src="universe.thumbnail" alt="Universe Image" class="w-full h-full rounded-lg" />
                 <div v-else class="text-white text-xl">U{{ universe.universe_id }}</div>
             </div>
             <p class="text-white pt-4">{{ universe.universe_name }}</p>

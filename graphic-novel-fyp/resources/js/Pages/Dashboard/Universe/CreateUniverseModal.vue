@@ -30,9 +30,10 @@ const FilePond = vueFilePond(
 const modal = ref(null)
 
 const form = useForm({
-            universe_name: '',
-            // universe_thumbnail: '',
-        });
+    universe_name: '',
+    upload: '',
+    // universe_thumbnail: '',
+});
 
 onClickOutside(modal, () => {
     close()
@@ -42,9 +43,20 @@ function submit() {
     form.post(route('universes.store'), {
         onFinish: () => {
             // console.log(form.universe_name)
-            close()}
+            close()
+        }
     });
 };
+
+let csrfToken = document.querySelector('meta[name="csrf-token"]').content
+
+function handleFilePondThumbnailProcess(error, file) {
+    form.upload = file.serverId;
+}
+
+function handleFilePondThumbnailRemove(error, file) {
+    form.upload = '';
+}
 </script>
 
 
@@ -66,10 +78,10 @@ function submit() {
                             @processfile="handleFilePondThumbnailProcess" @removefile="handleFilePondThumbnailRemove"
                             :server="{
                                 process: {
-                                    url: '/upload?media=series_thumbnail',
+                                    url: '/upload?media=universe_thumbnail',
                                 },
                                 revert: {
-                                    url: '/api/series/' + this.form.upload + '/thumbnail',
+                                    url: '/api/universes/' + form.upload + '/thumbnail',
                                 },
                                 headers: {
                                     'X-CSRF-TOKEN': csrfToken
@@ -84,7 +96,8 @@ function submit() {
                         <div>
                             <div>
                                 <InputLabel for="universe_name" value="Universe name:" />
-                                <TextInput id="universe_name" type="text" class="mt-1 block w-full" v-model="form.universe_name" required autofocus />
+                                <TextInput id="universe_name" type="text" class="mt-1 block w-full"
+                                    v-model="form.universe_name" required autofocus />
                                 <InputError class="mt-2" message="" />
                             </div>
 

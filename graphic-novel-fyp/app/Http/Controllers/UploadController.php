@@ -75,6 +75,24 @@ class UploadController extends Controller
         $temporaryFile->delete();
     }
 
+    public function deleteUniverseThumbnail(string $serverId)
+    {
+        // Get the temporary file
+        $temporaryFile = TemporaryFile::where('folder', $serverId)->first();
+
+        if ($temporaryFile) {
+            // Get full path of the file
+            $fullPath = $temporaryFile->getFullPath('universe_thumbnail');
+
+            if (Storage::disk('public')->exists($fullPath)) {
+                Storage::disk('public')->delete($fullPath);
+            }
+        }
+
+        // Delete the temporary file from the database
+        $temporaryFile->delete();
+    }
+
     public function deletePageImage(string $serverId)
     {
         // If serverId is empty, return

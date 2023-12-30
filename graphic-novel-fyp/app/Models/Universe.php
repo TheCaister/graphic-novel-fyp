@@ -8,11 +8,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
-class Universe extends Model
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+
+class Universe extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
     // public $timestamps = false;
     protected $primaryKey = 'universe_id';
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('universe_thumbnail')->singleFile();
+    }
 
     /**
      * The attributes that are mass assignable.

@@ -14,7 +14,12 @@ class TemporaryFile extends Model
         'filename',
     ];
 
-    // Method to get the full path of the file
+    /**
+     * Get the full path of the file.
+     *
+     * @param  string  $media
+     * @return string
+     */
     public function getFullPath(string $media)
     {
         return '/uploads/' . $media . '/tmp/' . $this->folder . '/' . $this->filename;
