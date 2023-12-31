@@ -54,6 +54,24 @@ class UploadController extends Controller
 
         return 'nope';
     }
+    
+    public function deleteUniverseThumbnail(string $serverId)
+    {
+        // Get the temporary file
+        $temporaryFile = TemporaryFile::where('folder', $serverId)->first();
+
+        if ($temporaryFile) {
+            // Get full path of the file
+            $fullPath = $temporaryFile->getFullPath('universe_thumbnail');
+
+            if (Storage::disk('public')->exists($fullPath)) {
+                Storage::disk('public')->delete($fullPath);
+            }
+        }
+
+        // Delete the temporary file from the database
+        $temporaryFile->delete();
+    }
 
     public function deleteSeriesThumbnail(string $serverId)
     {
@@ -74,14 +92,14 @@ class UploadController extends Controller
         $temporaryFile->delete();
     }
 
-    public function deleteUniverseThumbnail(string $serverId)
+    public function deleteChapterThumbnail(string $serverId)
     {
         // Get the temporary file
         $temporaryFile = TemporaryFile::where('folder', $serverId)->first();
 
         if ($temporaryFile) {
             // Get full path of the file
-            $fullPath = $temporaryFile->getFullPath('universe_thumbnail');
+            $fullPath = $temporaryFile->getFullPath('chapter_thumbnail');
 
             if (Storage::disk('public')->exists($fullPath)) {
                 Storage::disk('public')->delete($fullPath);
@@ -91,6 +109,7 @@ class UploadController extends Controller
         // Delete the temporary file from the database
         $temporaryFile->delete();
     }
+
 
     public function deletePageImage(Request $request)
     {

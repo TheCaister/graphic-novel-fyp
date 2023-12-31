@@ -22,6 +22,7 @@ let csrfToken = document.querySelector('meta[name="csrf-token"]').content
 
 const emit = defineEmits(['closeModal'])
 function close() {
+    deleteMedia();
     emit('closeModal');
 };
 
@@ -79,6 +80,11 @@ function handleFilePondThumbnailProcess(error, file) {
     // Update the form with the file ids
     form.upload = file.serverId;
 }
+
+function handleFilePondThumbnailRemove(error, file) {
+    form.upload = '';
+}
+
 function handleFilePondPagesProcess(error, file) {
     // Update the form with the file ids
     form.pages.push(file.serverId);
@@ -93,6 +99,23 @@ function handleFilePondPagesRemoveFile(e) {
     });
 
     console.log(form.pages)
+}
+
+function deleteMedia() {
+    
+    if (form.upload) {
+        axios.delete('/api/chapter/' + form.upload + '/thumbnail').catch(error => {
+            console.log(error);
+        });
+    }
+
+    if (form.pages) {
+        form.pages.forEach(element => {
+            axios.delete('/api/pages/' + element).catch(error => {
+                console.log(error);
+            });
+        });
+    }
 }
 
 onMounted(() => {

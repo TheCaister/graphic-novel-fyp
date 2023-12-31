@@ -20,6 +20,7 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
 const emit = defineEmits(['closeModal'])
 function close() {
+    deleteMedia();
     emit('closeModal');
 };
 
@@ -62,6 +63,15 @@ function submit() {
         }
     });
 };
+
+function deleteMedia() {
+    
+    if (form.upload) {
+        axios.delete('/api/series/' + form.upload + '/thumbnail').catch(error => {
+            console.log(error);
+        });
+    }
+}
 
 onMounted(() => {
     APICalls.getAllGenres().then(response => {

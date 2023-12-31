@@ -48,6 +48,8 @@ Route::get('/elements', [App\Http\Controllers\ElementController::class, 'getElem
 
 Route::delete('/universes/{serverId}/thumbnail', [App\Http\Controllers\UploadController::class, 'deleteUniverseThumbnail'])->name('universes.delete-thumbnail');
 
+Route::delete('/chapters/{serverId}/thumbnail', [App\Http\Controllers\UploadController::class, 'deleteChapterThumbnail'])->name('chapters.delete-thumbnail');
+
 Route::delete('/series/{serverId}/thumbnail', [App\Http\Controllers\UploadController::class, 'deleteSeriesThumbnail'])->name('series.delete-thumbnail');
 
 Route::delete('/pages/{serverId}', [App\Http\Controllers\UploadController::class, 'deletePageImage'])->name('pages.delete-image');
