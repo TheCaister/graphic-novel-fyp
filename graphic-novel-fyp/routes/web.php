@@ -192,6 +192,8 @@ Route::middleware('auth')->group(function () {
 
 Route::post('/upload', [UploadController::class, 'store'])->name('upload.store');
 
+Route::delete('/upload', [UploadController::class, 'destroy'])->name('upload.destroy');
+
 Route::get('/publish', [SeriesController::class, 'publish'])->name('publish');
 
 Route::resource('universes', UniverseController::class);

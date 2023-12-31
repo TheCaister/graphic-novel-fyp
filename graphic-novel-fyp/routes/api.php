@@ -51,3 +51,5 @@ Route::delete('/universes/{serverId}/thumbnail', [App\Http\Controllers\UploadCon
 Route::delete('/series/{serverId}/thumbnail', [App\Http\Controllers\UploadController::class, 'deleteSeriesThumbnail'])->name('series.delete-thumbnail');
 
 Route::delete('/pages/{serverId}', [App\Http\Controllers\UploadController::class, 'deletePageImage'])->name('pages.delete-image');
+
+// Route::delete('/pages', [App\Http\Controllers\UploadController::class, 'deletePageImage'])->name('pages.delete-image');

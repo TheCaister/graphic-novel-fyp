@@ -39,6 +39,7 @@ class UniverseController extends Controller
 
         $formFields['owner_id'] = auth()->id();
 
+        // Connecting temporary thumbnail to the universe
         $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
 
         $universe = Universe::create($formFields);
@@ -47,17 +48,11 @@ class UniverseController extends Controller
             $universe->addMedia(storage_path('app/public/uploads/universe_thumbnail/tmp/' . $request->upload . '/' . $tempThumbnail->filename))
                 ->toMediaCollection('universe_thumbnail');
 
-            // $universe->chapter_thumbnail = $universe->getFirstMediaUrl('universe_thumbnail');
-
             $universe->save();
 
             rmdir(storage_path('app/public/uploads/universe_thumbnail/tmp/' . $request->upload));
             $tempThumbnail->delete();
         }
-
-        // dd($formFields);
-
-
 
         return redirect()->route('home');
     }
@@ -123,26 +118,8 @@ class UniverseController extends Controller
 
         foreach ($universes as $universe) {
             $universe->thumbnail = $universe->getFirstMediaUrl('universe_thumbnail');
-            // dd($universe->thumbnail);
-
-            // dd($universe->getMedia());
-
-            // Call getMedia. If mediaItems is not empty, dd
-            // $mediaItems = $universe->getMedia();
-            // if ($mediaItems->count() !== 0) {
-            //     dd($mediaItems);
-                // $universe->thumbnail = $universe->getFirstMediaUrl('universe_thumbnail');
             }
 
         return response()->json($universes);
-
-        // If with_series is true, attach each series to the universe
-        // if ($request->with_series) {
-        //     foreach ($universes as $universe) {
-        //         $universe->series = $universe->series;
-        //     }
-        // }
-
-        // return response()->json($universes);
     }
 }

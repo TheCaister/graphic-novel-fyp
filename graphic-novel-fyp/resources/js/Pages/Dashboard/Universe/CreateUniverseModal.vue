@@ -32,7 +32,6 @@ const modal = ref(null)
 const form = useForm({
     universe_name: '',
     upload: '',
-    // universe_thumbnail: '',
 });
 
 onClickOutside(modal, () => {
@@ -68,11 +67,7 @@ function handleFilePondThumbnailRemove(error, file) {
                 <div class="flex">
 
                     <div class="w-1/2">
-                        <!-- <img src="https://media.gettyimages.com/id/1428545051/photo/chureito-pagoda-and-mt-fuji-at-sunset.jpg?s=612x612&w=gi&k=20&c=rocg5X4hPst-eOzmceAG3qOr5WV03JRhZzzqjy5qMv8="
-                            alt=""> -->
-
                         <Label>Universe Thumbnail</Label>
-                        <!-- <ImageLabel /> -->
 
                         <file-pond name="upload" label-idle="Universe Thumbnail" accepted-file-types="image/jpeg, image/png"
                             @processfile="handleFilePondThumbnailProcess" @removefile="handleFilePondThumbnailRemove"
@@ -89,10 +84,6 @@ function handleFilePondThumbnailRemove(error, file) {
                             }" />
                     </div>
                     <div class="flex flex-col justify-between w-1/2 ml-8">
-                        <!-- <InputLabel for="email" value="Email" />
-                        <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autofocus
-                            autocomplete="username" />
-                        <InputError class="mt-2" :message="form.errors.email" /> -->
                         <div>
                             <div>
                                 <InputLabel for="universe_name" value="Universe name:" />
@@ -113,10 +104,6 @@ function handleFilePondThumbnailRemove(error, file) {
                                 class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                                 Cancel
                             </button>
-                            <!-- <PrimaryButton type="submit"  @click="submit"
-                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                Create
-                            </PrimaryButton> -->
                             <PrimaryButton type="submit"
                                 class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                                 Create

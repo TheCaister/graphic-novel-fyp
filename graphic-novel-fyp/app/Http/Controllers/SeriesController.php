@@ -22,7 +22,6 @@ class SeriesController extends Controller
     // Store the new series
     public function store(Request $request)
     {
-        // dd($request->all());
 
         // Validate the request
         $formFields = $request->validate([

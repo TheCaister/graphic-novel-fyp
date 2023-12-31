@@ -15,7 +15,7 @@ class Universe extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
-    // public $timestamps = false;
+    
     protected $primaryKey = 'universe_id';
 
     public function registerMediaCollections(): void

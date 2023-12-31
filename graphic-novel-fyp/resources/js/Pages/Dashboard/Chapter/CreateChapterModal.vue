@@ -6,7 +6,7 @@ import { onClickOutside } from '@vueuse/core'
 import { ref, onMounted, defineProps, computed } from 'vue'
 import APICalls from '@/Utilities/APICalls';
 
-import { useForm } from '@inertiajs/vue3';
+import { useForm, router } from '@inertiajs/vue3';
 
 
 import vueFilePond from 'vue-filepond';
@@ -40,7 +40,6 @@ const form = useForm({
     // scheduled_publish: '',
     pages: [],
     upload: '',
-    // universe_thumbnail: '',
 });
 
 const genres = ref([
@@ -84,9 +83,13 @@ function handleFilePondPagesProcess(error, file) {
     // Update the form with the file ids
     form.pages.push(file.serverId);
 }
-function handleFilePondPagesRemoveFile(error, file) {
-    // Update the form with the file ids
-    form.pages = form.pages.filter((item) => item !== file.serverId);
+
+function handleFilePondPagesRemoveFile(e) {
+    form.pages = form.pages.filter((item) => item !== e);
+
+    axios.delete(`/api/pages/${e}`).catch(error => {
+        console.log(error);
+    });
 }
 
 onMounted(() => {
@@ -108,8 +111,6 @@ onMounted(() => {
                 <div class="flex">
 
                     <div class="w-1/2">
-                        <!-- <img src="https://media.gettyimages.com/id/1428545051/photo/chureito-pagoda-and-mt-fuji-at-sunset.jpg?s=612x612&w=gi&k=20&c=rocg5X4hPst-eOzmceAG3qOr5WV03JRhZzzqjy5qMv8="
-                            alt=""> -->
 
                         <Label>Chapter Thumbnail</Label>
                         <!-- <ImageLabel /> -->
@@ -163,22 +164,21 @@ onMounted(() => {
 
                             <div>
                                 <InputLabel for="admins" value="Pages:" />
-                                <file-pond id="test"
-                                    name="upload"
-                                    label-idle="Pages"
-                                    allow-multiple="true"
-                                    allow-reorder="true"
-                                    @processfile="handleFilePondPagesProcess"
-                                    @removefile="handleFilePondPagesRemoveFile"
-                                    accepted-file-types="image/jpeg, image/png"
-                                    :server="{
+                                <file-pond id="test" name="upload" label-idle="Pages" allow-multiple="true"
+                                    allow-reorder="true" @processfile="handleFilePondPagesProcess"
+                                    accepted-file-types="image/jpeg, image/png" :server="{
                                         url: '/upload?media=pages',
+                                        revert: (uniqueFileId, load, error) => {
+                                            handleFilePondPagesRemoveFile(uniqueFileId)
+
+                                            // Should call the load method when done, no parameters required
+                                            load();
+                                            // error('oh my goodness');
+                                        },
                                         headers: {
-                                            'X-CSRF-TOKEN': csrfToken
+                                            'X-CSRF-TOKEN': csrfToken,
                                         }
-                                    }"
-                                    :styleItemPanelAspectRatio="1.414"
-                                />
+                                    }" styleItemPanelAspectRatio="1.414" />
                             </div>
                         </div>
                         <div class="flex justify-end">

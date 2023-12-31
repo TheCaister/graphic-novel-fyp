@@ -35,7 +35,7 @@ const form = useForm({
     series_title: '',
     series_summary: '',
     series_genre: '',
-    // series_thumbnail: '',
+    upload: '',
 });
 
 const genres = ref([
@@ -69,6 +69,16 @@ onMounted(() => {
     }).catch(error => console.log(error))
 }
 )
+
+let csrfToken = document.querySelector('meta[name="csrf-token"]').content
+
+function handleFilePondThumbnailProcess(error, file) {
+    form.upload = file.serverId;
+}
+
+function handleFilePondThumbnailRemove(error, file) {
+    form.upload = '';
+}
 </script>
 
 
@@ -80,20 +90,17 @@ onMounted(() => {
                 <div class="flex">
 
                     <div class="w-1/2">
-                        <!-- <img src="https://media.gettyimages.com/id/1428545051/photo/chureito-pagoda-and-mt-fuji-at-sunset.jpg?s=612x612&w=gi&k=20&c=rocg5X4hPst-eOzmceAG3qOr5WV03JRhZzzqjy5qMv8="
-                            alt=""> -->
-
                         <Label>Series Thumbnail</Label>
-                        <!-- <ImageLabel /> -->
 
                         <file-pond name="upload" label-idle="Series Thumbnail" accepted-file-types="image/jpeg, image/png"
                             @processfile="handleFilePondThumbnailProcess" @removefile="handleFilePondThumbnailRemove"
+                          
                             :server="{
                                 process: {
                                     url: '/upload?media=series_thumbnail',
                                 },
                                 revert: {
-                                    url: '/api/series/' + this.form.upload + '/thumbnail',
+                                    url: '/api/series/' + form.upload + '/thumbnail',
                                 },
                                 headers: {
                                     'X-CSRF-TOKEN': csrfToken

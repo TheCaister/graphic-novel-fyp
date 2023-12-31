@@ -2,21 +2,20 @@
     <!-- Loop through the universes and display them in cards -->
     <div v-if="seriesLoaded" class="w-full flex">
         <div v-for="series in series" :key="series.series_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
-                <Link :href='route("series.show", series.series_id)'>
-                <div class="h-64 bg-pink-300 flex items-center justify-center rounded-lg relative">
-                    <!-- Create a button on the top right corner -->
-                    <button @click="test" class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
-                        <span class="material-symbols-outlined dark">
-                            pending
-                        </span>
-                    </button>
+            <Link :href='route("series.show", series.series_id)'>
+            <div class="h-64 bg-pink-300 flex items-center justify-center rounded-lg relative">
+                <!-- Create a button on the top right corner -->
+                <button @click="test" class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
+                    <span class="material-symbols-outlined dark">
+                        pending
+                    </span>
+                </button>
 
-                    <!-- <img v-if="universe.image" :src="universe.image" alt="Universe Image"
-                        class="w-full h-full object-cover" />
-                    <div v-else class="text-white text-xl">U{{ universe.universe_id }}</div> -->
-                    <div class="text-white text-xl">S{{ series.series_id }}</div>
-                </div>
-                <p class="text-white pt-4">{{ series.series_title }}</p>
+                <img v-if="series.series_thumbnail" :src="series.series_thumbnail" alt="Series Image"
+                    class="w-full h-full rounded-lg" />
+                <div v-else class="text-white text-xl">S{{ series.series_id }}</div>
+            </div>
+            <p class="text-white pt-4">{{ series.series_title }}</p>
             </Link>
         </div>
 
@@ -40,7 +39,8 @@
 
     <Teleport to="body">
         <Transition name="modal">
-            <create-series-modal v-if="isOpen" @closeModal="isOpen = false; updateContentList()" :parentContentIdNumber="props.parentContentId"
+            <create-series-modal v-if="isOpen" @closeModal="isOpen = false; updateContentList()"
+                :parentContentIdNumber="props.parentContentId"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 

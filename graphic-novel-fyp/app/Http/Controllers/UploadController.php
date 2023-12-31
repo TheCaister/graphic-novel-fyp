@@ -11,7 +11,6 @@ class UploadController extends Controller
     //
     public function store(Request $request)
     {
-        // dd($request->all());
 
         // Check if $request->media is set. If not, return an empty string
         $media = $request->media ?? '';
@@ -93,8 +92,22 @@ class UploadController extends Controller
         $temporaryFile->delete();
     }
 
-    public function deletePageImage(string $serverId)
+    public function deletePageImage(Request $request)
     {
+        // return response()->json($request->all());
+
+        // $name = "John Doe";
+        // $response = [
+        //     'name' => $name,
+        //     'age' => rand(18, 60),
+        //     'city' => ['New York', 'London', 'Paris', 'Tokyo'][rand(0, 3)],
+        //     'hobbies' => ['reading', 'coding', 'traveling', 'painting'][rand(0, 3)],
+        // ];
+
+        // return response()->json($response);
+
+
+        $serverId = $request->serverId;
         // If serverId is empty, return
         if ($serverId == '') {
             return;
@@ -114,5 +127,24 @@ class UploadController extends Controller
 
         // Delete the temporary file from the database
         $temporaryFile->delete();
+    }
+
+    public function destroy(Request $request)
+    {
+        dd($request->all());
+        // Get the temporary file
+        // $temporaryFile = TemporaryFile::where('folder', $request->upload)->first();
+
+        // if ($temporaryFile) {
+        //     // Get full path of the file
+        //     $fullPath = $temporaryFile->getFullPath($request->media);
+
+        //     if (Storage::disk('public')->exists($fullPath)) {
+        //         Storage::disk('public')->delete($fullPath);
+        //     }
+        // }
+
+        // // Delete the temporary file from the database
+        // $temporaryFile->delete();
     }
 }

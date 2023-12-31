@@ -11,9 +11,9 @@
                     </span>
                 </button>
 
-                <!-- <img v-if="universe.image" :src="universe.image" alt="Universe Image"
-                        class="w-full h-full object-cover" /> -->
-                <div class="text-white text-xl">C{{ chapter.chapter_id }}</div>
+                <img v-if="chapter.chapter_thumbnail" :src="chapter.chapter_thumbnail" alt="Chapter Image"
+                    class="w-full h-full rounded-lg" />
+                <div v-else class="text-white text-xl">C{{ chapter.chapter_id }}</div>
             </div>
             <p class="text-white pt-4">{{ chapter.chapter_title }}</p>
             </Link>
