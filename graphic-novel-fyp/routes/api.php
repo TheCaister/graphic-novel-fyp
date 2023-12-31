@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\SeriesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Api call to get all universes owned by the user. The function is called getUniverses
 Route::get('/universes', [App\Http\Controllers\UniverseController::class, 'getUniverses'])->name('universes.get-universes');
 
-Route::get('/chapters/{chapter}/pages', [App\Http\Controllers\PageController::class, 'getChapterPages'])->name('pages.chapter-pages');
+// Route::get('/chapters/{chapter}/pages', [App\Http\Controllers\PageController::class, 'getChapterPages'])->name('pages.chapter-pages');
 
 Route::get('/series/genres', [App\Http\Controllers\SeriesController::class, 'getGenreSeries'])->name('series.get-genre-series');
 
@@ -35,6 +36,8 @@ Route::get('/series/recent', [App\Http\Controllers\SeriesController::class, 'get
 Route::get('/series/{series}/chapters', [App\Http\Controllers\SeriesController::class, 'getSeriesChapters'])->name('chapters.get-series-chapters');
 
 Route::get('/series/{universe}', [App\Http\Controllers\SeriesController::class, 'getSeries'])->name('series.get-series');
+
+Route::get('chapters/{chapter}/pages', [PageController::class, 'getChapterPages'])->name('pages.get-chapter-pages');
 
 
 

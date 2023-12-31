@@ -26,7 +26,7 @@ CREATE TABLE `chapters` (
   `chapter_number` int NOT NULL,
   `chapter_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `chapter_thumbnail` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `chapter_notes` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `chapter_notes` text COLLATE utf8mb4_unicode_ci,
   `scheduled_publish` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -296,3 +296,4 @@ INSERT INTO `migrations` VALUES (33,'2023_08_25_185318_elements_created_at',10);
 INSERT INTO `migrations` VALUES (37,'2023_09_30_122118_edits',11);
 INSERT INTO `migrations` VALUES (38,'2023_09_30_143355_timestamps',12);
 INSERT INTO `migrations` VALUES (39,'2023_12_28_150011_timestamps',13);
+INSERT INTO `migrations` VALUES (40,'2023_12_31_153843_chapternotes',14);
