@@ -19,6 +19,7 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
 const emit = defineEmits(['closeModal'])
 function close() {
+    deleteMedia();
     emit('closeModal');
 };
 
@@ -55,6 +56,15 @@ function handleFilePondThumbnailProcess(error, file) {
 
 function handleFilePondThumbnailRemove(error, file) {
     form.upload = '';
+}
+
+function deleteMedia() {
+    
+    if (form.upload) {
+        axios.delete('/api/universes/' + form.upload + '/thumbnail').catch(error => {
+            console.log(error);
+        });
+    }
 }
 </script>
 
