@@ -50,15 +50,8 @@
 import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
 import { usePage } from '@inertiajs/vue3';
-import { defineEmits, ref } from 'vue';
+import { ref } from 'vue';
 import CreateUniverseModal from './CreateUniverseModal.vue';
-
-const emit = defineEmits(['updateDashboard'])
-
-function updateDashboard(dashboardView, parentContentId) {
-    console.log('updateDashboard')
-    emit('updateDashboard', dashboardView, parentContentId)
-}
 
 const page = usePage();
 

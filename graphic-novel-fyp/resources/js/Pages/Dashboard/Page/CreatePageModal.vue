@@ -1,7 +1,6 @@
 <script setup>
 import { onClickOutside } from '@vueuse/core'
 import { ref, defineProps } from 'vue'
-import APICalls from '@/Utilities/APICalls';
 
 import { useForm } from '@inertiajs/vue3';
 
@@ -17,6 +16,7 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
 const emit = defineEmits(['closeModal'])
 function close() {
+    deleteMedia();
     emit('closeModal');
 };
 
@@ -28,7 +28,8 @@ const FilePond = vueFilePond(
 const modal = ref(null)
 
 const form = useForm({
-    page_image: '',
+    chapter_id: '',
+    upload: '',
 });
 
 const props = defineProps({
@@ -44,8 +45,34 @@ onClickOutside(modal, () => {
 
 function submit() {
 
-    // form.post(route('pages.store'), {
+    form.chapter_id = props.parentContentIdNumber
+
+    form.post(route('pages.store'), {
+        onFinish: () => {
+            close()
+        }
+    });
 };
+
+let csrfToken = document.querySelector('meta[name="csrf-token"]').content
+
+function handleFilePondThumbnailProcess(error, file) {
+    form.upload = file.serverId;
+}
+
+function handleFilePondThumbnailRemove(error, file) {
+    form.upload = '';
+}
+
+function deleteMedia() {
+
+    if (form.upload) {
+        axios.delete('/api/pages/' + form.upload + '/thumbnail').catch(error => {
+            console.log(error);
+        });
+    }
+}
+
 </script>
 
 
@@ -63,10 +90,10 @@ function submit() {
                             @processfile="handleFilePondThumbnailProcess" @removefile="handleFilePondThumbnailRemove"
                             :server="{
                                 process: {
-                                    url: '/upload?media=series_thumbnail',
+                                    url: '/upload?media=pages_thumbnail',
                                 },
                                 revert: {
-                                    url: '/api/series/' + this.form.upload + '/thumbnail',
+                                    url: '/api/pages/' + this.form.upload + '/thumbnail',
                                 },
                                 headers: {
                                     'X-CSRF-TOKEN': csrfToken

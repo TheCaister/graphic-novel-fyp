@@ -11,8 +11,8 @@
                         </span>
                     </button>
 
-                    <img v-if="universe.image" :src="universe.image" alt="Universe Image"
-                        class="w-full h-full object-cover" />
+                    <img v-if="page.page_image" :src="page.page_image" alt="Page Image"
+                        class="w-full h-full rounded-lg" />
                     <div v-else class="text-white text-xl">P{{ page.page_number }}</div>
                 </div>
                 <p class="text-white pt-4">{{ page.page_number }}</p>
@@ -46,7 +46,7 @@
 
     <Teleport to="body">
         <Transition name="modal">
-            <create-page-modal  v-if="isCreatePageOpen" @closeModal="isCreatePageOpen = false; updateContentList()"
+            <create-page-modal  v-if="isCreatePageOpen" @closeModal="isCreatePageOpen = false; updateContentList()" :parentContentIdNumber="props.parentContentId"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60"/>
         </Transition>
     </Teleport>
@@ -57,15 +57,9 @@
 import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
 import { usePage } from '@inertiajs/vue3';
-import { defineEmits, ref } from 'vue';
+import { ref } from 'vue';
 import PageManageModal from './PageManageModal.vue'
 import CreatePageModal from './CreatePageModal.vue'
-
-const emit = defineEmits(['updateDashboard'])
-
-function updateDashboard(dashboardView, parentContentId) {
-    emit('updateDashboard', dashboardView, parentContentId)
-}
 
 const props = defineProps({
     parentContentId: {

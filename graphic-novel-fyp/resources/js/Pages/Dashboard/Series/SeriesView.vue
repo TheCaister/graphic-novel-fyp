@@ -51,14 +51,8 @@
 
 import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
-import { defineEmits, ref, defineProps } from 'vue';
+import { ref, defineProps } from 'vue';
 import CreateSeriesModal from './CreateSeriesModal.vue';
-
-const emit = defineEmits(['updateDashboard'])
-
-function updateDashboard(dashboardView, parentContentId) {
-    emit('updateDashboard', dashboardView, parentContentId)
-}
 
 const series = ref([
     { series_title: "Series 1", series_genre: "Action", series_summary: "Summary of Series 1" },

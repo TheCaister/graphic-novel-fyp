@@ -46,7 +46,7 @@ function updateDashboard(dashboardViewString, parentContentId) {
     parentContentIdNumber.value = parentContentId
     dashboardView.value = dashboardViewString
 
-    console.log("Parent:" + parentContentIdNumber.value)
+    // console.log("Parent:" + parentContentIdNumber.value)
 }
 
 function goBack() {
