@@ -1,6 +1,6 @@
 <template>
     <!-- Loop through the universes and display them in cards -->
-    <div v-if="universeLoaded" class="w-full flex">
+    <div v-if="universeLoaded" class="w-full flex flex-wrap">
         <div v-for="universe in universes" :key="universe.universe_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
                 <Link :href='route("universes.show", universe.universe_id)'>
             <div class="h-64 bg-pink-300 flex items-center justify-center rounded-lg relative">

@@ -28,7 +28,7 @@ class SeriesController extends Controller
             'universe_id' => 'required',
             'series_title' => 'required',
             'series_genre' => 'required',
-            'series_summary' => 'required',
+            'series_summary' => 'nullable',
         ]);
 
         if ($request->hasFile('series_thumbnail')) {

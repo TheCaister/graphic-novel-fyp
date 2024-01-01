@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ElementController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\UniverseController;
@@ -192,8 +193,6 @@ Route::middleware('auth')->group(function () {
 
 Route::post('/upload', [UploadController::class, 'store'])->name('upload.store');
 
-Route::delete('/upload', [UploadController::class, 'destroy'])->name('upload.destroy');
-
 Route::get('/publish', [SeriesController::class, 'publish'])->name('publish');
 
 Route::resource('universes', UniverseController::class);
@@ -206,6 +205,7 @@ Route::resource('chapters', ChapterController::class);
 // Route::get('{universe}/series/create', [SeriesController::class, 'create'])->name('series.create');
 Route::get('/series/genres',[SeriesController::class, 'genres'])->name('series.genres');
 Route::resource('series', SeriesController::class);
+Route::resource('comic-pages', PageController::class);
 
 ////////////////////////// ELEMENT ROUTES ////////////////////////
 Route::get('user/main/elementsforge', [ElementController::class, 'elementsforge'])->name('user.main.elementsforge');

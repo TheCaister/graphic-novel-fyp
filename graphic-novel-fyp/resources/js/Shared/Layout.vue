@@ -16,7 +16,7 @@
 
     </Head>
 
-    <div class="bg-gray-100 dark:bg-gray-900 h-screen">
+    <div class="bg-gray-100 dark:bg-gray-900 min-h-screen">
 
         <section class="p-6">
             <header class="flex justify-between">

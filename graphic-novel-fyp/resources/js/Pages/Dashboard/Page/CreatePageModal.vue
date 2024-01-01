@@ -47,8 +47,9 @@ function submit() {
 
     form.chapter_id = props.parentContentIdNumber
 
-    form.post(route('pages.store'), {
+    form.post(route('comic-pages.store'), {
         onFinish: () => {
+            form.upload = '';
             close()
         }
     });
@@ -66,8 +67,10 @@ function handleFilePondThumbnailRemove(error, file) {
 
 function deleteMedia() {
 
+    console.log(form.upload)
+
     if (form.upload) {
-        axios.delete('/api/pages/' + form.upload + '/thumbnail').catch(error => {
+        axios.delete('/api/pages/' + form.upload).catch(error => {
             console.log(error);
         });
     }
@@ -90,10 +93,10 @@ function deleteMedia() {
                             @processfile="handleFilePondThumbnailProcess" @removefile="handleFilePondThumbnailRemove"
                             :server="{
                                 process: {
-                                    url: '/upload?media=pages_thumbnail',
+                                    url: '/upload?media=pages',
                                 },
                                 revert: {
-                                    url: '/api/pages/' + this.form.upload + '/thumbnail',
+                                    url: '/api/pages/' + form.upload,
                                 },
                                 headers: {
                                     'X-CSRF-TOKEN': csrfToken

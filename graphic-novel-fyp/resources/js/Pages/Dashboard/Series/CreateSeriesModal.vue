@@ -58,6 +58,7 @@ function submit() {
 
     form.post(route('series.store'), {
         onFinish: () => {
+            form.upload = '';
             // console.log(form.universe_name)
             close()
         }

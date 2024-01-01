@@ -1,6 +1,6 @@
 <template>
     <!-- Loop through the universes and display them in cards -->
-    <div v-if="pagesLoaded" class="w-full flex">
+    <div v-if="pagesLoaded" class="w-full flex flex-wrap">
         <div v-for="page in pages" :key="page.page_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
             <button @click="isPageManageOpen = true" class="w-full">
                 <div class="h-64 bg-pink-300 flex items-center justify-center rounded-lg relative">

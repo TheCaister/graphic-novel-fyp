@@ -53,6 +53,7 @@ import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
 import { usePage } from '@inertiajs/vue3';
 import { ref, defineProps } from 'vue';
+import CreateChapterModal from './CreateChapterModal.vue';
 
 const page = usePage();
 

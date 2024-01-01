@@ -43,6 +43,7 @@ function submit() {
     form.post(route('universes.store'), {
         onFinish: () => {
             // console.log(form.universe_name)
+            form.upload = '';
             close()
         }
     });

@@ -6,7 +6,7 @@ import { onClickOutside } from '@vueuse/core'
 import { ref, onMounted, defineProps, computed } from 'vue'
 import APICalls from '@/Utilities/APICalls';
 
-import { useForm, router } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 
 
 import vueFilePond from 'vue-filepond';
@@ -62,7 +62,7 @@ function submit() {
 
     form.post(route('chapters.store'), {
         onFinish: () => {
-            // console.log(form.universe_name)
+            form.upload = '';
             close()
         }
     });
