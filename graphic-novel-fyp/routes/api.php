@@ -58,6 +58,8 @@ Route::delete('/series/{serverId}/thumbnail', [App\Http\Controllers\UploadContro
 
 Route::delete('/pages/{serverId}', [App\Http\Controllers\UploadController::class, 'deletePageImage'])->name('pages.delete-image');
 
+Route::delete('images/{serverId}', [App\Http\Controllers\UploadController::class, 'deleteImage'])->name('images.delete-image');
+
 // Route::delete('/pages', [App\Http\Controllers\UploadController::class, 'deletePageImage'])->name('pages.delete-image');
 
 Route::group([], function () {

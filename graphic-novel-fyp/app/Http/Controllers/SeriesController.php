@@ -55,9 +55,6 @@ class SeriesController extends Controller
             $tempThumbnail->delete();
         }
 
-
-        // Redirect to the series page
-        // return redirect()->route('publish');
         return back();
     }
 
@@ -97,9 +94,6 @@ class SeriesController extends Controller
             ];
         }
 
-
-
-
         return Inertia::render('Series/Edit', [
             'universe' => $series->universe,
             'series' => $series,
@@ -112,15 +106,11 @@ class SeriesController extends Controller
     {
         // Validate the request
         $formFields = $request->validate([
-            // 'title' => 'required',
-            // 'description' => 'required',
             // 'universe_id' => 'required',
             'series_title' => 'required',
             'series_genre' => 'required',
+            'series_summary' => 'nullable',
         ]);
-
-        // Add series summary to the form fields
-        $formFields['series_summary'] = $request->series_summary;
 
         // If upload is empty, remove the series_thumbnail from the series media collection
         if ($request->upload == '') {

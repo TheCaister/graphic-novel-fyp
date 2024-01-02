@@ -93,10 +93,21 @@ class UniverseController extends Controller
             'universe_name' => 'required',
         ]);
 
+        $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
+
+        if ($tempThumbnail) {
+            $universe->addMedia(storage_path('app/public/uploads/universe_thumbnail/tmp/' . $tempThumbnail->folder . '/' . $tempThumbnail->filename))->toMediaCollection('universe_thumbnail');
+
+            rmdir(storage_path('app/public/uploads/universe_thumbnail/tmp/' . $tempThumbnail->folder));
+
+            $tempThumbnail->delete();
+        }
+
+
         $universe->update($formFields);
         
         // Redirect back to the dashboard
-        return redirect()->route('home');
+        return redirect()->back();
     }
 
     /**

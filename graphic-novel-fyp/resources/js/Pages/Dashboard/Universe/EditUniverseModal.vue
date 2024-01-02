@@ -3,7 +3,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { onClickOutside } from '@vueuse/core'
-import { ref, onMounted, defineProps } from 'vue'
+import { ref, onMounted, defineProps, computed } from 'vue'
 import APICalls from '@/Utilities/APICalls';
 
 import { useForm } from '@inertiajs/vue3';
@@ -15,6 +15,7 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import axios from 'axios';
 
 const emit = defineEmits(['closeModal'])
 function close() {
@@ -37,7 +38,7 @@ const props = defineProps({
 
 
 const form = useForm({
-    universe_id: '',
+    // universe_id: '',
     universe_name: '',
     upload: '',
 });
@@ -47,9 +48,8 @@ onClickOutside(modal, () => {
 })
 
 function submit() {
-    form.post(route('universes.store'), {
+    form.put(route('universes.update', props.universe.universe_id), {
         onFinish: () => {
-            // console.log(form.universe_name)
             form.upload = '';
             close()
         }
@@ -75,16 +75,49 @@ function deleteMedia() {
     }
 }
 
+function deleteExistingThumbnail() {
+    if (props.universe.media && props.universe.media.length > 0) {
+        axios.delete('/api/universes/-1/thumbnail', {
+            params: {
+                isTemp: "false",
+                universeId: props.universe.universe_id,
+            }
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+
+    // '/api/universes/' + this.form.upload + '/thumbnail?isTemp=true',
+}
+
 onMounted(() => {
-    console.log(props.universe)
-    console.log('testing...')
-    form.universe_id = props.universe.universe_id
     form.universe_name = props.universe.universe_name
+})
+
+const files = computed(() => {
 
     if (props.universe.media && props.universe.media.length > 0) {
-        console.log(props.universe.media[0].id);
+
+        return [
+            {
+                source: props.universe.thumbnail.replace('http://localhost', ''),
+                options: {
+                    type: 'local',
+                },
+            },
+        ]
     }
+    return [];
 })
+
+// const testFiles = [
+//     {
+//         source: '/storage/60/27504d63a37ff94fee0c5114318475c329ce1cb0.png',
+//         options: {
+//             type: 'local',
+//         },
+//     },
+// ]
 </script>
 
 
@@ -112,22 +145,33 @@ onMounted(() => {
                                 }
                             }" /> -->
 
-                        <!-- <file-pond name="upload" label-idle="Universe Thumbnail" accepted-file-types="image/jpeg, image/png"
-                            :files="props.universe.thumbnail" @processfile="handleFilePondThumbnailProcess"
+                        <file-pond name="upload" label-idle="Universe Thumbnail" accepted-file-types="image/jpeg, image/png"
+                            :files="files" @processfile="handleFilePondThumbnailProcess"
                             @removefile="handleFilePondThumbnailRemove" :server="{
                                 process: {
                                     url: '/upload?media=universe_thumbnail',
                                 },
                                 revert: {
-                                    url: '/api/universes/' + this.form.upload + '/thumbnail',
+                                    // url: '/api/universes/' + this.form.upload + '/thumbnail',
+
+                                    url: '/api/universes/' + this.form.upload + '/thumbnail?isTemp=true',
                                 },
                                 load: {
                                     url: '/',
                                 },
                                 headers: {
                                     'X-CSRF-TOKEN': csrfToken
+                                },
+                                remove: (source, load, error) => {
+                                    // axios.delete('/api/universes/' + form.upload + '/thumbnail').catch(error => {
+                                    //     console.log(error);
+                                    // });
+
+                                    deleteExistingThumbnail();
+
+                                    load();
                                 }
-                            }" /> -->
+                            }" />
                     </div>
                     <div class="flex flex-col justify-between w-1/2 ml-8">
                         <div>

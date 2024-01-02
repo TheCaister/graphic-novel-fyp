@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TemporaryFile;
+use App\Models\Universe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -54,25 +55,32 @@ class UploadController extends Controller
 
         return 'nope';
     }
-    
+
     public function deleteUniverseThumbnail(string $serverId, Request $request)
     {
-        dd($request->getContent());
-
-        // Get the temporary file
-        $temporaryFile = TemporaryFile::where('folder', $serverId)->first();
-
-        if ($temporaryFile) {
-            // Get full path of the file
-            $fullPath = $temporaryFile->getFullPath('universe_thumbnail');
-
-            if (Storage::disk('public')->exists($fullPath)) {
-                Storage::disk('public')->delete($fullPath);
-            }
+        // dd($request->getContent());
+        if ($request->isTemp == 'false') {
+            $universe = Universe::where('universe_id', $request->universeId)->first();
+            $universe->clearMediaCollection('universe_thumbnail');
+            $universe->save();
         }
+        else {
 
-        // Delete the temporary file from the database
-        $temporaryFile->delete();
+            // Get the temporary file
+            $temporaryFile = TemporaryFile::where('folder', $serverId)->first();
+
+            if ($temporaryFile) {
+                // Get full path of the file
+                $fullPath = $temporaryFile->getFullPath('universe_thumbnail');
+
+                if (Storage::disk('public')->exists($fullPath)) {
+                    Storage::disk('public')->delete($fullPath);
+                }
+            }
+
+            // Delete the temporary file from the database
+            $temporaryFile->delete();
+        }
     }
 
     public function deleteSeriesThumbnail(string $serverId)

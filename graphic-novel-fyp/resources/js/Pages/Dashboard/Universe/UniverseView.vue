@@ -3,7 +3,14 @@
     <div v-if="universeLoaded" class="w-full flex flex-wrap">
         <div v-for="universe in universes" :key="universe.universe_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
 
-            <div class="h-64 bg-pink-300 flex items-center justify-center rounded-lg relative">
+            <div class="relative">
+                <Link :href='route("universes.show", universe.universe_id)' class="h-full flex items-center">
+                <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
+                    <img v-if="universe.thumbnail" :src="universe.thumbnail" alt="Universe Image"
+                        class="w-full h-full rounded-lg" />
+                    <div v-else class="text-white text-xl flex items-center">U{{ universe.universe_id }}</div>
+                </div>
+                </Link>
 
                 <!-- Create a button on the top right corner -->
                 <button class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
@@ -12,16 +19,11 @@
 
 
                     </span>
-                    <DashboardDropdownMenu class="absolute z-40" :events="dropDownMenuOptions" @click="switchSelectedContent(universe.universe_id);" 
-                        @menuItemClick="handleMenuItemClicked" />
+                    <DashboardDropdownMenu class="absolute z-40" :events="dropDownMenuOptions"
+                        @click="switchSelectedContent(universe.universe_id);" @menuItemClick="handleMenuItemClicked" />
                 </button>
-
-                <Link :href='route("universes.show", universe.universe_id)'>
-                <img v-if="universe.thumbnail" :src="universe.thumbnail" alt="Universe Image"
-                    class="w-full h-full rounded-lg" />
-                <div v-else class="text-white text-xl">U{{ universe.universe_id }}</div>
-                </Link>
             </div>
+
             <p class="text-white pt-4">{{ universe.universe_name }}</p>
 
 
@@ -48,14 +50,15 @@
         </div>
     </div>
 
-    <Teleport to="body" >
+    <Teleport to="body">
         <Transition name="modal" class="z-50">
             <create-universe-modal v-if="isCreateModalOpen" @closeModal="isCreateModalOpen = false; updateContentList()"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
         <Transition name="modal" class="z-50">
-            <edit-universe-modal v-if="isEditModalOpen" @closeModal="isEditModalOpen = false; updateContentList()" :universe="selectedUniverse" :key="selectedUniverse.universe_id"
+            <edit-universe-modal v-if="isEditModalOpen" @closeModal="isEditModalOpen = false; updateContentList()"
+                :universe="selectedUniverse" :key="selectedUniverse.universe_id"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
@@ -87,7 +90,7 @@ const isEditModalOpen = ref(false)
 
 const universeLoaded = ref(false)
 
-const selectedUniverse = ref({universe_id: 0, universe_name: ""})
+const selectedUniverse = ref({ universe_id: 0, universe_name: "" })
 
 const dropDownMenuOptions = [
     { id: 1, text: "Edit", eventName: "edit" },
@@ -133,8 +136,8 @@ function handleMenuItemClicked(eventName) {
     }
 }
 
-function switchSelectedContent(contentId){
-    
+function switchSelectedContent(contentId) {
+
     selectedUniverse.value = universes.value.find(universe => universe.universe_id == contentId)
     console.log(selectedUniverse.value)
 }
