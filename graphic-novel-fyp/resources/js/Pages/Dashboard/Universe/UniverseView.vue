@@ -2,28 +2,40 @@
     <!-- Loop through the universes and display them in cards -->
     <div v-if="universeLoaded" class="w-full flex flex-wrap">
         <div v-for="universe in universes" :key="universe.universe_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
-                <Link :href='route("universes.show", universe.universe_id)'>
+
             <div class="h-64 bg-pink-300 flex items-center justify-center rounded-lg relative">
+
                 <!-- Create a button on the top right corner -->
                 <button @click="test" class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
                     <span class="material-symbols-outlined dark">
                         pending
+
+
                     </span>
+                    <DashboardDropdownMenu class="absolute z-40" :events="dropDownMenuOptions"
+                        @menuItemClick="handleMenuItemClicked" />
                 </button>
 
-                <img v-if="universe.thumbnail" :src="universe.thumbnail" alt="Universe Image" class="w-full h-full rounded-lg" />
+                <Link :href='route("universes.show", universe.universe_id)'>
+                <img v-if="universe.thumbnail" :src="universe.thumbnail" alt="Universe Image"
+                    class="w-full h-full rounded-lg" />
                 <div v-else class="text-white text-xl">U{{ universe.universe_id }}</div>
+                </Link>
             </div>
             <p class="text-white pt-4">{{ universe.universe_name }}</p>
-        </Link>
+
+
+
         </div>
 
-        <button @click="isOpen = true" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
+        <button @click="isCreateModalOpen = true" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
             <div class="w-full h-64 flex items-center justify-center rounded-lg">
 
                 <span class="material-symbols-outlined dark"
                     style="font-size: 10rem; font-variation-settings: 'wght' 100; color: #f9a8d4;">
                     add_circle
+
+
                 </span>
             </div>
             <p class="text-white pt-4 text-center">Create Universe</p>
@@ -36,9 +48,14 @@
         </div>
     </div>
 
-    <Teleport to="body">
-        <Transition name="modal">
-            <create-universe-modal v-if="isOpen" @closeModal="isOpen = false; updateContentList()"
+    <Teleport to="body" >
+        <Transition name="modal" class="z-50">
+            <create-universe-modal v-if="isCreateModalOpen" @closeModal="isCreateModalOpen = false; updateContentList()"
+                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+        </Transition>
+
+        <Transition name="modal" class="z-50">
+            <edit-universe-modal v-if="isEditModalOpen" @closeModal="isEditModalOpen = false; updateContentList()"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
@@ -52,6 +69,8 @@ import APICalls from '@/Utilities/APICalls';
 import { usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import CreateUniverseModal from './CreateUniverseModal.vue';
+import EditUniverseModal from './EditUniverseModal.vue';
+import DashboardDropdownMenu from '../DashboardDropdownMenu.vue'
 
 const page = usePage();
 
@@ -63,9 +82,16 @@ const universes = ref([
     // Add more universes as needed
 ]);
 
-const isOpen = ref(false)
+const isCreateModalOpen = ref(false)
+const isEditModalOpen = ref(false)
 
 const universeLoaded = ref(false)
+
+const dropDownMenuOptions = [
+    { id: 1, text: "Edit", eventName: "edit" },
+    { id: 2, text: "View Elements", eventName: "viewElements" },
+    { id: 3, text: "Delete", eventName: "delete" },
+]
 
 onActivated(async () => {
     updateContentList()
@@ -88,6 +114,23 @@ function updateContentList() {
 
 function test() {
     console.log('test')
+}
+
+function handleMenuItemClicked(eventName) {
+    console.log(eventName)
+
+    // switch
+    switch (eventName) {
+        case "edit":
+            isEditModalOpen.value = true
+            break;
+        case "viewElements":
+            break;
+        case "delete":
+            break;
+        default:
+            break;
+    }
 }
 </script>
 
