@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SeriesController;
+use App\Http\Controllers\UniverseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -58,3 +59,14 @@ Route::delete('/series/{serverId}/thumbnail', [App\Http\Controllers\UploadContro
 Route::delete('/pages/{serverId}', [App\Http\Controllers\UploadController::class, 'deletePageImage'])->name('pages.delete-image');
 
 // Route::delete('/pages', [App\Http\Controllers\UploadController::class, 'deletePageImage'])->name('pages.delete-image');
+
+Route::group([], function () {
+    Route::get('universes/{universe}', [UniverseController::class, 'getJsonUniverse'])->name('universes.get-universe-json');
+    Route::get('series/{series}', [SeriesController::class, 'getJsonSeries'])->name('series.get-series-json');
+    Route::get('chapters/{chapter}', [SeriesController::class, 'getJsonChapter'])->name('chapters.get-chapter-json');
+    Route::get('pages/{page}', [PageController::class, 'getJsonPage'])->name('pages.get-page-json');
+});
+
+Route::group([], function () {
+    Route::get('universes/{universe}/thumbnail', [UniverseController::class, 'getThumbnailJson'])->name('universes.get-thumbnail-json');
+});

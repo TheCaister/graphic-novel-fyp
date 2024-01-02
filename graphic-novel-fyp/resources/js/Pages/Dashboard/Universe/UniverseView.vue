@@ -6,13 +6,13 @@
             <div class="h-64 bg-pink-300 flex items-center justify-center rounded-lg relative">
 
                 <!-- Create a button on the top right corner -->
-                <button @click="test" class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
+                <button class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
                     <span class="material-symbols-outlined dark">
                         pending
 
 
                     </span>
-                    <DashboardDropdownMenu class="absolute z-40" :events="dropDownMenuOptions"
+                    <DashboardDropdownMenu class="absolute z-40" :events="dropDownMenuOptions" @click="switchSelectedContent(universe.universe_id);" 
                         @menuItemClick="handleMenuItemClicked" />
                 </button>
 
@@ -55,7 +55,7 @@
         </Transition>
 
         <Transition name="modal" class="z-50">
-            <edit-universe-modal v-if="isEditModalOpen" @closeModal="isEditModalOpen = false; updateContentList()"
+            <edit-universe-modal v-if="isEditModalOpen" @closeModal="isEditModalOpen = false; updateContentList()" :universe="selectedUniverse" :key="selectedUniverse.universe_id"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
@@ -87,6 +87,8 @@ const isEditModalOpen = ref(false)
 
 const universeLoaded = ref(false)
 
+const selectedUniverse = ref({universe_id: 0, universe_name: ""})
+
 const dropDownMenuOptions = [
     { id: 1, text: "Edit", eventName: "edit" },
     { id: 2, text: "View Elements", eventName: "viewElements" },
@@ -117,8 +119,6 @@ function test() {
 }
 
 function handleMenuItemClicked(eventName) {
-    console.log(eventName)
-
     // switch
     switch (eventName) {
         case "edit":
@@ -131,6 +131,12 @@ function handleMenuItemClicked(eventName) {
         default:
             break;
     }
+}
+
+function switchSelectedContent(contentId){
+    
+    selectedUniverse.value = universes.value.find(universe => universe.universe_id == contentId)
+    console.log(selectedUniverse.value)
 }
 </script>
 

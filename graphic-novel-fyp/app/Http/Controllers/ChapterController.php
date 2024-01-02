@@ -302,4 +302,31 @@ class ChapterController extends Controller
 
         return redirect()->route('series.show', $series_id);
     }
+
+    public function getJsonChapter($chapterId)
+    {
+        $chapter = Chapter::find($chapterId);
+
+        $chapterPagesToReturn = [];
+        // Create array that holds all pages in the chapter, sorted by page number
+        $pagesInOrder = $chapter->pages()->orderBy('page_number')->get();
+
+        foreach ($pagesInOrder as $page) {
+            $filePath = $page->getFirstMediaUrl('page_image');
+
+            $filePath = str_replace('http://localhost', '', $filePath);
+
+            // Add the page to the array
+            $chapterPagesToReturn[] = [
+                'source' => $filePath,
+                'options' => [
+                    'type' => 'local',
+                ],
+            ];
+        }
+
+        $chapter->chapter_pages = $chapterPagesToReturn;
+
+        return response()->json($chapter);
+    }
 }

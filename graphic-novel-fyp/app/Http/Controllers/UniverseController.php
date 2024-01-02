@@ -122,4 +122,43 @@ class UniverseController extends Controller
 
         return response()->json($universes);
     }
+
+    public function getJsonUniverse(Universe $universe)
+    {
+
+        $universe->thumbnail = $this->getThumbnail($universe);
+
+        return response()->json($universe);
+    }
+
+
+    // JSON wrapper for getThumbnail    
+    public function getThumbnailJson(Universe $universe)
+    {
+
+        return response()->json($this->getThumbnail($universe));
+    }
+
+    public function getThumbnail(Universe $universe)
+    {
+        $thumbnail = $universe->getFirstMediaUrl('universe_thumbnail');
+
+        if ($thumbnail) {
+            $thumbnail = str_replace('http://localhost', '', $thumbnail);
+
+            $files = [
+                [
+                    'source' => $thumbnail,
+                    'options' => [
+                        'type' => 'local',
+                    ],
+                ],
+            ];
+        }
+        
+
+        return $files;
+    }
+
+
 }

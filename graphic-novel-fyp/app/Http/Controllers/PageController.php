@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chapter;
+use App\Models\Page;
 use App\Models\TemporaryFile;
 use Illuminate\Http\Request;
 
@@ -61,5 +62,12 @@ class PageController extends Controller
         }
 
         return back();
+    }
+
+    public function getJsonPage($pageId)
+    {
+        $page = Page::find($pageId);
+
+        return response()->json($page);
     }
 }

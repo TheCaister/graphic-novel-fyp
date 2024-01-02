@@ -55,8 +55,10 @@ class UploadController extends Controller
         return 'nope';
     }
     
-    public function deleteUniverseThumbnail(string $serverId)
+    public function deleteUniverseThumbnail(string $serverId, Request $request)
     {
+        dd($request->getContent());
+
         // Get the temporary file
         $temporaryFile = TemporaryFile::where('folder', $serverId)->first();
 

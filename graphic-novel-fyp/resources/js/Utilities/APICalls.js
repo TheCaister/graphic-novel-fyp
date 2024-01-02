@@ -53,5 +53,33 @@ export default {
                 id: id,
             }
         })
+    },
+    getContent(type, id){
+        // Switch
+        switch(type){
+            case 'page':
+                return this.getPage(id)
+            case 'chapter':
+                return this.getChapter(id)
+            case 'series':
+                return this.getSeries(id)
+            case 'universe':
+                return this.getUniverse(id)
+        }
+    },
+    getPage(pageId){
+        return axios.get('/api/pages/' + pageId)
+    },
+    getChapter(chapterId){
+        return axios.get('/api/chapters/' + chapterId)
+    },
+    getSeries(seriesId){
+        return axios.get('/api/series/' + seriesId)
+    },
+    getUniverse(universeId){
+        return axios.get('/api/universes/' + universeId)
+    },
+    getUniverseThumbnail(universeId){
+        return axios.get('/api/universes/' + universeId + '/thumbnail')
     }
 }

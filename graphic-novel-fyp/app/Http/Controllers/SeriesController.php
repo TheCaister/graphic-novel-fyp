@@ -64,11 +64,13 @@ class SeriesController extends Controller
     // Show the series
     public function show(Series $series)
     {
-        return Inertia::render('Dashboard/Dashboard',
-        [
-            'dashboardViewType' => 'ChapterView',
-            'parentContentId' => $series->series_id,   
-        ]);
+        return Inertia::render(
+            'Dashboard/Dashboard',
+            [
+                'dashboardViewType' => 'ChapterView',
+                'parentContentId' => $series->series_id,
+            ]
+        );
     }
 
     // Edit the series
@@ -254,7 +256,7 @@ class SeriesController extends Controller
         return response()->json($series);
     }
 
-public function getSeriesChapters(Series $series)
+    public function getSeriesChapters(Series $series)
     {
         // dd($series->chapters);
 
@@ -272,5 +274,11 @@ public function getSeriesChapters(Series $series)
         return Inertia::render('Chapters/ManageChapters', [
             'chapters' => $series->chapters,
         ]);
+    }
+
+    public function getJsonSeries(Series $series)
+    {
+        // Return the series as a json response
+        return response()->json($series);
     }
 }

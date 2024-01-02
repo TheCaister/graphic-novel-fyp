@@ -3,7 +3,8 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { onClickOutside } from '@vueuse/core'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineProps } from 'vue'
+import APICalls from '@/Utilities/APICalls';
 
 import { useForm } from '@inertiajs/vue3';
 
@@ -28,7 +29,15 @@ const FilePond = vueFilePond(
 
 const modal = ref(null)
 
+const props = defineProps({
+    universe: {
+        type: Object,
+    },
+})
+
+
 const form = useForm({
+    universe_id: '',
     universe_name: '',
     upload: '',
 });
@@ -58,13 +67,24 @@ function handleFilePondThumbnailRemove(error, file) {
 }
 
 function deleteMedia() {
-    
+
     if (form.upload) {
         axios.delete('/api/universes/' + form.upload + '/thumbnail').catch(error => {
             console.log(error);
         });
     }
 }
+
+onMounted(() => {
+    console.log(props.universe)
+    console.log('testing...')
+    form.universe_id = props.universe.universe_id
+    form.universe_name = props.universe.universe_name
+
+    if (props.universe.media && props.universe.media.length > 0) {
+        console.log(props.universe.media[0].id);
+    }
+})
 </script>
 
 
@@ -78,7 +98,7 @@ function deleteMedia() {
                     <div class="w-1/2">
                         <Label>Universe Thumbnail</Label>
 
-                        <file-pond name="upload" label-idle="Universe Thumbnail" accepted-file-types="image/jpeg, image/png"
+                        <!-- <file-pond name="upload" label-idle="Universe Thumbnail" accepted-file-types="image/jpeg, image/png"
                             @processfile="handleFilePondThumbnailProcess" @removefile="handleFilePondThumbnailRemove"
                             :server="{
                                 process: {
@@ -90,7 +110,24 @@ function deleteMedia() {
                                 headers: {
                                     'X-CSRF-TOKEN': csrfToken
                                 }
-                            }" />
+                            }" /> -->
+
+                        <!-- <file-pond name="upload" label-idle="Universe Thumbnail" accepted-file-types="image/jpeg, image/png"
+                            :files="props.universe.thumbnail" @processfile="handleFilePondThumbnailProcess"
+                            @removefile="handleFilePondThumbnailRemove" :server="{
+                                process: {
+                                    url: '/upload?media=universe_thumbnail',
+                                },
+                                revert: {
+                                    url: '/api/universes/' + this.form.upload + '/thumbnail',
+                                },
+                                load: {
+                                    url: '/',
+                                },
+                                headers: {
+                                    'X-CSRF-TOKEN': csrfToken
+                                }
+                            }" /> -->
                     </div>
                     <div class="flex flex-col justify-between w-1/2 ml-8">
                         <div>
