@@ -7,7 +7,7 @@ import PageView from './Page/PageView.vue';
 import ElementView from './Element/ElementView.vue';
 import TabsWrapper from './TabsWrapper.vue';
 import Tab from './Tab.vue';
-import { ref, defineProps, onMounted, computed } from 'vue'
+import { ref, defineProps, onMounted, computed, provide } from 'vue'
 import APICalls from '@/Utilities/APICalls';
 
 
@@ -39,6 +39,9 @@ const DashboardViewComponent = computed(() => {
             return UniverseView
     }
 })
+
+provide('dashboardView', dashboardView.value)
+provide('parentContentId', parentContentIdNumber.value)
 
 onMounted(async () => {
     console.log(props.dashboardViewType)
@@ -86,35 +89,23 @@ function goBack() {
         </div>
     </div>
 
-    <div class="text-gray-500 flex justify-center">
-
-        <div>
-            <button>Content</button>
-            <button>Elements</button>
-        </div>
-    </div>
-
-    <div >
+    <div>
 
         <TabsWrapper class="text-4xl font-bold text-white flex flex-wrap ">
             <Tab title="Content">
-
                 <KeepAlive>
                     <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber"
                         @updateDashboard="updateDashboard" />
                 </KeepAlive>
-
-
             </Tab>
 
             <Tab title="Elements">
-                <ElementView/>
+                <KeepAlive>
+                    <ElementView />
+                </KeepAlive>
+
             </Tab>
         </TabsWrapper>
-
-        <!-- Make dynamic -->
-
-
     </div>
 </template>
 

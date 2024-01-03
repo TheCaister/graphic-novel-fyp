@@ -22,19 +22,19 @@ class ChapterController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Series $series)
-    {
-        // Get the universe of the series
-        $universe = $series->universe;
-        // Return the create page, passing in the series
-        return Inertia::render(
-            'Chapters/Create',
-            [
-                'passedUniverse' => $universe,
-                'passedSeries' => $series,
-            ]
-        );
-    }
+    // public function create(Series $series)
+    // {
+    //     // Get the universe of the series
+    //     $universe = $series->universe;
+    //     // Return the create page, passing in the series
+    //     return Inertia::render(
+    //         'Chapters/Create',
+    //         [
+    //             'passedUniverse' => $universe,
+    //             'passedSeries' => $series,
+    //         ]
+    //     );
+    // }
 
     /**
      * Store a newly created resource in storage.

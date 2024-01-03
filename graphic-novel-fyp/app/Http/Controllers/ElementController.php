@@ -28,13 +28,33 @@ class ElementController extends Controller
         //
         // dd(request()->all());
 
+        // return Inertia::render(
+        //     'Elements/Create',
+        //     [
+        //         'elementable' => request()->contentType,
+        //         'elementable_id' => request()->contentId,
+        //     ]
+        // );
+
+        // return Inertia::render(
+        //     'Elements/EditElementLayout',
+        //     [
+        //         // 'elementable' => request()->contentType,
+        //         // 'elementable_id' => request()->contentId,
+        //     ]
+        // );
+
+        // do a switch statement on the request's element_type
         return Inertia::render(
-            'Elements/Create',
+            'Elements/EditElementLayout',
             [
-                'elementable' => request()->contentType,
-                'elementable_id' => request()->contentId,
+                'elementType' => request()->elementType,
+                'contentType' => request()->contentType,
+                'contentId' => request()->contentId,
             ]
         );
+
+        
     }
 
     /**

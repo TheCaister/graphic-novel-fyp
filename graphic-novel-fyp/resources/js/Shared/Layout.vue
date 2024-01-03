@@ -73,7 +73,7 @@
             </header>
         </section>
 
-        <section class="p-6">
+        <section>
             <slot />
         </section>
 
