@@ -4,7 +4,6 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { onClickOutside } from '@vueuse/core'
 import { ref, onMounted, defineProps, computed } from 'vue'
-import APICalls from '@/Utilities/APICalls';
 
 import { useForm } from '@inertiajs/vue3';
 
@@ -38,7 +37,6 @@ const props = defineProps({
 
 
 const form = useForm({
-    // universe_id: '',
     universe_name: '',
     upload: '',
 });
@@ -86,8 +84,6 @@ function deleteExistingThumbnail() {
             console.log(error);
         });
     }
-
-    // '/api/universes/' + this.form.upload + '/thumbnail?isTemp=true',
 }
 
 onMounted(() => {
@@ -109,15 +105,6 @@ const files = computed(() => {
     }
     return [];
 })
-
-// const testFiles = [
-//     {
-//         source: '/storage/60/27504d63a37ff94fee0c5114318475c329ce1cb0.png',
-//         options: {
-//             type: 'local',
-//         },
-//     },
-// ]
 </script>
 
 
@@ -131,20 +118,6 @@ const files = computed(() => {
                     <div class="w-1/2">
                         <Label>Universe Thumbnail</Label>
 
-                        <!-- <file-pond name="upload" label-idle="Universe Thumbnail" accepted-file-types="image/jpeg, image/png"
-                            @processfile="handleFilePondThumbnailProcess" @removefile="handleFilePondThumbnailRemove"
-                            :server="{
-                                process: {
-                                    url: '/upload?media=universe_thumbnail',
-                                },
-                                revert: {
-                                    url: '/api/universes/' + form.upload + '/thumbnail',
-                                },
-                                headers: {
-                                    'X-CSRF-TOKEN': csrfToken
-                                }
-                            }" /> -->
-
                         <file-pond name="upload" label-idle="Universe Thumbnail" accepted-file-types="image/jpeg, image/png"
                             :files="files" @processfile="handleFilePondThumbnailProcess"
                             @removefile="handleFilePondThumbnailRemove" :server="{
@@ -152,8 +125,6 @@ const files = computed(() => {
                                     url: '/upload?media=universe_thumbnail',
                                 },
                                 revert: {
-                                    // url: '/api/universes/' + this.form.upload + '/thumbnail',
-
                                     url: '/api/universes/' + this.form.upload + '/thumbnail?isTemp=true',
                                 },
                                 load: {
@@ -163,10 +134,6 @@ const files = computed(() => {
                                     'X-CSRF-TOKEN': csrfToken
                                 },
                                 remove: (source, load, error) => {
-                                    // axios.delete('/api/universes/' + form.upload + '/thumbnail').catch(error => {
-                                    //     console.log(error);
-                                    // });
-
                                     deleteExistingThumbnail();
 
                                     load();
@@ -196,7 +163,7 @@ const files = computed(() => {
                             </button>
                             <PrimaryButton type="submit"
                                 class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                Create
+                                Save
                             </PrimaryButton>
                         </div>
                     </div>

@@ -62,6 +62,12 @@
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
+        <Transition name="modal" class="z-50">
+            <delete-universe-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()"
+                :universe="selectedUniverse" :key="selectedUniverse.universe_id"
+                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+        </Transition>
+
     </Teleport>
 </template>
 
@@ -74,6 +80,7 @@ import { ref } from 'vue';
 import CreateUniverseModal from './CreateUniverseModal.vue';
 import EditUniverseModal from './EditUniverseModal.vue';
 import DashboardDropdownMenu from '../DashboardDropdownMenu.vue'
+import DeleteUniverseModal from './DeleteUniverseModal.vue'
 
 const page = usePage();
 
@@ -87,6 +94,7 @@ const universes = ref([
 
 const isCreateModalOpen = ref(false)
 const isEditModalOpen = ref(false)
+const isDeleteModalOpen = ref(false)
 
 const universeLoaded = ref(false)
 
@@ -130,6 +138,7 @@ function handleMenuItemClicked(eventName) {
         case "viewElements":
             break;
         case "delete":
+            isDeleteModalOpen.value = true
             break;
         default:
             break;

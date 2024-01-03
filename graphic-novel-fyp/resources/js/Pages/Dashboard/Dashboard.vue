@@ -4,6 +4,8 @@ import UniverseView from './Universe/UniverseView.vue';
 import SeriesView from './Series/SeriesView.vue';
 import ChapterView from './Chapter/ChapterView.vue';
 import PageView from './Page/PageView.vue';
+import TabsWrapper from './TabsWrapper.vue';
+import Tab from './Tab.vue';
 import { ref, defineProps, onMounted, computed } from 'vue'
 import APICalls from '@/Utilities/APICalls';
 
@@ -45,8 +47,6 @@ function updateDashboard(dashboardViewString, parentContentId) {
 
     parentContentIdNumber.value = parentContentId
     dashboardView.value = dashboardViewString
-
-    // console.log("Parent:" + parentContentIdNumber.value)
 }
 
 function goBack() {
@@ -85,13 +85,36 @@ function goBack() {
         </div>
     </div>
 
-    <div class="flex flex-wrap relative">
+    <div class="text-gray-500 flex justify-center">
+
+        <div>
+            <button>Content</button>
+            <button>Elements</button>
+        </div>
+    </div>
+
+    <div>
+
+        <TabsWrapper class="text-4xl font-bold text-white flex flex-wrap relative">
+            <Tab title="Content">
+
+                <KeepAlive>
+                    <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber"
+                        @updateDashboard="updateDashboard" />
+                </KeepAlive>
+
+
+            </Tab>
+            
+            <Tab title="Elements">
+                <div>
+                    Testing2...
+                </div>
+            </Tab>
+        </TabsWrapper>
 
         <!-- Make dynamic -->
-        <KeepAlive>
-            <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber"
-                @updateDashboard="updateDashboard" />
-        </KeepAlive>
+
 
     </div>
 </template>

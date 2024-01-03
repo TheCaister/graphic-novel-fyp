@@ -115,10 +115,19 @@ class UniverseController extends Controller
      */
     public function destroy(Universe $universe)
     {
+        
+        // Delete all media
+        $universe->clearMediaCollection('universe_thumbnail');
+        
+        
         //
         $universe->delete();
 
-        return redirect()->route('home');
+
+
+        // return redirect()->route('home');
+
+        return redirect()->back();
     }
 
     // Return universes in JSON format
