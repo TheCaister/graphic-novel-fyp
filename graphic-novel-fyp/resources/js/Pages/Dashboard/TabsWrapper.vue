@@ -1,12 +1,12 @@
 <template>
-    <div class="tabs">
-        <ul class="tabes_header">
+    <div class="tabs flex flex-col">
+        <ul class="flex">
             <li v-for="title in tabTitles" :key="title" @click="selectedTitle = title">
                 {{ title }}
 
             </li>
         </ul>
-    <slot/>
+         <slot/>
     </div>
 </template>
 

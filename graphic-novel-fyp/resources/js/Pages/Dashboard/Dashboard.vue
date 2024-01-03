@@ -4,6 +4,7 @@ import UniverseView from './Universe/UniverseView.vue';
 import SeriesView from './Series/SeriesView.vue';
 import ChapterView from './Chapter/ChapterView.vue';
 import PageView from './Page/PageView.vue';
+import ElementView from './Element/ElementView.vue';
 import TabsWrapper from './TabsWrapper.vue';
 import Tab from './Tab.vue';
 import { ref, defineProps, onMounted, computed } from 'vue'
@@ -93,9 +94,9 @@ function goBack() {
         </div>
     </div>
 
-    <div>
+    <div >
 
-        <TabsWrapper class="text-4xl font-bold text-white flex flex-wrap relative">
+        <TabsWrapper class="text-4xl font-bold text-white flex flex-wrap ">
             <Tab title="Content">
 
                 <KeepAlive>
@@ -105,11 +106,9 @@ function goBack() {
 
 
             </Tab>
-            
+
             <Tab title="Elements">
-                <div>
-                    Testing2...
-                </div>
+                <ElementView/>
             </Tab>
         </TabsWrapper>
 
