@@ -1,31 +1,26 @@
 <script setup>
-import { Head, router } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import EditSimpleText from './SimpleText/EditSimpleText.vue';
 import EditMindMap from './Mindmap/EditMindMap.vue';
 import EditPanelPlanner from './PanelPlanner/EditPanelPlanner.vue';
-import { ref, defineProps, onMounted, computed } from 'vue'
-import APICalls from '@/Utilities/APICalls';
-
+import { defineProps, onMounted, computed } from 'vue'
 
 const props = defineProps({
-    dashboardViewType: {
+    elementType: {
         type: String,
     },
-    parentContentType: {
+    contentType: {
         type: String,
     },
-    parentContentId: {
+    contentId: {
         type: Number,
         default: 0,
     },
 });
 
-// const dashboardView = ref(props.dashboardViewType)
-// const parentContentIdNumber = ref(props.parentContentId)
-
 const DashboardViewComponent = computed(() => {
     // Switch statement to return the correct dashboard view
-    switch (dashboardView.value) {
+    switch (props.elementType.value) {
         case 'SimpleText':
             return EditSimpleText
         case 'MindMap':
@@ -78,5 +73,10 @@ function updateDashboard(dashboardViewString, parentContentId) {
             </div>
         
         </div>
+
+        <!-- Element Edit View -->
+        <KeepAlive>
+            <component :is="DashboardViewComponent" />
+        </KeepAlive>
     </div>
 </template>

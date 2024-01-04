@@ -75,7 +75,7 @@
         </button>
     </div>
 
-    <div class="border-2 border-black">
+    <div class="bg-black text-white">
         <editor-content class="p-4 editor-field" :editor="editor" />
 
     </div>

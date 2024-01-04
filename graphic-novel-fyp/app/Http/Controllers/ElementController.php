@@ -63,7 +63,7 @@ class ElementController extends Controller
     public function store(Request $request)
     {
 
-        // dd($request->all());
+        dd($request->all());
 
         // dd($content);
 
