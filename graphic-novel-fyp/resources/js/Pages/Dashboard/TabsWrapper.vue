@@ -22,9 +22,14 @@ import {ref, provide, useSlots} from 'vue'
 
 const slots = useSlots()
 
-console.log(slots.default())
+// console.log(slots.default())
 
-const tabTitles = ref(slots.default().map((tab) => tab.props.title))
+
+// console.log(slots.default().filter(vnode => vnode.type.toString() !== "Symbol('v-cmt')"))
+console.log(slots.default().filter(vnode => typeof vnode.children !== 'string'))
+
+
+const tabTitles = ref(slots.default().filter(vnode => typeof vnode.children !== 'string').map((tab) => tab.props.title))
 const selectedTitle = ref(tabTitles.value[0])
 
 provide('selectedTitle', selectedTitle)

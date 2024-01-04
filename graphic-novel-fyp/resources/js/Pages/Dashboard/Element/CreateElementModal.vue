@@ -11,18 +11,21 @@ function close() {
 const dashboardView = inject('dashboardView')
 const parentContentId = inject('parentContentId')
 
+console.log(dashboardView)
+console.log(parentContentId)
+
 const parentContentType = computed(() => {
     switch (dashboardView.value) {
         case 'UniverseView':
-            return 'universe'
+            return ''
         case 'SeriesView':
-            return 'series'
-        case 'ChapterView':
-            return 'chapter'
-        case 'PageView':
-            return 'page'
-        default:
             return 'universe'
+        case 'ChapterView':
+            return 'series'
+        case 'PageView':
+            return 'chapter'
+        default:
+            return ''
     }
 })
 
@@ -36,9 +39,12 @@ const form = useForm({
     elementType: '',
     contentType: parentContentType.value,
     contentId: parentContentId.value,
+    // contentType: "parentContentType.value",
+    // contentId: "parentContentId.value",
 });
 
 const submit = (elementType) => {
+    console.log(parentContentType)
     form.elementType = elementType;
     form.post(route('elements.store'), {
         onFinish: () => {

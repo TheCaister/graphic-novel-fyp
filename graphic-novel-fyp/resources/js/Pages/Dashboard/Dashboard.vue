@@ -99,13 +99,18 @@ function goBack() {
                 </KeepAlive>
             </Tab>
 
-            <Tab title="Elements">
+            <Tab v-if="dashboardView != 'UniverseView'" title="Elements">
                 <KeepAlive>
                     <ElementView />
                 </KeepAlive>
-
             </Tab>
+            
+
+            <!-- Testing -->
+           
         </TabsWrapper>
+
+     
     </div>
 </template>
 
