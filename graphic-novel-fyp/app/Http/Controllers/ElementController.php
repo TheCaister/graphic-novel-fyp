@@ -391,7 +391,6 @@ class ElementController extends Controller
 
     private function createSimpleTextElement(Request $request)
     {
-        // dd($request->all());
         $content = null;
 
         switch ($request->contentType) {
@@ -408,22 +407,15 @@ class ElementController extends Controller
                 $content = Page::find($request->contentId);
                 break;
             default:
-                # code...
                 return;
                 // break;
         }
 
-        // dd($content);
-
         $simple_text = SimpleTextElement::create();
-
-        // dd($simple_text->simple_text_element_id);
 
         // We get the content, and then we create a new element and attach it to the content.
         $element = Element::create([
             'element_name' => 'New Element',
-            // 'derived_element_type' => 'SimpleText',
-            // 'derived_element_id' => $simple_text->simple_text_element_id,
             'hidden' => false,
         ]);
 
