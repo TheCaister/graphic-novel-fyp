@@ -15,7 +15,7 @@ console.log(dashboardView)
 console.log(parentContentId)
 
 const parentContentType = computed(() => {
-    switch (dashboardView.value) {
+    switch (dashboardView) {
         case 'UniverseView':
             return ''
         case 'SeriesView':
@@ -37,15 +37,15 @@ onClickOutside(modal, () => {
 
 const form = useForm({
     elementType: '',
-    contentType: parentContentType.value,
-    contentId: parentContentId.value,
-    // contentType: "parentContentType.value",
-    // contentId: "parentContentId.value",
+    contentType: '',
+    contentId: '',
 });
 
 const submit = (elementType) => {
     console.log(parentContentType)
     form.elementType = elementType;
+    form.contentType = parentContentType;
+    form.contentId = parentContentId;
     form.post(route('elements.store'), {
         onFinish: () => {
             form.reset();

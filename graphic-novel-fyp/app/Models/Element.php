@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Element extends Model
@@ -20,8 +21,12 @@ class Element extends Model
      */
     protected $fillable = [
         'element_id',
-        'owner_id',
-        'type',
+        // 'owner_id',
+        // 'type',
+        'element_name',
+        'element_thumbnail',
+        'derived_element_type',
+        'derived_element_id',
         'created_at',
         'content',
         'hidden',
@@ -33,7 +38,7 @@ class Element extends Model
      * @var array
      */
     protected $casts = [
-        'owner_id' => 'integer',
+        // 'owner_id' => 'integer',
         'created_at' => 'timestamp',
         'hidden' => 'boolean',
     ];
@@ -61,5 +66,10 @@ class Element extends Model
     public function pages(): MorphToMany
     {
         return $this->morphedByMany(Page::class, 'elementable', 'elementables', 'element_id', 'elementable_id');
+    }
+
+    public function elementType() : MorphTo
+    {
+        return $this->morphTo('elementType', 'derived_element_type', 'derived_element_id');
     }
 }

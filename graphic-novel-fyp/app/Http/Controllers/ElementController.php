@@ -6,6 +6,7 @@ use App\Models\Chapter;
 use App\Models\Element;
 use App\Models\Page;
 use App\Models\Series;
+use App\Models\SimpleTextElement;
 use App\Models\Universe;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -53,8 +54,6 @@ class ElementController extends Controller
                 'contentId' => request()->contentId,
             ]
         );
-
-        
     }
 
     /**
@@ -63,7 +62,25 @@ class ElementController extends Controller
     public function store(Request $request)
     {
 
-        dd($request->all());
+        // dd($request->all());
+
+        switch ($request->elementType) {
+            case 'SimpleText':
+                # code...
+                $this->createSimpleTextElement($request);
+                break;
+            case 'MindMap':
+                # code...
+                break;
+            case 'PanelPlanner':
+                # code...
+                break;
+
+            default:
+                # code...
+                return redirect()->back();
+                // break;
+        }
 
         // dd($content);
 
@@ -370,5 +387,53 @@ class ElementController extends Controller
             'content' => $this->getElementable($request->contentType, $request->contentId),
             'subContentList' => $this->getSubcontent($request->contentType, $request->contentId),
         ]);
+    }
+
+    private function createSimpleTextElement(Request $request)
+    {
+        // dd($request->all());
+        $content = null;
+
+        switch ($request->contentType) {
+            case 'universe':
+                $content = Universe::find($request->contentId);
+                break;
+            case 'series':
+                $content = Series::find($request->contentId);
+                break;
+            case 'chapter':
+                $content = Chapter::find($request->contentId);
+                break;
+            case 'page':
+                $content = Page::find($request->contentId);
+                break;
+            default:
+                # code...
+                return;
+                // break;
+        }
+
+        // dd($content);
+
+        $simple_text = SimpleTextElement::create();
+
+        // dd($simple_text->simple_text_element_id);
+
+        // We get the content, and then we create a new element and attach it to the content.
+        $element = Element::create([
+            'element_name' => 'New Element',
+            // 'derived_element_type' => 'SimpleText',
+            // 'derived_element_id' => $simple_text->simple_text_element_id,
+            'hidden' => false,
+        ]);
+
+        $element->elementType()->associate($simple_text);
+
+        $element->save();
+
+        $content->elements()->attach($element->element_id);
+        
+
+        dd($element);
     }
 }
