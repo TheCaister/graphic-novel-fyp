@@ -14,21 +14,6 @@ const parentContentId = inject('parentContentId')
 console.log(dashboardView)
 console.log(parentContentId)
 
-const parentContentType = computed(() => {
-    switch (dashboardView) {
-        case 'UniverseView':
-            return ''
-        case 'SeriesView':
-            return 'universes'
-        case 'ChapterView':
-            return 'series'
-        case 'PageView':
-            return 'chapters'
-        default:
-            return ''
-    }
-})
-
 const modal = ref(null)
 
 onClickOutside(modal, () => {
@@ -42,9 +27,9 @@ const form = useForm({
 });
 
 const submit = (elementType) => {
-    console.log(parentContentType)
+    // console.log(parentContentType)
     form.elementType = elementType;
-    form.contentType = parentContentType;
+    form.contentType = getParentContentType();
     form.contentId = parentContentId;
     form.post(route('elements.store'), {
         onFinish: () => {
@@ -53,6 +38,22 @@ const submit = (elementType) => {
         }
     })
 };
+
+function getParentContentType(){
+    switch (dashboardView) {
+        case 'UniverseView':
+            return ''
+        case 'SeriesView':
+            return 'universes'
+        case 'ChapterView':
+            return 'series'
+        case 'PageView':
+            return 'chapters'
+        default:
+            return ''
+    }
+
+}
 </script>
 
 <template>

@@ -26,16 +26,6 @@ class ElementController extends Controller
      */
     public function create()
     {
-        //
-        // dd(request()->all());
-
-        // return Inertia::render(
-        //     'Elements/Create',
-        //     [
-        //         'elementable' => request()->contentType,
-        //         'elementable_id' => request()->contentId,
-        //     ]
-        // );
     }
 
     /**
@@ -47,7 +37,6 @@ class ElementController extends Controller
         $elementable = $request->contentType;
         $elementable_id = $request->contentId;
 
-        // dd($request->all());
         $element = null;
 
         switch ($request->elementType) {
@@ -63,48 +52,18 @@ class ElementController extends Controller
                 break;
 
             default:
-                # code...
                 return redirect()->back();
                 // break;
         }
 
-        // dd($content);
-
-        // Store new element in database
-        // $element = Element::create([
-        //     'owner_id' => auth()->user()->id,
-        //     'type' => $request->type,
-        //     'content' => json_encode($request->content),
-        //     'created_at' => now(),
-        //     'hidden' => $request->hidden,
-        // ]);
-
-
-        // $elementable = $this->getElementable($request->elementable, $request->elementable_id);
-
-        // Attach the element to the content
-        // $elementable->elements()->attach($element->element_id);
-
         $universe = $this->getUniverse($elementable, $elementable_id);
-
-        // dd($universe);
 
         // Attach the element to the universe in case it gets detached from the subcontent
         $universe->elements()->attach($element->element_id);
-        // dd($elementable);
-
-        // dd($element);
 
         // Redirect to the element page
+        return redirect()->route('elements.show', $element->element_id);
 
-        // return redirect()->route('elements.show', $element->element_id);
-
-        return Inertia::render(
-            'Elements/EditElementLayout',
-            [
-                'element' => $element,
-            ]
-        );
     }
 
     /**
@@ -112,15 +71,26 @@ class ElementController extends Controller
      */
     public function show(Element $element)
     {
+        // return Inertia::render('Dashboard/Dashboard',
+        // [
+        //     'dashboardViewType' => 'SeriesView',
+        //     'parentContentId' => $universe->universe_id,   
+        // ]);
 
+        return Inertia::render(
+            'Elements/EditElementLayout',
+            [
+                'element' => $element,
+            ]
+        );
 
-        return Inertia::render('Elements/Show', [
-            'element' => $element,
-            'universes' => $element->universes,
-            'series' => $element->series,
-            'chapters' => $element->chapters,
-            'pages' => $element->pages,
-        ]);
+        // return Inertia::render('Elements/Show', [
+        //     'element' => $element,
+        //     'universes' => $element->universes,
+        //     'series' => $element->series,
+        //     'chapters' => $element->chapters,
+        //     'pages' => $element->pages,
+        // ]);
     }
 
     /**

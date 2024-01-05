@@ -6,16 +6,6 @@ import EditPanelPlanner from './PanelPlanner/EditPanelPlanner.vue';
 import { defineProps, onMounted, computed } from 'vue'
 
 const props = defineProps({
-    // elementType: {
-    //     type: String,
-    // },
-    // contentType: {
-    //     type: String,
-    // },
-    // contentId: {
-    //     type: Number,
-    //     default: 0,
-    // },
     element: {
         type: Object,
     },
