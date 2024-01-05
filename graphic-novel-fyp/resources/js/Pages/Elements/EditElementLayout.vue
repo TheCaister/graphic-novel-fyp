@@ -6,26 +6,29 @@ import EditPanelPlanner from './PanelPlanner/EditPanelPlanner.vue';
 import { defineProps, onMounted, computed } from 'vue'
 
 const props = defineProps({
-    elementType: {
-        type: String,
-    },
-    contentType: {
-        type: String,
-    },
-    contentId: {
-        type: Number,
-        default: 0,
+    // elementType: {
+    //     type: String,
+    // },
+    // contentType: {
+    //     type: String,
+    // },
+    // contentId: {
+    //     type: Number,
+    //     default: 0,
+    // },
+    element: {
+        type: Object,
     },
 });
 
 const DashboardViewComponent = computed(() => {
     // Switch statement to return the correct dashboard view
-    switch (props.elementType.value) {
-        case 'SimpleText':
+    switch (props.element.value) {
+        case 'App\Models\SimpleTextElement':
             return EditSimpleText
-        case 'MindMap':
+        case 'App\Models\MindMapElement':
             return EditMindMap
-        case 'PanelPlanner':
+        case 'App\Models\PanelPlannerElement':
             return EditPanelPlanner
         default:
             return EditSimpleText
@@ -35,10 +38,10 @@ const DashboardViewComponent = computed(() => {
 onMounted(async () => {
 })
 
-function updateDashboard(dashboardViewString, parentContentId) {
-    parentContentIdNumber.value = parentContentId
-    dashboardView.value = dashboardViewString
-}
+// function updateDashboard(dashboardViewString, parentContentId) {
+//     parentContentIdNumber.value = parentContentId
+//     dashboardView.value = dashboardViewString
+// }
 </script>
 
 <template>

@@ -19,11 +19,11 @@ const parentContentType = computed(() => {
         case 'UniverseView':
             return ''
         case 'SeriesView':
-            return 'universe'
+            return 'universes'
         case 'ChapterView':
             return 'series'
         case 'PageView':
-            return 'chapter'
+            return 'chapters'
         default:
             return ''
     }
@@ -61,15 +61,6 @@ const submit = (elementType) => {
 
                 <div class="flex flex-col gap-10">
                     <h2 class="text-4xl font-bold text-white ">Select type of element to create:</h2>
-
-                    <!-- <Link :href="route('elements.create',
-                        {
-                            elementType: 'SimpleText',
-                            contentId: parentContentId,
-                            contentType: parentContentType
-                        })" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                    Simple Text
-                    </Link> -->
 
                     <button @click="submit('SimpleText')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Simple Text

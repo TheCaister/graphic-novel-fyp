@@ -36,24 +36,6 @@ class ElementController extends Controller
         //         'elementable_id' => request()->contentId,
         //     ]
         // );
-
-        // return Inertia::render(
-        //     'Elements/EditElementLayout',
-        //     [
-        //         // 'elementable' => request()->contentType,
-        //         // 'elementable_id' => request()->contentId,
-        //     ]
-        // );
-
-        // do a switch statement on the request's element_type
-        return Inertia::render(
-            'Elements/EditElementLayout',
-            [
-                'elementType' => request()->elementType,
-                'contentType' => request()->contentType,
-                'contentId' => request()->contentId,
-            ]
-        );
     }
 
     /**
@@ -62,12 +44,16 @@ class ElementController extends Controller
     public function store(Request $request)
     {
 
+        $elementable = $request->contentType;
+        $elementable_id = $request->contentId;
+
         // dd($request->all());
+        $element = null;
 
         switch ($request->elementType) {
             case 'SimpleText':
                 # code...
-                $this->createSimpleTextElement($request);
+                $element = $this->createSimpleTextElement($request);
                 break;
             case 'MindMap':
                 # code...
@@ -85,21 +71,23 @@ class ElementController extends Controller
         // dd($content);
 
         // Store new element in database
-        $element = Element::create([
-            'owner_id' => auth()->user()->id,
-            'type' => $request->type,
-            'content' => json_encode($request->content),
-            'created_at' => now(),
-            'hidden' => $request->hidden,
-        ]);
+        // $element = Element::create([
+        //     'owner_id' => auth()->user()->id,
+        //     'type' => $request->type,
+        //     'content' => json_encode($request->content),
+        //     'created_at' => now(),
+        //     'hidden' => $request->hidden,
+        // ]);
 
 
-        $elementable = $this->getElementable($request->elementable, $request->elementable_id);
+        // $elementable = $this->getElementable($request->elementable, $request->elementable_id);
 
         // Attach the element to the content
-        $elementable->elements()->attach($element->element_id);
+        // $elementable->elements()->attach($element->element_id);
 
-        $universe = $this->getUniverse($request->elementable, $request->elementable_id);
+        $universe = $this->getUniverse($elementable, $elementable_id);
+
+        // dd($universe);
 
         // Attach the element to the universe in case it gets detached from the subcontent
         $universe->elements()->attach($element->element_id);
@@ -109,7 +97,14 @@ class ElementController extends Controller
 
         // Redirect to the element page
 
-        return redirect()->route('elements.show', $element->element_id);
+        // return redirect()->route('elements.show', $element->element_id);
+
+        return Inertia::render(
+            'Elements/EditElementLayout',
+            [
+                'element' => $element,
+            ]
+        );
     }
 
     /**
@@ -382,34 +377,16 @@ class ElementController extends Controller
 
         // dd($request->all());
 
-        return Inertia::render('Elements/Forge/Show', [
-            'selectedContent' => $this->generateSelectedContent($request->contentType, $request->contentId),
-            'content' => $this->getElementable($request->contentType, $request->contentId),
-            'subContentList' => $this->getSubcontent($request->contentType, $request->contentId),
-        ]);
+        // return Inertia::render('Elements/Forge/Show', [
+        //     'selectedContent' => $this->generateSelectedContent($request->contentType, $request->contentId),
+        //     'content' => $this->getElementable($request->contentType, $request->contentId),
+        //     'subContentList' => $this->getSubcontent($request->contentType, $request->contentId),
+        // ]);
     }
 
     private function createSimpleTextElement(Request $request)
     {
-        $content = null;
-
-        switch ($request->contentType) {
-            case 'universe':
-                $content = Universe::find($request->contentId);
-                break;
-            case 'series':
-                $content = Series::find($request->contentId);
-                break;
-            case 'chapter':
-                $content = Chapter::find($request->contentId);
-                break;
-            case 'page':
-                $content = Page::find($request->contentId);
-                break;
-            default:
-                return;
-                // break;
-        }
+        $content = $this->getElementable($request->contentType, $request->contentId);
 
         $simple_text = SimpleTextElement::create();
 
@@ -425,7 +402,6 @@ class ElementController extends Controller
 
         $content->elements()->attach($element->element_id);
         
-
-        dd($element);
+        return $element;
     }
 }
