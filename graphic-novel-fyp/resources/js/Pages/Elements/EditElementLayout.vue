@@ -4,6 +4,7 @@ import EditSimpleText from './SimpleText/EditSimpleText.vue';
 import EditMindMap from './Mindmap/EditMindMap.vue';
 import EditPanelPlanner from './PanelPlanner/EditPanelPlanner.vue';
 import { defineProps, onMounted, computed } from 'vue'
+import { useForm} from '@inertiajs/vue3';
 
 const props = defineProps({
     element: {
@@ -25,6 +26,30 @@ const DashboardViewComponent = computed(() => {
     }
 })
 
+const form = useForm({
+    // element_name: '',
+    // upload: '',
+    // content: {},
+
+    element: {},
+    upload: '',
+});
+
+function updateForm(element){
+    // console.log('test')
+    form.element = element
+
+    // console.log(form.element)
+}
+
+function saveElement(assign = false){
+    form.put(route('elements.update', {element: props.element.element_id, assign: assign})), {
+        // preserveScroll: true,
+        onSuccess: () => {
+            console.log('success')
+
+        }}}
+
 onMounted(async () => {
 })
 
@@ -45,7 +70,7 @@ onMounted(async () => {
                     Back
                 </button>
                 <div>
-                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    <button @click="saveElement()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Save
                 </button>
                 <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
@@ -69,7 +94,7 @@ onMounted(async () => {
 
         <!-- Element Edit View -->
         <KeepAlive>
-            <component :is="DashboardViewComponent" />
+            <component :is="DashboardViewComponent" :element="props.element" @updateElement="updateForm"/>
         </KeepAlive>
     </div>
 </template>

@@ -110,13 +110,19 @@ class ElementController extends Controller
     public function update(Request $request, Element $element)
     {
 
+        // dd($request->all());
+        $newElement = $request->element;
+
         $element->update([
-            'content' => json_encode($request->content),
-            'hidden' => $request->hidden,
-            'type' => $request->type,
+            'content' => json_encode($newElement['content']),
+            // 'hidden' => $request->hidden,
+            // 'type' => $request->type,
         ]);
 
-        return redirect()->route('elements.show', $element->element_id);
+        dd($element->content);
+
+        // return redirect()->route('elements.show', $element->element_id);
+        return redirect()->back();
     }
 
     /**
