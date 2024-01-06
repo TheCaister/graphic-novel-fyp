@@ -1,3 +1,0 @@
-<template>
-    assign elements here...
-</template>

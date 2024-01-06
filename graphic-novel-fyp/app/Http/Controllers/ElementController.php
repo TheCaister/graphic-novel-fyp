@@ -198,7 +198,7 @@ class ElementController extends Controller
         //     'subContentList' => $subcontent,
         // ]);
 
-        return Inertia::render('Elements/AssignElements', [
+        return Inertia::render('Elements/Assign/AssignElements', [
         ]);
     }
 
