@@ -63,7 +63,6 @@ class ElementController extends Controller
 
         // Redirect to the element page
         return redirect()->route('elements.edit', $element->element_id);
-
     }
 
     /**
@@ -109,7 +108,7 @@ class ElementController extends Controller
         // convert $element->content to object
         $element->content = json_decode($element->content);
         // dd($element);
-        
+
         // $element->content = json_encode([
         //     'title' => 'Random Test Object',
         //     'description' => 'This is a random test object.',
@@ -143,10 +142,11 @@ class ElementController extends Controller
             // 'type' => $request->type,
         ]);
 
-        // dd($element->content);
-
-        // return redirect()->route('elements.show', $element->element_id);
-        return redirect()->back();
+        if ($request->assign) {
+            return redirect()->route('elements.assign');
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -168,63 +168,37 @@ class ElementController extends Controller
         ]);
     }
 
-    public function assign(Request $request)
+    public function assign()
     {
 
-        // Get the type of content. It could be universes, series, chapters, or pages. With content_id, we can get the content.
+        // // Get the type of content. It could be universes, series, chapters, or pages. With content_id, we can get the content.
 
-        // Set content to nothing
-        $content = null;
+        // // Set content to nothing
+        // $content = null;
 
-        $subcontent = null;
+        // $subcontent = null;
 
-        // Create a new selectedContent vartiable to pass to the view. It will contain the type of content, along with the name of the content.
-        // $selectedContent = [
-        //     'type' => $request->type,
-        // ];
+        // // Create a new selectedContent vartiable to pass to the view. It will contain the type of content, along with the name of the content.
+        // // $selectedContent = [
+        // //     'type' => $request->type,
+        // // ];
 
-        $selectedContent = $this->generateSelectedContent($request->type, $request->content_id);
+        // $selectedContent = $this->generateSelectedContent($request->type, $request->content_id);
 
-        $content = $this->getElementable($request->type, $request->content_id);
-        $subcontent = $this->getSubcontent($request->type, $request->content_id);
+        // $content = $this->getElementable($request->type, $request->content_id);
+        // $subcontent = $this->getSubcontent($request->type, $request->content_id);
 
-        // dd($subcontent);
+        // // Set $elements to the elements of the content, filter duplicates by using unique()
+        // $elements = $content->elements->unique();
 
-        // Create a switch statement to determine the type of content
-        // switch ($request->type) {
-        //     case 'universes':
-        //         $content = Universe::find($request->content_id);
-        //         // Set name in selectedContent to the name of the universe
-        //         $selectedContent['name'] = $content->universe_name;
-        //         $subcontent = $content->series;
-        //         break;
-        //     case 'series':
-        //         $content = Series::find($request->content_id);
-        //         $selectedContent['name'] = $content->series_title;
-        //         $subcontent = $content->chapters;
-        //         break;
-        //     case 'chapters':
-        //         $content = Chapter::find($request->content_id);
-        //         $selectedContent['name'] = $content->chapter_title;
-
-        //         $subcontent = $content->pages;
-        //         break;
-        //     case 'pages':
-        //         $content = Page::find($request->content_id);
-        //         break;
-        // }
-
-        // dd($type);
-        // dd($content->elements);
-
-        // Set $elements to the elements of the content, filter duplicates by using unique()
-        $elements = $content->elements->unique();
+        // return Inertia::render('Elements/AssignElements', [
+        //     'selectedContent' => $selectedContent,
+        //     'content' => $content,
+        //     'elements' => $elements,
+        //     'subContentList' => $subcontent,
+        // ]);
 
         return Inertia::render('Elements/AssignElements', [
-            'selectedContent' => $selectedContent,
-            'content' => $content,
-            'elements' => $elements,
-            'subContentList' => $subcontent,
         ]);
     }
 
@@ -401,7 +375,7 @@ class ElementController extends Controller
         $element->save();
 
         $content->elements()->attach($element->element_id);
-        
+
         return $element;
     }
 }

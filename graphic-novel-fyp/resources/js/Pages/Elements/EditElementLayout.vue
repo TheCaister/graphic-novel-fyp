@@ -40,7 +40,6 @@ function updateForm(element) {
 
 function saveElement(assign = false) {
     form.put(route('elements.update', { element: form.element.element_id, assign: assign })), {
-        // preserveScroll: true,
         onSuccess: () => {
             console.log('success')
 
@@ -49,6 +48,7 @@ function saveElement(assign = false) {
 }
 
 onMounted(async () => {
+    form.element = props.element
 })
 
 function back()
@@ -64,18 +64,17 @@ function back()
         <!-- Buttons for saving, going back -->
         <div class="flex mb-8 w-full">
             <div class="flex justify-between w-full">
-                <Link href='#' @click="back">
-                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                    Back
-                </button>
-
+                <Link @click="back">
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Back
+                    </button>
                 </Link>
                 <div>
                     <button @click="saveElement()"
                         class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                         Save
                     </button>
-                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    <button @click="saveElement(true)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                         Save and Assign
                     </button>
                 </div>
