@@ -22,7 +22,7 @@ const emit = defineEmits(['updateElement'])
 
 watch(props.element, (element) => {
     emit('updateElement', element)
-    // console.log(element)
+   
 })
 
 

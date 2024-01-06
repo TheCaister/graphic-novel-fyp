@@ -6,7 +6,7 @@
     <div>
         <ul>
             <li v-for="element in elements" :key="element.element_id">
-                <Link :href="route('elements.show', element.element_id)">
+                <Link :href="route('elements.edit', element.element_id)">
                     {{ element.content }}
                 </Link>
             </li>

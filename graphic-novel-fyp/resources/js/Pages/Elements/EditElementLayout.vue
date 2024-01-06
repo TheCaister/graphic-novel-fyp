@@ -3,14 +3,17 @@ import { Head } from '@inertiajs/vue3';
 import EditSimpleText from './SimpleText/EditSimpleText.vue';
 import EditMindMap from './Mindmap/EditMindMap.vue';
 import EditPanelPlanner from './PanelPlanner/EditPanelPlanner.vue';
-import { defineProps, onMounted, computed } from 'vue'
-import { useForm} from '@inertiajs/vue3';
+import { defineProps, onMounted, computed, inject } from 'vue'
+import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
     element: {
         type: Object,
     },
 });
+
+const dashboardView = inject('dashboardView')
+const parentContentId = inject('parentContentId')
 
 const DashboardViewComponent = computed(() => {
     // Switch statement to return the correct dashboard view
@@ -25,38 +28,33 @@ const DashboardViewComponent = computed(() => {
             return EditSimpleText
     }
 })
-
 const form = useForm({
-    // element_name: '',
-    // upload: '',
-    // content: {},
-
     element: {},
     upload: '',
 });
 
-function updateForm(element){
-    // console.log('test')
+function updateForm(element) {
+    console.log(element.content.content[0].content[0].text)
     form.element = element
-
-    // console.log(form.element)
 }
 
-function saveElement(assign = false){
-    form.put(route('elements.update', {element: props.element.element_id, assign: assign})), {
+function saveElement(assign = false) {
+    form.put(route('elements.update', { element: form.element.element_id, assign: assign })), {
         // preserveScroll: true,
         onSuccess: () => {
             console.log('success')
 
-        }}}
+        }
+    }
+}
 
 onMounted(async () => {
 })
 
-// function updateDashboard(dashboardViewString, parentContentId) {
-//     parentContentIdNumber.value = parentContentId
-//     dashboardView.value = dashboardViewString
-// }
+function back()
+{
+    window.history.back();
+}
 </script>
 
 <template>
@@ -66,35 +64,42 @@ onMounted(async () => {
         <!-- Buttons for saving, going back -->
         <div class="flex mb-8 w-full">
             <div class="flex justify-between w-full">
+                <Link href='#' @click="back">
                 <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Back
                 </button>
+
+                </Link>
                 <div>
-                    <button @click="saveElement()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                    Save
-                </button>
-                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                    Save and Assign
-                </button>
+                    <button @click="saveElement()"
+                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Save
+                    </button>
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Save and Assign
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Thumbnail with option to edit name -->
-        <div class="w-full h-64 flex items-center p-6" style="background-image: url('https://images.unsplash.com/photo-1481349518771-20055b2a7b24?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fHww')">
+        <div class="w-full h-64 flex items-center p-6"
+            style="background-image: url('https://images.unsplash.com/photo-1481349518771-20055b2a7b24?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fHww')">
             <div class="flex items-center gap-8">
-                <img class="w-32 h-32 shadow-2xl rounded-lg" src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fHww" alt="" srcset="">
+                <img class="w-32 h-32 shadow-2xl rounded-lg"
+                    src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fHww"
+                    alt="" srcset="">
 
                 <p>
                     Title...
                 </p>
             </div>
-        
+
         </div>
 
         <!-- Element Edit View -->
         <KeepAlive>
-            <component :is="DashboardViewComponent" :element="props.element" @updateElement="updateForm"/>
+            <component :is="DashboardViewComponent" :element="props.element" @updateElement="updateForm" />
         </KeepAlive>
     </div>
 </template>

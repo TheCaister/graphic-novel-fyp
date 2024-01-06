@@ -62,7 +62,7 @@ class ElementController extends Controller
         $universe->elements()->attach($element->element_id);
 
         // Redirect to the element page
-        return redirect()->route('elements.show', $element->element_id);
+        return redirect()->route('elements.edit', $element->element_id);
 
     }
 
@@ -99,9 +99,33 @@ class ElementController extends Controller
     public function edit(Element $element)
     {
         //
-        return Inertia::render('Elements/Edit', [
-            'element' => $element,
-        ]);
+        // return Inertia::render('Elements/Edit', [
+        //     'element' => $element,
+        // ]);
+
+
+
+
+        // convert $element->content to object
+        $element->content = json_decode($element->content);
+        // dd($element);
+        
+        // $element->content = json_encode([
+        //     'title' => 'Random Test Object',
+        //     'description' => 'This is a random test object.',
+        //     'data' => [
+        //         'key1' => 'value1',
+        //         'key2' => 'value2',
+        //         'key3' => 'value3',
+        //     ],
+        // ]);
+
+        return Inertia::render(
+            'Elements/EditElementLayout',
+            [
+                'element' => $element,
+            ]
+        );
     }
 
     /**
@@ -119,7 +143,7 @@ class ElementController extends Controller
             // 'type' => $request->type,
         ]);
 
-        dd($element->content);
+        // dd($element->content);
 
         // return redirect()->route('elements.show', $element->element_id);
         return redirect()->back();

@@ -30,7 +30,7 @@
                         </label>
                     </div>
 
-                    <Link :href="route('elements.show', element.element_id)">
+                    <Link :href="route('elements.edit', element.element_id)">
                     >
                     </Link>
                 </div>
@@ -49,7 +49,7 @@
                         <img src="" alt="Page image">
                     </label>
 
-                    <Link :href="route('elements.show', element.element_id)">
+                    <Link :href="route('elements.edit', element.element_id)">
                     >
                     </Link>
                 </div>

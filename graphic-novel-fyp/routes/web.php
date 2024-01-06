@@ -33,19 +33,9 @@ Route::get('/tailwind', function () {
 });
 
 Route::post('user-reset-password', [RegisteredUserController::class, 'resetPassword'])
-->name('user.resetPassword');
+    ->name('user.resetPassword');
 
-Route::get('/', function () {
-    // Instead of returning Blade view, you're returning client-side view
-    // The base directory is assumed to be resources/js/Pages
 
-    return Inertia::render(
-        'Dashboard/Dashboard',
-        [
-            'dashboardViewType' => 'UniverseView',
-        ]
-    );
-})->name('home');
 
 Route::get('/content/get-parent', function (Request $request) {
     $content_type = $request->type;
@@ -84,7 +74,7 @@ Route::get('/content/get-parent', function (Request $request) {
 // Using group, you can apply middleware to all routes in the group
 Route::middleware('auth')->group(function () {
 
- 
+
 
     // TEST ROUTES ////////////////////////
 
@@ -165,6 +155,17 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        // Instead of returning Blade view, you're returning client-side view
+        // The base directory is assumed to be resources/js/Pages
+
+        return Inertia::render(
+            'Dashboard/Dashboard',
+            [
+                'dashboardViewType' => 'UniverseView',
+            ]
+        );
+    })->name('home');
     Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
     Route::get('/profile/{user}/edit', [ProfileController::class, 'editOther'])->name('profile.editOther');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -174,7 +175,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::delete('/users/{user}', [ProfileController::class, 'destroyOther']);
-    
+
     Route::get('/user/main', [ProfileController::class, 'main'])->name('user.main');
     Route::get('/user/main/dashboard', [ProfileController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -186,7 +187,6 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard/{content-type}/{content-id}', function ($contentType, $contentId) {
-    
     });
 });
 
@@ -203,7 +203,7 @@ Route::get('{series}/chapters/manage', [SeriesController::class, 'manageChapters
 Route::resource('chapters', ChapterController::class);
 
 // Route::get('{universe}/series/create', [SeriesController::class, 'create'])->name('series.create');
-Route::get('/series/genres',[SeriesController::class, 'genres'])->name('series.genres');
+Route::get('/series/genres', [SeriesController::class, 'genres'])->name('series.genres');
 Route::resource('series', SeriesController::class);
 Route::resource('comic-pages', PageController::class);
 

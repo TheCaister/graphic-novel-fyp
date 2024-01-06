@@ -3,13 +3,13 @@
         <div v-for="element in elements" :key="element.element_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
 
             <div class="relative">
-                <!-- <Link :href='route("universes.show", .universe_id)' class="h-full flex items-center"> -->
-                <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
-                    <img v-if="element.element_thumbnail" :src="element.element_thumbnail" alt="Element Image"
-                        class="w-full h-full rounded-lg" />
-                    <div v-else class="text-white text-xl flex items-center">E{{ element.element_id }}</div>
-                </div>
-                <!-- </Link> -->
+                <Link :href='route("elements.edit", element.element_id)' class="h-full flex items-center">
+                    <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
+                        <img v-if="element.element_thumbnail" :src="element.element_thumbnail" alt="Element Image"
+                            class="w-full h-full rounded-lg" />
+                        <div v-else class="text-white text-xl flex items-center">E{{ element.element_id }}</div>
+                    </div>
+                </Link>
 
                 <!-- Create a button on the top right corner -->
                 <button class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
@@ -24,9 +24,6 @@
             </div>
 
             <p class="text-white pt-4">{{ element.element_name }}</p>
-
-
-
         </div>
 
         <button @click="isCreateModalOpen = true" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
@@ -63,24 +60,27 @@
 import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
 import { usePage } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import DashboardDropdownMenu from '../DashboardDropdownMenu.vue'
 import CreateElementModal from './CreateElementModal.vue'
 
 const page = usePage();
 
+const dashboardView = inject('dashboardView')
+const parentContentId = inject('parentContentId')
+
 const elements = ref([
-    {
-        element_id: 0,
-        element_name: "",
-        element_thumbnail: ""
+    // {
+    //     element_id: 0,
+    //     element_name: "",
+    //     element_thumbnail: ""
     
-    },
-    {
-        element_id: 1,
-        element_name: "",
-        element_thumbnail: ""
-    },
+    // },
+    // {
+    //     element_id: 1,
+    //     element_name: "",
+    //     element_thumbnail: ""
+    // },
 
 ]);
 
@@ -109,14 +109,32 @@ onMounted(async () => {
 
 
 function updateContentList() {
-    APICalls.getElements('type', 2).then(response => {
-        elements.value = response.data
+    // APICalls.getElements('type', 2).then(response => {
+    //     elements.value = response.data
+    //     elementsLoaded.value = true
+    // }).catch(error => console.log(error))
+
+    APICalls.getElements(getParentContentType(), parentContentId).then(response => {
+        elements.value = response.data.elements
         elementsLoaded.value = true
+        // console.log(elements.value)
     }).catch(error => console.log(error))
 }
 
-function test() {
-    console.log('test')
+function getParentContentType(){
+    switch (dashboardView) {
+        case 'UniverseView':
+            return ''
+        case 'SeriesView':
+            return 'universes'
+        case 'ChapterView':
+            return 'series'
+        case 'PageView':
+            return 'chapters'
+        default:
+            return ''
+    }
+
 }
 
 function handleMenuItemClicked(eventName) {
