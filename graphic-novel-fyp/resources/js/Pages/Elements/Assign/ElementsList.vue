@@ -3,12 +3,13 @@
         Here is a list of all the elements:
     </h1>
 
-    <div>
+    <div class="h-96 overflow-auto">
         <ul>
             <li v-for="element in elements" :key="element.element_id">
-                <Link :href="route('elements.edit', element.element_id)">
-                    {{ element.content }}
-                </Link>
+                <div>
+                    <input type="checkbox" :id="'element-' + element.element_id" :value="element.element_id">
+                    <label :for="'element-' + element.element_id">{{ element.content }}</label>
+                </div>
             </li>
         </ul>
     </div>
@@ -19,7 +20,7 @@
     import {defineProps, ref} from 'vue'
 
     const props = defineProps({
-        elements: {
+        preSelectedElementIds: {
             type: Array,
             required: true
         }

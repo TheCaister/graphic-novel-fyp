@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.hamburger{
+/* .hamburger{
     cursor:pointer;
     width: 24px;
     height: 24px;
@@ -28,7 +28,9 @@
 .hamburger-bottom{
     transform: translateY(14px);
 
-}
+} */
+
+
 
 @layer base{
     h1 {
@@ -49,4 +51,25 @@
     h6 {
         @apply text-base;
     }
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    background: #ffffff00;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #dd88e0;
+    border-radius: 5px;
+}
+ 
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(107, 104, 7)646;
 }
