@@ -2,14 +2,15 @@
     <div class="p-8 border border-white rounded-lg text-white">
         <!-- Content title here, with option  to go back... -->
         <div>
-            Content Title
+            <!-- Content Title -->
+            {{ parentContent.content_name }}
         </div>
 
         <!-- Two lists, one for content, one for elements -->
-        <div class="flex">
+        <div class="flex justify-around">
             <div class="flex flex-col items-center">
                 <SearchBar />
-                <ContentList :parentContent="parentContent" />
+                <ContentList :subContentList="subContentList" />
 
 
 
@@ -38,6 +39,10 @@ import SearchBar from './SearchBar.vue';
 const props = defineProps({
     parentContent: {
         type: Object,
+        required: true
+    },
+    subContentList: {
+        type: Array,
         required: true
     },
     preSelectedElementIds: {

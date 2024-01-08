@@ -10,10 +10,13 @@ const props = defineProps({
     element: {
         type: Object,
     },
+    parentContentType: {
+        type: String,
+    },
+    parentContentId: {
+        type: Number,
+    }
 });
-
-const dashboardView = inject('dashboardView')
-const parentContentId = inject('parentContentId')
 
 const DashboardViewComponent = computed(() => {
     // Switch statement to return the correct dashboard view
@@ -39,20 +42,28 @@ function updateForm(element) {
 }
 
 function saveElement(assign = false) {
-    form.put(route('elements.update', { element: form.element.element_id, assign: assign })), {
+
+    form.put(route('elements.update', { element: form.element.element_id, assign: assign, content_type: assign ? props.parentContentType : '', content_id: assign ? props.parentContentId : '', preSelectedElementIds: [form.element.element_id] })), {
         onSuccess: () => {
             console.log('success')
 
         }
     }
+
+    // form.put(route('elements.update', { element: form.element.element_id, assign: assign, content_type: true ? 'hi guys' : '', content_id: assign ? parentContentId : '' })), {
+    //     onSuccess: () => {
+    //         console.log('success')
+
+    //     }
+    // }
+
 }
 
 onMounted(async () => {
     form.element = props.element
 })
 
-function back()
-{
+function back() {
     window.history.back();
 }
 </script>
@@ -65,16 +76,17 @@ function back()
         <div class="flex mb-8 w-full">
             <div class="flex justify-between w-full">
                 <Link @click="back">
-                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                        Back
-                    </button>
+                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    Back
+                </button>
                 </Link>
                 <div>
                     <button @click="saveElement()"
                         class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                         Save
                     </button>
-                    <button @click="saveElement(true)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    <button @click="saveElement(true)"
+                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                         Save and Assign
                     </button>
                 </div>

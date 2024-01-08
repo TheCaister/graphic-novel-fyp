@@ -3,7 +3,7 @@
         <div v-for="element in elements" :key="element.element_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
 
             <div class="relative">
-                <Link :href='route("elements.edit", element.element_id)' class="h-full flex items-center">
+                <Link :href='route("elements.edit", {element: element.element_id, content_type: getParentContentType(), content_id: parentContentId})' class="h-full flex items-center">
                     <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
                         <img v-if="element.element_thumbnail" :src="element.element_thumbnail" alt="Element Image"
                             class="w-full h-full rounded-lg" />
@@ -69,20 +69,7 @@ const page = usePage();
 const dashboardView = inject('dashboardView')
 const parentContentId = inject('parentContentId')
 
-const elements = ref([
-    // {
-    //     element_id: 0,
-    //     element_name: "",
-    //     element_thumbnail: ""
-    
-    // },
-    // {
-    //     element_id: 1,
-    //     element_name: "",
-    //     element_thumbnail: ""
-    // },
-
-]);
+const elements = ref([]);
 
 const isCreateModalOpen = ref(false)
 const isDeleteModalOpen = ref(false)
@@ -109,15 +96,9 @@ onMounted(async () => {
 
 
 function updateContentList() {
-    // APICalls.getElements('type', 2).then(response => {
-    //     elements.value = response.data
-    //     elementsLoaded.value = true
-    // }).catch(error => console.log(error))
-
     APICalls.getElements(getParentContentType(), parentContentId).then(response => {
         elements.value = response.data.elements
         elementsLoaded.value = true
-        // console.log(elements.value)
     }).catch(error => console.log(error))
 }
 
