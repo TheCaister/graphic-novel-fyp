@@ -2,11 +2,13 @@
     <div class="p-8 border border-white rounded-lg text-white">
         <!-- Content title here, with option  to go back... -->
         <div class="flex">
-            <button>
-                <span class="material-symbols-outlined dark">
-                    chevron_left
-                </span>
-            </button>
+            <Link
+                :href="route('elements.assign.get-parent', { type: parentContent.type, content_id: parentContent.content_id })"
+                v-if="parentContent.type !== 'universes'">
+            <span class="material-symbols-outlined dark">
+                chevron_left
+            </span>
+            </Link>
 
 
             <div>
@@ -19,7 +21,8 @@
         <div class="flex justify-around">
             <div class="flex flex-col items-center">
                 <SearchBar />
-                <ContentList :subContentList="subContentList" @content-checked="(event) => updateSelectedContentList(event)" />
+                <ContentList :subContentList="subContentList"
+                    @content-checked="(event) => updateSelectedContentList(event)" />
 
 
 
@@ -41,6 +44,7 @@
 </template>
 
 <script setup>
+import { router } from '@inertiajs/vue3';
 import ElementsList from './ElementsList.vue';
 import ContentList from './ContentList.vue';
 import SearchBar from './SearchBar.vue';
@@ -88,4 +92,7 @@ function updateSelectedContentList(event) {
     }
 }
 
+function goBack() {
+    router.visit()
+}
 </script>

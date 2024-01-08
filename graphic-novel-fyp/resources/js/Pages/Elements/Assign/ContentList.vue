@@ -5,7 +5,7 @@
 
     <div class="h-96 overflow-auto">
         <div v-for="content in subContentList" :key="content.content_id">
-            <Checkbox :label="content.content_name" image="" @checked="(event) => check(content.content_id, event)" />
+            <Checkbox :content="content" @checked="(event) => check(content.content_id, event)" />
         </div>
     </div>
 </template>

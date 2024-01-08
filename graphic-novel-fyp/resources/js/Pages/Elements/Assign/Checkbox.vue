@@ -8,7 +8,7 @@
                     alt="" class="rounded-full w-16 h-16">
                 <!-- label -->
                 <div>
-                    {{ label }}
+                    {{ content.content_name }}
                 </div>
             </div>
 
@@ -16,23 +16,22 @@
                 check_circle
             </span>
         </button>
-        <button>
+        <Link :href="route('elements.assign', { content_type: content.type, content_id: content.content_id })">
             >>
-        </button>
+        </Link>
     </div>
 </template>
 
 <script setup>
+import { Link } from '@inertiajs/vue3'
 import { defineProps, ref, defineEmits } from 'vue'
 
 const emits = defineEmits(['checked'])
 
 const props = defineProps({
-    image: {
-        type: String,
-    },
-    label: {
-        type: String,
+    content:
+    {
+        type: Object,
         required: true
     }
 })

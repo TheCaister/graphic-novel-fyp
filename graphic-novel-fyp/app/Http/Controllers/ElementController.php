@@ -81,7 +81,7 @@ class ElementController extends Controller
             'Elements/EditElementLayout',
             [
                 'element' => $element,
-          
+
             ]
         );
 
@@ -102,9 +102,9 @@ class ElementController extends Controller
         // convert $element->content to object
         $element->content = json_decode($element->content);
 
-     
 
-        
+
+
         // $content = null;
 
         // if($element->universes->count() > 0){
@@ -121,8 +121,8 @@ class ElementController extends Controller
         // else if($element->pages->count() > 0){
         //     $content = $element->pages->first();
         // }
-        
-        
+
+
 
         // dd($content);
         // dd($request->all());
@@ -153,12 +153,14 @@ class ElementController extends Controller
         ]);
 
         if ($request->assign) {
-            return redirect()->route('elements.assign',
-        [
-            'content_type' => $request->content_type,
-            'content_id' => $request->content_id,
-            'preSelectedElementIds' => $request->preSelectedElementIds,
-        ]);
+            return redirect()->route(
+                'elements.assign',
+                [
+                    'content_type' => $request->content_type,
+                    'content_id' => $request->content_id,
+                    'preSelectedElementIds' => $request->preSelectedElementIds,
+                ]
+            );
             // return $this->assign($request);
         } else {
             return redirect()->back();
@@ -199,7 +201,7 @@ class ElementController extends Controller
         //     'type' => $request->type,
         // ];
 
-        // dd(session('request'));
+        // dd($request->all());
 
         $selectedContent = null;
         $subContentList = null;
@@ -210,16 +212,55 @@ class ElementController extends Controller
         $subContentList = $this->generateSubcontent($request->content_type, $request->content_id);
 
 
-        
+
 
         // // Set $elements to the elements of the content, filter duplicates by using unique()
         // $elements = $content->elements->unique();
 
         return Inertia::render('Elements/Assign/AssignElements', [
-            'parentContent' => $selectedContent, 
+            'parentContent' => $selectedContent,
             'subContentList' => $subContentList,
             'preSelectedElementIds' => $request->preSelectedElementIds,
             'elementList' => $this->getUniverse($request->content_type, $request->content_id)->elements->unique(),
+        ]);
+    }
+
+    public function assignGetParent(Request $request)
+    {
+        // { type: props.parentContent.type, id: props.parentContent.content_id })
+        $content_type = $request->type;
+        $content_id = $request->content_id;
+        $parent_content_type = null;
+
+        $parent = null;
+
+        // Switch statement to determine which model to use
+        // For example, if we're currently on SeriesView, then the parent model is a Universe
+        switch ($content_type) {
+            case 'series':
+                // return redirect()->route('home');
+                $model = Series::find($content_id);
+                $parent = $model->universe;
+                $parent = $this->generateSelectedContent('universes', $parent->universe_id);
+                $parent_content_type = 'universes';
+                break;
+            case 'chapters':
+                $model = Chapter::find($content_id);
+                $parent = $model->series;
+                $parent = $this->generateSubcontent('series', $parent->series_id);
+                $parent_content_type = 'series';
+
+                // $result['show'] = 'universes';
+                // $result['parentid'] = $parent->universe_id;
+                break;
+            default:
+                return redirect()->route('home');
+        }
+        // redirect to the correct view
+        return redirect()->route('elements.assign', [
+            'content_type' => $parent_content_type,
+            'content_id' => $parent['content_id'],
+            'preSelectedElementIds' => []
         ]);
     }
 
@@ -322,12 +363,12 @@ class ElementController extends Controller
 
                 // dd($content->series);
                 // $subcontent = $content->series;
-                
+
                 // Loop through each series, use generateSelectedContent to create a new array with the type and name of the series
                 foreach ($content->series as $series) {
                     $subcontent[] = $this->generateSelectedContent('series', $series->series_id);
                 }
-                
+
                 break;
             case 'series':
                 $content = Series::find($id);
@@ -347,7 +388,7 @@ class ElementController extends Controller
                 break;
         }
 
-  
+
 
         return $subcontent;
     }

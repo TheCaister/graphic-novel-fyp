@@ -210,6 +210,8 @@ Route::resource('comic-pages', PageController::class);
 ////////////////////////// ELEMENT ROUTES ////////////////////////
 Route::get('user/main/elementsforge', [ElementController::class, 'elementsforge'])->name('user.main.elementsforge');
 
+Route::get('/elements/assign/getParent', [ElementController::class, 'assignGetParent'])->name('elements.assign.get-parent');
+
 Route::get('/elements/assign', [ElementController::class, 'assign'])->name('elements.assign');
 
 Route::post('/elements/assign', [ElementController::class, 'assignStore'])->name('elements.assignStore');
