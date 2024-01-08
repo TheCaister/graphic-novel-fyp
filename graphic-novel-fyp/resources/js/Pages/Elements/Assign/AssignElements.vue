@@ -86,8 +86,6 @@ function updateSelectedContentList(event) {
             checked: event.checked
         })
     }
-
-    // console.log(form.selectedContentList)
 }
 
 </script>
