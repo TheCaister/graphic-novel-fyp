@@ -4,16 +4,12 @@
     </h1>
 
     <div class="h-96 overflow-auto">
-        <div v-for="element in elements" :key="element.element_id">
-            <!-- <div>
-                    <input type="checkbox" :id="'element-' + element.element_id" :value="element.element_id">
-                    <label :for="'element-' + element.element_id">{{ element.element_name }}</label>
-                </div> -->
-
-            <TriCheckbox :label="element.element_name" image="" @checked="(event) => check(element.element_id, event)" />
-
-            <!-- <Checkbox :label="content.content_name" image="" @checked="(event) => check(content.content_id, event)" /> -->
-        </div>
+        <TransitionGroup name="list" tag="ul">
+            <div v-for="element in elements" :key="element.element_id">
+                <TriCheckbox :label="element.element_name" image=""
+                    @checked="(event) => check(element.element_id, event)" />
+            </div>
+        </TransitionGroup>
     </div>
 </template>
 
@@ -68,3 +64,20 @@ onMounted(() => {
     })
 })
 </script>
+
+<style scoped>
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+.list-move {
+    transition: transform 0.5s ease;
+}
+</style>
