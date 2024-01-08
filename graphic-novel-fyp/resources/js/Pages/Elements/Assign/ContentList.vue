@@ -6,10 +6,7 @@
     <div class="h-96 overflow-auto">
         <ul>
             <li v-for="content in subContentList" :key="content.content_id">
-                <div>
-                    <input type="checkbox" :id="'content-' + content.content_id" :value="content.content_id">
-                    <label :for="'content-' + content.content_id">{{ content.content_name }}</label>
-                </div>
+                <Checkbox :label="content.content_name" image="" @checked="(event) => check(content.content_id, event)" />
             </li>
         </ul>
     </div>
@@ -17,7 +14,8 @@
 </template>
 
 <script setup>
-    import {defineProps, ref} from 'vue'
+    import {defineProps, ref, defineEmits} from 'vue'
+    import Checkbox from './Checkbox.vue';
 
     const props = defineProps({
         subContentList: {
@@ -26,5 +24,26 @@
         }
     })
 
+    const emits = defineEmits(['contentChecked'])
+
     const contentItems = ref(props.subContentList)
+
+    function check(contentId, event) {
+
+        // Set the checked value in the contentItems array. Search for object in contentItems that has the same contentId as the one passed in.
+        const selectedContent = contentItems.value.find(content => content.content_id === contentId)
+        
+        selectedContent.checked = event
+
+        // console.log(contentItems.value.find(content => content.content_id === contentId))
+
+        // Emit the checked event
+        // emits('contentChecked', contentId, event)
+
+        emits('contentChecked', {
+            type: selectedContent.type,
+            content_id: selectedContent.content_id,
+            checked: selectedContent.checked
+        })
+    }
 </script>

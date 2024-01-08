@@ -217,9 +217,9 @@ class ElementController extends Controller
 
         return Inertia::render('Elements/Assign/AssignElements', [
             'parentContent' => $selectedContent, 
-            // 'selectedContent' => $selectedContent,
             'subContentList' => $subContentList,
             'preSelectedElementIds' => $request->preSelectedElementIds,
+            'elementList' => $this->getUniverse($request->content_type, $request->content_id)->elements->unique(),
         ]);
     }
 
