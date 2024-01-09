@@ -276,31 +276,26 @@ class ElementController extends Controller
         // dd($request->all());
         // I can either split the selected content into a separate array for each type of content, or I can iterate through the array and check the type of content for each element.
 
-        // $contentList = [];
+        $contentList = [];
 
-        // foreach ($request->selectedContent as $content) {
-        //     // $contentList[] = $this->getElementable($content['optionType'], $content['optionId']);
+        foreach ($request->selectedContentList as $content) {
+            // $contentList[] = $this->getElementable($content['optionType'], $content['optionId']);
 
-        //     $curContent =  $this->getElementable($content['optionType'], $content['optionId']);
+            $curContent =  $this->getElementable($content['type'], $content['content_id']);
 
-        //     foreach ($request->selectedElements as $element) {
-        //         if ($element['assign']) {
-        //             $curContent->elements()->attach($element['optionId']);
-        //         } else {
-        //             $curContent->elements()->detach($element['optionId']);
-        //         }
-        //     }
-        // }
+          
+
+            foreach ($request->selectedElementList as $element) {
+                if ($element['checked']) {
+                    // dd('attaching...');
+                    $curContent->elements()->attach($element['element_id']);
+                } else {
+                    $curContent->elements()->detach($element['element_id']);
+                }
+            }
+        }
 
         // return redirect()->route('user.main.elementsforge');
-
-        // return redirect()->back();
-
-        // return redirect()->route('elements.assign', [
-        //     'content_type' => $request->parentContentType,
-        //     'content_id' => $request->parentContentId,
-        //     'preSelectedElements' => $request->selectedElementList,
-        // ]);
 
         return $this->assign($request);
     }
