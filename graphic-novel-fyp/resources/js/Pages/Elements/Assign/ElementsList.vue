@@ -52,7 +52,7 @@ function check(elementId, event) {
     })
 
     emits('elementChecked', {
-        element_id: selectedElement.content_id,
+        element_id: selectedElement.element_id,
         checked: selectedElement.checked
     })
 }

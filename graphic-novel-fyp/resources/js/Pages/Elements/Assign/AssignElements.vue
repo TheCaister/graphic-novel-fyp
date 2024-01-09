@@ -32,7 +32,8 @@
             </div>
             <div class="flex flex-col items-center">
                 <SearchBar />
-                <ElementsList :elementList="elementList" :preSelectedElementIds="preSelectedElementIds" />
+                <ElementsList :elementList="elementList" :preSelectedElementIds="preSelectedElementIds"
+                @element-checked="(event) => updateSelectedElementList(event)" />
 
 
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -90,6 +91,34 @@ function updateSelectedContentList(event) {
             checked: event.checked
         })
     }
+}
+
+function updateSelectedElementList(event) {
+
+    console.log(event)
+
+    // if element_id in event is checked === null, remove it from the list. Otherwise, add it to the list with the checked value.
+    if (event.checked === null) {
+        // Remove the element from the list
+        form.selectedElementList = form.selectedElementList.filter(element => element.element_id !== event.element_id)
+    } else {
+
+        // if the element is already in the list, update the checked value. Otherwise, add it to the list.
+        const selectedElement = form.selectedElementList.find(element => element.element_id === event.element_id)
+
+        if (selectedElement) {
+            // Update the checked value
+            selectedElement.checked = event.checked
+        } else {
+            // Add the element to the list
+            form.selectedElementList.push({
+                element_id: event.element_id,
+                checked: event.checked
+            })
+        }
+    }
+
+    console.log(form.selectedElementList)
 }
 
 function goBack() {
