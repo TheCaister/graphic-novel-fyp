@@ -37,7 +37,7 @@ const form = useForm({
 });
 
 function updateForm(element) {
-    console.log(element.content.content[0].content[0].text)
+    // console.log(element.content.content[0].content[0].text)
     form.element = element
 }
 
@@ -54,13 +54,6 @@ function saveElement(assign = false) {
 
         }
     }
-
-    // form.put(route('elements.update', { element: form.element.element_id, assign: assign, content_type: true ? 'hi guys' : '', content_id: assign ? parentContentId : '' })), {
-    //     onSuccess: () => {
-    //         console.log('success')
-
-    //     }
-    // }
 
 }
 

@@ -56,10 +56,14 @@ class ElementController extends Controller
                 // break;
         }
 
-        $universe = $this->getUniverse($elementable, $elementable_id);
+        // dd($element->universes->first());
 
-        // Attach the element to the universe in case it gets detached from the subcontent
-        $universe->elements()->attach($element->element_id);
+        // Check if the element is already attached to a universe
+        if (is_null($element->universes->first())) {
+            $universe = $this->getUniverse($elementable, $elementable_id);
+            // Attach the element to the universe in case it gets detached from the subcontent
+            $universe->elements()->attach($element->element_id);
+        }
 
         // Redirect to the element page
         return redirect()->route('elements.edit', $element->element_id);
@@ -276,14 +280,8 @@ class ElementController extends Controller
         // dd($request->all());
         // I can either split the selected content into a separate array for each type of content, or I can iterate through the array and check the type of content for each element.
 
-        $contentList = [];
-
         foreach ($request->selectedContentList as $content) {
-            // $contentList[] = $this->getElementable($content['optionType'], $content['optionId']);
-
             $curContent =  $this->getElementable($content['type'], $content['content_id']);
-
-          
 
             foreach ($request->selectedElementList as $element) {
                 if ($element['checked']) {
@@ -294,8 +292,6 @@ class ElementController extends Controller
                 }
             }
         }
-
-        // return redirect()->route('user.main.elementsforge');
 
         return $this->assign($request);
     }
