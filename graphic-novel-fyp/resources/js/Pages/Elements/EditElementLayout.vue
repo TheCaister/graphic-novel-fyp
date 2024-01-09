@@ -43,7 +43,12 @@ function updateForm(element) {
 
 function saveElement(assign = false) {
 
-    form.put(route('elements.update', { element: form.element.element_id, assign: assign, content_type: assign ? props.parentContentType : '', content_id: assign ? props.parentContentId : '', preSelectedElementIds: [form.element.element_id] })), {
+    form.put(route('elements.update', {
+        element: form.element.element_id, assign: assign, content_type: assign ? props.parentContentType : '', content_id: assign ? props.parentContentId : '', preSelectedElements: [{
+            element_id: form.element.element_id,
+            checked: true
+        }]
+    })), {
         onSuccess: () => {
             console.log('success')
 
@@ -112,5 +117,4 @@ function back() {
         <KeepAlive>
             <component :is="DashboardViewComponent" :element="props.element" @updateElement="updateForm" />
         </KeepAlive>
-    </div>
-</template>
+</div></template>

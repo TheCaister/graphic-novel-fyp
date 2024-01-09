@@ -12,7 +12,7 @@
                 </div>
             </div>
 
-            <span v-if="checked" class="material-symbols-outlined dark">
+            <span v-if="checked === true" class="material-symbols-outlined dark">
                 check_circle
             </span>
 
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, defineEmits } from 'vue'
+import { defineProps, ref, defineEmits, onMounted } from 'vue'
 
 const emits = defineEmits(['checked'])
 
@@ -33,13 +33,17 @@ const props = defineProps({
     image: {
         type: String,
     },
+    preChecked: {
+        type: Boolean,
+        default: null
+    },
     label: {
         type: String,
         required: true
     }
 })
 
-const checked = ref(null)
+const checked = ref(props.preChecked)
 
 function toggleChecked() {
     if(checked.value === null) {

@@ -158,7 +158,7 @@ class ElementController extends Controller
                 [
                     'content_type' => $request->content_type,
                     'content_id' => $request->content_id,
-                    'preSelectedElementIds' => $request->preSelectedElementIds,
+                    'preSelectedElements' => $request->preSelectedElements,
                 ]
             );
             // return $this->assign($request);
@@ -220,7 +220,7 @@ class ElementController extends Controller
         return Inertia::render('Elements/Assign/AssignElements', [
             'parentContent' => $selectedContent,
             'subContentList' => $subContentList,
-            'preSelectedElementIds' => $request->preSelectedElementIds,
+            'preSelectedElements' => $request->preSelectedElements,
             'elementList' => $this->getUniverse($request->content_type, $request->content_id)->elements->unique(),
         ]);
     }
@@ -260,34 +260,49 @@ class ElementController extends Controller
         return redirect()->route('elements.assign', [
             'content_type' => $parent_content_type,
             'content_id' => $parent['content_id'],
-            'preSelectedElementIds' => []
+            'preSelectedElements' => []
         ]);
     }
 
     public function assignStore(Request $request)
     {
 
+        // $request->preSelectedElements = $request->selectedElementList;
+
+        $request->merge([
+            'preSelectedElements' => $request->selectedElementList,
+        ]);
+
+        // dd($request->all());
         // I can either split the selected content into a separate array for each type of content, or I can iterate through the array and check the type of content for each element.
 
         // $contentList = [];
 
-        foreach ($request->selectedContent as $content) {
-            // $contentList[] = $this->getElementable($content['optionType'], $content['optionId']);
+        // foreach ($request->selectedContent as $content) {
+        //     // $contentList[] = $this->getElementable($content['optionType'], $content['optionId']);
 
-            $curContent =  $this->getElementable($content['optionType'], $content['optionId']);
+        //     $curContent =  $this->getElementable($content['optionType'], $content['optionId']);
 
-            foreach ($request->selectedElements as $element) {
-                if ($element['assign']) {
-                    $curContent->elements()->attach($element['optionId']);
-                } else {
-                    $curContent->elements()->detach($element['optionId']);
-                }
-            }
-        }
+        //     foreach ($request->selectedElements as $element) {
+        //         if ($element['assign']) {
+        //             $curContent->elements()->attach($element['optionId']);
+        //         } else {
+        //             $curContent->elements()->detach($element['optionId']);
+        //         }
+        //     }
+        // }
 
-        return redirect()->route('user.main.elementsforge');
+        // return redirect()->route('user.main.elementsforge');
 
         // return redirect()->back();
+
+        // return redirect()->route('elements.assign', [
+        //     'content_type' => $request->parentContentType,
+        //     'content_id' => $request->parentContentId,
+        //     'preSelectedElements' => $request->selectedElementList,
+        // ]);
+
+        return $this->assign($request);
     }
 
     public function getElements(Request $request)

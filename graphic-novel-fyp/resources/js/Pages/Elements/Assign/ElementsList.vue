@@ -6,7 +6,7 @@
     <div class="h-96 overflow-auto">
         <TransitionGroup name="list" tag="ul">
             <div v-for="element in elements" :key="element.element_id">
-                <TriCheckbox :label="element.element_name" image=""
+                <TriCheckbox :label="element.element_name" image="" :pre-checked="element.checked"
                     @checked="(event) => check(element.element_id, event)" />
             </div>
         </TransitionGroup>
@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, defineEmits, onMounted } from 'vue'
+import { defineProps, ref, defineEmits, onBeforeMount} from 'vue'
 import TriCheckbox from './TriCheckbox.vue';
 
 const emits = defineEmits(['elementChecked'])
@@ -24,7 +24,7 @@ const props = defineProps({
         type: Array,
         required: true
     },
-    preSelectedElementIds: {
+    preSelectedElements: {
         type: Array,
         required: true
     }
@@ -37,8 +37,6 @@ function check(elementId, event) {
     const selectedElement = elements.value.find(element => element.element_id === elementId)
 
     selectedElement.checked = event
-
-    // console.log(selectedElement)
 
     // Rearrange the elements array so that the checked === true elements are at the top of the list, with checked === false following and checked === null at the bottom.
     elements.value.sort((a, b) => {
@@ -57,10 +55,21 @@ function check(elementId, event) {
     })
 }
 
-onMounted(() => {
+onBeforeMount(() => {
     // Set all elements to checked === null
     elements.value.forEach(element => {
         element.checked = null
+    })
+
+    // In the preSelectedElements array, find the element in the elements array that has the same element_id as the one in the preSelectedElements array. Set the checked value to true.
+    props.preSelectedElements.forEach(preSelectedElement => {
+
+        // first, convert the elementId to a number, then find
+        const selectedElement = elements.value.find(element => element.element_id === Number(preSelectedElement.element_id))
+
+        if (selectedElement) {
+            check(selectedElement.element_id, preSelectedElement.checked === '1');
+        }
     })
 })
 </script>

@@ -26,17 +26,17 @@
 
 
 
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <button @click="goBack" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Back
                 </button>
             </div>
             <div class="flex flex-col items-center">
                 <SearchBar />
-                <ElementsList :elementList="elementList" :preSelectedElementIds="preSelectedElementIds"
+                <ElementsList :elementList="elementList" :preSelectedElements="preSelectedElements"
                 @element-checked="(event) => updateSelectedElementList(event)" />
 
 
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <button @click="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Save
                 </button>
             </div>
@@ -65,16 +65,26 @@ const props = defineProps({
         type: Array,
         required: true
     },
-    preSelectedElementIds: {
+    preSelectedElements: {
         type: Array,
         required: true
     }
 })
 
 const form = useForm({
+    content_type: props.parentContent.type,
+    content_id: props.parentContent.content_id,
     selectedContentList: [],
     selectedElementList: [],
 })
+
+function submit(){
+    form.post(route('elements.assign.store'), {
+        onFinish: () => {form.reset()
+            console.log('form reset')
+        },
+    });
+}
 
 function updateSelectedContentList(event) {
     // First, check if the content is already in the selectedContentList by comparing the contentId. If it is, remove it from the list. If it isn't, add it to the list.
@@ -94,8 +104,6 @@ function updateSelectedContentList(event) {
 }
 
 function updateSelectedElementList(event) {
-
-    console.log(event)
 
     // if element_id in event is checked === null, remove it from the list. Otherwise, add it to the list with the checked value.
     if (event.checked === null) {
@@ -117,11 +125,26 @@ function updateSelectedElementList(event) {
             })
         }
     }
-
-    console.log(form.selectedElementList)
 }
 
-function goBack() {
-    router.visit()
+function goBack(){
+    // switch on the parentContent.type
+    switch (props.parentContent.type) {
+        case 'universes':
+            router.visit(route('universes.show', { universe: props.parentContent.content_id }))
+            break;
+        case 'series':
+            router.visit(route('series.show', { series: props.parentContent.content_id }))
+            break;
+        case 'chapters':
+            router.visit(route('chapters.show', { chapter: props.parentContent.content_id }))
+            break;
+        // case 'pages':
+        //     router.visit(route('pages.show', { page: parentContent.content_id }))
+        //     break;
+
+        default:
+            break;
+    }
 }
 </script>

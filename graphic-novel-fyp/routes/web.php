@@ -214,7 +214,7 @@ Route::get('/elements/assign/getParent', [ElementController::class, 'assignGetPa
 
 Route::get('/elements/assign', [ElementController::class, 'assign'])->name('elements.assign');
 
-Route::post('/elements/assign', [ElementController::class, 'assignStore'])->name('elements.assignStore');
+Route::post('/elements/assign', [ElementController::class, 'assignStore'])->name('elements.assign.store');
 
 Route::resource('elements', ElementController::class);
 
