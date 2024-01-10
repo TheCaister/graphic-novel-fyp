@@ -10,8 +10,10 @@ class SearchController extends Controller
     //
 
     public function search(){
-        dd(request()->all());
+        // dd(request()->all());
 
-        return Inertia::render('Search/Sear')
+        return Inertia::render('Search/SearchLayout', [
+            'searchType' => 'elements',
+        ]);
     }
 }
