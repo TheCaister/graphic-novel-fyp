@@ -21,7 +21,10 @@
         <section class="p-6">
             <header class="flex justify-between">
                 <div class="flex">
-                    <PrimaryButton class="mr-4">Home</PrimaryButton>
+                    <Link :href="route('home')">
+                        <PrimaryButton class="mr-4">Home</PrimaryButton>
+                    </Link>
+              
                     <PrimaryButton class="mr-4">Projects</PrimaryButton>
                     <PrimaryButton class="mr-4">About Us</PrimaryButton>
                 </div>

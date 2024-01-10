@@ -72,4 +72,11 @@ class Element extends Model
     {
         return $this->morphTo('elementType', 'derived_element_type', 'derived_element_id');
     }
+
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['search'] ?? null, function ($query, $search) {
+            $query->where('element_name', 'like', '%'.$search.'%');
+        });
+    }
 }
