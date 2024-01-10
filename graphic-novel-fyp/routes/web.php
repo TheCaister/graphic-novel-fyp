@@ -6,6 +6,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ElementController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\UniverseController;
 use App\Http\Controllers\UploadController;
@@ -223,5 +224,8 @@ Route::get('/forge/show', [ElementController::class, 'forgeShow'])->name('forge.
 
 ////////////////////////// MEDIA ROUTES ////////////////////////
 // http://localhost/upload?media=series_thumbnail 
+
+////////////////////////// SEARCH ROUTES ////////////////////////
+Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 require __DIR__ . '/auth.php';

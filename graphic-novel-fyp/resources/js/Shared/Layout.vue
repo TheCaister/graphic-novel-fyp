@@ -22,41 +22,40 @@
             <header class="flex justify-between">
                 <div class="flex">
                     <Link :href="route('home')">
-                        <PrimaryButton class="mr-4">Home</PrimaryButton>
+                    <PrimaryButton class="mr-4">Home</PrimaryButton>
                     </Link>
-              
+
                     <PrimaryButton class="mr-4">Projects</PrimaryButton>
                     <PrimaryButton class="mr-4">About Us</PrimaryButton>
                 </div>
 
                 <div class="flex items-center">
                     <!-- Search bar -->
-                    <form @submit.prevent="submit">
+                    <!-- <form action=""> -->
                         <div class="relative text-gray-600">
-                        <input v-model="form.search" type="search" name="search" placeholder="Search"
-                            class="bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none">
-                        <button type="submit" class="absolute right-0 top-0 mt-3 mr-4 flex items-center justify-center">
-                            <span class="material-symbols-outlined">
-                                search
-                            </span>
-                        </button>
-                    </div>
+                            <input v-model="form.search" type="search" name="search" placeholder="Search"
+                                class="bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none">
+                            <button @click="search" type="submit"
+                                class="absolute right-0 top-0 mt-3 mr-4 flex items-center justify-center">
+                                <span class="material-symbols-outlined">
+                                    search
+                                </span>
+                            </button>
+                        </div>
+                    <!-- </form> -->
 
-                    </form>
 
                     <!-- Settings button with gear icon -->
                     <button type="submit">
                         <span class="material-symbols-outlined dark">settings</span>
                     </button>
 
-                    <Link
-                    :href="route('logout')"
-                    method="post"
-                    as="button"
-                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                    >Log Out</Link>
+                    <Link :href="route('logout')" method="post" as="button"
+                        class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                    Log Out</Link>
 
-                    <Avatar src='https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg'/>
+                    <Avatar
+                        src='https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg' />
 
                 </div>
 
@@ -87,7 +86,6 @@
 </template>
 
 <style>
-
 .dark {
     /* background: black; */
     color: rgb(230, 230, 230);
@@ -100,19 +98,26 @@
 </style>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, router } from '@inertiajs/vue3';
 
 const form = useForm({
     search: '',
 });
 
-function submit() {
+function search() {
     console.log(form.search)
     // form.post(route('search'), {
     //     onFinish: () => {
     //         console.log('success')
     //     }
     // });
+
+    if (form.search !== '') {
+        router.get(route('search'), {
+            search: form.search,
+        });
+    }
+
 }
 </script>
 
@@ -131,7 +136,7 @@ export default {
     },
 
     computed: {
-        // Get stuff in shared by every page by accessing $page.props
+        //  Get stuff in shared by every page by accessing $page.props
         username() {
             return this.$page.props.auth.username;
         },
