@@ -184,16 +184,6 @@ export default {
                 // JSON
                 // this.$emit('update:modelValue', this.editor.getJSON())
 
-                const before = this.editor.getJSON()
-
-                before.content.forEach(contentNode => {
-
-
-                    // Filter out any node with text === null
-                    // contentNode.content = contentNode.content.filter(node => node.text !== " ")
-                    
-                });
-
                 // this.editor.commands.setContent(before, false)
 
                 // console.log(this.editor.getJSON())
