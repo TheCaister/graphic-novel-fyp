@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\UniverseController;
 use Illuminate\Http\Request;
@@ -71,4 +72,8 @@ Route::group([], function () {
 
 Route::group([], function () {
     Route::get('universes/{universe}/thumbnail', [UniverseController::class, 'getThumbnailJson'])->name('universes.get-thumbnail-json');
+});
+
+Route::group([], function () {
+    Route::get('search', [SearchController::class, 'searchJson'])->name('search.json');
 });

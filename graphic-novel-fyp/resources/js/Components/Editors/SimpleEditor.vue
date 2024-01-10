@@ -1,5 +1,4 @@
 <template>
-
     <div v-if="editor" class="flex flex-wrap space-x-2">
         <button @click="editor.chain().focus().toggleBold().run()"
             :disabled="!editor.can().chain().focus().toggleBold().run()"
@@ -81,10 +80,13 @@
 </template>
   
 <script>
+import Mention from '@tiptap/extension-mention'
 import StarterKit from '@tiptap/starter-kit'
 import { Editor, EditorContent } from '@tiptap/vue-3'
+import suggestion from './suggestion'
 
 export default {
+
     components: {
         EditorContent,
     },
@@ -124,7 +126,7 @@ export default {
             const newHTML = this.editor.getHTML().replaceAll(/<li><p>(.*?)<\/p><(\/?)(ol|li|ul)>/gi, "<li>$1<$2$3>")
 
             this.editor.commands.setContent(newHTML, false)
-        }
+        },
     },
 
     mounted() {
@@ -154,9 +156,28 @@ export default {
                         },
                     }
                 ),
+                Mention.configure({
+                    HTMLAttributes: {
+                        class: 'mention',
+                    },
+                    renderLabel({options, node}){
+
+                        // Example of how to render a label
+                        // return options[node.attrs.id].name
+
+                        // return '<button class="not-active">' + 'testing'+ '</button>'
+
+                        // node.attrs.id is the element object that is returned when a suggestion is selected.
+                        return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id.element_name}`
+
+                        // return `${options.suggestion.char}${node.attrs.element_name}`
+                    },
+                    suggestion,
+                }),
             ],
             content: this.modelValue,
             onUpdate: () => {
+                console.log(this.editor.getJSON())
                 // this.editor.commands.setContent(, false)
 
                 // console.log(this.editor.getHTML().replaceAll(/<li><p>(.*?)<\/p><(\/?)(ol|li|ul)>/gi, "<li>$1<$2$3>"))
@@ -180,11 +201,19 @@ export default {
 </script>
 
 <style>
-ul > li {
+/* Change how the mention looks here */
+.mention {
+  border: 3px solid #c62424;
+  border-radius: 0.4rem;
+  padding: 0.1rem 0.3rem;
+  box-decoration-break: clone;
+}
+
+ul>li {
     margin-left: 20px;
 }
 
-ol > li {
+ol>li {
     margin-left: 20px;
 }
 

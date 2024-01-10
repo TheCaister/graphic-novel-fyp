@@ -18,8 +18,10 @@
     },
     "dependencies": {
         "@headlessui/vue": "^1.7.16",
+        "@tiptap/extension-mention": "^2.1.15",
         "@tiptap/pm": "^2.0.3",
         "@tiptap/starter-kit": "^2.0.3",
+        "@tiptap/suggestion": "^2.1.15",
         "@tiptap/vue-3": "^2.0.3",
         "@vue-flow/core": "^1.22.3",
         "@vueuse/core": "^10.7.0",
@@ -27,6 +29,7 @@
         "filepond-plugin-file-validate-type": "^1.2.8",
         "filepond-plugin-image-preview": "^4.6.11",
         "lodash": "^4.17.21",
+        "tippy.js": "^6.3.7",
         "vue": "^3.4.7",
         "vue-filepond": "^7.0.3",
         "vue3-grid-layout-next": "^1.0.6"

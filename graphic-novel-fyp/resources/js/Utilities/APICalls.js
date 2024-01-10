@@ -81,5 +81,14 @@ export default {
     },
     getUniverseThumbnail(universeId){
         return axios.get('/api/universes/' + universeId + '/thumbnail')
+    },
+    searchElements(query, limit){
+        return axios.get('/api/search', {
+            params: {
+                searchType: 'elements',
+                search: query,
+                limit: limit,
+            }
+        })
     }
 }
