@@ -25,7 +25,7 @@
 
 <script setup>
 import { onClickOutside } from '@vueuse/core'
-import { ref, defineProps } from 'vue'
+import { ref } from 'vue'
 import axios from 'axios';
 
 const emit = defineEmits(['closeModal'])

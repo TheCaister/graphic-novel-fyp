@@ -3,7 +3,7 @@ import { Head } from '@inertiajs/vue3';
 import EditSimpleText from './SimpleText/EditSimpleText.vue';
 import EditMindMap from './Mindmap/EditMindMap.vue';
 import EditPanelPlanner from './PanelPlanner/EditPanelPlanner.vue';
-import { defineProps, onMounted, computed, inject } from 'vue'
+import { onMounted, computed, inject } from 'vue'
 import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps({

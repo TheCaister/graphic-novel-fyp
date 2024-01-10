@@ -28,8 +28,9 @@
 
                 <div class="flex items-center">
                     <!-- Search bar -->
-                    <div class="relative text-gray-600">
-                        <input type="search" name="search" placeholder="Search"
+                    <form @submit.prevent="submit">
+                        <div class="relative text-gray-600">
+                        <input v-model="form.search" type="search" name="search" placeholder="Search"
                             class="bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none">
                         <button type="submit" class="absolute right-0 top-0 mt-3 mr-4 flex items-center justify-center">
                             <span class="material-symbols-outlined">
@@ -37,6 +38,8 @@
                             </span>
                         </button>
                     </div>
+
+                    </form>
 
                     <!-- Settings button with gear icon -->
                     <button type="submit">
@@ -93,10 +96,29 @@
 }
 </style>
 
+<script setup>
+import { useForm } from '@inertiajs/vue3';
+
+const form = useForm({
+    search: '',
+});
+
+function submit() {
+    console.log(form.search)
+    // form.post(route('search'), {
+    //     onFinish: () => {
+    //         console.log('success')
+    //     }
+    // });
+}
+</script>
+
 <script>
 import { Head } from '@inertiajs/vue3';
 import Avatar from './Avatar.vue';
 import { Link } from '@inertiajs/vue3';
+
+
 
 
 export default {
