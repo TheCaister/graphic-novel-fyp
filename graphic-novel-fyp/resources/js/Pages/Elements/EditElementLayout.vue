@@ -99,9 +99,15 @@ function back() {
                     src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fHww"
                     alt="" srcset="">
 
-                <p>
+                <!-- <p>
                     Title...
-                </p>
+                </p> -->
+
+                <!-- Input v-model form.element.element_name -->
+                <div>
+                    <input id="element_name" type="text" class="mt-1 block w-full bg-transparent border-none"
+                        v-model="form.element.element_name" required autofocus />
+                    </div>  
             </div>
 
         </div>

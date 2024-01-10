@@ -114,6 +114,7 @@ function search() {
 
     if (form.search !== '') {
         router.get(route('search'), {
+            searchType: 'elements',
             search: form.search,
         });
     }

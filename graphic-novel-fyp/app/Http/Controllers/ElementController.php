@@ -152,6 +152,7 @@ class ElementController extends Controller
         $newElement = $request->element;
 
         $element->update([
+            'element_name' => $newElement['element_name'],
             'content' => json_encode($newElement['content']),
             // 'hidden' => $request->hidden,
         ]);
