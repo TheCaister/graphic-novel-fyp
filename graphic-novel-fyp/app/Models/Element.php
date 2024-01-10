@@ -68,15 +68,17 @@ class Element extends Model
         return $this->morphedByMany(Page::class, 'elementable', 'elementables', 'element_id', 'elementable_id');
     }
 
-    public function elementType() : MorphTo
+    public function elementType(): MorphTo
     {
         return $this->morphTo('elementType', 'derived_element_type', 'derived_element_id');
     }
 
     public function scopeFilter($query, array $filters)
     {
+        // dd($query);
         $query->when($filters['search'] ?? null, function ($query, $search) {
-            $query->where('element_name', 'like', '%'.$search.'%');
+            $query->whereRaw("LOWER(element_name) LIKE CONCAT('%', LOWER(?), '%')", [$search])
+                ->orWhereRaw("LOWER(content) LIKE CONCAT('%', LOWER(?), '%')", [$search]);
         });
     }
 }

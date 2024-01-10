@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Element;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -41,7 +42,9 @@ class SearchController extends Controller
         $resultsList = [];
 
         // search for elements
-        $resultsList = \App\Models\Element::where('element_name', 'LIKE', "%{$searchTerm}%")->get();
+        // $resultsList = \App\Models\Element::where('element_name', 'LIKE', "%{$searchTerm}%")->get();
+
+        $resultsList = Element::latest()->filter(request(['search']))->get();
 
         dd($resultsList);
 
