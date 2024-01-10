@@ -43,6 +43,8 @@ function updateForm(element) {
 
 function saveElement(assign = false) {
 
+    // console.log(form.element.content)
+
     form.put(route('elements.update', {
         element: form.element.element_id, assign: assign, content_type: assign ? props.parentContentType : '', content_id: assign ? props.parentContentId : '', preSelectedElements: [{
             element_id: form.element.element_id,

@@ -4,24 +4,26 @@ import tippy from 'tippy.js'
 import MentionList from '@/Components/MentionList.vue'
 import APICalls from '@/Utilities/APICalls'
 
-export default {
-  items: ({ query }) => {
-    // This is the list of items that will be passed to the MentionList component
-    // return [
-    //   'Lea Thompson', 'Cyndi Lauper', 'Tom Cruise', 'Madonna', 'Jerry Hall', 'Joan Collins', 'Winona Ryder', 'Christina Applegate', 'Alyssa Milano', 'Molly Ringwald', 'Ally Sheedy', 'Debbie Harry', 'Olivia Newton-John', 'Elton John', 'Michael J. Fox', 'Axl Rose', 'Emilio Estevez', 'Ralph Macchio', 'Rob Lowe', 'Jennifer Grey', 'Mickey Rourke', 'John Cusack', 'Matthew Broderick', 'Justine Bateman', 'Lisa Bonet',
-    // ].filter(item => item.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
+let list = []
 
+export default {
+  items: async ({ query }) => {
+    // This is the list of items that will be passed to the MentionList component
     // we can do all this, or we can simply call the api here
+    // console.log(query)
+    // return ['test', 'test2', 'test3', 'test4', 'test5']
+
     return APICalls.searchElements(query, 5)
     
     // .then((response) => {
-    //     console.log(response.data)
-    //     return response.data
-    // }).catch((error) => {
+    //     // console.log(response.data)
+    //     list = response.data
+    //     // return response.data
+    // }
+    // ).catch((error) => {
     //     console.log(error)
-    //     return []
     // })
-    // console.log(list)
+
     // return list
 
   },
@@ -99,8 +101,20 @@ export default {
 
     //   When exiting the suggester, we destroy the VueRenderer instance.
       onExit() {
-        popup[0].destroy()
-        component.destroy()
+        // console.log('exit')
+        // console.log(popup)
+        // popup[0].destroy()
+        // component.destroy()
+
+        if(popup){
+            popup[0].destroy()
+        }
+        if(component){
+            component.destroy()
+        }
+
+        popup = null
+        component = null
       },
     }
   },

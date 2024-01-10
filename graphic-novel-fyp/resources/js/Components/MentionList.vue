@@ -89,7 +89,7 @@
       },
     },
     mounted() {
-        console.log('hi guys')
+        // console.log('hi guys')
     },
   }
   </script>

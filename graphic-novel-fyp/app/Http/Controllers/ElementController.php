@@ -137,7 +137,7 @@ class ElementController extends Controller
             [
                 'element' => $element,
                 'parentContentType' => $request->content_type,
-                'parentContentId' => $request->content_id,
+                'parentContentId' => intval($request->content_id),
             ]
         );
     }
@@ -151,9 +151,36 @@ class ElementController extends Controller
         // dd($request->all());
         $newElement = $request->element;
 
+        // $elementContent= $newElement['content'];
+
+        // in elementContent, I want to convert all values of null to empty strings
+        // $elementContent = array_map(function($value){
+        //     if(is_null($value)){
+        //         return '';
+        //     }
+        //     else{
+        //         return $value;
+        //     }
+        // }, $elementContent);
+
+        // By default, it seems that Laravel converts empty strings or strings with just spaces to null. Here's a recursive function to convert all null text values to empty strings. This is to ensure that the content renders properly. For TipTap, as it doesn't render properly if the text value is null.
+        array_walk_recursive($newElement['content'], function(&$value, $key){
+            if ($key === 'text' && is_null($value)) {
+                $value = ' ';
+            }
+        });
+        
+        // dd($newElement['content']);
+
+
+
+
+        // dd(json_encode($newElement['content']));
+
         $element->update([
             'element_name' => $newElement['element_name'],
             'content' => json_encode($newElement['content']),
+            // 'content' => $newElement['content'],
             // 'hidden' => $request->hidden,
         ]);
 

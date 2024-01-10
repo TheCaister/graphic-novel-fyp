@@ -32,6 +32,8 @@ class Element extends Model
         'hidden',
     ];
 
+    // protected $guarded = [];
+
     /**
      * The attributes that should be cast to native types.
      *

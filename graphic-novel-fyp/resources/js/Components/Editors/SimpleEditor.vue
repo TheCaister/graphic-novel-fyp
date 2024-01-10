@@ -161,23 +161,17 @@ export default {
                         class: 'mention',
                     },
                     renderLabel({options, node}){
-
-                        // Example of how to render a label
-                        // return options[node.attrs.id].name
-
-                        // return '<button class="not-active">' + 'testing'+ '</button>'
+                        // console.log(options)
 
                         // node.attrs.id is the element object that is returned when a suggestion is selected.
                         return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id.element_name}`
-
-                        // return `${options.suggestion.char}${node.attrs.element_name}`
                     },
                     suggestion,
                 }),
             ],
             content: this.modelValue,
             onUpdate: () => {
-                console.log(this.editor.getJSON())
+             
                 // this.editor.commands.setContent(, false)
 
                 // console.log(this.editor.getHTML().replaceAll(/<li><p>(.*?)<\/p><(\/?)(ol|li|ul)>/gi, "<li>$1<$2$3>"))
@@ -188,11 +182,32 @@ export default {
                 // this.$emit('update:modelValue', this.editor.getHTML())
 
                 // JSON
-                this.$emit('update:modelValue', this.editor.getJSON())
+                // this.$emit('update:modelValue', this.editor.getJSON())
+
+                const before = this.editor.getJSON()
+
+                before.content.forEach(contentNode => {
+
+
+                    // Filter out any node with text === null
+                    // contentNode.content = contentNode.content.filter(node => node.text !== " ")
+                    
+                });
+
+                // this.editor.commands.setContent(before, false)
+
+                // console.log(this.editor.getJSON())
+                
+                // In before.content, Remove any entry that has an null text field
+                // Go through each node in the content array
+
+                this.$emit('update:modelValue', JSON.parse(JSON.stringify(this.editor.getJSON())))
                 // console.log(this.editor.getJSON());
             },
         })
     },
+
+    
 
     beforeUnmount() {
         this.editor.destroy()
