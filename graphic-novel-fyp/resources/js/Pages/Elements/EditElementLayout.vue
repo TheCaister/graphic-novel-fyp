@@ -118,6 +118,6 @@ function back() {
 
         <!-- Element Edit View -->
         <KeepAlive>
-            <component :is="DashboardViewComponent" :element="props.element" @updateElement="updateForm" />
+            <component :is="DashboardViewComponent" :element="props.element" @updateElement="updateForm" class="h-96" />
         </KeepAlive>
 </div></template>
