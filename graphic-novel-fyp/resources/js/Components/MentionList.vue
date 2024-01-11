@@ -20,6 +20,7 @@
   
   <script>
   export default {
+    emits: ['selectItem'],
     props: {
         // The list of items to display
       items: {

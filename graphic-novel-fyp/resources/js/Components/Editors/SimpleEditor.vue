@@ -75,15 +75,24 @@
     </div>
 
     <div class="bg-black text-white">
-        <editor-content class="p-4 editor-field" :editor="editor" />
+        <editor-content class="p-4 editor-field" :editor="editor" @itemSelected="itemSelected" />
     </div>
 </template>
+
+<script setup>
+
+function itemSelected(props) {
+    console.log(props.id.element_id)
+}
+</script>
   
 <script>
 import Mention from '@tiptap/extension-mention'
 import StarterKit from '@tiptap/starter-kit'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import suggestion from './suggestion'
+
+
 
 export default {
 
@@ -127,9 +136,32 @@ export default {
 
             this.editor.commands.setContent(newHTML, false)
         },
+        testing(event) {
+            console.log(event)
+            console.log('testing')
+        },
     },
 
     mounted() {
+        // Defining custom mention
+        const CustomMention = Mention.extend({
+
+            renderHTML(props) {
+                const { node } = props;
+                let id = node.attrs.id;
+                return [
+                    'button',
+                    {
+                        style: 'color: red; border: 2px solid pink;',
+                        target: '_blank',
+                        //   Onclick function
+                        onclick: `alert(testing())`,
+                    },
+                    `${node.attrs.label ?? node.attrs.id.element_name}`,
+                ];
+            },
+        });
+
         this.editor = new Editor({
             extensions: [
                 StarterKit.configure(
@@ -156,12 +188,14 @@ export default {
                         },
                     }
                 ),
-                Mention.configure({
+                CustomMention.configure({
                     HTMLAttributes: {
                         class: 'mention',
+                        onclick: 'alert(event.target.getAttribute("data-id"))',
+                        // onclick: 'testing(event)',
                     },
-                    renderLabel({options, node}){
-                        // console.log(options)
+                    renderLabel({ options, node }) {
+                        console.log(node)
 
                         // node.attrs.id is the element object that is returned when a suggestion is selected.
                         return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id.element_name}`
@@ -171,7 +205,7 @@ export default {
             ],
             content: this.modelValue,
             onUpdate: () => {
-             
+
                 // this.editor.commands.setContent(, false)
 
                 // console.log(this.editor.getHTML().replaceAll(/<li><p>(.*?)<\/p><(\/?)(ol|li|ul)>/gi, "<li>$1<$2$3>"))
@@ -186,8 +220,8 @@ export default {
 
                 // this.editor.commands.setContent(before, false)
 
-                // console.log(this.editor.getJSON())
-                
+                console.log(this.editor.getJSON())
+
                 // In before.content, Remove any entry that has an null text field
                 // Go through each node in the content array
 
@@ -197,7 +231,7 @@ export default {
         })
     },
 
-    
+
 
     beforeUnmount() {
         this.editor.destroy()
@@ -208,10 +242,10 @@ export default {
 <style>
 /* Change how the mention looks here */
 .mention {
-  border: 3px solid #c62424;
-  border-radius: 0.4rem;
-  padding: 0.1rem 0.3rem;
-  box-decoration-break: clone;
+    border: 3px solid #c62424;
+    border-radius: 0.4rem;
+    padding: 0.1rem 0.3rem;
+    box-decoration-break: clone;
 }
 
 ul>li {

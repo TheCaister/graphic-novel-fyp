@@ -66,7 +66,7 @@ function getParentContentType(){
                     <button @click="submit('SimpleText')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Simple Text
                     </button>
-                    <button @click="form.elementType = 'MindMap'"
+                    <button @click="submit('MindMap')"
                         class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Mind Map
                     </button>

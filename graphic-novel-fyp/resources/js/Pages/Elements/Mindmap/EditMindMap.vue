@@ -1,5 +1,6 @@
 <template>
     <div class="border border-black">
+        Hi guys
         <VueFlow v-model="elements" />
     </div>
 </template>

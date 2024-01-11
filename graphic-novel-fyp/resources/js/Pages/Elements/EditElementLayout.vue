@@ -3,7 +3,7 @@ import { Head } from '@inertiajs/vue3';
 import EditSimpleText from './SimpleText/EditSimpleText.vue';
 import EditMindMap from './Mindmap/EditMindMap.vue';
 import EditPanelPlanner from './PanelPlanner/EditPanelPlanner.vue';
-import { onMounted, computed, inject } from 'vue'
+import { onMounted, computed, inject, ref } from 'vue'
 import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -18,16 +18,20 @@ const props = defineProps({
     }
 });
 
+const editView = ref(props.element.derived_element_type)
+
 const DashboardViewComponent = computed(() => {
     // Switch statement to return the correct dashboard view
-    switch (props.element.value) {
+    console.log(editView.value)
+    switch (editView.value) {
         case 'App\Models\SimpleTextElement':
             return EditSimpleText
-        case 'App\Models\MindMapElement':
+        case 'App\Models\MindmapElement':
             return EditMindMap
         case 'App\Models\PanelPlannerElement':
             return EditPanelPlanner
         default:
+            console.log('default')
             return EditSimpleText
     }
 })

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Chapter;
 use App\Models\Element;
+use App\Models\MindmapElement;
 use App\Models\Page;
 use App\Models\Series;
 use App\Models\SimpleTextElement;
@@ -46,6 +47,7 @@ class ElementController extends Controller
                 break;
             case 'MindMap':
                 # code...
+                $element = $this->createMindMapElement();
                 break;
             case 'PanelPlanner':
                 # code...
@@ -498,6 +500,27 @@ class ElementController extends Controller
         ]);
 
         $element->elementType()->associate($simple_text);
+
+        $element->save();
+
+        $content->elements()->attach($element->element_id);
+
+        return $element;
+    }
+
+    private function createMindMapElement(){
+        $content = $this->getElementable(request()->contentType, request()->contentId);
+
+        $mindmap = MindmapElement::create();
+
+        // We get the content, and then we create a new element and attach it to the content.
+
+        $element = Element::create([
+            'element_name' => 'New Element',
+            'hidden' => false,
+        ]);
+
+        $element->elementType()->associate($mindmap);
 
         $element->save();
 
