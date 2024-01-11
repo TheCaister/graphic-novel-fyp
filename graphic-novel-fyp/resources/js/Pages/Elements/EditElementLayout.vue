@@ -18,20 +18,18 @@ const props = defineProps({
     }
 });
 
-const editView = ref(props.element.derived_element_type)
-
 const DashboardViewComponent = computed(() => {
-    // Switch statement to return the correct dashboard view
-    console.log(editView.value)
-    switch (editView.value) {
-        case 'App\Models\SimpleTextElement':
+    switch (props.element.derived_element_type) {
+        case "App\\Models\\SimpleTextElement":
             return EditSimpleText
-        case 'App\Models\MindmapElement':
+            break
+        case "App\\Models\\MindmapElement":
             return EditMindMap
-        case 'App\Models\PanelPlannerElement':
+            break
+        case "App\\Models\\PanelPlannerElement":
             return EditPanelPlanner
+            break
         default:
-            console.log('default')
             return EditSimpleText
     }
 })

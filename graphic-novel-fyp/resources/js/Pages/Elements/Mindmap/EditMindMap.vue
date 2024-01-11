@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div class="border border-black">
         Hi guys
         <VueFlow v-model="elements" />
@@ -28,4 +28,4 @@ const elements = ref([
     // An animated edge
     { id: 'e1-2', source: '1', target: '2', animated: true },
 ])
-</script>
+</script> -->
