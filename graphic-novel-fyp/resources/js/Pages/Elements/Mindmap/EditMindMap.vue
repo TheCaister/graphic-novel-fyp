@@ -77,17 +77,29 @@ const nodes = ref([
     },
     // Dynamic resolution to slot-names is done for your user-defined node-types, meaning a node with the type custom is expected to have a slot named #node-custom.
     { id: '3', type: 'custom', label: 'Node 3', position: { x: 400, y: 100 } },
+
+
+    { id: 'e1-2', source: '1', target: '2', type: 'custom' },
+    // { id: 'e1-2', source: '1', target: '2' },
+
+    // {
+    //     id: 'e1-2',
+    //     source: '1',
+    //     target: '2',
+    // },
+
+    { id: 'e1-3', source: '1', target: '3', animated: true },
 ])
 
 const edges = ref([
-    // { id: 'e1-2', source: '1', target: '2', type: 'custom' },
+    { id: 'e1-2', source: '1', target: '2', type: 'custom' },
     // { id: 'e1-2', source: '1', target: '2' },
 
-    {
-        id: 'e1-2',
-        source: '1',
-        target: '2',
-    },
+    // {
+    //     id: 'e1-2',
+    //     source: '1',
+    //     target: '2',
+    // },
 
     { id: 'e1-3', source: '1', target: '3', animated: true },
 ])
@@ -136,7 +148,11 @@ function removeNode() {
         <button @click="removeNode()" class="text-white text-4xl">Remove Node</button>
 
             <!-- <div class="p-16 bg-white"> -->
-                <VueFlow v-model:nodes="nodes" v-model:edges="edges" fit-view-on-init
+                <!-- <VueFlow v-model:nodes="nodes" v-model:edges="edges" fit-view-on-init
+            class="border-4 border-green-500 bg-blue-500 vue-flow-basic-example" :default-zoom="1.5" :min-zoom="0.2"
+            :max-zoom="4"> -->
+
+            <VueFlow v-model="nodes" fit-view-on-init
             class="border-4 border-green-500 bg-blue-500 vue-flow-basic-example" :default-zoom="1.5" :min-zoom="0.2"
             :max-zoom="4">
             <Background pattern-color="#aaa" :gap="8" />
@@ -150,9 +166,9 @@ function removeNode() {
                 <CustomNode v-bind="nodeProps" />
             </template>
 
-            <!-- <template #edge-custom="edgeProps">
+            <template #edge-custom="edgeProps">
                 <CustomEdge v-bind="edgeProps" />
-            </template> -->
+            </template>
         </VueFlow>
     <!-- </div> -->
 

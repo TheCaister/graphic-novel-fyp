@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import type { EdgeProps } from '@vue-flow/core'
 import { BaseEdge, EdgeLabelRenderer, getBezierPath, useVueFlow } from '@vue-flow/core'
 
@@ -8,6 +8,10 @@ const props = defineProps<EdgeProps>()
 const { removeEdges } = useVueFlow()
 
 const path = computed(() => getBezierPath(props))
+
+onMounted(() => {
+    console.log(props)
+})
 </script>
 
 <script lang="ts">
