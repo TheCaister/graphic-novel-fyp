@@ -22,7 +22,7 @@ import { ref, watch } from 'vue'
 const emits = defineEmits(['closeElementSearchModal'])
 
 function close() {
-    emit('closeElementSearchModal');
+    emits('closeElementSearchModal');
 };
 
 const modal = ref(null)
@@ -67,14 +67,14 @@ onClickOutside(modal, () => {
 
 watch(searchQuery, () => {
     // Clear the previous timer if it exists
-    if(timer) {
-        clearTimeout(timer);
+    if (timer.value) {
+        clearTimeout(timer.value);
     }
 
     // Set a new timer to delay the API call
-    timer = setTimeout(() => {
+    timer.value = setTimeout(() => {
         // this.makeApiCall();
         console.log('Making API call...')
-    }, 2000); // Adjust the delay time (in milliseconds) as needed
+    }, 200); // Adjust the delay time (in milliseconds) as needed
 })
 </script>

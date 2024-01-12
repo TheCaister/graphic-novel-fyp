@@ -51,8 +51,10 @@ import { MiniMap } from '@vue-flow/minimap'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import CustomNode from './CustomNode.vue'
 import CustomEdge from './CustomEdge.vue'
+import SearchElementModal from '../SearchElementModal.vue'
 
 const showAddElementButton = ref(false)
+const isSearchElementModalOpen = ref(false)
 const clickedMouseX = ref(0)
 const clickedMouseY = ref(0)
 
@@ -148,14 +150,22 @@ function removeNode() {
     removeNodes(nodes.value.length.toString())
 }
 
-function test(){
+function onAddElementButtonClicked() {
     console.log('hi guys')
+    isSearchElementModalOpen.value = true
     showAddElementButton.value = false
 }
 </script>
 
 <template>
     <div>
+        <Teleport to="body">
+            <Transition name="modal" class="z-50">
+                <search-element-modal v-if="isSearchElementModalOpen" @closeModal="isSearchElementModalOpen = false"
+                    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+            </Transition>
+        </Teleport>
+
         <!-- Cool button that calls insertNode -->
         <button @click="insertNode()" class="text-white text-4xl">Insert Node</button>
 
@@ -168,7 +178,7 @@ function test(){
             :max-zoom="4"> -->
 
         <VueFlow v-model="nodes" fit-view-on-init class="border-4 border-green-500 bg-blue-500 vue-flow-basic-example"
-            :default-zoom="1.5" :min-zoom="0.2" :max-zoom="4" @pane-click="onPaneClicked" >
+            :default-zoom="1.5" :min-zoom="0.2" :max-zoom="4" @pane-click="onPaneClicked">
 
 
             <Background pattern-color="#aaa" :gap="8" />
@@ -186,10 +196,11 @@ function test(){
                 <CustomEdge v-bind="edgeProps" />
             </template>
 
-            <button @click="test" ref="AddElementButton" v-if="showAddElementButton"
-            :style="{ position: 'fixed', top: clickedMouseY + 'px', left: clickedMouseX + 'px' }" class="bg-pink-500 p-8 z-10 rounded-lg border-4 border-black">
-            Add Element
-         </button>
+            <button @click="onAddElementButtonClicked" ref="AddElementButton" v-if="showAddElementButton"
+                :style="{ position: 'fixed', top: clickedMouseY + 'px', left: clickedMouseX + 'px' }"
+                class="bg-pink-500 p-8 z-10 rounded-lg border-4 border-black">
+                Add Element
+            </button>
         </VueFlow>
         <!-- </div> -->
 
