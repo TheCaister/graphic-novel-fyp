@@ -10,7 +10,7 @@ const counter = ref(0)
 </script>
 
 <template>
-    <NodeResizer min-width="100" min-height="300" />
+    <NodeResizer min-width="100" min-height="30" />
     <div class="custom-node">
         <Handle type="target" :position="Position.Top" />
         <button @click="counter++">Increment</button>

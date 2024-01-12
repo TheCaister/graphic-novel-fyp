@@ -43,7 +43,8 @@ const elements = ref([
 
 // The nodes and edges can be bound to props that I will pass in from the database.
 
-import { h, ref } from 'vue'
+import { ref } from 'vue'
+import { onClickOutside } from '@vueuse/core'
 import { Background } from '@vue-flow/background'
 import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
@@ -51,9 +52,21 @@ import { VueFlow, useVueFlow } from '@vue-flow/core'
 import CustomNode from './CustomNode.vue'
 import CustomEdge from './CustomEdge.vue'
 
+const showAddElementButton = ref(false)
+const clickedMouseX = ref(0)
+const clickedMouseY = ref(0)
+
+const AddElementButton = ref(null)
+
+
+
+onClickOutside(AddElementButton, () => {
+    showAddElementButton.value = false
+})
+
 // https://vueflow.dev/typedocs/interfaces/Actions.html#addedges
 // Actions that can be listened to
-const { onConnect, addEdges, removeEdges, removeNodes, addNodes, onNodeDragStart } = useVueFlow()
+const { onConnect, addEdges, removeEdges, removeNodes, addNodes, onNodeDragStart, onNodeClick, onPaneClick } = useVueFlow()
 
 // default is the default node type, which includes 2 handles.
 // You can tweak the position like so 
@@ -91,25 +104,22 @@ const nodes = ref([
     { id: 'e1-3', source: '1', target: '3', animated: true },
 ])
 
-const edges = ref([
-    { id: 'e1-2', source: '1', target: '2', type: 'custom' },
-    // { id: 'e1-2', source: '1', target: '2' },
-
-    // {
-    //     id: 'e1-2',
-    //     source: '1',
-    //     target: '2',
-    // },
-
-    { id: 'e1-3', source: '1', target: '3', animated: true },
-])
-
 onConnect((params) => {
     addEdges([params])
 })
 
 onNodeDragStart((params) => {
     console.log(params)
+})
+
+onNodeClick((params) => {
+    console.log(params)
+})
+
+onPaneClick((params) => {
+    clickedMouseX.value = params.clientX
+    clickedMouseY.value = params.clientY
+    showAddElementButton.value = true
 })
 
 function insertNode() {
@@ -137,6 +147,11 @@ function removeNode() {
 
     removeNodes(nodes.value.length.toString())
 }
+
+function test(){
+    console.log('hi guys')
+    showAddElementButton.value = false
+}
 </script>
 
 <template>
@@ -147,14 +162,15 @@ function removeNode() {
         <!-- Cool button that calls removeNode -->
         <button @click="removeNode()" class="text-white text-4xl">Remove Node</button>
 
-            <!-- <div class="p-16 bg-white"> -->
-                <!-- <VueFlow v-model:nodes="nodes" v-model:edges="edges" fit-view-on-init
+        <!-- <div class="p-16 bg-white"> -->
+        <!-- <VueFlow v-model:nodes="nodes" v-model:edges="edges" fit-view-on-init
             class="border-4 border-green-500 bg-blue-500 vue-flow-basic-example" :default-zoom="1.5" :min-zoom="0.2"
             :max-zoom="4"> -->
 
-            <VueFlow v-model="nodes" fit-view-on-init
-            class="border-4 border-green-500 bg-blue-500 vue-flow-basic-example" :default-zoom="1.5" :min-zoom="0.2"
-            :max-zoom="4">
+        <VueFlow v-model="nodes" fit-view-on-init class="border-4 border-green-500 bg-blue-500 vue-flow-basic-example"
+            :default-zoom="1.5" :min-zoom="0.2" :max-zoom="4" @pane-click="onPaneClicked" >
+
+
             <Background pattern-color="#aaa" :gap="8" />
 
             <MiniMap />
@@ -169,10 +185,14 @@ function removeNode() {
             <template #edge-custom="edgeProps">
                 <CustomEdge v-bind="edgeProps" />
             </template>
+
+            <button @click="test" ref="AddElementButton" v-if="showAddElementButton"
+            :style="{ position: 'fixed', top: clickedMouseY + 'px', left: clickedMouseX + 'px' }" class="bg-pink-500 p-8 z-10 rounded-lg border-4 border-black">
+            Add Element
+         </button>
         </VueFlow>
-    <!-- </div> -->
+        <!-- </div> -->
 
     </div>
-
 </template>
 
