@@ -161,7 +161,7 @@ function onAddElementButtonClicked() {
     <div>
         <Teleport to="body">
             <Transition name="modal" class="z-50">
-                <search-element-modal v-if="isSearchElementModalOpen" @closeModal="isSearchElementModalOpen = false"
+                <search-element-modal v-if="isSearchElementModalOpen" @closeElementSearchModal="isSearchElementModalOpen = false"
                     class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
             </Transition>
         </Teleport>
@@ -178,7 +178,7 @@ function onAddElementButtonClicked() {
             :max-zoom="4"> -->
 
         <VueFlow v-model="nodes" fit-view-on-init class="border-4 border-green-500 bg-blue-500 vue-flow-basic-example"
-            :default-zoom="1.5" :min-zoom="0.2" :max-zoom="4" @pane-click="onPaneClicked">
+            :default-zoom="1.5" :min-zoom="0.2" :max-zoom="4">
 
 
             <Background pattern-color="#aaa" :gap="8" />
@@ -207,3 +207,15 @@ function onAddElementButtonClicked() {
     </div>
 </template>
 
+<style scoped>
+.modal-enter-active,
+.modal-leave-active {
+    transition: all 0.25s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    opacity: 0;
+    transform: scale(1.1);
+}
+</style>

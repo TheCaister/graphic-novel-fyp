@@ -166,12 +166,14 @@ class ElementController extends Controller
         // }, $elementContent);
 
         // By default, it seems that Laravel converts empty strings or strings with just spaces to null. Here's a recursive function to convert all null text values to empty strings. This is to ensure that the content renders properly. For TipTap, as it doesn't render properly if the text value is null.
-        array_walk_recursive($newElement['content'], function(&$value, $key){
-            if ($key === 'text' && is_null($value)) {
-                $value = ' ';
-            }
-        });
-        
+        if (!is_null($newElement['content'])) {
+            array_walk_recursive($newElement['content'], function(&$value, $key){
+                if ($key === 'text' && is_null($value)) {
+                    $value = ' ';
+                }
+            });
+        }
+      
         // dd($newElement['content']);
 
 
