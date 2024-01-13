@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { inject, defineProps } from 'vue'
+import { inject } from 'vue'
 
 const props = defineProps({
     title: {

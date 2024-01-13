@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, defineEmits, onMounted } from 'vue'
+import { ref } from 'vue'
 
 const emits = defineEmits(['checked'])
 
