@@ -1,6 +1,6 @@
 <template>
     <Head title="Search" />
-    
+
     <div class="text-white text-lg">
         <!-- Search bar with buttons for users, content and elements -->
         <div>
@@ -10,17 +10,21 @@
         <!-- Advanced search -->
         <div>
             Advanced search...
+
+            <!-- Here, I will swap things out depending on search type -->
         </div>
 
         <!-- Sorting, different views -->
         <div>
             Sorting, different views...
+
+            <!-- Results here -->
+            <KeepAlive>
+                <component :is="ResultsViewComponent" :resultsList="resultsList" />
+            </KeepAlive>
         </div>
 
-        <!-- Results here -->
-        <KeepAlive>
-            <component :is="ResultsViewComponent" :resultsList="resultsList" />
-        </KeepAlive>
+
     </div>
 </template>
 
@@ -58,15 +62,15 @@ const form = useForm({
     search: '',
 });
 
-function search(){
-    if(form.search !== ''){
+function search() {
+    if (form.search !== '') {
         router.get(route('search'), {
             search: form.search,
         });
     }
 }
 
-function back(){
+function back() {
     router.back();
 }
 </script>
