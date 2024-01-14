@@ -48,7 +48,6 @@ watch(nodesEdges, (list) => {
     emit('updateElement', updatedElement)
 })
 
-const AddElementButton = ref(null)
 // https://vueflow.dev/typedocs/interfaces/Actions.html#addedges
 // Actions that can be listened to
 const { onConnect, addEdges, removeNodes, addNodes, onPaneClick, } = useVueFlow()
@@ -136,7 +135,7 @@ onMounted(() => {
                 <CustomEdge v-bind="edgeProps" />
             </template>
 
-            <button @click="onAddElementButtonClicked" ref="AddElementButton" v-if="showAddElementButton"
+            <button @click="onAddElementButtonClicked" v-if="showAddElementButton"
                 :style="{ position: 'fixed', top: clickedMouseY + 'px', left: clickedMouseX + 'px' }"
                 class="bg-pink-500 p-8 z-10 rounded-lg border-4 border-black">
                 Add Element
