@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-center text-white">
+    <div class="flex justify-center text-white ">
         <div class="text-white">
             <div v-for="item in layout" class="rounded-lg relative border-4 border-pink-500 p-4">
                 <div>
@@ -15,16 +15,18 @@
             <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout" :col-num="12"
                 :row-height="30" :is-draggable="true" :is-resizable="true" :is-mirrored="true" :vertical-compact="false"
                 :margin="[10, 10]" :restore-on-drag="true" :use-css-transforms="true"
-                class="border-4 border-pink-500 rounded-lg  touch-none" @click="console.log('clicked...')"
+                class="border-4 border-pink-500 rounded-lg  touch-none" @click="addGridItem"
                 @mousemove="updateMousePosition" @mouseleave="showAddElementHint = false">
                 <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :key="item.i"
-                    class="rounded-lg relative border-4 border-pink-500 text-white p-4" @click.stop="">
+                    class="rounded-lg relative border-4 border-pink-500 text-white p-4"
+                    @mousemove.stop="showAddElementHint = false" @click.stop="">
                     Testing...
+                    <span class="absolute top-0 right-0 cursor-pointer mt-2 mr-2"  @click="removeGridItem(item.i)">X</span>
                 </grid-item>
             </GridLayout>
             <div class="flex justify-center">
                 <button>
-                    <- </button>
+                    &lt;- </button>
                         <div>
                             12/29
                         </div>
@@ -72,6 +74,7 @@
   
 
 <script lang="ts" setup>
+import { watch } from 'vue';
 import { ref } from 'vue';
 import { GridLayout, GridItem } from 'vue3-grid-layout-next';
 
@@ -95,19 +98,28 @@ const emit = defineEmits(['updateElement'])
 // Set const layout to random values
 // I should consider adding...
 // static so that it won't move when I drag other panels over it
-const layout = ref([
-    {
-        "x": 0, "y": 0, "w": 2, "h": 2, "i": "0", "text": "Some lore here", "elements": [{
-            "element_id": 1,
-            "element_name": "Grudd",
-        }]
-    },
-    { "x": 2, "y": 0, "w": 2, "h": 4, "i": "1" },
-    { "x": 4, "y": 0, "w": 2, "h": 5, "i": "2" },
-    { "x": 6, "y": 0, "w": 2, "h": 3, "i": "3" },
-    { "x": 8, "y": 0, "w": 2, "h": 3, "i": "4" },
-    { "x": 10, "y": 0, "w": 2, "h": 3, "i": "5" },
-])
+// list-index so that I can keep track of the order of the panels in the list on the right
+const layout = ref(props.element.content)
+
+// layout.value = [
+//     {
+//         "x": 0, "y": 0, "w": 2, "h": 2, "i": "0", "text": "Some lore here", "elements": [{
+//             "element_id": 1,
+//             "element_name": "Grudd",
+//         }]
+//     },
+//     { "x": 2, "y": 0, "w": 2, "h": 4, "i": "1" },
+//     { "x": 4, "y": 0, "w": 2, "h": 5, "i": "2" },
+//     { "x": 6, "y": 0, "w": 2, "h": 3, "i": "3" },
+//     { "x": 8, "y": 0, "w": 2, "h": 3, "i": "4" },
+//     { "x": 10, "y": 0, "w": 2, "h": 3, "i": "5" },
+// ]
+
+watch(layout, (newVal) => {
+    console.log('updated...')
+    props.element.content = newVal
+    emit('updateElement', props.element)
+})
 
 // const layout = reactive([]) // will cause some bug
 
@@ -119,6 +131,27 @@ function updateMousePosition(event) {
     mouseY.value = event.clientY
 
     showAddElementHint.value = true
+}
+
+function addGridItem() {
+    layout.value.push({
+        // 12 is the number of columns or colNum
+        "x": (layout.value.length * 2) % 12,
+        "y": layout.value.length + 12,
+        "w": 2,
+        "h": 2,
+        "i": layout.value.length.toString(),
+        "text": "Some lore here", "elements": [{
+            "element_id": 1,
+            "element_name": "Grudd",
+        }]
+    })
+}
+
+function removeGridItem(val) {
+    const index = this.layout.map(item => item.i).indexOf(val);
+    this.layout.splice(index, 1);
+
 }
 
 </script>
