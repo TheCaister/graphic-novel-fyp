@@ -6,6 +6,7 @@ use App\Models\Chapter;
 use App\Models\Element;
 use App\Models\MindmapElement;
 use App\Models\Page;
+use App\Models\PanelPlannerElement;
 use App\Models\Series;
 use App\Models\SimpleTextElement;
 use App\Models\Universe;
@@ -38,24 +39,10 @@ class ElementController extends Controller
         $elementable = $request->contentType;
         $elementable_id = $request->contentId;
 
-        $element = null;
+        $element = $this->createElement();
 
-        switch ($request->elementType) {
-            case 'SimpleText':
-                # code...
-                $element = $this->createSimpleTextElement($request);
-                break;
-            case 'MindMap':
-                # code...
-                $element = $this->createMindMapElement();
-                break;
-            case 'PanelPlanner':
-                # code...
-                break;
-
-            default:
-                return redirect()->back();
-                // break;
+        if(is_null($element)){
+            return redirect()->back();
         }
 
         // dd($element->universes->first());
@@ -155,13 +142,13 @@ class ElementController extends Controller
 
         // By default, it seems that Laravel converts empty strings or strings with just spaces to null. Here's a recursive function to convert all null text values to empty strings. This is to ensure that the content renders properly. For TipTap, as it doesn't render properly if the text value is null.
         if (!is_null($newElement['content'])) {
-            array_walk_recursive($newElement['content'], function(&$value, $key){
+            array_walk_recursive($newElement['content'], function (&$value, $key) {
                 if ($key === 'text' && is_null($value)) {
                     $value = ' ';
                 }
             });
         }
-      
+
         $element->update([
             'element_name' => $newElement['element_name'],
             'content' => json_encode($newElement['content']),
@@ -470,45 +457,42 @@ class ElementController extends Controller
         // ]);
     }
 
-    private function createSimpleTextElement(Request $request)
+    private function createElement()
     {
-        $content = $this->getElementable($request->contentType, $request->contentId);
-
-        $simple_text = SimpleTextElement::create();
-
-        // We get the content, and then we create a new element and attach it to the content.
-        $element = Element::create([
-            'element_name' => 'New Element',
-            'hidden' => false,
-        ]);
-
-        $element->elementType()->associate($simple_text);
-
-        $element->save();
-
-        $content->elements()->attach($element->element_id);
-
-        return $element;
-    }
-
-    private function createMindMapElement(){
         $content = $this->getElementable(request()->contentType, request()->contentId);
 
-        $mindmap = MindmapElement::create();
-
-        // We get the content, and then we create a new element and attach it to the content.
+        $elementType = null;
 
         $element = Element::create([
             'element_name' => 'New Element',
             'hidden' => false,
         ]);
 
-        $element->elementType()->associate($mindmap);
 
-        $element->save();
+        switch (request()->elementType) {
+            case 'SimpleText':
+                $elementType = SimpleTextElement::create();
+                break;
+            case 'MindMap':
+                $elementType = MindmapElement::create();
+                break;
+            case 'PanelPlanner':
+                $elementType = PanelPlannerElement::create();
+                break;
+            default:
+                return null;
+        }
 
-        $content->elements()->attach($element->element_id);
+        if (is_null($elementType)) {
+            return null;
+        } else {
+            $element->elementType()->associate($elementType);
 
-        return $element;
+            $element->save();
+
+            $content->elements()->attach($element->element_id);
+
+            return $element;
+        }
     }
 }
