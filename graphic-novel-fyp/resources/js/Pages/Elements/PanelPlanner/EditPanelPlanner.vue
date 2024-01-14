@@ -11,7 +11,7 @@
                 </div>
             </div>
         </div>
-        <div class="w-2/3">
+        <div class="w-2/3 min-h-10">
             <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout" :col-num="12"
                 :row-height="30" :is-draggable="true" :is-resizable="true" :is-mirrored="true" :vertical-compact="false"
                 :margin="[10, 10]" :restore-on-drag="true" :use-css-transforms="true"
@@ -23,6 +23,15 @@
                     Testing...
                     <span class="absolute top-0 right-0 cursor-pointer mt-2 mr-2"  @click="removeGridItem(item.i)">X</span>
                 </grid-item>
+
+                
+
+                <!-- Make an empty div with a border with the aspect ratio of a page to be overlayed on top of the grid -->
+                     <div class="border-4 border-blue-500 rounded-lg" :style="{ paddingBottom: pageStyleAspectRatio + '%' }"></div>
+
+                     <!-- <div class="border-4 border-blue-500 rounded-lg" style="padding-bottom: 141.0;"></div> -->
+
+           
             </GridLayout>
             <div class="flex justify-center">
                 <button>
@@ -75,7 +84,7 @@
 
 <script lang="ts" setup>
 import { watch } from 'vue';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { GridLayout, GridItem } from 'vue3-grid-layout-next';
 
 const responsive = ref(true)
@@ -84,6 +93,7 @@ const showAddElementButton = ref(false)
 const showAddElementHint = ref(false)
 const mouseX = ref(0)
 const mouseY = ref(0)
+const pageStyle = ref('a5')
 
 const props = defineProps({
     element: {
@@ -120,6 +130,23 @@ watch(layout, (newVal) => {
     props.element.content = newVal
     emit('updateElement', props.element)
 })
+
+// computed pageStyle to return the correct page aspect ratio
+const pageStyleAspectRatio = computed(() => {
+    switch (pageStyle.value) {
+        case 'a5':
+            return 141.42
+        case 'double_a5':
+            return 282.84
+        case 'standard_american':
+            return 150
+        case 'double_standard_american':
+            return 300
+        default:
+            return 141.42
+    }
+})
+
 
 // const layout = reactive([]) // will cause some bug
 

@@ -36,8 +36,8 @@ const form = useForm({
 });
 
 function updateForm(element) {
-    console.log('updating form...')
-    console.log(element)
+    // console.log('updating form...')
+    // console.log(element)
     form.element = element
 }
 
