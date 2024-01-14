@@ -1,35 +1,3 @@
-<!-- <template>
-    <div class="border border-black">
-        Hi guys
-        <VueFlow v-model="elements" />
-    </div>
-</template>
-  
-<script setup>
-import { VueFlow } from '@vue-flow/core'
-import { ref } from 'vue';
-
-const elements = ref([
-    // Nodes
-    // An input node, specified by using `type: 'input'`
-    { id: '1', type: 'input', label: 'Node 1', position: { x: 250, y: 5 } },
-
-    // Default nodes, you can omit `type: 'default'`
-    { id: '2', label: 'Node 2', position: { x: 100, y: 100 }, },
-    { id: '3', label: 'Node 3', position: { x: 400, y: 100 } },
-
-    // An output node, specified by using `type: 'output'`
-    { id: '4', type: 'output', label: 'Node 4', position: { x: 400, y: 200 } },
-
-    // Edges
-    // Most basic edge, only consists of an id, source-id and target-id
-    { id: 'e1-3', source: '1', target: '3' },
-
-    // An animated edge
-    { id: 'e1-2', source: '1', target: '2', animated: true },
-])
-</script> -->
-
 <style>
 /* import the necessary styles for Vue Flow to work */
 @import '@vue-flow/core/dist/style.css';
@@ -44,7 +12,6 @@ const elements = ref([
 // The nodes and edges can be bound to props that I will pass in from the database.
 
 import { ref } from 'vue'
-import { onClickOutside } from '@vueuse/core'
 import { Background } from '@vue-flow/background'
 import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
@@ -52,133 +19,107 @@ import { VueFlow, useVueFlow } from '@vue-flow/core'
 import CustomNode from './CustomNode.vue'
 import CustomEdge from './CustomEdge.vue'
 import SearchElementModal from '../SearchElementModal.vue'
+import { watch, onMounted } from 'vue'
 
 const showAddElementButton = ref(false)
 const isSearchElementModalOpen = ref(false)
 const clickedMouseX = ref(0)
 const clickedMouseY = ref(0)
+const paneX = ref(0)
+const paneY = ref(0)
 
-const AddElementButton = ref(null)
-
-
-
-onClickOutside(AddElementButton, () => {
-    showAddElementButton.value = false
+const props = defineProps({
+    element: {
+        type: Object,
+        required: true
+    }
 })
 
+const emit = defineEmits(['updateElement'])
+
+const nodesEdges = ref([])
+
+
+watch(nodesEdges, (list) => {
+    console.log('element has changed...')
+    // Making a copy to prevent reactivity issues
+    const updatedElement = JSON.parse(JSON.stringify(props.element))
+
+    updatedElement.content = list
+    emit('updateElement', updatedElement)
+})
+
+const AddElementButton = ref(null)
 // https://vueflow.dev/typedocs/interfaces/Actions.html#addedges
 // Actions that can be listened to
-const { onConnect, addEdges, removeEdges, removeNodes, addNodes, onNodeDragStart, onNodeClick, onPaneClick } = useVueFlow()
+const { onConnect, addEdges, removeNodes, addNodes, onPaneClick, } = useVueFlow()
 
 // default is the default node type, which includes 2 handles.
 // You can tweak the position like so 
 // targetHandle: Position.Top, // or Bottom, Left, Right,
 // sourceHandle: Position.Bottom, // or Top, Left, Right,
 
-// input has a single handle.
-const nodes = ref([
-    // { id: '1', type: 'input', label: 'Node 1', position: { x: 250, y: 5 } },
-    // { id: '2', type: 'output', label: 'Node 2', position: { x: 100, y: 100 } },
-
-    {
-        id: '1',
-        position: { x: 50, y: 50 },
-        label: 'Node 1',
-    },
-    {
-        id: '2',
-        position: { x: 50, y: 250 },
-        label: 'Node 2',
-    },
-    // Dynamic resolution to slot-names is done for your user-defined node-types, meaning a node with the type custom is expected to have a slot named #node-custom.
-    { id: '3', type: 'custom', label: 'Node 3', position: { x: 400, y: 100 } },
-
-
-    { id: 'e1-2', source: '1', target: '2', type: 'custom' },
-    // { id: 'e1-2', source: '1', target: '2' },
-
-    // {
-    //     id: 'e1-2',
-    //     source: '1',
-    //     target: '2',
-    // },
-
-    { id: 'e1-3', source: '1', target: '3', animated: true },
-])
-
-onConnect((params) => {
-    addEdges([params])
-})
-
-onNodeDragStart((params) => {
-    console.log(params)
-})
-
-onNodeClick((params) => {
-    console.log(params)
-})
-
 onPaneClick((params) => {
     clickedMouseX.value = params.clientX
     clickedMouseY.value = params.clientY
-    showAddElementButton.value = true
+    paneX.value = params.offsetX
+    paneY.value = params.offsetY
+
+    if(showAddElementButton.value == false) {
+        showAddElementButton.value = true
+    }
+    else {
+        showAddElementButton.value = false
+    }
 })
 
-function insertNode() {
-    // nodes.value.push({
-    //     id: getNextNodeId(),
-    //     type: 'input',
-    //     label: 'Node 4',
-    //     position: { x: 400, y: 200 }
-    // })
-
+function insertNode(data) {
+    // console.log(props.element)
     addNodes([{
-        id: getNextNodeId(),
-        type: 'input',
-        label: 'Node 4',
-        position: { x: 400, y: 200 }
-    }])
+            id: getNextNodeId(),
+            label: data.element_name,
+            position: { x: paneX.value, y: paneY.value },
+
+            data: data
+        }])
 }
 
 function getNextNodeId() {
-    return nodes.value.length + 1
-}
-
-function removeNode() {
-    // nodes.value.pop()
-
-    removeNodes(nodes.value.length.toString())
+    return nodesEdges.value.length + 1
 }
 
 function onAddElementButtonClicked() {
-    console.log('hi guys')
     isSearchElementModalOpen.value = true
     showAddElementButton.value = false
 }
+
+function onCloseElementSearchModal(event) {
+    isSearchElementModalOpen.value = false
+
+    if (event) {
+        insertNode(event)
+    }
+}
+
+onMounted(() => {
+    if (props.element.content !== null) {
+        nodesEdges.value = props.element.content
+    }
+})
+
 </script>
 
 <template>
     <div>
         <Teleport to="body">
             <Transition name="modal" class="z-50">
-                <search-element-modal v-if="isSearchElementModalOpen" @closeElementSearchModal="isSearchElementModalOpen = false"
+                <search-element-modal v-if="isSearchElementModalOpen" @closeElementSearchModal="onCloseElementSearchModal"
                     class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
             </Transition>
         </Teleport>
 
-        <!-- Cool button that calls insertNode -->
-        <button @click="insertNode()" class="text-white text-4xl">Insert Node</button>
-
-        <!-- Cool button that calls removeNode -->
-        <button @click="removeNode()" class="text-white text-4xl">Remove Node</button>
-
-        <!-- <div class="p-16 bg-white"> -->
-        <!-- <VueFlow v-model:nodes="nodes" v-model:edges="edges" fit-view-on-init
-            class="border-4 border-green-500 bg-blue-500 vue-flow-basic-example" :default-zoom="1.5" :min-zoom="0.2"
-            :max-zoom="4"> -->
-
-        <VueFlow v-model="nodes" fit-view-on-init class="border-4 border-green-500 bg-blue-500 vue-flow-basic-example"
-            :default-zoom="1.5" :min-zoom="0.2" :max-zoom="4">
+        <VueFlow v-model="nodesEdges" fit-view-on-init class="border-4 border-green-500 bg-blue-500 vue-flow-basic-example"
+            :default-zoom="1.5" :min-zoom="0.2" :max-zoom="4" auto-connect>
 
 
             <Background pattern-color="#aaa" :gap="8" />
@@ -202,7 +143,6 @@ function onAddElementButtonClicked() {
                 Add Element
             </button>
         </VueFlow>
-        <!-- </div> -->
 
     </div>
 </template>

@@ -39,13 +39,10 @@ const form = useForm({
 });
 
 function updateForm(element) {
-    // console.log(element.content.content[0].content[0].text)
     form.element = element
 }
 
 function saveElement(assign = false) {
-
-    // console.log(form.element.content)
 
     form.put(route('elements.update', {
         element: form.element.element_id, assign: assign, content_type: assign ? props.parentContentType : '', content_id: assign ? props.parentContentId : '', preSelectedElements: [{
@@ -56,13 +53,23 @@ function saveElement(assign = false) {
         onSuccess: () => {
             console.log('success')
 
+        },
+        onError: (e) => {
+            console.log(e)
         }
     }
 
 }
 
-onMounted(async () => {
+onMounted(() => {
+    console.log('mounting...')
+    console.log(props.element)
+    console.log(form.element)
     form.element = props.element
+    console.log('setting up...')
+    console.log(props.element)
+    console.log(form)
+    console.log(form.element)
 })
 
 function back() {
@@ -102,10 +109,6 @@ function back() {
                 <img class="w-32 h-32 shadow-2xl rounded-lg"
                     src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fHww"
                     alt="" srcset="">
-
-                <!-- <p>
-                    Title...
-                </p> -->
 
                 <!-- Input v-model form.element.element_name -->
                 <div>

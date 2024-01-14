@@ -8,7 +8,7 @@
             </div>
             <!-- List of element results -->
             <div class="flex flex-wrap m-8 justify-center">
-                <button v-for="element in elementResults" :key="element.element_id" class="flex flex-col items-center w-32 m-4 p-4 bg-gray-600 shadow-lg rounded-lg hover:bg-gray-700 hover:scale-105 hover:shadow-xl transition duration-300">
+                <button v-for="element in elementResults" :key="element.element_id" class="flex flex-col items-center w-32 m-4 p-4 bg-gray-600 shadow-lg rounded-lg hover:bg-gray-700 hover:scale-105 hover:shadow-xl transition duration-300" @click="emits('closeElementSearchModal', element)">
                     <!-- Display element content here -->
                     <!-- image -->
                     <img src="https://cc-prod.scene7.com/is/image/CCProdAuthor/What-is-Stock-Photography_P1_mobile?$pjpeg$&jpegSize=200&wid=720"
@@ -62,14 +62,14 @@ watch(searchQuery, () => {
         // Call the API
         APICalls.searchElements(searchQuery.value, 8)
             .then(response => {
-                console.log(response.data)
+                // console.log(response.data)
                 elementResults.value = response.data
             })
             .catch(error => {
                 console.log(error)
             })
 
-            console.log(elementResults.value)
+            // console.log(elementResults.value)
     }, 200);
 })
 </script>

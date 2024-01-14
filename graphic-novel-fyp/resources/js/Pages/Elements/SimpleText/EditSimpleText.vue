@@ -1,6 +1,4 @@
 <template>
-    <!-- <SimpleEditor v-model="form.content" class="bg-white" /> -->
-
     <div class="bg-white">
         <SimpleEditor v-model="element.content" />
     </div>
@@ -8,7 +6,7 @@
 
 <script setup>
 import SimpleEditor from '@/Components/Editors/SimpleEditor.vue';
-import {defineProps, defineEmits, watch} from 'vue'
+import {watch} from 'vue'
 
 const props = defineProps({
     element: {
@@ -21,8 +19,8 @@ const props = defineProps({
 const emit = defineEmits(['updateElement'])
 
 watch(props.element, (element) => {
+    // console.log(element)
     emit('updateElement', element)
-   
 })
 
 
