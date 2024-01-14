@@ -29,12 +29,17 @@
                     <PrimaryButton class="mr-4">About Us</PrimaryButton>
                 </div>
 
-                <div class="flex items-center">
+                <div class="flex items-center ">
                     <!-- Search bar -->
                     <!-- <form action=""> -->
-                        <div class="relative text-gray-600">
+                        <div class="relative text-gray-600 h-10 flex items-center">
+                            <select name="" id="" class="h-full">
+                                <option value="">Users</option>
+                                <option value="">Content</option>
+                                <option value="">Elements</option>
+                            </select>
                             <input v-model="form.search" type="search" name="search" placeholder="Search"
-                                class="bg-white h-10 px-5 pr-10 rounded-full text-sm focus:outline-none">
+                                class="bg-white h-full text-sm focus:outline-none">
                             <button @click="search" type="submit"
                                 class="absolute right-0 top-0 mt-3 mr-4 flex items-center justify-center">
                                 <span class="material-symbols-outlined">
