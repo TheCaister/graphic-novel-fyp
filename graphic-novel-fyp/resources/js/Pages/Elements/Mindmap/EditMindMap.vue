@@ -41,7 +41,6 @@ const nodesEdges = ref([])
 
 
 watch(nodesEdges, (list) => {
-    console.log('element has changed...')
     // Making a copy to prevent reactivity issues
     const updatedElement = JSON.parse(JSON.stringify(props.element))
 

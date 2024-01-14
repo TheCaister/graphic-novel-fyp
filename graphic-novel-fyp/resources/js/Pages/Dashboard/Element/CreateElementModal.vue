@@ -39,7 +39,7 @@ const submit = (elementType) => {
     })
 };
 
-function getParentContentType(){
+function getParentContentType() {
     switch (dashboardView) {
         case 'UniverseView':
             return ''
@@ -60,21 +60,22 @@ function getParentContentType(){
     <div>
         <div ref="modal" class="text-lg bg-black shadow-lg rounded-lg p-8 w-4/5">
 
-                <div class="flex flex-col gap-10">
-                    <h2 class="text-4xl font-bold text-white ">Select type of element to create:</h2>
+            <div class="flex flex-col gap-10">
+                <h2 class="text-4xl font-bold text-white ">Select type of element to create:</h2>
 
-                    <button @click="submit('SimpleText')" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                <button @click="submit('SimpleText')"
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Simple Text
-                    </button>
-                    <button @click="submit('MindMap')"
-                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                </button>
+                <button @click="submit('MindMap')"
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Mind Map
-                    </button>
-                    <Link :href="route('elements.create')"
-                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                </button>
+                <button @click="submit('MindMap')"
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Panel Planner
-                    </Link>
-                </div>
+                </button>
+            </div>
 
         </div>
     </div>
