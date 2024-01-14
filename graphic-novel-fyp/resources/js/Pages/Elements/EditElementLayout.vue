@@ -22,13 +22,10 @@ const DashboardViewComponent = computed(() => {
     switch (props.element.derived_element_type) {
         case "App\\Models\\SimpleTextElement":
             return EditSimpleText
-            break
         case "App\\Models\\MindmapElement":
             return EditMindMap
-            break
         case "App\\Models\\PanelPlannerElement":
             return EditPanelPlanner
-            break
         default:
             return EditSimpleText
     }
@@ -121,6 +118,6 @@ function back() {
 
         <!-- Element Edit View -->
         <KeepAlive>
-            <component :is="DashboardViewComponent" :element="props.element" @updateElement="updateForm" class="h-96" />
+            <component :is="DashboardViewComponent" :element="props.element" @updateElement="updateForm" />
         </KeepAlive>
 </div></template>
