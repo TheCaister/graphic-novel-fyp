@@ -16,6 +16,4 @@
 
 <script setup>
 import TriCheckbox from './TriCheckbox.vue';
-
-
 </script>

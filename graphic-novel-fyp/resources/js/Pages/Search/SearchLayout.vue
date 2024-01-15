@@ -25,15 +25,9 @@
             <KeepAlive>
                 <component :is="AdvancedFiltersComponent" :resultsList="resultsList" />
             </KeepAlive>
-
-            <!-- Here, I will swap things out depending on search type -->
         </div>
 
-        <!-- Sorting, different views -->
         <div>
-            Sorting, different views...
-
-            <!-- Results here -->
             <KeepAlive>
                 <component :is="ResultsViewComponent" :resultsList="resultsList" />
             </KeepAlive>
@@ -58,6 +52,10 @@ const props = defineProps({
     searchType: {
         type: String,
     },
+    initResultsList: {
+        type: Array,
+        default: () => []
+    }
 })
 
 const resultsList = ref([])

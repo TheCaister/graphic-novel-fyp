@@ -75,4 +75,11 @@ class User extends Authenticatable
         $this->moderatableSeries()->detach();
         parent::delete();
     }
+
+    public function scopeFilter($query, array $filters)
+    {
+        $query->when($filters['search'] ?? null, function ($query, $search) {
+            $query->whereRaw("LOWER(username) LIKE CONCAT('%', LOWER(?), '%')", [$search]);
+        });
+    }
 }
