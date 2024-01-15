@@ -1,7 +1,7 @@
 <!-- Boilerplate -->
 <template>
     <div class="avatar">
-        <Link :link="link">
+        <Link :href="link">
             <img :src="src" :alt="alt" :title="title" class="rounded-full h-10 w-10 object-cover" />
         </Link>
 

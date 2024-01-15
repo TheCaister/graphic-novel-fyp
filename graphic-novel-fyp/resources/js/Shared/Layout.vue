@@ -32,21 +32,21 @@
                 <div class="flex items-center ">
                     <!-- Search bar -->
                     <!-- <form action=""> -->
-                        <div class="relative text-gray-600 h-10 flex items-center">
-                            <select name="" id="" class="h-full">
-                                <option value="">Users</option>
-                                <option value="">Content</option>
-                                <option value="">Elements</option>
-                            </select>
-                            <input v-model="form.search" type="search" name="search" placeholder="Search"
-                                class="bg-white h-full text-sm focus:outline-none">
-                            <button @click="search" type="submit"
-                                class="absolute right-0 top-0 mt-3 mr-4 flex items-center justify-center">
-                                <span class="material-symbols-outlined">
-                                    search
-                                </span>
-                            </button>
-                        </div>
+                    <div class="relative text-gray-600 h-10 flex items-center">
+                        <select v-model="form.searchType" class="h-full">
+                            <option value="users" selected>Users</option>
+                            <option value="content">Content</option>
+                            <option value="elements">Elements</option>
+                        </select>
+                        <input v-model="form.search" type="search" name="search" placeholder="Search"
+                            class="bg-white h-full text-sm focus:outline-none">
+                        <button @click="search" type="submit"
+                            class="absolute right-0 top-0 mt-3 mr-4 flex items-center justify-center">
+                            <span class="material-symbols-outlined">
+                                search
+                            </span>
+                        </button>
+                    </div>
                     <!-- </form> -->
 
 
@@ -59,9 +59,12 @@
                         class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
                     Log Out</Link>
 
-                    <Avatar
-                        src='https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg' />
+                    <!-- <Link> -->
+                        <Avatar
+                        src='https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg' :link="route('profile.edit')" />
 
+                    <!-- </Link> -->
+                 
                 </div>
 
 
@@ -107,23 +110,24 @@ import { useForm, router } from '@inertiajs/vue3';
 
 const form = useForm({
     search: '',
+    searchType: 'users',
 });
 
 function search() {
     console.log(form.search)
-    // form.post(route('search'), {
-    //     onFinish: () => {
-    //         console.log('success')
-    //     }
-    // });
 
     if (form.search !== '') {
-        router.get(route('search'), {
-            searchType: 'elements',
-            search: form.search,
-        });
-    }
 
+        form.get(route('search'), {
+            onFinish: () => {
+                console.log('success')
+                form.search = ''
+            }
+        })
+
+        
+
+    }
 }
 </script>
 

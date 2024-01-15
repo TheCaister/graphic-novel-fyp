@@ -89,6 +89,8 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
+        // dd($request->validated());
+
         return Redirect::route('profile.edit');
     }
 

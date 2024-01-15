@@ -7,8 +7,11 @@
             <div>
                 {{ result.username }}
             </div>
-            <div>
+            <div v-if="result.bio && result.bio.trim() !== ''">
                 {{ result.bio }}
+            </div>
+            <div v-else>
+                No bio
             </div>
         </div>
     </div>

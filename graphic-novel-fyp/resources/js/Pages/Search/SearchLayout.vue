@@ -58,25 +58,7 @@ const props = defineProps({
     }
 })
 
-const resultsList = ref([])
-
-resultsList.value = [
-    {
-        id: 1,
-        username: 'test',
-        bio: 'Hi I am a test user',
-    },
-    {
-        id: 2,
-        username: 'test2',
-        bio: 'Hi I am a test user',
-    },
-    {
-        id: 3,
-        username: 'test3',
-        bio: 'Hi I am a test user',
-    },
-]
+const resultsList = ref(props.initResultsList)
 
 const ResultsViewComponent = computed(() => {
     return SearchUsersResults
