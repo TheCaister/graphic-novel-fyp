@@ -1,14 +1,19 @@
 <template>
     <div v-if="elementsLoaded" class="w-full flex flex-wrap">
+        <button class="text-white" @click="emits('updateSize', elements.length)">
+            Update props...
+        </button>
         <div v-for="element in elements" :key="element.element_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
 
             <div class="relative">
-                <Link :href='route("elements.edit", {element: element.element_id, content_type: getParentContentType(), content_id: parentContentId})' class="h-full flex items-center">
-                    <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
-                        <img v-if="element.element_thumbnail" :src="element.element_thumbnail" alt="Element Image"
-                            class="w-full h-full rounded-lg" />
-                        <div v-else class="text-white text-xl flex items-center">E{{ element.element_id }}</div>
-                    </div>
+                <Link
+                    :href='route("elements.edit", { element: element.element_id, content_type: getParentContentType(), content_id: parentContentId })'
+                    class="h-full flex items-center">
+                <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
+                    <img v-if="element.element_thumbnail" :src="element.element_thumbnail" alt="Element Image"
+                        class="w-full h-full rounded-lg" />
+                    <div v-else class="text-white text-xl flex items-center">E{{ element.element_id }}</div>
+                </div>
                 </Link>
 
                 <!-- Create a button on the top right corner -->
@@ -60,7 +65,7 @@
 import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
 import { usePage } from '@inertiajs/vue3';
-import { ref, inject } from 'vue';
+import { ref, inject, defineEmits } from 'vue';
 import DashboardDropdownMenu from '../DashboardDropdownMenu.vue'
 import CreateElementModal from './CreateElementModal.vue'
 
@@ -83,8 +88,9 @@ const dropDownMenuOptions = [
     { id: 2, text: "View Assigned Content", eventName: "viewElements" },
     { id: 3, text: "Related Elements", eventName: "relatedElements" },
     { id: 4, text: "Assign Element", eventName: "assignElement" },
-    { id: 5, text: "Delete", eventName: "delete" },
-]
+    { id: 5, text: "Delete", eventName: "delete" },]
+
+const emits = defineEmits(['updateSize'])
 
 onActivated(async () => {
     updateContentList()
@@ -92,6 +98,9 @@ onActivated(async () => {
 
 onMounted(async () => {
     updateContentList()
+
+    console.log('this is size...')
+    console.log(props.size)
 })
 
 
@@ -99,10 +108,13 @@ function updateContentList() {
     APICalls.getElements(getParentContentType(), parentContentId).then(response => {
         elements.value = response.data.elements
         elementsLoaded.value = true
+
+        console.log('I am emitting!!')
+        emits('updateSize', elements.value.length)
     }).catch(error => console.log(error))
 }
 
-function getParentContentType(){
+function getParentContentType() {
     switch (dashboardView) {
         case 'UniverseView':
             return ''

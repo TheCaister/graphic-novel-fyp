@@ -24,6 +24,7 @@ const props = defineProps({
 
 const dashboardView = ref(props.dashboardViewType)
 const parentContentIdNumber = ref(props.parentContentId)
+const size = ref(0)
 
 const recentsList = ref([
     {
@@ -75,6 +76,16 @@ function updateDashboard(dashboardViewString, parentContentId) {
 function goBack() {
     router.visit(route('content.get-parent', { type: dashboardView.value, id: parentContentIdNumber.value }))
 }
+
+function test(){
+    console.log('test')
+}
+
+function updateSize(event){
+    console.log(event)
+    console.log('successfully updated element list size')
+    size.value = event
+}
 </script>
 
 <template>
@@ -110,7 +121,7 @@ function goBack() {
 
     <div class="flex">
 
-        <TabsWrapper class="text-4xl font-bold text-white flex flex-wrap w-4/5 ">
+        <TabsWrapper class="text-4xl font-bold text-white flex flex-wrap w-4/5 " :size="size">
             <Tab title="Content">
                 <KeepAlive>
                     <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber"
@@ -118,9 +129,9 @@ function goBack() {
                 </KeepAlive>
             </Tab>
 
-            <Tab v-if="dashboardView != 'UniverseView'" title="Elements">
+            <Tab v-if="dashboardView != 'UniverseView'" title="Elements" listSize="-1" @updateSize="updateSize" v-slot="{ update }">
                 <KeepAlive>
-                    <ElementView />
+                    <ElementView :size="size" @updateSize="update"/>
                 </KeepAlive>
             </Tab>
            
