@@ -168,10 +168,14 @@ function switchSelectedContent(contentId) {
 
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.5s, transform 0.5s;
+    transition: opacity 0.2s, transform 0.2s;
 }
 
-.fade-enter,
+.fade-enter-from{
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
 .fade-leave-to {
     opacity: 0;
     transform: translateY(-20px);

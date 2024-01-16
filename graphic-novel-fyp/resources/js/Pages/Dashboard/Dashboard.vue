@@ -77,12 +77,7 @@ function goBack() {
     router.visit(route('content.get-parent', { type: dashboardView.value, id: parentContentIdNumber.value }))
 }
 
-function test(){
-    console.log('test')
-}
-
 function updateSize(event){
-    console.log(event)
     console.log('successfully updated element list size')
     size.value = event
 }
@@ -131,7 +126,7 @@ function updateSize(event){
 
             <Tab v-if="dashboardView != 'UniverseView'" title="Elements" listSize="-1" @updateSize="updateSize" v-slot="{ update }">
                 <KeepAlive>
-                    <ElementView :size="size" @updateSize="update"/>
+                    <ElementView @updateSize="update"/>
                 </KeepAlive>
             </Tab>
            

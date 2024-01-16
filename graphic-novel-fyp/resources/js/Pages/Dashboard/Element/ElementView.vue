@@ -1,8 +1,5 @@
 <template>
     <div v-if="elementsLoaded" class="w-full flex flex-wrap">
-        <button class="text-white" @click="emits('updateSize', elements.length)">
-            Update props...
-        </button>
         <div v-for="element in elements" :key="element.element_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
 
             <div class="relative">
@@ -64,12 +61,9 @@
 
 import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
-import { usePage } from '@inertiajs/vue3';
 import { ref, inject, defineEmits } from 'vue';
 import DashboardDropdownMenu from '../DashboardDropdownMenu.vue'
 import CreateElementModal from './CreateElementModal.vue'
-
-const page = usePage();
 
 const dashboardView = inject('dashboardView')
 const parentContentId = inject('parentContentId')
@@ -98,9 +92,6 @@ onActivated(async () => {
 
 onMounted(async () => {
     updateContentList()
-
-    console.log('this is size...')
-    console.log(props.size)
 })
 
 
@@ -109,7 +100,6 @@ function updateContentList() {
         elements.value = response.data.elements
         elementsLoaded.value = true
 
-        console.log('I am emitting!!')
         emits('updateSize', elements.value.length)
     }).catch(error => console.log(error))
 }
