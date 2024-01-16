@@ -78,4 +78,12 @@ class Chapter extends Model implements HasMedia
     {
         return $this->chapter_title;
     }
+
+    public function getRecentsFormattedEntry(){
+        return [
+            'title' => $this->chapter_title,
+            'thumbnail' => $this->chapter_thumbnail,
+            'link' => route('chapters.show', $this->chapter_id),
+        ];
+    }
 }

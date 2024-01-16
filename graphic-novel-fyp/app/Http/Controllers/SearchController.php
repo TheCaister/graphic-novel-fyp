@@ -119,24 +119,23 @@ class SearchController extends Controller
     {
         $resultsList = [];
 
-        // search for content
-        // if (request()->limit) {
-        //     $resultsList = Element::latest()->limit(request()->limit)->get();
-        // } else {
-        //     $resultsList = Element::latest()->get();
-        // }
-
         // Aggregate universes, series, chapters and elements. Order by updated_at and limit to the request limit
-        $resultsList = Universe::latest()
-            ->limit(request()->limit)
-            ->get()
+        $tempList = Universe::latest()
+            ->limit(request()->limit)->get()
             ->concat(Series::latest()->limit(request()->limit)->get())
             ->concat(Chapter::latest()->limit(request()->limit)->get())
             ->concat(Element::latest()->limit(request()->limit)->get())
             ->sortByDesc('updated_at')
-            ->take(10);
+            ->take(request()->limit);
 
-        dd($resultsList);
+        // dd($tempList);
+
+        // loop through the results and convert them to a formatted entry
+        foreach ($tempList as $result) {
+            $resultsList[] = $result->getRecentsFormattedEntry();
+        }
+
+        // dd($resultsList);
 
         return $resultsList;
     }
