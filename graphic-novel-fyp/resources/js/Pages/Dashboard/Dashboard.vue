@@ -26,24 +26,6 @@ const dashboardView = ref(props.dashboardViewType)
 const parentContentIdNumber = ref(props.parentContentId)
 const size = ref(0)
 
-const recentsList = ref([
-    {
-        title: 'Universe 1',
-        thumbnail: 'https://via.placeholder.com/150',
-        link: '#',
-    },
-    {
-        title: 'Element 1',
-        thumbnail: 'https://via.placeholder.com/150',
-        link: '#',
-    },
-    {
-        title: 'Series 1',
-        thumbnail: 'https://via.placeholder.com/150',
-        link: '#',
-    }
-])
-
 const DashboardViewComponent = computed(() => {
     // Switch statement to return the correct dashboard view
     switch (dashboardView.value) {
@@ -119,8 +101,10 @@ function updateSize(event){
         <TabsWrapper class="text-4xl font-bold text-white flex flex-wrap w-4/5 " :size="size">
             <Tab title="Content">
                 <KeepAlive>
-                    <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber"
-                        @updateDashboard="updateDashboard" />
+                  
+                        <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber"
+                            @updateDashboard="updateDashboard" />
+            
                 </KeepAlive>
             </Tab>
 

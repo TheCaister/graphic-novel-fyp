@@ -1,8 +1,7 @@
 <template>
     <div v-show="title == selectedTitle">
-        <slot :update="update"/>
+        <slot :update="update" />
     </div>
-
 </template>
 
 <script setup>
@@ -20,9 +19,7 @@ const props = defineProps({
 const emits = defineEmits(['updateSize'])
 
 const selectedTitle = inject('selectedTitle')
-function update(event){
+function update(event) {
     console.log('the tab has been updated')
     emits('updateSize', event)
 }
-
-</script>
