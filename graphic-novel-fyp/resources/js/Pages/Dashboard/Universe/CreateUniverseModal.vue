@@ -36,6 +36,7 @@ const form = useForm({
 });
 
 onClickOutside(modal, () => {
+    console.log('you have clicked outside')
     close()
 })
 

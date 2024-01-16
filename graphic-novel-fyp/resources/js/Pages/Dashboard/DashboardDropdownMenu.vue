@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col rounded-md bg-white text-gray-700 text-base font-thin shadow-md">
+    <div class="flex flex-col rounded-md bg-white text-gray-700 text-base font-thin shadow-md" ref="cardMenu">
         <div v-for="event in events" :key="event.id" @click="menuItemClick(event.eventName)"
             class="py-4 pl-4 pr-16 whitespace-nowrap text-left hover:bg-gray-200 rounded-md">
             <div v-if="event.eventName === 'delete'" class="text-red-500">
@@ -14,6 +14,11 @@
 </template>
 
 <script setup>
+import { defineEmits, ref } from 'vue'
+import { onClickOutside } from '@vueuse/core'
+
+const emits = defineEmits(['menuItemClick', 'closeMenu'])
+
 const props = defineProps({
     events: {
         type: Array,
@@ -21,9 +26,15 @@ const props = defineProps({
     },
 })
 
-const emit = defineEmits(['menuItemClick'])
+const cardMenu = ref(null)
+
+onClickOutside(cardMenu, () => {
+    console.log("outside")
+    emits('closeMenu')
+})
 
 function menuItemClick(eventName) {
-    emit('menuItemClick', eventName)
+    console.log(eventName)
+    emits('menuItemClick', eventName)
 }
 </script>

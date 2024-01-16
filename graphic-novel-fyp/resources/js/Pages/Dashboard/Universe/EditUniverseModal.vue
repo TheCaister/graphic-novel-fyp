@@ -125,7 +125,7 @@ const files = computed(() => {
                                     url: '/upload?media=universe_thumbnail',
                                 },
                                 revert: {
-                                    url: '/api/universes/' + this.form.upload + '/thumbnail?isTemp=true',
+                                    url: '/api/universes/' + form.upload + '/thumbnail?isTemp=true',
                                 },
                                 load: {
                                     url: '/',

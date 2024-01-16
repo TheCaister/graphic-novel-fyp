@@ -17,7 +17,7 @@
                         </span>
                         <Transition name="fade">
                             <DashboardDropdownMenu v-if="selectedUniverse.universe_id === universe.universe_id && isCardMenuOpen" class="absolute z-40" :events="dropDownMenuOptions"
-                            @menuItemClick="handleMenuItemClicked" ref="cardMenu"/>
+                            @menuItemClick="handleMenuItemClicked" @closeMenu="isCardMenuOpen = false"/>
                         </Transition>
             
                     </button>
@@ -87,7 +87,7 @@ const isEditModalOpen = ref(false)
 const isDeleteModalOpen = ref(false)
 const isCardMenuOpen = ref(false)
 
-const cardMenu = ref(null)
+
 
 const universeLoaded = ref(false)
 
@@ -103,9 +103,7 @@ onActivated(async () => {
     updateContentList()
 })
 
-onClickOutside(cardMenu, () => {
-    isCardMenuOpen.value = false
-})
+
 
 onMounted(async () => {
     updateContentList()
@@ -120,11 +118,8 @@ function updateContentList() {
     }).catch(error => console.log(error))
 }
 
-function test() {
-    console.log('test')
-}
-
 function handleMenuItemClicked(eventName) {
+    console.log(eventName)
     // switch
     switch (eventName) {
         case "edit":
@@ -141,7 +136,7 @@ function handleMenuItemClicked(eventName) {
 }
 
 function switchSelectedContent(contentId) {
-
+    console.log(contentId)
     selectedUniverse.value = universes.value.find(universe => universe.universe_id == contentId)
     isCardMenuOpen.value = true
 }
