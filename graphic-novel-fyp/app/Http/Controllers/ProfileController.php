@@ -58,7 +58,7 @@ class ProfileController extends Controller
             $series = array_merge($series, $universe->series()->get()->toArray());
         }
 
-        return Inertia::render('Profile/Show', [
+        return Inertia::render('Profile/Components/Show', [
             'user' => $user,
             'universes' => $universes,
             'series' => $series,

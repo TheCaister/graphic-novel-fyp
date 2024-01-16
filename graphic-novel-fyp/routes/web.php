@@ -168,8 +168,10 @@ Route::middleware('auth')->group(function () {
         );
     })->name('home');
     Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
-    Route::get('/profile/{user}/edit', [ProfileController::class, 'editOther'])->name('profile.editOther');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/{user}/edit', [ProfileController::class, 'editOther'])->name('profile.editOther');
+    Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+
     Route::patch('/profile/{user}/personal', [ProfileController::class, 'updateOtherPersonal'])->name('profile.updateOtherPersonal');
     Route::patch('/profile/personal', [ProfileController::class, 'updatePersonal'])->name('profile.updatePersonal');
     Route::patch('/profile/{user}', [ProfileController::class, 'updateOther'])->name('profile.updateOther');
