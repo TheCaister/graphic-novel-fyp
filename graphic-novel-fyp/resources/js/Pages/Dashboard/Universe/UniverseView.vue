@@ -14,13 +14,15 @@
 
                 <!-- Create a button on the top right corner -->
                 <button class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
-                    <span class="material-symbols-outlined dark">
+                    <span @click="switchSelectedContent(universe.universe_id);"  class="material-symbols-outlined dark">
                         pending
-
-
                     </span>
-                    <DashboardDropdownMenu class="absolute z-40" :events="dropDownMenuOptions"
-                        @click="switchSelectedContent(universe.universe_id);" @menuItemClick="handleMenuItemClicked" />
+
+                    <Transition name="fade">
+                        <DashboardDropdownMenu v-if="selectedUniverse.universe_id === universe.universe_id && isCardMenuOpen" class="absolute z-40" :events="dropDownMenuOptions"
+                        @menuItemClick="handleMenuItemClicked" ref="cardMenu"/>
+                    </Transition>
+           
                 </button>
             </div>
 
@@ -77,6 +79,7 @@ import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
 import { usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { onClickOutside } from '@vueuse/core'
 import CreateUniverseModal from './CreateUniverseModal.vue';
 import EditUniverseModal from './EditUniverseModal.vue';
 import DashboardDropdownMenu from '../DashboardDropdownMenu.vue'
@@ -84,17 +87,14 @@ import DeleteUniverseModal from './DeleteUniverseModal.vue'
 
 const page = usePage();
 
-const universes = ref([
-    { universe_id: 1, universe_name: "Universe 1" },
-    { universe_id: 2, universe_name: "Universe 2" },
-    { universe_id: 3, universe_name: "Universe 3" },
-
-    // Add more universes as needed
-]);
+const universes = ref([]);
 
 const isCreateModalOpen = ref(false)
 const isEditModalOpen = ref(false)
 const isDeleteModalOpen = ref(false)
+const isCardMenuOpen = ref(false)
+
+const cardMenu = ref(null)
 
 const universeLoaded = ref(false)
 
@@ -110,6 +110,11 @@ onActivated(async () => {
     updateContentList()
 })
 
+onClickOutside(cardMenu, () => {
+    console.log('clicked outside')
+    isCardMenuOpen.value = false
+})
+
 onMounted(async () => {
     updateContentList()
 })
@@ -117,7 +122,6 @@ onMounted(async () => {
 
 function updateContentList() {
     console.log('updateContentList')
-    console.log(universes)
 
     APICalls.getUniversesByUserId(page.props.auth.user.id, false).then(response => {
         universes.value = response.data
@@ -148,6 +152,7 @@ function handleMenuItemClicked(eventName) {
 function switchSelectedContent(contentId) {
 
     selectedUniverse.value = universes.value.find(universe => universe.universe_id == contentId)
+    isCardMenuOpen.value = true
     console.log(selectedUniverse.value)
 }
 </script>
@@ -162,5 +167,21 @@ function switchSelectedContent(contentId) {
 .modal-leave-to {
     opacity: 0;
     transform: scale(1.1);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.fade-enter-to {
+    opacity: 1;
+    transform: translateY(0);
 }
 </style>
