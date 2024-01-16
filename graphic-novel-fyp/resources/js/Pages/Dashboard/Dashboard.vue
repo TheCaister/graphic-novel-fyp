@@ -5,6 +5,7 @@ import SeriesView from './Series/SeriesView.vue';
 import ChapterView from './Chapter/ChapterView.vue';
 import PageView from './Page/PageView.vue';
 import ElementView from './Element/ElementView.vue';
+import RecentsList from './RecentsList.vue';
 import TabsWrapper from './TabsWrapper.vue';
 import Tab from './Tab.vue';
 import { ref, defineProps, onMounted, computed, provide } from 'vue'
@@ -23,6 +24,24 @@ const props = defineProps({
 
 const dashboardView = ref(props.dashboardViewType)
 const parentContentIdNumber = ref(props.parentContentId)
+
+const recentsList = ref([
+    {
+        title: 'Universe 1',
+        thumbnail: 'https://via.placeholder.com/150',
+        link: '#',
+    },
+    {
+        title: 'Element 1',
+        thumbnail: 'https://via.placeholder.com/150',
+        link: '#',
+    },
+    {
+        title: 'Series 1',
+        thumbnail: 'https://via.placeholder.com/150',
+        link: '#',
+    }
+])
 
 const DashboardViewComponent = computed(() => {
     // Switch statement to return the correct dashboard view
@@ -89,9 +108,9 @@ function goBack() {
         </div>
     </div>
 
-    <div>
+    <div class="flex">
 
-        <TabsWrapper class="text-4xl font-bold text-white flex flex-wrap ">
+        <TabsWrapper class="text-4xl font-bold text-white flex flex-wrap w-4/5 ">
             <Tab title="Content">
                 <KeepAlive>
                     <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber"
@@ -104,11 +123,12 @@ function goBack() {
                     <ElementView />
                 </KeepAlive>
             </Tab>
-            
-
-            <!-- Testing -->
            
         </TabsWrapper>
+
+        <RecentsList class="w-1/5">
+
+        </RecentsList>
 
      
     </div>

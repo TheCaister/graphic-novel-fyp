@@ -90,5 +90,12 @@ export default {
                 limit: limit,
             }
         })
+    },
+    getRecents(limit){
+        return axios.get('/api/recents', {
+            params: {
+                limit: limit,
+            }
+        })
     }
 }

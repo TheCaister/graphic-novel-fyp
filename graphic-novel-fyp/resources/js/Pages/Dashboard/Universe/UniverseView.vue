@@ -111,7 +111,6 @@ onActivated(async () => {
 })
 
 onClickOutside(cardMenu, () => {
-    console.log('clicked outside')
     isCardMenuOpen.value = false
 })
 
@@ -121,7 +120,6 @@ onMounted(async () => {
 
 
 function updateContentList() {
-    console.log('updateContentList')
 
     APICalls.getUniversesByUserId(page.props.auth.user.id, false).then(response => {
         universes.value = response.data
@@ -153,7 +151,6 @@ function switchSelectedContent(contentId) {
 
     selectedUniverse.value = universes.value.find(universe => universe.universe_id == contentId)
     isCardMenuOpen.value = true
-    console.log(selectedUniverse.value)
 }
 </script>
 

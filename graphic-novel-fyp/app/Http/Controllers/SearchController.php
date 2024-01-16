@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Element;
 use App\Models\User;
+use App\Models\Universe;
+use App\Models\Series;
+use App\Models\Chapter;
 use Inertia\Inertia;
 
 class SearchController extends Controller
@@ -31,7 +34,7 @@ class SearchController extends Controller
                 $resultsList = [];
                 break;
         }
-        
+
         // dd($resultsList);
 
         return Inertia::render('Search/SearchLayout', [
@@ -80,7 +83,8 @@ class SearchController extends Controller
         return $resultsList;
     }
 
-    private function searchUsers(){
+    private function searchUsers()
+    {
         $resultsList = [];
 
         // search for users
@@ -95,7 +99,8 @@ class SearchController extends Controller
         return $resultsList;
     }
 
-    private function searchContent(){
+    private function searchContent()
+    {
         $resultsList = [];
 
         // search for content
@@ -106,6 +111,32 @@ class SearchController extends Controller
         }
 
         // dd($resultsList);
+
+        return $resultsList;
+    }
+
+    public function getRecent()
+    {
+        $resultsList = [];
+
+        // search for content
+        // if (request()->limit) {
+        //     $resultsList = Element::latest()->limit(request()->limit)->get();
+        // } else {
+        //     $resultsList = Element::latest()->get();
+        // }
+
+        // Aggregate universes, series, chapters and elements. Order by updated_at and limit to the request limit
+        $resultsList = Universe::latest()
+            ->limit(request()->limit)
+            ->get()
+            ->concat(Series::latest()->limit(request()->limit)->get())
+            ->concat(Chapter::latest()->limit(request()->limit)->get())
+            ->concat(Element::latest()->limit(request()->limit)->get())
+            ->sortByDesc('updated_at')
+            ->take(10);
+
+        dd($resultsList);
 
         return $resultsList;
     }
