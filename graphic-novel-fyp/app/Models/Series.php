@@ -82,6 +82,11 @@ class Series extends Model implements HasMedia
         ];
     }
 
+    public static function getThumbnailCollectionName()
+    {
+        return 'series_thumbnail';
+    }
+
     function delete()
     {
         $this->chapters()->delete();

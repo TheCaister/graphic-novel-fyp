@@ -1,34 +1,21 @@
 <template>
     <!-- Loop through the universes and display them in cards -->
     <div v-if="chaptersLoaded" class="w-full flex">
-        <div v-for="chapter in chapters" :key="chapter.chapter_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
-            <Link :href='route("chapters.show", chapter.chapter_id)'>
-            <div class="h-64 bg-pink-300 flex items-center justify-center rounded-lg relative">
-                <!-- Create a button on the top right corner -->
-                <button @click="test" class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
-                    <span class="material-symbols-outlined dark">
-                        pending
-                    </span>
-                </button>
 
-                <img v-if="chapter.chapter_thumbnail" :src="chapter.chapter_thumbnail" alt="Chapter Image"
-                    class="w-full h-full rounded-lg" />
-                <div v-else class="text-white text-xl">C{{ chapter.chapter_id }}</div>
-            </div>
-            <p class="text-white pt-4">{{ chapter.chapter_title }}</p>
-            </Link>
+        <div v-for="chapter in chapters" :key="chapter.chapter_id" class=" w-2/5 mx-8 mb-4">
+            <content-card-detailed :content="{
+                content_id: series.series_id,
+                content_name: series.series_title,
+                subheading: series.series_genre,
+                description: series.series_summary,
+                thumbnail: series.series_thumbnail,
+            }" :link="route('series.show', series.series_id)"
+                :selected="series.series_id === selectedSeries.series_id"
+                :drop-down-menu-options="dropDownMenuOptions" @switch-selected-content="switchSelectedContent"
+                @menu-item-click="handleMenuItemClicked" />
         </div>
 
-        <button @click="isOpen = true" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
-            <div class="w-full h-64 flex items-center justify-center rounded-lg">
-
-                <span class="material-symbols-outlined dark"
-                    style="font-size: 10rem; font-variation-settings: 'wght' 100; color: #f9a8d4;">
-                    add_circle
-                </span>
-            </div>
-            <p class="text-white pt-4 text-center">Create Chapter</p>
-        </button>
+        <add-button @click="isCreateModalOpen = true" label="Create Chapter"/>
 
     </div>
     <div v-else>
@@ -39,7 +26,7 @@
 
     <Teleport to="body">
         <Transition name="modal">
-            <create-chapter-modal v-if="isOpen" @closeModal="isOpen = false; updateContentList()"
+            <create-chapter-modal v-if="isCreateModalOpen" @closeModal="isCreateModalOpen = false; updateContentList()"
                 :parentContentIdNumber="props.parentContentId"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
@@ -54,12 +41,16 @@ import APICalls from '@/Utilities/APICalls';
 import { usePage } from '@inertiajs/vue3';
 import { ref, defineProps } from 'vue';
 import CreateChapterModal from './CreateChapterModal.vue';
+import ContentCardDetailed from '../ContentCardDetailed.vue';
+import AddButton from '../AddButton.vue'
 
 const page = usePage();
 
 const chapters = ref([]);
 
-const isOpen = ref(false)
+const isCreateModalOpen = ref(false)
+const isEditModalOpen = ref(false)
+const isDeleteModalOpen = ref(false)
 
 const chaptersLoaded = ref(false)
 

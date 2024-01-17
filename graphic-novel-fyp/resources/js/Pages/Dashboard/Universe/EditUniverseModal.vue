@@ -79,7 +79,8 @@ function deleteTempThumbnail() {
 }
 
 function deleteExistingThumbnail() {
-    if (props.universe.media && props.universe.media.length > 0) {
+    // if (props.universe.media && props.universe.media.length > 0) {
+    if (props.universe.thumbnail !== '') {
         axios.delete(route('delete-thumbnail', {
             isTemp: "false",
             contentType: "Universe",
@@ -96,7 +97,7 @@ onMounted(() => {
 })
 
 const files = computed(() => {
-    if(props.universe.thumbnail !== ''){
+    if (props.universe.thumbnail !== '') {
         return [
             {
                 source: props.universe.thumbnail.replace('http://localhost', ''),

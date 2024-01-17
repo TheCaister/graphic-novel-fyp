@@ -5,6 +5,8 @@
             <content-card-detailed :content="{
                 content_id: series.series_id,
                 content_name: series.series_title,
+                subheading: series.series_genre,
+                description: series.series_summary,
                 thumbnail: series.series_thumbnail,
             }" :link="route('series.show', series.series_id)"
                 :selected="series.series_id === selectedSeries.series_id"

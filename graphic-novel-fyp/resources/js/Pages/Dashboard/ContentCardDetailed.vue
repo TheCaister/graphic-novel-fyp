@@ -1,6 +1,6 @@
 <template>
     <Link Link :href='props.link'>
-    <div class="rounded-lg">
+    <!-- <div class="rounded-lg">
         <div class="relative bg-black rounded-lg shadow-md ">
             <div class="h-full flex items-center">
                 <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
@@ -21,6 +21,39 @@
             </button>
         </div>
         <div class="text-white p-4 flex items-center">{{ content.content_name }}</div>
+    </div> -->
+
+
+    <div class="rounded-lg bg-white p-4">
+        <div class="relative rounded-lg">
+            <div class="h-full flex items-center">
+                <div class="h-64 w-full flex justify-center rounded-lg">
+                    <img v-if="content.thumbnail" :src="content.thumbnail" alt="Content Image"
+                        class="rounded-lg object-cover w-full mb-4" />
+                    <div v-else class="text-white text-xl flex items-center">U{{ content.content_id }}</div>
+                </div>
+            </div>
+            <button class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
+                <span @click.prevent="switchSelectedContent(content.content_id);"
+                    class="material-symbols-outlined text-pink-300">
+                    pending
+                </span>
+                <Transition name="fade">
+                    <DashboardDropdownMenu v-if="selected && isCardMenuOpen" class="absolute z-40"
+                        :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked"
+                        @closeMenu="isCardMenuOpen = false" />
+                </Transition>
+            </button>
+        </div>
+        <div class="text-gray-800 flex flex-col h-28">
+            <div class="text-sm font-thin text-gray-500">
+                {{ content.subheading }}
+            </div>
+            <div class="flex items-center">{{ content.content_name }}</div>
+            <div class="text-base font-thin">
+                {{ content.description }}
+            </div>
+        </div>
     </div>
     </Link>
 </template>

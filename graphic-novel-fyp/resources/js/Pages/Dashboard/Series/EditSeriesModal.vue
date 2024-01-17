@@ -91,7 +91,7 @@ function deleteTempThumbnail() {
 }
 
 function deleteExistingThumbnail() {
-    if (props.universe.media && props.universe.media.length > 0) {
+    if (props.series.series_thumbnail !== '') {
         axios.delete(route('delete-thumbnail', {
             isTemp: "false",
             contentType: "Series",
