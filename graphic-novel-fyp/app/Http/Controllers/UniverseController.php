@@ -140,6 +140,8 @@ class UniverseController extends Controller
             $universe->thumbnail = $universe->getFirstMediaUrl('universe_thumbnail');
             }
 
+        // dd($universes);
+
         return response()->json($universes);
     }
 

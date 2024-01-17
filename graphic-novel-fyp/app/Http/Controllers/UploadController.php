@@ -63,8 +63,6 @@ class UploadController extends Controller
             $temporaryFile = TemporaryFile::where('folder', request()->serverId)->first();
 
             if ($temporaryFile) {
-                // $fullPath = $temporaryFile->getFullPath($this->getMediaCollectionName(request()->contentType));
-
                 $fullPath = $temporaryFile->getFullPath($this->getClassName(request()->contentType)::getThumbnailCollectionName());
 
                 if (Storage::disk('public')->exists($fullPath)) {

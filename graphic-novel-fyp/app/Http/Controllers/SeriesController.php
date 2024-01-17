@@ -129,7 +129,6 @@ class SeriesController extends Controller
 
             // Set series thumbnail to the uploaded thumbnail
             $series->series_thumbnail = $series->getFirstMediaUrl('series_thumbnail');
-            // $series->save();
 
             $tempThumbnail->delete();
         }
@@ -138,12 +137,7 @@ class SeriesController extends Controller
         // Update the series
         $series->update($formFields);
 
-
-
-        // Redirect to the series page
-        // return redirect()->route('series.show', $series->id);
-
-        return redirect()->route('dashboard');
+        return redirect()->back();
     }
 
     // Delete the series

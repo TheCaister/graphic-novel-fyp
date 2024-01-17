@@ -1,23 +1,6 @@
 <template>
     <!-- Loop through the universes and display them in cards -->
     <div v-if="seriesLoaded" class="w-full flex">
-        <!-- <div v-for="series in series" :key="series.series_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
-            <Link :href='route("series.show", series.series_id)'>
-            <div class="h-64 bg-pink-300 flex items-center justify-center rounded-lg relative">
-                <button @click="test" class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
-                    <span class="material-symbols-outlined dark">
-                        pending
-                    </span>
-                </button>
-
-                <img v-if="series.series_thumbnail" :src="series.series_thumbnail" alt="Series Image"
-                    class="w-full h-full rounded-lg" />
-                <div v-else class="text-white text-xl">S{{ series.series_id }}</div>
-            </div>
-            <p class="text-white pt-4">{{ series.series_title }}</p>
-            </Link>
-        </div> -->
-
         <div v-for="series in series" :key="series.series_id" class=" w-2/5 mx-8 mb-4">
             <content-card-detailed :content="{
                 content_id: series.series_id,

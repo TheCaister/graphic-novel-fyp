@@ -18,7 +18,7 @@ import axios from 'axios';
 
 const emit = defineEmits(['closeModal'])
 function close() {
-    deleteMedia();
+    deleteTempThumbnail();
     emit('closeModal');
 };
 
@@ -64,10 +64,15 @@ function handleFilePondThumbnailRemove(error, file) {
     form.upload = '';
 }
 
-function deleteMedia() {
+function deleteTempThumbnail() {
 
     if (form.upload) {
-        axios.delete('/api/universes/' + form.upload + '/thumbnail').catch(error => {
+
+        axios.delete(route('delete-thumbnail', {
+            isTemp: "true",
+            contentType: "Universe",
+            serverId: form.upload,
+        })).catch(error => {
             console.log(error);
         });
     }
@@ -86,13 +91,12 @@ function deleteExistingThumbnail() {
 }
 
 onMounted(() => {
+    console.log(props.universe)
     form.universe_name = props.universe.universe_name
 })
 
 const files = computed(() => {
-
-    if (props.universe.media && props.universe.media.length > 0) {
-
+    if(props.universe.thumbnail !== ''){
         return [
             {
                 source: props.universe.thumbnail.replace('http://localhost', ''),
