@@ -63,7 +63,6 @@ const series = ref([
 const props = defineProps({
     parentContentId: {
         type: Number,
-        // required: true
     },
 })
 

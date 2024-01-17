@@ -9,8 +9,6 @@ import RecentsList from './RecentsList.vue';
 import TabsWrapper from './TabsWrapper.vue';
 import Tab from './Tab.vue';
 import { ref, defineProps, onMounted, computed, provide } from 'vue'
-import APICalls from '@/Utilities/APICalls';
-
 
 const props = defineProps({
     dashboardViewType: {
@@ -59,7 +57,7 @@ function goBack() {
     router.visit(route('content.get-parent', { type: dashboardView.value, id: parentContentIdNumber.value }))
 }
 
-function updateSize(event){
+function updateSize(event) {
     console.log('successfully updated element list size')
     size.value = event
 }
@@ -101,26 +99,31 @@ function updateSize(event){
         <TabsWrapper class="text-4xl font-bold text-white flex flex-wrap w-4/5 " :size="size">
             <Tab title="Content">
                 <KeepAlive>
-                  
-                        <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber"
-                            @updateDashboard="updateDashboard" />
-            
+
+
+
+                    <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber" />
+
+                </KeepAlive>
+
+                <!-- <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber"
+                            @updateDashboard="updateDashboard" /> -->
+            </Tab>
+
+            <Tab v-if="dashboardView != 'UniverseView'" title="Elements" listSize="-1" @updateSize="updateSize"
+                v-slot="{ update }">
+                <KeepAlive>
+                    <ElementView @updateSize="update" />
                 </KeepAlive>
             </Tab>
 
-            <Tab v-if="dashboardView != 'UniverseView'" title="Elements" listSize="-1" @updateSize="updateSize" v-slot="{ update }">
-                <KeepAlive>
-                    <ElementView @updateSize="update"/>
-                </KeepAlive>
-            </Tab>
-           
         </TabsWrapper>
 
         <RecentsList class="w-1/5">
 
         </RecentsList>
 
-     
+
     </div>
 </template>
 

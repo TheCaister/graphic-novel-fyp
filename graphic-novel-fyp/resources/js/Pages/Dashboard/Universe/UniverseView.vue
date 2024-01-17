@@ -1,7 +1,7 @@
 <template>
     <!-- Loop through the universes and display them in cards -->
     <div v-if="universeLoaded" class="w-full flex flex-wrap">
-        <div v-for="universe in universes" :key="universe.universe_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
+        <!-- <div v-for="universe in universes" :key="universe.universe_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
             <div class="relative">
                 <Link :href='route("universes.show", universe.universe_id)' class="h-full flex items-center">
                 <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
@@ -10,7 +10,6 @@
                     <div v-else class="text-white text-xl flex items-center">U{{ universe.universe_id }}</div>
                 </div>
                 </Link>
-                <!-- Create a button on the top right corner -->
                 <button class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
                     <span @click="switchSelectedContent(universe.universe_id);" class="material-symbols-outlined dark">
                         pending
@@ -25,6 +24,14 @@
                 </button>
             </div>
             <p class="text-white pt-4">{{ universe.universe_name }}</p>
+        </div> -->
+
+        <div v-for="universe in universes" :key="universe.universe_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
+            <ContentCard :content="{
+                content_id: universe.universe_id,
+                content_name: universe.universe_name,
+                thumbnail: universe.thumbnail
+            }" :link="route('universes.show', universe.universe_id)" :selected="universe.universe_id === selectedUniverse.universe_id"/>
         </div>
 
         <button @click="isCreateModalOpen = true" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
@@ -79,6 +86,7 @@ import CreateUniverseModal from './CreateUniverseModal.vue';
 import EditUniverseModal from './EditUniverseModal.vue';
 import DashboardDropdownMenu from '../DashboardDropdownMenu.vue'
 import DeleteUniverseModal from './DeleteUniverseModal.vue'
+import ContentCard from '../ContentCard.vue'
 
 const page = usePage();
 
@@ -89,8 +97,6 @@ const isEditModalOpen = ref(false)
 const isDeleteModalOpen = ref(false)
 const isCardMenuOpen = ref(false)
 
-
-
 const universeLoaded = ref(false)
 
 const selectedUniverse = ref({ universe_id: 0, universe_name: "" })
@@ -100,6 +106,12 @@ const dropDownMenuOptions = [
     { id: 2, text: "View Elements", eventName: "viewElements" },
     { id: 3, text: "Delete", eventName: "delete" },
 ]
+
+const props = defineProps({
+    parentContentId: {
+        type: Number,
+    },
+})
 
 onActivated(async () => {
     updateContentList()
