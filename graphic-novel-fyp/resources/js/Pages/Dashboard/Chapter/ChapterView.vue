@@ -4,18 +4,17 @@
 
         <div v-for="chapter in chapters" :key="chapter.chapter_id" class=" w-2/5 mx-8 mb-4">
             <content-card-detailed :content="{
-                content_id: series.series_id,
-                content_name: series.series_title,
-                subheading: series.series_genre,
-                description: series.series_summary,
-                thumbnail: series.series_thumbnail,
-            }" :link="route('series.show', series.series_id)"
-                :selected="series.series_id === selectedSeries.series_id"
-                :drop-down-menu-options="dropDownMenuOptions" @switch-selected-content="switchSelectedContent"
-                @menu-item-click="handleMenuItemClicked" />
+                content_id: chapter.chapter_id,
+                content_name: chapter.chapter_title,
+                subheading: 'Chapter ' + chapter.chapter_number,
+                description: chapter.chapter_notes,
+                thumbnail: chapter.chapter_thumbnail,
+            }" :link="route('chapters.show', chapter.chapter_id)"
+                :selected="chapter.chapter_id === selectedChapter.chapter_id" :drop-down-menu-options="dropDownMenuOptions"
+                @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked" />
         </div>
 
-        <add-button @click="isCreateModalOpen = true" label="Create Chapter"/>
+        <add-button @click="isCreateModalOpen = true" label="Create Chapter" />
 
     </div>
     <div v-else>
@@ -31,6 +30,13 @@
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
+        <Transition name="modal" class="z-50">
+            <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()" :content="{
+                content_id: selectedChapter.chapter_id,
+                content_name: selectedChapter.chapter_title,
+            }" type="chapter" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+        </Transition>
+
     </Teleport>
 </template>
 
@@ -41,6 +47,8 @@ import APICalls from '@/Utilities/APICalls';
 import { usePage } from '@inertiajs/vue3';
 import { ref, defineProps } from 'vue';
 import CreateChapterModal from './CreateChapterModal.vue';
+import EditChapterModal from './EditChapterModal.vue';
+import DeleteModal from '../DeleteModal.vue';
 import ContentCardDetailed from '../ContentCardDetailed.vue';
 import AddButton from '../AddButton.vue'
 
@@ -53,6 +61,20 @@ const isEditModalOpen = ref(false)
 const isDeleteModalOpen = ref(false)
 
 const chaptersLoaded = ref(false)
+
+const selectedChapter = ref({
+    chapter_id: null,
+    chapter_title: null,
+    chapter_notes: null,
+    chapter_thumbnail: null,
+})
+
+const dropDownMenuOptions = [
+    { id: 1, text: "Edit", eventName: "edit" },
+    { id: 2, text: "View Elements", eventName: "viewElements" },
+    { id: 3, text: "Assign Elements", eventName: "assignElements" },
+    { id: 3, text: "Delete", eventName: "delete" },
+]
 
 const props = defineProps({
     parentContentId: {
@@ -75,6 +97,29 @@ function updateContentList() {
         chapters.value = response.data
         chaptersLoaded.value = true
     }).catch(error => console.log(error))
+}
+
+function handleMenuItemClicked(eventName) {
+    console.log(eventName)
+    // switch
+    switch (eventName) {
+        case "edit":
+            isEditModalOpen.value = true
+            break;
+        case "viewElements":
+            break;
+        case "assignElements":
+            break;
+        case "delete":
+            isDeleteModalOpen.value = true
+            break;
+        default:
+            break;
+    }
+}
+
+function switchSelectedContent(contentId) {
+    selectedChapter.value = chapters.value.find(chapter => chapter.chapter_id == contentId)
 }
 </script>
 
