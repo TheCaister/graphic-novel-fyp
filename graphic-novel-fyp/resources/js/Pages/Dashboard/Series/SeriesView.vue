@@ -19,6 +19,8 @@
             </Link>
         </div>
 
+        <add-button @click="isCreateModalOpen = true" label="Create Universe"/>
+
         <button @click="isOpen = true" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
             <div class="w-full h-64 flex items-center justify-center rounded-lg">
 
@@ -53,12 +55,10 @@ import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
 import { ref, defineProps } from 'vue';
 import CreateSeriesModal from './CreateSeriesModal.vue';
+import AddButton from '../AddButton.vue'
+import ContentCardDetailed from '../ContentCardDetailed.vue';
 
-const series = ref([
-    { series_title: "Series 1", series_genre: "Action", series_summary: "Summary of Series 1" },
-    { series_title: "Series 2", series_genre: "Fantasy", series_summary: "Summary of Series 2" },
-    { series_title: "Series 3", series_genre: "Sci-Fi", series_summary: "Summary of Series 3" },
-]);
+const series = ref([]);
 
 const props = defineProps({
     parentContentId: {
@@ -66,7 +66,15 @@ const props = defineProps({
     },
 })
 
-const isOpen = ref(false)
+const isCreateModalOpen = ref(false)
+const isEditModalOpen = ref(false)
+const isDeleteModalOpen = ref(false)
+
+const dropDownMenuOptions = [
+    { id: 1, text: "Edit", eventName: "edit" },
+    { id: 2, text: "View Elements", eventName: "viewElements" },
+    { id: 3, text: "Delete", eventName: "delete" },
+]
 
 const seriesLoaded = ref(false)
 

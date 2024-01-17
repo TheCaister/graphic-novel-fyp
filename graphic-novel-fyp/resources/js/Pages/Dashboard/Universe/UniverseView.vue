@@ -7,12 +7,13 @@
                 content_id: universe.universe_id,
                 content_name: universe.universe_name,
                 thumbnail: universe.thumbnail
-            }" :link="route('universes.show', universe.universe_id)" :selected="universe.universe_id === selectedUniverse.universe_id" :drop-down-menu-options="dropDownMenuOptions"
-            @switch-selected-content="switchSelectedContent"
-            @menu-item-click="handleMenuItemClicked"/>
+            }" :link="route('universes.show', universe.universe_id)"
+                :selected="universe.universe_id === selectedUniverse.universe_id"
+                :drop-down-menu-options="dropDownMenuOptions" @switch-selected-content="switchSelectedContent"
+                @menu-item-click="handleMenuItemClicked" />
         </div>
 
-        <add-button @click="isCreateModalOpen = true" label="Create Universe"/>
+        <add-button @click="isCreateModalOpen = true" label="Create Universe" />
 
     </div>
     <div v-else>
@@ -29,14 +30,15 @@
 
         <Transition name="modal" class="z-50">
             <edit-universe-modal v-if="isEditModalOpen" @closeModal="isEditModalOpen = false; updateContentList()"
-                :universe="selectedUniverse" 
+                :universe="selectedUniverse"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
         <Transition name="modal" class="z-50">
-            <delete-universe-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()"
-                :universe="selectedUniverse" 
-                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+            <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()" :content="{
+                content_id: selectedUniverse.universe_id,
+                content_name: selectedUniverse.universe_name,
+            }" type="universes" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
     </Teleport>
@@ -51,10 +53,9 @@ import { ref } from 'vue';
 
 import CreateUniverseModal from './CreateUniverseModal.vue';
 import EditUniverseModal from './EditUniverseModal.vue';
-
-import DeleteUniverseModal from './DeleteUniverseModal.vue'
 import ContentCard from '../ContentCard.vue'
 import AddButton from '../AddButton.vue'
+import DeleteModal from '../DeleteModal.vue'
 
 const page = usePage();
 
@@ -131,6 +132,4 @@ function switchSelectedContent(contentId) {
     opacity: 0;
     transform: scale(1.1);
 }
-
-
 </style>
