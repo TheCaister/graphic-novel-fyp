@@ -7,7 +7,7 @@
             </span>
 
             <div>
-                Delete {{ props.universe.universe_name }}?
+                Delete <span class="text-red-300">{{ props.universe.universe_name }}</span>?
             </div>
 
             <div>
@@ -69,6 +69,5 @@ function submit() {
         'wght' 500,
         'GRAD' 0,
         'opsz' 40;
-    /* color: red; */
 }
 </style>
