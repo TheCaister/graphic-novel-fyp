@@ -73,12 +73,11 @@ function deleteMedia() {
 
 function deleteExistingThumbnail() {
     if (props.universe.media && props.universe.media.length > 0) {
-        axios.delete('/api/series/-1/thumbnail', {
-            params: {
-                isTemp: "false",
-                universeId: props.universe.universe_id,
-            }
-        }).catch(error => {
+        axios.delete(route('delete-thumbnail', {
+            isTemp: "false",
+            contentType: "series",
+            contentId: props.universe.universe_id,
+        })).catch(error => {
             console.log(error);
         });
     }

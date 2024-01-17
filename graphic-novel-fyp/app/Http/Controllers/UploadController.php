@@ -2,11 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Chapter;
-use App\Models\Page;
-use App\Models\Series;
 use App\Models\TemporaryFile;
-use App\Models\Universe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -67,7 +63,9 @@ class UploadController extends Controller
             $temporaryFile = TemporaryFile::where('folder', request()->serverId)->first();
 
             if ($temporaryFile) {
-                $fullPath = $temporaryFile->getFullPath($this->getMediaCollectionName(request()->contentType));
+                // $fullPath = $temporaryFile->getFullPath($this->getMediaCollectionName(request()->contentType));
+
+                $fullPath = $temporaryFile->getFullPath($this->getClassName(request()->contentType)::getThumbnailCollectionName());
 
                 if (Storage::disk('public')->exists($fullPath)) {
                     Storage::disk('public')->delete($fullPath);
@@ -78,53 +76,11 @@ class UploadController extends Controller
         }
     }
 
-    private function getMediaCollectionName($contentType)
-    {
-        switch ($contentType) {
-            case 'universe':
-                return 'universe_thumbnail';
-                break;
-            case 'series':
-                return 'series_thumbnail';
-                break;
-            case 'chapter':
-                return 'chapter_thumbnail';
-                break;
-            case 'page':
-                return 'page_image';
-                break;
-            default:
-                break;
-        }
-    }
-
     private function clearMediaCollection($contentType, $contentId)
     {
-        // Do a switch on contentType
-        switch ($contentType) {
-            case 'universe':
-                $universe = Universe::where('universe_id', $contentId)->first();
-                $universe->clearMediaCollection('universe_thumbnail');
-                $universe->save();
-                break;
-            case 'series':
-                $series = Series::where('series_id', $contentId)->first();
-                $series->clearMediaCollection('series_thumbnail');
-                $series->save();
-                break;
-            case 'chapter':
-                $chapter = Chapter::where('chapter_id', $contentId)->first();
-                $chapter->clearMediaCollection('chapter_thumbnail');
-                $chapter->save();
-                break;
-            case 'page':
-                $page = Page::where('page_id', $contentId)->first();
-                $page->clearMediaCollection('page_image');
-                $page->save();
-                break;
-            default:
-                break;
-        }
+        $content = $this->getClassName($contentType)::find($contentId);
+        $content->clearMediaCollection($this->getClassName($contentType)::getThumbnailCollectionName());
+        $content->save();
     }
 
     public function deletePageImage(Request $request)
@@ -150,5 +106,10 @@ class UploadController extends Controller
 
         // Delete the temporary file from the database
         $temporaryFile->delete();
+    }
+
+    private function getClassName($contentType)
+    {
+        return 'App\\Models\\' . $contentType;
     }
 }

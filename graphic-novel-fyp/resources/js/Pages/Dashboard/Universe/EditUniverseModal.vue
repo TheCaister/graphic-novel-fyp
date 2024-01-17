@@ -77,7 +77,7 @@ function deleteExistingThumbnail() {
     if (props.universe.media && props.universe.media.length > 0) {
         axios.delete(route('delete-thumbnail', {
             isTemp: "false",
-            contentType: "universe",
+            contentType: "Universe",
             contentId: props.universe.universe_id,
         })).catch(error => {
             console.log(error);
@@ -110,6 +110,9 @@ const files = computed(() => {
 <template>
     <div>
         <div ref="modal" class="text-lg bg-black shadow-lg rounded-lg p-8 w-4/5">
+            <button class="text-white" @click="deleteExistingThumbnail">
+                Delete thumbnail
+            </button>
             <h2 class="text-4xl font-bold text-white ">Edit Universe</h2>
             <form @submit.prevent="submit">
                 <div class="flex">
@@ -124,7 +127,7 @@ const files = computed(() => {
                                     url: '/upload?media=universe_thumbnail',
                                 },
                                 revert: {
-                                    url: '/api/thumbnail?contentType=universe&serverId=' + form.upload + '&isTemp=true',
+                                    url: '/api/thumbnail?contentType=Universe&serverId=' + form.upload + '&isTemp=true',
                                 },
                                 load: {
                                     url: '/',
