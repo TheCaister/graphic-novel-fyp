@@ -1,10 +1,9 @@
 <template>
     <!-- Loop through the universes and display them in cards -->
     <div v-if="seriesLoaded" class="w-full flex">
-        <div v-for="series in series" :key="series.series_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
+        <!-- <div v-for="series in series" :key="series.series_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
             <Link :href='route("series.show", series.series_id)'>
             <div class="h-64 bg-pink-300 flex items-center justify-center rounded-lg relative">
-                <!-- Create a button on the top right corner -->
                 <button @click="test" class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
                     <span class="material-symbols-outlined dark">
                         pending
@@ -17,20 +16,20 @@
             </div>
             <p class="text-white pt-4">{{ series.series_title }}</p>
             </Link>
+        </div> -->
+
+        <div v-for="series in series" :key="series.series_id" class=" w-2/5 mx-8 mb-4">
+            <content-card-detailed :content="{
+                content_id: series.series_id,
+                content_name: series.series_title,
+                thumbnail: series.series_thumbnail,
+            }" :link="route('series.show', series.series_id)"
+                :selected="series.series_id === selectedSeries.series_id"
+                :drop-down-menu-options="dropDownMenuOptions" @switch-selected-content="switchSelectedContent"
+                @menu-item-click="handleMenuItemClicked" />
         </div>
 
-        <add-button @click="isCreateModalOpen = true" label="Create Universe"/>
-
-        <button @click="isOpen = true" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
-            <div class="w-full h-64 flex items-center justify-center rounded-lg">
-
-                <span class="material-symbols-outlined dark"
-                    style="font-size: 10rem; font-variation-settings: 'wght' 100; color: #f9a8d4;">
-                    add_circle
-                </span>
-            </div>
-            <p class="text-white pt-4 text-center">Create Series</p>
-        </button>
+        <add-button @click="isCreateModalOpen = true" label="Create Series"/>
 
     </div>
     <div v-else>
@@ -41,9 +40,22 @@
 
     <Teleport to="body">
         <Transition name="modal">
-            <create-series-modal v-if="isOpen" @closeModal="isOpen = false; updateContentList()"
+            <create-series-modal v-if="isCreateModalOpen" @closeModal="isCreateModalOpen = false; updateContentList()"
                 :parentContentIdNumber="props.parentContentId"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+        </Transition>
+
+        <Transition name="modal" class="z-50">
+            <edit-series-modal v-if="isEditModalOpen" @closeModal="isEditModalOpen = false; updateContentList()"
+                :series="selectedSeries"
+                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+        </Transition>
+
+        <Transition name="modal" class="z-50">
+            <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()" :content="{
+                content_id: selectedSeries.series_id,
+                content_name: selectedSeries.series_title,
+            }" type="series" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
     </Teleport>
@@ -57,6 +69,8 @@ import { ref, defineProps } from 'vue';
 import CreateSeriesModal from './CreateSeriesModal.vue';
 import AddButton from '../AddButton.vue'
 import ContentCardDetailed from '../ContentCardDetailed.vue';
+import DeleteModal from '../DeleteModal.vue'
+import EditSeriesModal from './EditSeriesModal.vue';
 
 const series = ref([]);
 
@@ -73,10 +87,13 @@ const isDeleteModalOpen = ref(false)
 const dropDownMenuOptions = [
     { id: 1, text: "Edit", eventName: "edit" },
     { id: 2, text: "View Elements", eventName: "viewElements" },
+    { id: 3, text: "Assign Elements", eventName: "assignElements" },
     { id: 3, text: "Delete", eventName: "delete" },
 ]
 
 const seriesLoaded = ref(false)
+
+const selectedSeries = ref({ series_id: 0, series_title: "" })
 
 onActivated(async () => {
     updateContentList()
@@ -93,6 +110,29 @@ function updateContentList() {
         series.value = response.data
         seriesLoaded.value = true
     }).catch(error => console.log(error))
+}
+
+function handleMenuItemClicked(eventName) {
+    console.log(eventName)
+    // switch
+    switch (eventName) {
+        case "edit":
+            isEditModalOpen.value = true
+            break;
+        case "viewElements":
+            break;
+        case "assignElements":
+            break;
+        case "delete":
+            isDeleteModalOpen.value = true
+            break;
+        default:
+            break;
+    }
+}
+
+function switchSelectedContent(contentId) {
+    selectedSeries.value = series.value.find(series => series.series_id == contentId)
 }
 </script>
 

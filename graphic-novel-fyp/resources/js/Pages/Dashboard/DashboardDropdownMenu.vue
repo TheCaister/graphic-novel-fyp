@@ -29,7 +29,6 @@ const props = defineProps({
 const cardMenu = ref(null)
 
 onClickOutside(cardMenu, () => {
-    console.log("outside")
     emits('closeMenu')
 })
 

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Chapter;
+use App\Models\Page;
+use App\Models\Series;
 use App\Models\TemporaryFile;
 use App\Models\Universe;
 use Illuminate\Http\Request;
@@ -56,70 +59,73 @@ class UploadController extends Controller
         return 'nope';
     }
 
-    public function deleteUniverseThumbnail(string $serverId, Request $request)
+    public function deleteThumbnail()
     {
-        // dd($request->getContent());
-        if ($request->isTemp == 'false') {
-            $universe = Universe::where('universe_id', $request->universeId)->first();
-            $universe->clearMediaCollection('universe_thumbnail');
-            $universe->save();
-        }
-        else {
-
-            // Get the temporary file
-            $temporaryFile = TemporaryFile::where('folder', $serverId)->first();
+        if (request()->isTemp == 'false') {
+            $this->clearMediaCollection(request()->contentType, request()->contentId);
+        } else {
+            $temporaryFile = TemporaryFile::where('folder', request()->serverId)->first();
 
             if ($temporaryFile) {
-                // Get full path of the file
-                $fullPath = $temporaryFile->getFullPath('universe_thumbnail');
+                $fullPath = $temporaryFile->getFullPath($this->getMediaCollectionName(request()->contentType));
 
                 if (Storage::disk('public')->exists($fullPath)) {
                     Storage::disk('public')->delete($fullPath);
                 }
             }
 
-            // Delete the temporary file from the database
             $temporaryFile->delete();
         }
     }
 
-    public function deleteSeriesThumbnail(string $serverId)
+    private function getMediaCollectionName($contentType)
     {
-        // Get the temporary file
-        $temporaryFile = TemporaryFile::where('folder', $serverId)->first();
-
-        if ($temporaryFile) {
-            // Get full path of the file
-            $fullPath = $temporaryFile->getFullPath('series_thumbnail');
-
-
-            if (Storage::disk('public')->exists($fullPath)) {
-                Storage::disk('public')->delete($fullPath);
-            }
+        switch ($contentType) {
+            case 'universe':
+                return 'universe_thumbnail';
+                break;
+            case 'series':
+                return 'series_thumbnail';
+                break;
+            case 'chapter':
+                return 'chapter_thumbnail';
+                break;
+            case 'page':
+                return 'page_image';
+                break;
+            default:
+                break;
         }
-
-        // Delete the temporary file from the database
-        $temporaryFile->delete();
     }
 
-    public function deleteChapterThumbnail(string $serverId)
+    private function clearMediaCollection($contentType, $contentId)
     {
-        // Get the temporary file
-        $temporaryFile = TemporaryFile::where('folder', $serverId)->first();
-
-        if ($temporaryFile) {
-            // Get full path of the file
-            $fullPath = $temporaryFile->getFullPath('chapter_thumbnail');
-
-            if (Storage::disk('public')->exists($fullPath)) {
-                Storage::disk('public')->delete($fullPath);
-            }
+        // Do a switch on contentType
+        switch ($contentType) {
+            case 'universe':
+                $universe = Universe::where('universe_id', $contentId)->first();
+                $universe->clearMediaCollection('universe_thumbnail');
+                $universe->save();
+                break;
+            case 'series':
+                $series = Series::where('series_id', $contentId)->first();
+                $series->clearMediaCollection('series_thumbnail');
+                $series->save();
+                break;
+            case 'chapter':
+                $chapter = Chapter::where('chapter_id', $contentId)->first();
+                $chapter->clearMediaCollection('chapter_thumbnail');
+                $chapter->save();
+                break;
+            case 'page':
+                $page = Page::where('page_id', $contentId)->first();
+                $page->clearMediaCollection('page_image');
+                $page->save();
+                break;
+            default:
+                break;
         }
-
-        // Delete the temporary file from the database
-        $temporaryFile->delete();
     }
-
 
     public function deletePageImage(Request $request)
     {

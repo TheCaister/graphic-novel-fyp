@@ -4,6 +4,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\UniverseController;
+use App\Http\Controllers\UploadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +53,8 @@ Route::get('chapters/{chapter}/pages', [PageController::class, 'getChapterPages'
 Route::get('/genres', [SeriesController::class, 'getGenres'])->name('series.get-genres');
 
 Route::get('/elements', [App\Http\Controllers\ElementController::class, 'getElements'])->name('elements.get-elements');
+
+Route::delete('/thumbnail',[ UploadController::class, 'deleteThumbnail'])->name('delete-thumbnail');
 
 Route::delete('/universes/{serverId}/thumbnail', [App\Http\Controllers\UploadController::class, 'deleteUniverseThumbnail'])->name('universes.delete-thumbnail');
 

@@ -75,12 +75,11 @@ function deleteMedia() {
 
 function deleteExistingThumbnail() {
     if (props.universe.media && props.universe.media.length > 0) {
-        axios.delete('/api/universes/-1/thumbnail', {
-            params: {
-                isTemp: "false",
-                universeId: props.universe.universe_id,
-            }
-        }).catch(error => {
+        axios.delete(route('delete-thumbnail', {
+            isTemp: "false",
+            contentType: "universe",
+            contentId: props.universe.universe_id,
+        })).catch(error => {
             console.log(error);
         });
     }
@@ -125,7 +124,7 @@ const files = computed(() => {
                                     url: '/upload?media=universe_thumbnail',
                                 },
                                 revert: {
-                                    url: '/api/universes/' + form.upload + '/thumbnail?isTemp=true',
+                                    url: '/api/thumbnail?contentType=universe&serverId=' + form.upload + '&isTemp=true',
                                 },
                                 load: {
                                     url: '/',
