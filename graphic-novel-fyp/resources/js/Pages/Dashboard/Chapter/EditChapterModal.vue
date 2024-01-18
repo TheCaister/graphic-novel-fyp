@@ -68,12 +68,31 @@ onClickOutside(modal, () => {
 })
 
 function submit() {
-    form.pages.forEach(page => {
+    form.pages.forEach((page, index) => {
+        try {
+            if(page.getMetadata('pageId') !== undefined) {
+                form.pages[index] = {
+                    pageId: page.getMetadata('pageId')
+                };
+            }
+            else {
+                form.pages[index] = {
+                    serverId: page.serverId
+                };
+            }
+        } catch (error) {
 
-        // If serverId doesn't exist, create a serverId
-        if (!page.hasOwnProperty('serverId')) {
-            page.serverId = page.source;
-        }
+            // Check if page.options.metadata.pageId is undefined
+            if(page.options.metadata.pageId !== undefined) {
+                form.pages[index] = {
+                    pageId: page.options.metadata.pageId
+                };
+            }
+            else {
+                form.pages[index] = {
+                    serverId: page.serverId
+                };
+        }}
     });
 
     form.put(route('chapters.update', props.chapter.chapter_id), {
@@ -143,7 +162,7 @@ function handleFilePondPagesRevert(serverId) {
     if (index !== -1) {
         form.pages.splice(index, 1);
     }
-    
+
 
     axios.delete(route('delete-thumbnail', {
         isTemp: "true",
@@ -167,6 +186,8 @@ function handleFilePondPagesProcess(error, file) {
 function handleFilePondPagesReorderFiles(files) {
     // // Clear form.pages
     form.pages = files;
+
+    console.log(form.pages);
 }
 
 onMounted(() => {

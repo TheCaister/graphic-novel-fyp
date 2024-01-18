@@ -40,7 +40,7 @@
             <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()" :content="{
                 content_id: selectedChapter.chapter_id,
                 content_name: selectedChapter.chapter_title,
-            }" type="chapter" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+            }" type="chapters" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
     </Teleport>

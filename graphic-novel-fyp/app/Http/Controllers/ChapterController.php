@@ -234,6 +234,8 @@ class ChapterController extends Controller
         // Extract the "serverId" of each page in request->pages and store it in an array
         $requestPagesServerIdArray = [];
 
+        dd(request()->pages);
+
         foreach ($request->pages as $index=>$page) {
             $requestPagesServerIdArray[$index] = $page['serverId'];
         }
@@ -291,10 +293,6 @@ class ChapterController extends Controller
             }
         }
         
-        // dd all page images in the chapter
-        // dd($chapter->pages->pluck('page_number'));
-
-        // return redirect()->route('chapter.manage', $series_id);
         return redirect()->back();
     }
 
