@@ -49,8 +49,6 @@ const props = defineProps({
 
 const files = computed(() => {
 
-    console.log(props.chapter)
-
     if (props.chapter.chapter_thumbnail !== '' && props.chapter.chapter_thumbnail !== null) {
 
         return [
@@ -113,8 +111,20 @@ function deleteExistingThumbnail() {
 }
 
 function deleteExistingPage(source, load) {
-    console.log('existing page: ' + source)
-    console.log('existing page: ' + load.getMetadata('pageId'))
+    // // in form.pages, get the page with same source as source
+    const pageIndexToBeDeleted = form.pages.findIndex(page => page.source === source);
+    const pageId = form.pages[pageIndexToBeDeleted].options.metadata.pageId;
+
+    axios.delete(route('delete-thumbnail', {
+        isTemp: "false",
+        contentType: "Page",
+        contentId: pageId,
+    })).catch(error => {
+        console.log(error);
+    });
+
+    // Remove from form.pages
+    form.pages.splice(pageIndexToBeDeleted, 1);
 }
 
 function handleFilePondThumbnailProcess(error, file) {
@@ -126,37 +136,14 @@ function handleFilePondThumbnailRemove(error, file) {
     form.upload = '';
 }
 
-function handleFilePondPagesRemoveFile(e, file) {
-
-    console.log('Page is officially... REMOVED! ' + file.getMetadata('pageId'))
-    // console.log(form.pages)
-    form.pages = form.pages.filter((item) => item !== e);
-
-    // axios.delete(`/api/pages/${e}`).catch(error => {
-    //     console.log(error);
-    // });
-
-    // axios.delete(route('delete-thumbnail', {
-    //     isTemp: "false",
-    //     contentType: "Chapter",
-    //     contentId: props.chapter.chapter_id,
-    // })).catch(error => {
-    //     console.log(error);
-    // });
-
-    // console.log(form.pages)
-}
-
 function handleFilePondPagesRevert(serverId) {
 
     // in form.pages, remove the page with same serverId as serverId
-    form.pages = form.pages.filter((item) => item.serverId !== serverId);
-
-    console.log('After: ' + form.pages)
-
-    // axios.delete(`/api/pages/${e}`).catch(error => {
-    //     console.log(error);
-    // });
+    const index = form.pages.findIndex((item) => item.serverId === serverId);
+    if (index !== -1) {
+        form.pages.splice(index, 1);
+    }
+    
 
     axios.delete(route('delete-thumbnail', {
         isTemp: "true",
@@ -177,40 +164,18 @@ function handleFilePondPagesProcess(error, file) {
     });
 }
 
-function handleFilePondPagesBeforeRemoveFile(item) {
-
-    // Return a promise that prints 'hi' to the console when resolved
-    return new Promise((resolve, reject) => {
-
-        // if item doesn't have a serverId, set this.pageToBeDeleted to empty string
-        // console.log(item.serverId)
-        // this.pageToBeDeleted = item.serverId;
-
-        // resolve with true to remove item from pond
-        resolve(true);
-    });
-}
-
 function handleFilePondPagesReorderFiles(files) {
     // // Clear form.pages
     form.pages = files;
 }
 
-function test(file) {
-    console.log(file)
-}
-
 onMounted(() => {
-
-    // form.chapter_number = getNextChapterNumber()
-
     form.chapter_title = props.chapter.chapter_title
     form.chapter_notes = props.chapter.chapter_notes
     form.chapter_number = props.chapter.chapter_number
 
     APICalls.getFilepondPages(props.chapter.chapter_id).then(response => {
         form.pages = response.data
-        console.log(form.pages)
     }).catch(error => console.log(error))
 }
 )
@@ -285,28 +250,13 @@ onMounted(() => {
                             </div>
 
                             <div>
-                                <!-- <InputLabel for="admins" value="Pages:" />
-                                <file-pond id="test" name="upload" label-idle="Pages" allow-multiple="true"
-                                    allow-reorder="true" @processfile="handleFilePondPagesProcess"
-                                    accepted-file-types="image/jpeg, image/png" :server="{
-                                        url: '/upload?media=pages',
-                                        revert: (uniqueFileId, load, error) => {
-                                            handleFilePondPagesRemoveFile(uniqueFileId)
-
-                                            // Should call the load method when done, no parameters required
-                                            load();
-                                        },
-                                        headers: {
-                                            'X-CSRF-TOKEN': csrfToken,
-                                        }
-                                    }" styleItemPanelAspectRatio="1.414" /> -->
 
                                 <button @click="handleFilePondPagesRevert('testing')" class="text-white">
                                     test
                                 </button>
 
-                                <file-pond name="upload" label-idle="Pages" allow-multiple="true" allow-reorder="true"
-                                    :files="form.pages" @processfile="handleFilePondPagesProcess"
+                                <file-pond id="pagepond" name="upload" label-idle="Pages" allow-multiple="true"
+                                    allow-reorder="true" :files="form.pages" @processfile="handleFilePondPagesProcess"
                                     @reorderfiles="handleFilePondPagesReorderFiles"
                                     accepted-file-types="image/jpeg, image/png" :server="{
                                         process: {
@@ -314,7 +264,6 @@ onMounted(() => {
                                         },
                                         revert: (uniqueFileId, load, error) => {
                                             handleFilePondPagesRevert(uniqueFileId)
-                                            // Should call the load method when done, no parameters required
                                             load();
                                         },
                                         remove: (source, load, error) => {
@@ -329,7 +278,7 @@ onMounted(() => {
                                             'X-CSRF-TOKEN': csrfToken
                                         }
                                     }
-                                        " />
+                                        " styleItemPanelAspectRatio="1.414" />
 
                                 <!-- 
                                     @processfile="handleFilePondPagesProcess"
@@ -384,7 +333,7 @@ onMounted(() => {
 <!-- <style> -->
 
 <style >
-#test .filepond--item {
+#pagepond .filepond--item {
     width: calc(33% - 0.5em);
 }
 </style>

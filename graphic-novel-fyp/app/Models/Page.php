@@ -65,6 +65,6 @@ class Page extends Model implements HasMedia
     }
 
     public function clearThumbnail(){
-        $this->page_image = null;
+        $this->delete();
     }
 }
