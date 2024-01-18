@@ -6,7 +6,7 @@
                 <div class="rounded-lg shadow-lg hover:shadow-white transition-all duration-200">
                     <div class="relative rounded-lg ">
                         <div class="h-full flex items-center">
-                            <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
+                            <div class="h-96 w-full bg-pink-300 flex justify-center rounded-lg">
                                 <img v-if="page.page_image" :src="page.page_image" alt="Content Image"
                                     class="rounded-lg object-cover w-full" />
                                 <div v-else class="text-white text-xl flex items-center">P{{ page.page_id }}</div>
@@ -18,7 +18,7 @@
                                 pending
                             </span>
                             <Transition name="fade">
-                                <DashboardDropdownMenu v-if="isCardMenuOpen" class="absolute z-50"
+                                <DashboardDropdownMenu v-if="selectedPage.page_id === page.page_id && isCardMenuOpen" class="absolute z-50"
                                     :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked"
                                     @closeMenu="isCardMenuOpen = false" />
                             </Transition>
@@ -82,9 +82,7 @@ const props = defineProps({
 })
 
 const pages = ref([]);
-const selectedPage = ref({
-
-});
+const selectedPage = ref({});
 
 const isPageManageOpen = ref(false)
 
@@ -136,7 +134,7 @@ function updateContentList() {
 }
 
 function switchSelectedContent(contentId) {
-    console.log(contentId)
+    // console.log(pages.value)
     selectedPage.value = pages.value.find(page => page.page_id == contentId)
     isCardMenuOpen.value = true;
 }
