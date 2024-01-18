@@ -1,8 +1,8 @@
 <template>
     <!-- Loop through the universes and display them in cards -->
-    <div v-if="chaptersLoaded" class="w-full flex">
+    <div v-if="chaptersLoaded" class="w-full flex flex-wrap  justify-center">
 
-        <div v-for="chapter in chapters" :key="chapter.chapter_id" class=" w-2/5 mx-8 mb-4">
+        <div v-for="chapter in chapters" :key="chapter.chapter_id" class="w-96 mx-8 mb-4">
             <content-card-detailed :content="{
                 content_id: chapter.chapter_id,
                 content_name: chapter.chapter_title,
@@ -14,7 +14,7 @@
                 @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked" />
         </div>
 
-        <add-button @click="isCreateModalOpen = true" label="Create Chapter" />
+        <add-button @click="isCreateModalOpen = true" label="Create Chapter" class="w-96"/>
 
     </div>
     <div v-else>
@@ -27,6 +27,12 @@
         <Transition name="modal">
             <create-chapter-modal v-if="isCreateModalOpen" @closeModal="isCreateModalOpen = false; updateContentList()"
                 :parentContentIdNumber="props.parentContentId"
+                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+        </Transition>
+
+        <Transition name="modal" class="z-50">
+            <edit-chapter-modal v-if="isEditModalOpen" @closeModal="isEditModalOpen = false; updateContentList()"
+                :chapter="selectedChapter"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 

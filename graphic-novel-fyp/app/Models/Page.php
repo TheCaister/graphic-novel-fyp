@@ -59,4 +59,12 @@ class Page extends Model implements HasMedia
         $this->elements()->delete();
         parent::delete();
     }
+
+    public static function getThumbnailCollectionName(){
+        return 'page_image';
+    }
+
+    public function clearThumbnail(){
+        $this->page_image = null;
+    }
 }

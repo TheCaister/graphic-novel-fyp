@@ -94,4 +94,8 @@ class Series extends Model implements HasMedia
 
         parent::delete();
     }
+
+    public function clearThumbnail(){
+        $this->series_thumbnail = null;
+    }
 }

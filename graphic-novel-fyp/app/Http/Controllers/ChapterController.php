@@ -168,6 +168,30 @@ class ChapterController extends Controller
         ]);
     }
 
+    public function getChapterFilepondPages(Chapter $chapter)
+    {
+        // Initiliase array to store chapter pages. It has size of the number of pages in the chapter
+        $chapterPagesToReturn = [];
+        // Create array that holds all pages in the chapter, sorted by page number
+        $pagesInOrder = $chapter->pages()->orderBy('page_number')->get();
+
+        foreach ($pagesInOrder as $page) {
+            $filePath = $page->getFirstMediaUrl('page_image');
+
+            $filePath = str_replace('http://localhost', '', $filePath);
+
+            // Add the page to the array
+            $chapterPagesToReturn[] = [
+                'source' => $filePath,
+                'options' => [
+                    'type' => 'local',
+                ],
+            ];
+        }
+
+        return response()->json($chapterPagesToReturn);
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -181,15 +205,8 @@ class ChapterController extends Controller
 
         $formFields = $request->validate([
             'chapter_title' => 'required',
-            'chapter_notes' => 'required',
+            'chapter_notes' => 'nullable',
         ]);
-
-        if ($request->upload == '') {
-            $chapter->clearMediaCollection('chapter_thumbnail');
-
-            // Set series thumbnail to null
-            $chapter->chapter_thumbnail = '';
-        }
 
         $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
 
@@ -218,8 +235,6 @@ class ChapterController extends Controller
             $requestPagesServerIdArray[$index] = $page['serverId'];
         }
 
-        // dd($requestPagesServerIdArray);
-
         // For each page in chapterPages, check if its source is in request->pages. If it is not, delete it. Otherwise, set its page number to the index of the page in request->pages + 1
         foreach ($chapterPages as $page) {
             $pageSource = $page->getFirstMediaUrl('page_image');
@@ -244,11 +259,6 @@ class ChapterController extends Controller
                 $page->save();
             }
         }
-
-        // Get the size of request->pages
-        $requestPagesSize = count($requestPagesServerIdArray);
-
-        // dd($requestPagesServerIdArray);
 
         // After this, all pages that weren't present in request->pages have been deleted. Now, we need to add the new pages to the chapter, with page number being the index of the page in request->pages + 1
         foreach ($requestPagesServerIdArray as $i => $serverId) {
@@ -281,9 +291,8 @@ class ChapterController extends Controller
         // dd all page images in the chapter
         // dd($chapter->pages->pluck('page_number'));
 
-
-
-        return redirect()->route('chapter.manage', $series_id);
+        // return redirect()->route('chapter.manage', $series_id);
+        return redirect()->back();
     }
 
     /**

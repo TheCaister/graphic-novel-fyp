@@ -27,7 +27,7 @@
                 {{ content.subheading }}
             </div>
             <div class="flex items-center">{{ content.content_name }}</div>
-            <div v-if="content.description !== ''" class="text-base h-[6rem] font-thin overflow-hidden text-ellipsis">
+            <div class="text-base h-[6rem] font-thin overflow-hidden text-ellipsis">
                 {{ content.description }}
             </div>
         </div>

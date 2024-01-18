@@ -86,4 +86,12 @@ class Chapter extends Model implements HasMedia
             'link' => route('chapters.show', $this->chapter_id),
         ];
     }
+
+    public static function getThumbnailCollectionName(){
+        return 'chapter_thumbnail';
+    }
+
+    public function clearThumbnail(){
+        $this->chapter_thumbnail = null;
+    }
 }

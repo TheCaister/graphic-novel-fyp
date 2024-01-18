@@ -22,7 +22,7 @@ let csrfToken = document.querySelector('meta[name="csrf-token"]').content
 
 const emit = defineEmits(['closeModal'])
 function close() {
-    deleteMedia();
+    deleteTempThumbnail();
     emit('closeModal');
 };
 
@@ -34,7 +34,6 @@ const FilePond = vueFilePond(
 const modal = ref(null)
 
 const form = useForm({
-    series_id: '',
     chapter_title: '',
     chapter_number: '',
     chapter_notes: '',
@@ -42,14 +41,28 @@ const form = useForm({
     upload: '',
 });
 
-const genres = ref([
-])
-
 const props = defineProps({
-    parentContentIdNumber: {
-        type: Number,
-        required: true
+    chapter: {
+        type: Object,
     },
+})
+
+const files = computed(() => {
+
+    console.log(props.chapter)
+
+    if (props.chapter.chapter_thumbnail !== '' && props.chapter.chapter_thumbnail !== null) {
+
+        return [
+            {
+                source: props.chapter.chapter_thumbnail.replace('http://localhost', ''),
+                options: {
+                    type: 'local',
+                },
+            },
+        ]
+    }
+    return [];
 })
 
 onClickOutside(modal, () => {
@@ -57,9 +70,7 @@ onClickOutside(modal, () => {
 })
 
 function submit() {
-    form.series_id = props.parentContentIdNumber
-
-    form.post(route('chapters.store'), {
+    form.put(route('chapters.update', props.chapter.chapter_id), {
         onFinish: () => {
             form.upload = '';
             close()
@@ -67,12 +78,30 @@ function submit() {
     });
 };
 
-function getNextChapterNumber() {
-    // APICalls.getNextChapterNumber(props.parentContentIdNumber).then(response => {
-    //     form.chapter_number = response.data
-    // }).catch(error => console.log(error))
+function deleteTempThumbnail() {
 
-    return 1
+    if (form.upload) {
+
+        axios.delete(route('delete-thumbnail', {
+            isTemp: "true",
+            contentType: "Chapter",
+            serverId: form.upload,
+        })).catch(error => {
+            console.log(error);
+        });
+    }
+}
+
+function deleteExistingThumbnail() {
+    if (props.chapter.chapter_thumbnail !== '') {
+        axios.delete(route('delete-thumbnail', {
+            isTemp: "false",
+            contentType: "Chapter",
+            contentId: props.chapter.chapter_id,
+        })).catch(error => {
+            console.log(error);
+        });
+    }
 }
 
 function handleFilePondThumbnailProcess(error, file) {
@@ -100,29 +129,18 @@ function handleFilePondPagesRemoveFile(e) {
     console.log(form.pages)
 }
 
-function deleteMedia() {
-    
-    if (form.upload) {
-        axios.delete('/api/chapter/' + form.upload + '/thumbnail').catch(error => {
-            console.log(error);
-        });
-    }
-
-    if (form.pages) {
-        form.pages.forEach(element => {
-            axios.delete('/api/pages/' + element).catch(error => {
-                console.log(error);
-            });
-        });
-    }
-}
-
 onMounted(() => {
-    APICalls.getAllGenres().then(response => {
-        genres.value = response.data
-    }).catch(error => console.log(error))
 
-    form.chapter_number = getNextChapterNumber()
+    // form.chapter_number = getNextChapterNumber()
+
+    form.chapter_title = props.chapter.chapter_title
+    form.chapter_notes = props.chapter.chapter_notes
+    form.chapter_number = props.chapter.chapter_number
+
+    APICalls.getFilepondPages(props.chapter.chapter_id).then(response => {
+        form.pages = response.data
+        console.log(form.pages)
+    }).catch(error => console.log(error))
 }
 )
 </script>
@@ -131,26 +149,33 @@ onMounted(() => {
 <template>
     <div>
         <div ref="modal" class="text-lg bg-black shadow-lg rounded-lg p-8 w-4/5">
-            <h2 class="text-4xl font-bold text-white ">Create Chapter</h2>
+            <h2 class="text-4xl font-bold text-white ">Edit Chapter</h2>
             <form @submit.prevent="submit">
                 <div class="flex">
 
                     <div class="w-1/2">
 
                         <Label>Chapter Thumbnail</Label>
-                        <!-- <ImageLabel /> -->
 
                         <file-pond name="upload" label-idle="Chapter Thumbnail" accepted-file-types="image/jpeg, image/png"
-                            @processfile="handleFilePondThumbnailProcess" @removefile="handleFilePondThumbnailRemove"
-                            :server="{
+                            :files="files" @processfile="handleFilePondThumbnailProcess"
+                            @removefile="handleFilePondThumbnailRemove" :server="{
                                 process: {
                                     url: '/upload?media=chapter_thumbnail',
                                 },
                                 revert: {
-                                    url: '/api/chapter/' + form.upload + '/thumbnail',
+                                    url: '/api/thumbnail?contentType=Chapter&serverId=' + form.upload + '&isTemp=true',
+                                },
+                                load: {
+                                    url: '/',
                                 },
                                 headers: {
                                     'X-CSRF-TOKEN': csrfToken
+                                },
+                                remove: (source, load, error) => {
+                                    deleteExistingThumbnail();
+
+                                    load();
                                 }
                             }" />
                     </div>
@@ -161,7 +186,8 @@ onMounted(() => {
 
                                 <div>
                                     <InputLabel for="chapter_number" value="Chapter number:" class="hidden" />
-                                    <TextInput id="chapter_number" type="number" class="mt-1 block w-20"
+                                    <input id="chapter_number" type="number"
+                                        class="mt-1 block w-20 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                         v-model="form.chapter_number" required autofocus />
                                     <InputError class="mt-2" message="" />
                                 </div>
@@ -191,7 +217,8 @@ onMounted(() => {
                                 <InputLabel for="admins" value="Pages:" />
                                 <file-pond id="test" name="upload" label-idle="Pages" allow-multiple="true"
                                     allow-reorder="true" @processfile="handleFilePondPagesProcess"
-                                    accepted-file-types="image/jpeg, image/png" :server="{
+                                    accepted-file-types="image/jpeg, image/png"
+                                    :server="{
                                         url: '/upload?media=pages',
                                         revert: (uniqueFileId, load, error) => {
                                             handleFilePondPagesRemoveFile(uniqueFileId)
@@ -203,6 +230,26 @@ onMounted(() => {
                                             'X-CSRF-TOKEN': csrfToken,
                                         }
                                     }" styleItemPanelAspectRatio="1.414" />
+
+                                <file-pond name="upload" label-idle="Pages" allow-multiple="true" allow-reorder="true"
+                                    :files="passedChapterPages" @processfile="handleFilePondPagesProcess"
+                                    @removefile="handleFilePondPagesRemoveFile"
+                                    @reorderfiles="handleFilePondPagesReorderFiles"
+                                    :beforeRemoveFile="handleFilePondPagesBeforeRemoveFile"
+                                    accepted-file-types="image/jpeg, image/png" :server="{
+                                        process: {
+                                            url: '/upload?media=pages',
+                                        },
+                                        revert: {
+                                            url: '/api/pages/' + this.pageToBeDeleted,
+                                        },
+                                        load: {
+                                            url: '/',
+                                        },
+                                        headers: {
+                                            'X-CSRF-TOKEN': csrfToken
+                                        }
+                                    }" />
                             </div>
                         </div>
                         <div class="flex justify-end">
@@ -213,7 +260,7 @@ onMounted(() => {
                             </button>
                             <PrimaryButton type="submit"
                                 class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                Create
+                                Save
                             </PrimaryButton>
                         </div>
                     </div>

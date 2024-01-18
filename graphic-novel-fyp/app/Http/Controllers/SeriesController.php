@@ -112,14 +112,6 @@ class SeriesController extends Controller
             'series_summary' => 'nullable',
         ]);
 
-        // If upload is empty, remove the series_thumbnail from the series media collection
-        if ($request->upload == '') {
-            $series->clearMediaCollection('series_thumbnail');
-
-            // Set series thumbnail to null
-            $series->series_thumbnail = '';
-        }
-
         $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
 
         if ($tempThumbnail) {

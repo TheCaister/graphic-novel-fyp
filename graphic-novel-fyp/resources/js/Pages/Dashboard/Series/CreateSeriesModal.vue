@@ -20,7 +20,7 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
 const emit = defineEmits(['closeModal'])
 function close() {
-    deleteMedia();
+    deleteTempThumbnail();
     emit('closeModal');
 };
 
@@ -65,13 +65,18 @@ function submit() {
     });
 };
 
-function deleteMedia() {
-    
-    if (form.upload) {
-        axios.delete('/api/series/' + form.upload + '/thumbnail').catch(error => {
-            console.log(error);
-        });
-    }
+function deleteTempThumbnail() {
+
+if (form.upload) {
+
+    axios.delete(route('delete-thumbnail', {
+        isTemp: "true",
+        contentType: "Series",
+        serverId: form.upload,
+    })).catch(error => {
+        console.log(error);
+    });
+}
 }
 
 onMounted(() => {

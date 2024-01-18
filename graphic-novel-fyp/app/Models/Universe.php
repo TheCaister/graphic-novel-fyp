@@ -87,4 +87,8 @@ class Universe extends Model implements HasMedia
 
         parent::delete();
     }
+
+    public function clearThumbnail(){
+        return;
+    }
 }

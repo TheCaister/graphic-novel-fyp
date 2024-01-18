@@ -78,6 +78,7 @@ class UploadController extends Controller
     {
         $content = $this->getClassName($contentType)::find($contentId);
         $content->clearMediaCollection($this->getClassName($contentType)::getThumbnailCollectionName());
+        $content->clearThumbnail();
         $content->save();
     }
 

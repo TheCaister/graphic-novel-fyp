@@ -97,5 +97,8 @@ export default {
                 limit: limit,
             }
         })
+    },
+    getFilepondPages(chapterId){
+        return axios.get('/api/chapters/' + chapterId + '/filepond-pages')
     }
 }

@@ -22,7 +22,7 @@ let csrfToken = document.querySelector('meta[name="csrf-token"]').content
 
 const emit = defineEmits(['closeModal'])
 function close() {
-    deleteMedia();
+    deleteTempThumbnail();
     emit('closeModal');
 };
 
@@ -101,17 +101,32 @@ function handleFilePondPagesRemoveFile(e) {
     console.log(form.pages)
 }
 
-function deleteMedia() {
-    
+function deleteTempThumbnail() {
+
     if (form.upload) {
-        axios.delete('/api/chapter/' + form.upload + '/thumbnail').catch(error => {
+
+        axios.delete(route('delete-thumbnail', {
+            isTemp: "true",
+            contentType: "Chapter",
+            serverId: form.upload,
+        })).catch(error => {
             console.log(error);
         });
     }
 
     if (form.pages) {
+        // form.pages.forEach(element => {
+        //     axios.delete('/api/pages/' + element).catch(error => {
+        //         console.log(error);
+        //     });
+        // });
+
         form.pages.forEach(element => {
-            axios.delete('/api/pages/' + element).catch(error => {
+            axios.delete(route('delete-thumbnail', {
+                isTemp: "true",
+                contentType: "Page",
+                serverId: form.upload,
+            })).catch(error => {
                 console.log(error);
             });
         });
@@ -147,8 +162,12 @@ onMounted(() => {
                                 process: {
                                     url: '/upload?media=chapter_thumbnail',
                                 },
+                                // revert: {
+                                //     url: '/api/chapter/' + form.upload + '/thumbnail',
+                                // },
+
                                 revert: {
-                                    url: '/api/chapter/' + form.upload + '/thumbnail',
+                                    url: '/api/thumbnail?contentType=Chapter&serverId=' + form.upload + '&isTemp=true',
                                 },
                                 headers: {
                                     'X-CSRF-TOKEN': csrfToken

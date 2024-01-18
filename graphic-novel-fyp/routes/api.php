@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SeriesController;
@@ -45,7 +46,7 @@ Route::get('/series/{universe}', [App\Http\Controllers\SeriesController::class, 
 Route::get('chapters/{chapter}/pages', [PageController::class, 'getChapterPages'])->name('pages.get-chapter-pages');
 
 
-
+Route::get('/chapters/{chapter}/filepond-pages', [ChapterController::class, 'getChapterFilepondPages'])->name('chapters.get-chapter-filepond-pages');
 
 
 
