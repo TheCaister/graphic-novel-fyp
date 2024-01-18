@@ -332,36 +332,6 @@ onMounted(() => {
                                         }
                                     }
                                         " styleItemPanelAspectRatio="1.414" />
-
-                                <!-- 
-                                    @processfile="handleFilePondPagesProcess"
-                                    @removefile="handleFilePondPagesRemoveFile"
-                                          :beforeRemoveFile="handleFilePondPagesBeforeRemoveFile"
-                                                   :server="
-                                    {
-                                        process: {
-                                            url: '/upload?media=pages',
-                                        },
-                                        // revert: (uniqueFileId, load, error) => {
-                                        //     handleFilePondPagesRemoveFile(uniqueFileId)
-
-                                        //     // Should call the load method when done, no parameters required
-                                        //     load();
-                                        // },
-                                        // remove: (source, load, error) => {
-                                        //     deleteExistingPage(source, load);
-
-                                        //     load();
-                                        // },
-                                        load: {
-                                            url: '/',
-                                        },
-                                        headers: {
-                                            'X-CSRF-TOKEN': csrfToken
-                                        }
-                                    }
-                                    "
-                                      -->
                             </div>
                         </div>
                         <div class="flex justify-end">

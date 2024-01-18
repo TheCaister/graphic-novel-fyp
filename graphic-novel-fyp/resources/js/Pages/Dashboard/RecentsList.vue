@@ -7,7 +7,7 @@
             <Link v-for="result in recentsList" :href="result.link" :key="result.id"
                 class="shadow-lg rounded-lg flex items-center hover:scale-105 hover:shadow-pink-500 transition-all duration-200">
                 <!-- Your existing code here -->
-                <img v-if="result.thumbnail" class="w-16 rounded-lg mr-2" :src="result.thumbnail" :alt="result.title" />
+                <img v-if="result.thumbnail" class="w-16 h-16 rounded-lg mr-2" :src="result.thumbnail" :alt="result.title" />
                 <!-- Display the first letter of the title -->
                 <div v-else class="w-16 h-16 rounded-lg mr-2 flex items-center justify-center text-xl bg-pink-300">
                     {{ result.title.charAt(0) }}
