@@ -70,7 +70,7 @@ onClickOutside(modal, () => {
 function submit() {
     form.pages.forEach((page, index) => {
         try {
-            if(page.getMetadata('pageId') !== undefined) {
+            if (page.getMetadata('pageId') !== undefined) {
                 form.pages[index] = {
                     pageId: page.getMetadata('pageId')
                 };
@@ -82,18 +82,19 @@ function submit() {
             }
         } catch (error) {
 
-            // Check if page.options.metadata.pageId is undefined
-            if(page.options.metadata.pageId !== undefined) {
+            try {
                 form.pages[index] = {
                     pageId: page.options.metadata.pageId
                 };
             }
-            else {
+            catch (error) {
                 form.pages[index] = {
                     serverId: page.serverId
                 };
-        }}
-    });
+            }
+        }
+    }
+    )
 
     form.put(route('chapters.update', props.chapter.chapter_id), {
         onFinish: () => {
@@ -101,7 +102,10 @@ function submit() {
             close()
         }
     });
+
 };
+
+
 
 function deleteTempThumbnail() {
 
@@ -132,7 +136,15 @@ function deleteExistingThumbnail() {
 function deleteExistingPage(source, load) {
     // // in form.pages, get the page with same source as source
     const pageIndexToBeDeleted = form.pages.findIndex(page => page.source === source);
-    const pageId = form.pages[pageIndexToBeDeleted].options.metadata.pageId;
+
+    let pageId = '';
+
+    try {
+        pageId = form.pages[pageIndexToBeDeleted].getMetadata('pageId');
+    }
+    catch (error) {
+        pageId = form.pages[pageIndexToBeDeleted].options.metadata.pageId;
+    }
 
     axios.delete(route('delete-thumbnail', {
         isTemp: "false",

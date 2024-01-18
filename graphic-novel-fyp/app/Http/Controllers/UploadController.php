@@ -83,10 +83,17 @@ class UploadController extends Controller
 
     private function clearMediaCollection($contentType, $contentId)
     {
+
         $content = $this->getClassName($contentType)::find($contentId);
+
         $content->clearMediaCollection($this->getClassName($contentType)::getThumbnailCollectionName());
-        $content->clearThumbnail();
-        $content->save();
+
+        if ($contentType == 'Page') {
+            $content->delete();
+        } else {
+            $content->clearThumbnail();
+            $content->save();
+        }
     }
 
     public function deletePageImage(Request $request)
