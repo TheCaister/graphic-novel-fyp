@@ -202,10 +202,6 @@ class ChapterController extends Controller
      */
     public function update(Request $request, Chapter $chapter)
     {
-        //
-        // dd($request->pages);
-
-        // dd($chapter->pages);
 
         // Get series id of the chapter
         $series_id = $chapter->series->series_id;
@@ -229,73 +225,6 @@ class ChapterController extends Controller
         }
 
         $chapter->update($formFields);
-
-
-
-        // // Get all pages in the chapter
-        // $chapterPages = $chapter->pages;
-
-        // // Extract the "serverId" of each page in request->pages and store it in an array
-        // $requestPagesServerIdArray = [];
-
-        // dd(request()->pages);
-
-        // foreach ($request->pages as $index => $page) {
-        //     $requestPagesServerIdArray[$index] = $page['serverId'];
-        // }
-
-        // // For each page in chapterPages, check if its source is in request->pages. If it is not, delete it. Otherwise, set its page number to the index of the page in request->pages + 1
-        // foreach ($chapterPages as $page) {
-        //     $pageSource = $page->getFirstMediaUrl('page_image');
-
-        //     $pageSource = str_replace('http://localhost', '', $pageSource);
-
-        //     // dd($pageSource, $requestPagesServerIdArray);
-
-        //     if (!in_array($pageSource, $requestPagesServerIdArray)) {
-        //         // dd('page not found...');
-
-        //         $page->clearMediaCollection('page_image');
-
-        //         $page->delete();
-        //     } else {
-
-        //         $page->page_number = array_search($pageSource, $requestPagesServerIdArray) + 1;
-
-        //         // Delete the page from request->pages. You can get the index by subtracting 1 from the page number
-        //         unset($requestPagesServerIdArray[$page->page_number - 1]);
-
-        //         $page->save();
-        //     }
-        // }
-
-        // // After this, all pages that weren't present in request->pages have been deleted. Now, we need to add the new pages to the chapter, with page number being the index of the page in request->pages + 1
-        // foreach ($requestPagesServerIdArray as $i => $serverId) {
-        //     // dd($serverId);
-
-        //     // Get the temporary file
-        //     $tempPage = TemporaryFile::where('folder', $serverId)->first();
-
-        //     if ($tempPage) {
-
-        //         // Create a page
-        //         $curPage = $chapter->pages()->create([
-        //             'page_number' => $i + 1,
-        //             'page_image' => '',
-        //         ]);
-
-        //         // Add the page to the chapter
-        //         $curPage->addMedia(storage_path('app/public/uploads/pages/tmp/' . $tempPage->folder . '/' . $tempPage->filename))
-        //             ->toMediaCollection('page_image');
-
-        //         $curPage->page_image = $curPage->getFirstMediaUrl('page_image');
-
-        //         $curPage->save();
-
-        //         rmdir(storage_path('app/public/uploads/pages/tmp/' . $tempPage->folder));
-        //         $tempPage->delete();
-        //     }
-        // }
 
         foreach (request()->pages as $index => $page) {
             // Check if 'serverId' is set
@@ -332,8 +261,6 @@ class ChapterController extends Controller
                 $curPage->page_number = $index + 1;
 
                 $curPage->save();
-
-
             }
         }
 

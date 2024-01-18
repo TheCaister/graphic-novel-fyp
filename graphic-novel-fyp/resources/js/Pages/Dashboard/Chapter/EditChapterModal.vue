@@ -23,6 +23,7 @@ let csrfToken = document.querySelector('meta[name="csrf-token"]').content
 const emit = defineEmits(['closeModal'])
 function close() {
     deleteTempThumbnail();
+    deleteTempPages();
     emit('closeModal');
 };
 
@@ -67,7 +68,7 @@ onClickOutside(modal, () => {
     close()
 })
 
-function submit() {
+function formatForm() {
     form.pages.forEach((page, index) => {
         try {
             if (page.getMetadata('pageId') !== undefined) {
@@ -95,6 +96,10 @@ function submit() {
         }
     }
     )
+}
+
+function submit() {
+    formatForm();
 
     form.put(route('chapters.update', props.chapter.chapter_id), {
         onFinish: () => {
@@ -104,8 +109,6 @@ function submit() {
     });
 
 };
-
-
 
 function deleteTempThumbnail() {
 
@@ -119,6 +122,23 @@ function deleteTempThumbnail() {
             console.log(error);
         });
     }
+}
+
+function deleteTempPages() {
+    formatForm();
+
+    form.pages.forEach(page => {
+        if (page.serverId) {
+            axios.delete(route('delete-thumbnail', {
+                isTemp: "true",
+                contentType: "Page",
+                serverId: page.serverId,
+            })).catch(error => {
+                console.log(error);
+            });
+        }
+    }
+    )
 }
 
 function deleteExistingThumbnail() {
