@@ -185,6 +185,9 @@ class ChapterController extends Controller
                 'source' => $filePath,
                 'options' => [
                     'type' => 'local',
+                    'metadata' => [
+                        'pageId' => $page->page_id,
+                    ]
                 ],
             ];
         }

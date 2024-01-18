@@ -70,6 +70,14 @@ onClickOutside(modal, () => {
 })
 
 function submit() {
+    form.pages.forEach(page => {
+
+        // If serverId doesn't exist, create a serverId
+        if (!page.hasOwnProperty('serverId')) {
+            page.serverId = page.source;
+        }
+    });
+
     form.put(route('chapters.update', props.chapter.chapter_id), {
         onFinish: () => {
             form.upload = '';
@@ -104,6 +112,11 @@ function deleteExistingThumbnail() {
     }
 }
 
+function deleteExistingPage(source, load) {
+    console.log('existing page: ' + source)
+    console.log('existing page: ' + load)
+}
+
 function handleFilePondThumbnailProcess(error, file) {
     // Update the form with the file ids
     form.upload = file.serverId;
@@ -114,19 +127,68 @@ function handleFilePondThumbnailRemove(error, file) {
 }
 
 function handleFilePondPagesProcess(error, file) {
+    console.log('Woah! A new page! ' + file.serverId)
     // Update the form with the file ids
     form.pages.push(file.serverId);
 }
 
-function handleFilePondPagesRemoveFile(e) {
-    console.log(form.pages)
+function handleFilePondPagesRemoveFile(e, file) {
+
+
+
+    console.log('Page is officially... REMOVED! ' + file.getMetadata('pageId'))
+    // console.log(form.pages)
     form.pages = form.pages.filter((item) => item !== e);
 
-    axios.delete(`/api/pages/${e}`).catch(error => {
-        console.log(error);
+    // axios.delete(`/api/pages/${e}`).catch(error => {
+    //     console.log(error);
+    // });
+
+    // axios.delete(route('delete-thumbnail', {
+    //     isTemp: "false",
+    //     contentType: "Chapter",
+    //     contentId: props.chapter.chapter_id,
+    // })).catch(error => {
+    //     console.log(error);
+    // });
+
+    // console.log(form.pages)
+}
+
+function handleFilePondPagesBeforeRemoveFile(item) {
+
+    // Return a promise that prints 'hi' to the console when resolved
+    return new Promise((resolve, reject) => {
+
+        // if item doesn't have a serverId, set this.pageToBeDeleted to empty string
+        // console.log(item.serverId)
+        // this.pageToBeDeleted = item.serverId;
+
+        // resolve with true to remove item from pond
+        resolve(true);
+    });
+}
+
+function handleFilePondPagesReorderFiles(files, origin, target) {
+
+    // Clear form.pages
+    form.pages = [];
+
+    // Loop through files and push to form.pages
+    files.forEach(file => {
+        form.pages.push({
+            serverId: file.serverId,
+        });
     });
 
-    console.log(form.pages)
+    // log all file names
+    // files.forEach(file => console.log(file.filename));
+
+}
+
+function test(file) {
+    console.log(file)
+
 }
 
 onMounted(() => {
@@ -214,11 +276,10 @@ onMounted(() => {
                             </div>
 
                             <div>
-                                <InputLabel for="admins" value="Pages:" />
+                                <!-- <InputLabel for="admins" value="Pages:" />
                                 <file-pond id="test" name="upload" label-idle="Pages" allow-multiple="true"
                                     allow-reorder="true" @processfile="handleFilePondPagesProcess"
-                                    accepted-file-types="image/jpeg, image/png"
-                                    :server="{
+                                    accepted-file-types="image/jpeg, image/png" :server="{
                                         url: '/upload?media=pages',
                                         revert: (uniqueFileId, load, error) => {
                                             handleFilePondPagesRemoveFile(uniqueFileId)
@@ -229,19 +290,29 @@ onMounted(() => {
                                         headers: {
                                             'X-CSRF-TOKEN': csrfToken,
                                         }
-                                    }" styleItemPanelAspectRatio="1.414" />
+                                    }" styleItemPanelAspectRatio="1.414" /> -->
 
                                 <file-pond name="upload" label-idle="Pages" allow-multiple="true" allow-reorder="true"
-                                    :files="passedChapterPages" @processfile="handleFilePondPagesProcess"
+                                    :files="form.pages" @processfile="handleFilePondPagesProcess"
                                     @removefile="handleFilePondPagesRemoveFile"
                                     @reorderfiles="handleFilePondPagesReorderFiles"
                                     :beforeRemoveFile="handleFilePondPagesBeforeRemoveFile"
-                                    accepted-file-types="image/jpeg, image/png" :server="{
+                                    accepted-file-types="image/jpeg, image/png"
+                                    :server="
+                                    {
                                         process: {
                                             url: '/upload?media=pages',
                                         },
-                                        revert: {
-                                            url: '/api/pages/' + this.pageToBeDeleted,
+                                        revert: (uniqueFileId, load, error) => {
+                                            handleFilePondPagesRemoveFile(uniqueFileId)
+
+                                            // Should call the load method when done, no parameters required
+                                            load();
+                                        },
+                                        remove: (source, load, error) => {
+                                            deleteExistingPage(source, load);
+
+                                            load();
                                         },
                                         load: {
                                             url: '/',
@@ -249,7 +320,35 @@ onMounted(() => {
                                         headers: {
                                             'X-CSRF-TOKEN': csrfToken
                                         }
-                                    }" />
+                                    }
+                                    "/>
+
+                                <!-- 
+                                                   :server="
+                                    {
+                                        process: {
+                                            url: '/upload?media=pages',
+                                        },
+                                        // revert: (uniqueFileId, load, error) => {
+                                        //     handleFilePondPagesRemoveFile(uniqueFileId)
+
+                                        //     // Should call the load method when done, no parameters required
+                                        //     load();
+                                        // },
+                                        // remove: (source, load, error) => {
+                                        //     deleteExistingPage(source, load);
+
+                                        //     load();
+                                        // },
+                                        load: {
+                                            url: '/',
+                                        },
+                                        headers: {
+                                            'X-CSRF-TOKEN': csrfToken
+                                        }
+                                    }
+                                    "
+                                      -->
                             </div>
                         </div>
                         <div class="flex justify-end">
