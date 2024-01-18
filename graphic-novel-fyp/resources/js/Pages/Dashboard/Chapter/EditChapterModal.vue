@@ -114,7 +114,7 @@ function deleteExistingThumbnail() {
 
 function deleteExistingPage(source, load) {
     console.log('existing page: ' + source)
-    console.log('existing page: ' + load)
+    console.log('existing page: ' + load.getMetadata('pageId'))
 }
 
 function handleFilePondThumbnailProcess(error, file) {
@@ -126,15 +126,7 @@ function handleFilePondThumbnailRemove(error, file) {
     form.upload = '';
 }
 
-function handleFilePondPagesProcess(error, file) {
-    console.log('Woah! A new page! ' + file.serverId)
-    // Update the form with the file ids
-    form.pages.push(file.serverId);
-}
-
 function handleFilePondPagesRemoveFile(e, file) {
-
-
 
     console.log('Page is officially... REMOVED! ' + file.getMetadata('pageId'))
     // console.log(form.pages)
@@ -155,6 +147,36 @@ function handleFilePondPagesRemoveFile(e, file) {
     // console.log(form.pages)
 }
 
+function handleFilePondPagesRevert(serverId) {
+
+    // in form.pages, remove the page with same serverId as serverId
+    form.pages = form.pages.filter((item) => item.serverId !== serverId);
+
+    console.log('After: ' + form.pages)
+
+    // axios.delete(`/api/pages/${e}`).catch(error => {
+    //     console.log(error);
+    // });
+
+    axios.delete(route('delete-thumbnail', {
+        isTemp: "true",
+        contentType: "Page",
+        serverId: serverId,
+    })).catch(error => {
+        console.log(error);
+    });
+}
+
+function handleFilePondPagesProcess(error, file) {
+    // Update the form with the file ids
+
+    // Push to the beginning of the array
+    form.pages.unshift({
+        serverId: file.serverId,
+        source: '',
+    });
+}
+
 function handleFilePondPagesBeforeRemoveFile(item) {
 
     // Return a promise that prints 'hi' to the console when resolved
@@ -169,26 +191,13 @@ function handleFilePondPagesBeforeRemoveFile(item) {
     });
 }
 
-function handleFilePondPagesReorderFiles(files, origin, target) {
-
-    // Clear form.pages
-    form.pages = [];
-
-    // Loop through files and push to form.pages
-    files.forEach(file => {
-        form.pages.push({
-            serverId: file.serverId,
-        });
-    });
-
-    // log all file names
-    // files.forEach(file => console.log(file.filename));
-
+function handleFilePondPagesReorderFiles(files) {
+    // // Clear form.pages
+    form.pages = files;
 }
 
 function test(file) {
     console.log(file)
-
 }
 
 onMounted(() => {
@@ -292,20 +301,19 @@ onMounted(() => {
                                         }
                                     }" styleItemPanelAspectRatio="1.414" /> -->
 
+                                <button @click="handleFilePondPagesRevert('testing')" class="text-white">
+                                    test
+                                </button>
+
                                 <file-pond name="upload" label-idle="Pages" allow-multiple="true" allow-reorder="true"
                                     :files="form.pages" @processfile="handleFilePondPagesProcess"
-                                    @removefile="handleFilePondPagesRemoveFile"
                                     @reorderfiles="handleFilePondPagesReorderFiles"
-                                    :beforeRemoveFile="handleFilePondPagesBeforeRemoveFile"
-                                    accepted-file-types="image/jpeg, image/png"
-                                    :server="
-                                    {
+                                    accepted-file-types="image/jpeg, image/png" :server="{
                                         process: {
                                             url: '/upload?media=pages',
                                         },
                                         revert: (uniqueFileId, load, error) => {
-                                            handleFilePondPagesRemoveFile(uniqueFileId)
-
+                                            handleFilePondPagesRevert(uniqueFileId)
                                             // Should call the load method when done, no parameters required
                                             load();
                                         },
@@ -321,9 +329,12 @@ onMounted(() => {
                                             'X-CSRF-TOKEN': csrfToken
                                         }
                                     }
-                                    "/>
+                                        " />
 
                                 <!-- 
+                                    @processfile="handleFilePondPagesProcess"
+                                    @removefile="handleFilePondPagesRemoveFile"
+                                          :beforeRemoveFile="handleFilePondPagesBeforeRemoveFile"
                                                    :server="
                                     {
                                         process: {

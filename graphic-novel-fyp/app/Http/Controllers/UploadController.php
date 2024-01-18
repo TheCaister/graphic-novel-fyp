@@ -62,8 +62,15 @@ class UploadController extends Controller
         } else {
             $temporaryFile = TemporaryFile::where('folder', request()->serverId)->first();
 
+            // dd($temporaryFile);
+
             if ($temporaryFile) {
                 $fullPath = $temporaryFile->getFullPath($this->getClassName(request()->contentType)::getThumbnailCollectionName());
+
+                // If contentType is Page, set fullpath to $temporaryFile->getFullPath('pages');
+                if (request()->contentType == 'Page') {
+                    $fullPath = $temporaryFile->getFullPath('pages');
+                }
 
                 if (Storage::disk('public')->exists($fullPath)) {
                     Storage::disk('public')->delete($fullPath);
