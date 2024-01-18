@@ -18,10 +18,11 @@ class PageController extends Controller
 
     public function getChapterPages(Chapter $chapter)
     {
-        $pages = $chapter->pages()->get();
+        $pages = $chapter->pages()->get()->sortBy('page_number')->values()->all();
 
         // Sort pages by page number
-        $pages = $pages->sortBy('page_number');
+        // $pages = $pages->sortBy('page_number');
+
 
         return response()->json($pages);
     }
