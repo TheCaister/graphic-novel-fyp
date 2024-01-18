@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col rounded-md bg-white text-gray-700 text-base font-thin shadow-md" ref="cardMenu">
+    <div class="flex flex-col rounded-md bg-white text-gray-700 text-base font-thin shadow-lg" ref="cardMenu">
         <div v-for="event in events" :key="event.id" @click.prevent="menuItemClick(event.eventName)"
             class="py-4 pl-4 pr-16 whitespace-nowrap text-left hover:bg-gray-200 rounded-md">
             <div v-if="event.eventName === 'delete'" class="text-red-500">

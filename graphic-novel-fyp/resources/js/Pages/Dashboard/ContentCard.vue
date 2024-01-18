@@ -1,7 +1,7 @@
 <template>
     <Link Link :href='props.link'>
-    <div class="rounded-lg">
-        <div class="relative bg-black rounded-lg shadow-md ">
+    <div class="rounded-lg shadow-lg hover:shadow-white transition-all duration-200">
+        <div class="relative rounded-lg ">
             <div class="h-full flex items-center">
                 <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
                     <img v-if="content.thumbnail" :src="content.thumbnail" alt="Content Image"
@@ -10,11 +10,11 @@
                 </div>
             </div>
             <button class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
-                <span @click.prevent="switchSelectedContent(content.content_id);" class="material-symbols-outlined text-pink-300">
+                <span @click.prevent="switchSelectedContent(content.content_id);" class="material-symbols-outlined text-pink-300 drop-shadow-[-2px_2px_0_rgba(0,0,0,1)]">
                     pending
                 </span>
                 <Transition name="fade">
-                    <DashboardDropdownMenu v-if="selected && isCardMenuOpen" class="absolute z-40"
+                    <DashboardDropdownMenu v-if="selected && isCardMenuOpen" class="absolute z-50"
                         :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked"
                         @closeMenu="isCardMenuOpen = false" />
                 </Transition>
@@ -87,5 +87,9 @@ function handleMenuItemClicked(event) {
         'GRAD' 0,
         'opsz' 40;
     font-size: 42px;
+}
+
+.submenu{
+    z-index: 1000;
 }
 </style>

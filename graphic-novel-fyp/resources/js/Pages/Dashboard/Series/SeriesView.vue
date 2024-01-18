@@ -1,7 +1,7 @@
 <template>
     <!-- Loop through the universes and display them in cards -->
-    <div v-if="seriesLoaded" class="w-full flex">
-        <div v-for="series in series" :key="series.series_id" class=" w-2/5 mx-8 mb-4">
+    <div v-if="seriesLoaded" class="w-full flex flex-wrap justify-center">
+        <div v-for="series in series" :key="series.series_id" class=" w-96 mx-8 mb-4">
             <content-card-detailed :content="{
                 content_id: series.series_id,
                 content_name: series.series_title,
@@ -14,7 +14,7 @@
                 @menu-item-click="handleMenuItemClicked" />
         </div>
 
-        <add-button @click="isCreateModalOpen = true" label="Create Series"/>
+        <add-button @click="isCreateModalOpen = true" label="Create Series" class="w-96"/>
 
     </div>
     <div v-else>
