@@ -1,12 +1,13 @@
 <template>
     <div v-show="title == selectedTitle">
-        <slot/>
+        <slot :update="update" />
     </div>
-
 </template>
 
 <script setup>
-import { inject } from 'vue'
+import { inject, useSlots, defineEmits } from 'vue'
+
+const slots = useSlots()
 
 const props = defineProps({
     title: {
@@ -15,7 +16,11 @@ const props = defineProps({
     },
 })
 
+const emits = defineEmits(['updateSize'])
+
 const selectedTitle = inject('selectedTitle')
-
-
+function update(event) {
+    console.log('the tab has been updated')
+    emits('updateSize', event)
+}
 </script>

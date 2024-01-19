@@ -112,14 +112,6 @@ class SeriesController extends Controller
             'series_summary' => 'nullable',
         ]);
 
-        // If upload is empty, remove the series_thumbnail from the series media collection
-        if ($request->upload == '') {
-            $series->clearMediaCollection('series_thumbnail');
-
-            // Set series thumbnail to null
-            $series->series_thumbnail = '';
-        }
-
         $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
 
         if ($tempThumbnail) {
@@ -129,7 +121,6 @@ class SeriesController extends Controller
 
             // Set series thumbnail to the uploaded thumbnail
             $series->series_thumbnail = $series->getFirstMediaUrl('series_thumbnail');
-            // $series->save();
 
             $tempThumbnail->delete();
         }
@@ -138,12 +129,7 @@ class SeriesController extends Controller
         // Update the series
         $series->update($formFields);
 
-
-
-        // Redirect to the series page
-        // return redirect()->route('series.show', $series->id);
-
-        return redirect()->route('dashboard');
+        return redirect()->back();
     }
 
     // Delete the series

@@ -75,6 +75,15 @@ class Element extends Model
         return $this->morphTo('elementType', 'derived_element_type', 'derived_element_id');
     }
 
+    public function getRecentsFormattedEntry()
+    {
+        return [
+            'title' => $this->element_name,
+            'thumbnail' => $this->element_thumbnail,
+            'link' => route('elements.show', $this->element_id),
+        ];
+    }
+
     public function scopeFilter($query, array $filters)
     {
         // dd($query);

@@ -7,11 +7,11 @@
             </span>
 
             <div>
-                Delete <span class="text-red-300">{{ props.universe.universe_name }}</span>?
+                Delete <span class="text-red-300">{{ props.content.content_name }}</span>?
             </div>
 
             <div>
-                Do you really want to delete this universe? This action cannot be undone.
+                Do you really want to delete this content? This action cannot be undone.
             </div>
 
             <div class="flex justify-end gap-16">
@@ -39,7 +39,10 @@ function close() {
 const modal = ref(null)
 
 const props = defineProps({
-    universe: {
+    type: {
+        type: String,
+    },
+    content: {
         type: Object,
     },
 })
@@ -50,7 +53,7 @@ onClickOutside(modal, () => {
 
 function submit() {
 
-    router.delete(route('universes.destroy', props.universe.universe_id), {
+    router.delete(route(props.type + '.destroy', props.content.content_id), {
         onSuccess: () => {
             console.log('closing...')
             close()

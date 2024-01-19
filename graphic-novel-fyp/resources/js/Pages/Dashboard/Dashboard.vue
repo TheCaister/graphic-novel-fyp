@@ -5,11 +5,10 @@ import SeriesView from './Series/SeriesView.vue';
 import ChapterView from './Chapter/ChapterView.vue';
 import PageView from './Page/PageView.vue';
 import ElementView from './Element/ElementView.vue';
+import RecentsList from './RecentsList.vue';
 import TabsWrapper from './TabsWrapper.vue';
 import Tab from './Tab.vue';
 import { ref, defineProps, onMounted, computed, provide } from 'vue'
-import APICalls from '@/Utilities/APICalls';
-
 
 const props = defineProps({
     dashboardViewType: {
@@ -23,6 +22,7 @@ const props = defineProps({
 
 const dashboardView = ref(props.dashboardViewType)
 const parentContentIdNumber = ref(props.parentContentId)
+const size = ref(0)
 
 const DashboardViewComponent = computed(() => {
     // Switch statement to return the correct dashboard view
@@ -55,6 +55,11 @@ function updateDashboard(dashboardViewString, parentContentId) {
 
 function goBack() {
     router.visit(route('content.get-parent', { type: dashboardView.value, id: parentContentIdNumber.value }))
+}
+
+function updateSize(event) {
+    console.log('successfully updated element list size')
+    size.value = event
 }
 </script>
 
@@ -89,28 +94,36 @@ function goBack() {
         </div>
     </div>
 
-    <div>
+    <div class="flex">
 
-        <TabsWrapper class="text-4xl font-bold text-white flex flex-wrap ">
+        <TabsWrapper class="text-4xl font-bold text-white flex flex-wrap w-4/5 " :size="size">
             <Tab title="Content">
                 <KeepAlive>
-                    <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber"
-                        @updateDashboard="updateDashboard" />
+
+
+
+                    <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber" />
+
                 </KeepAlive>
+
+                <!-- <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber"
+                            @updateDashboard="updateDashboard" /> -->
             </Tab>
 
-            <Tab v-if="dashboardView != 'UniverseView'" title="Elements">
+            <Tab v-if="dashboardView != 'UniverseView'" title="Elements" listSize="-1" @updateSize="updateSize"
+                v-slot="{ update }">
                 <KeepAlive>
-                    <ElementView />
+                    <ElementView @updateSize="update" />
                 </KeepAlive>
             </Tab>
-            
 
-            <!-- Testing -->
-           
         </TabsWrapper>
 
-     
+        <RecentsList class="w-1/5">
+
+        </RecentsList>
+
+
     </div>
 </template>
 

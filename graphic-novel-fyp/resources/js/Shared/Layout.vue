@@ -14,6 +14,8 @@
         <link rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
     </Head>
 
     <div class="bg-gray-100 dark:bg-gray-900 min-h-screen">
@@ -59,29 +61,10 @@
                         class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
                     Log Out</Link>
 
-                    <!-- <Link> -->
                         <Avatar
                         src='https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg' :link="route('profile.edit')" />
-
-                    <!-- </Link> -->
                  
                 </div>
-
-
-
-
-
-                <!-- <Link :href="route('home')">
-            <img src="/assets/black_page.jpg" alt="" width="50" height="50">
-            </Link>
-
-            
-            <Link href="/user/main" class="ml-auto">
-            <div class="flex items-center ml-4">
-                <img src="/assets/black_page.jpg" alt="" width="50" height="50">
-                <span class="ml-2">{{ username }}</span>
-            </div>
-            </Link> -->
 
             </header>
         </section>
@@ -106,7 +89,7 @@
 </style>
 
 <script setup>
-import { useForm, router } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 
 const form = useForm({
     search: '',
@@ -124,9 +107,6 @@ function search() {
                 form.search = ''
             }
         })
-
-        
-
     }
 }
 </script>

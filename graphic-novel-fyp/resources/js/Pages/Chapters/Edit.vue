@@ -229,7 +229,6 @@ export default {
 
                 // if item doesn't have a serverId, set this.pageToBeDeleted to empty string
                 // console.log(item.serverId)
-
                 this.pageToBeDeleted = item.serverId;
 
                 // resolve with true to remove item from pond

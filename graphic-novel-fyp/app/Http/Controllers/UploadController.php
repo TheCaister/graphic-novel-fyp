@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\TemporaryFile;
-use App\Models\Universe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -56,70 +55,46 @@ class UploadController extends Controller
         return 'nope';
     }
 
-    public function deleteUniverseThumbnail(string $serverId, Request $request)
+    public function deleteThumbnail()
     {
-        // dd($request->getContent());
-        if ($request->isTemp == 'false') {
-            $universe = Universe::where('universe_id', $request->universeId)->first();
-            $universe->clearMediaCollection('universe_thumbnail');
-            $universe->save();
-        }
-        else {
+        if (request()->isTemp == 'false') {
+            $this->clearMediaCollection(request()->contentType, request()->contentId);
+        } else {
+            $temporaryFile = TemporaryFile::where('folder', request()->serverId)->first();
 
-            // Get the temporary file
-            $temporaryFile = TemporaryFile::where('folder', $serverId)->first();
+            // dd($temporaryFile);
 
             if ($temporaryFile) {
-                // Get full path of the file
-                $fullPath = $temporaryFile->getFullPath('universe_thumbnail');
+                $fullPath = $temporaryFile->getFullPath($this->getClassName(request()->contentType)::getThumbnailCollectionName());
+
+                // If contentType is Page, set fullpath to $temporaryFile->getFullPath('pages');
+                if (request()->contentType == 'Page') {
+                    $fullPath = $temporaryFile->getFullPath('pages');
+                }
 
                 if (Storage::disk('public')->exists($fullPath)) {
                     Storage::disk('public')->delete($fullPath);
                 }
             }
 
-            // Delete the temporary file from the database
             $temporaryFile->delete();
         }
     }
 
-    public function deleteSeriesThumbnail(string $serverId)
+    private function clearMediaCollection($contentType, $contentId)
     {
-        // Get the temporary file
-        $temporaryFile = TemporaryFile::where('folder', $serverId)->first();
 
-        if ($temporaryFile) {
-            // Get full path of the file
-            $fullPath = $temporaryFile->getFullPath('series_thumbnail');
+        $content = $this->getClassName($contentType)::find($contentId);
 
+        $content->clearMediaCollection($this->getClassName($contentType)::getThumbnailCollectionName());
 
-            if (Storage::disk('public')->exists($fullPath)) {
-                Storage::disk('public')->delete($fullPath);
-            }
+        if ($contentType == 'Page') {
+            $content->delete();
+        } else {
+            $content->clearThumbnail();
+            $content->save();
         }
-
-        // Delete the temporary file from the database
-        $temporaryFile->delete();
     }
-
-    public function deleteChapterThumbnail(string $serverId)
-    {
-        // Get the temporary file
-        $temporaryFile = TemporaryFile::where('folder', $serverId)->first();
-
-        if ($temporaryFile) {
-            // Get full path of the file
-            $fullPath = $temporaryFile->getFullPath('chapter_thumbnail');
-
-            if (Storage::disk('public')->exists($fullPath)) {
-                Storage::disk('public')->delete($fullPath);
-            }
-        }
-
-        // Delete the temporary file from the database
-        $temporaryFile->delete();
-    }
-
 
     public function deletePageImage(Request $request)
     {
@@ -144,5 +119,10 @@ class UploadController extends Controller
 
         // Delete the temporary file from the database
         $temporaryFile->delete();
+    }
+
+    private function getClassName($contentType)
+    {
+        return 'App\\Models\\' . $contentType;
     }
 }

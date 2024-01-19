@@ -4,7 +4,6 @@ export default {
     getPagesByChapterId(chapterId) {
         return axios.get('/api/chapters/' + chapterId + '/pages')
     },
-  
 
     getUniversesByUserId(userId, withSeries = false) {
         const withSeriesBool = withSeries ? 1 : 0
@@ -22,9 +21,7 @@ export default {
     getChaptersBySeriesId(seriesId) {
         return axios.get('/api/series/' + seriesId + '/chapters')
     },
-    getPagesByChapterId(chapterId) {
-        return axios.get('/api/chapters/' + chapterId + '/pages')
-    },
+  
     getSeriesByGenre(genre) {
         return axios.get('/api/series/genres', {
             params: {
@@ -90,5 +87,15 @@ export default {
                 limit: limit,
             }
         })
+    },
+    getRecents(limit){
+        return axios.get('/api/recents', {
+            params: {
+                limit: limit,
+            }
+        })
+    },
+    getFilepondPages(chapterId){
+        return axios.get('/api/chapters/' + chapterId + '/filepond-pages')
     }
 }

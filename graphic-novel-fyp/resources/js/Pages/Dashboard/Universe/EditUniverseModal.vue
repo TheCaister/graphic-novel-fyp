@@ -18,7 +18,7 @@ import axios from 'axios';
 
 const emit = defineEmits(['closeModal'])
 function close() {
-    deleteMedia();
+    deleteTempThumbnail();
     emit('closeModal');
 };
 
@@ -64,36 +64,40 @@ function handleFilePondThumbnailRemove(error, file) {
     form.upload = '';
 }
 
-function deleteMedia() {
+function deleteTempThumbnail() {
 
     if (form.upload) {
-        axios.delete('/api/universes/' + form.upload + '/thumbnail').catch(error => {
+
+        axios.delete(route('delete-thumbnail', {
+            isTemp: "true",
+            contentType: "Universe",
+            serverId: form.upload,
+        })).catch(error => {
             console.log(error);
         });
     }
 }
 
 function deleteExistingThumbnail() {
-    if (props.universe.media && props.universe.media.length > 0) {
-        axios.delete('/api/universes/-1/thumbnail', {
-            params: {
-                isTemp: "false",
-                universeId: props.universe.universe_id,
-            }
-        }).catch(error => {
+    // if (props.universe.media && props.universe.media.length > 0) {
+    if (props.universe.thumbnail !== '') {
+        axios.delete(route('delete-thumbnail', {
+            isTemp: "false",
+            contentType: "Universe",
+            contentId: props.universe.universe_id,
+        })).catch(error => {
             console.log(error);
         });
     }
 }
 
 onMounted(() => {
+    console.log(props.universe)
     form.universe_name = props.universe.universe_name
 })
 
 const files = computed(() => {
-
-    if (props.universe.media && props.universe.media.length > 0) {
-
+    if (props.universe.thumbnail !== '') {
         return [
             {
                 source: props.universe.thumbnail.replace('http://localhost', ''),
@@ -111,6 +115,9 @@ const files = computed(() => {
 <template>
     <div>
         <div ref="modal" class="text-lg bg-black shadow-lg rounded-lg p-8 w-4/5">
+            <button class="text-white" @click="deleteExistingThumbnail">
+                Delete thumbnail
+            </button>
             <h2 class="text-4xl font-bold text-white ">Edit Universe</h2>
             <form @submit.prevent="submit">
                 <div class="flex">
@@ -125,7 +132,7 @@ const files = computed(() => {
                                     url: '/upload?media=universe_thumbnail',
                                 },
                                 revert: {
-                                    url: '/api/universes/' + this.form.upload + '/thumbnail?isTemp=true',
+                                    url: '/api/thumbnail?contentType=Universe&serverId=' + form.upload + '&isTemp=true',
                                 },
                                 load: {
                                     url: '/',

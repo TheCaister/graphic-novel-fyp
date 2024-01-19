@@ -1,43 +1,20 @@
 <template>
-    <div v-if="elementsLoaded" class="w-full flex flex-wrap">
-        <div v-for="element in elements" :key="element.element_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
+    <div v-if="elementsLoaded" class="w-full flex flex-wrap  justify-center">
+        <div v-for="element in elements" :key="element.element_id" class=" w-96 mx-8 mb-4">
 
-            <div class="relative">
-                <Link :href='route("elements.edit", {element: element.element_id, content_type: getParentContentType(), content_id: parentContentId})' class="h-full flex items-center">
-                    <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
-                        <img v-if="element.element_thumbnail" :src="element.element_thumbnail" alt="Element Image"
-                            class="w-full h-full rounded-lg" />
-                        <div v-else class="text-white text-xl flex items-center">E{{ element.element_id }}</div>
-                    </div>
-                </Link>
-
-                <!-- Create a button on the top right corner -->
-                <button class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
-                    <span class="material-symbols-outlined dark">
-                        pending
-
-
-                    </span>
-                    <DashboardDropdownMenu class="absolute z-40" :events="dropDownMenuOptions"
-                        @click="switchSelectedContent(element.element_id);" @menuItemClick="handleMenuItemClicked" />
-                </button>
-            </div>
-
-            <p class="text-white pt-4">{{ element.element_name }}</p>
+            <content-card-detailed :content="{
+                content_id: element.element_id,
+                content_name: element.element_name,
+                subheading: element.derived_element_type,
+                description: '',
+                thumbnail: element.element_thumbnail,
+            }"
+                :link='route("elements.edit", { element: element.element_id, content_type: getParentContentType(), content_id: parentContentId })'
+                :selected="element.element_id === selectedElement.element_id" :drop-down-menu-options="dropDownMenuOptions"
+                @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked" />
         </div>
 
-        <button @click="isCreateModalOpen = true" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
-            <div class="w-full h-64 flex items-center justify-center rounded-lg">
-
-                <span class="material-symbols-outlined dark"
-                    style="font-size: 10rem; font-variation-settings: 'wght' 100; color: #f9a8d4;">
-                    add_circle
-
-
-                </span>
-            </div>
-            <p class="text-white pt-4 text-center">Create Element</p>
-        </button>
+        <add-button @click="isCreateModalOpen = true" label="Create Element" class="w-96" />
 
     </div>
     <div v-else>
@@ -52,6 +29,13 @@
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
+        <Transition name="modal" class="z-50">
+            <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()" :content="{
+                content_id: selectedElement.element_id,
+                content_name: selectedElement.element_name,
+            }" type="series" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+        </Transition>
+
     </Teleport>
 </template>
 
@@ -59,12 +43,12 @@
 
 import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
-import { usePage } from '@inertiajs/vue3';
-import { ref, inject } from 'vue';
-import DashboardDropdownMenu from '../DashboardDropdownMenu.vue'
+import { ref, inject, defineEmits } from 'vue';
+import ContentCardDetailed from '../ContentCardDetailed.vue';
 import CreateElementModal from './CreateElementModal.vue'
-
-const page = usePage();
+import DeleteModal from '../DeleteModal.vue'
+import AddButton from '../AddButton.vue'
+import { router } from '@inertiajs/vue3'
 
 const dashboardView = inject('dashboardView')
 const parentContentId = inject('parentContentId')
@@ -80,11 +64,12 @@ const selectedElement = ref({ element_id: 0, element_name: "" })
 
 const dropDownMenuOptions = [
     { id: 1, text: "Edit", eventName: "edit" },
-    { id: 2, text: "View Assigned Content", eventName: "viewElements" },
+    { id: 2, text: "View Assigned Content", eventName: "viewAssignedContent" },
     { id: 3, text: "Related Elements", eventName: "relatedElements" },
     { id: 4, text: "Assign Element", eventName: "assignElement" },
-    { id: 5, text: "Delete", eventName: "delete" },
-]
+    { id: 5, text: "Delete", eventName: "delete" },]
+
+const emits = defineEmits(['updateSize'])
 
 onActivated(async () => {
     updateContentList()
@@ -99,10 +84,12 @@ function updateContentList() {
     APICalls.getElements(getParentContentType(), parentContentId).then(response => {
         elements.value = response.data
         elementsLoaded.value = true
+
+        emits('updateSize', elements.value.length)
     }).catch(error => console.log(error))
 }
 
-function getParentContentType(){
+function getParentContentType() {
     switch (dashboardView) {
         case 'UniverseView':
             return ''
@@ -119,9 +106,20 @@ function getParentContentType(){
 }
 
 function handleMenuItemClicked(eventName) {
+    console.log('handleMenuItemClicked: ' + eventName)
     // switch
     switch (eventName) {
-        case "viewElements":
+        case "edit":
+            
+            // route("elements.edit", { element: selectedElement.value.element_id, content_type: getParentContentType(), content_id: parentContentId })
+            console.log('going to edit...')
+            router.visit(route("elements.edit", { element: selectedElement.value.element_id, content_type: getParentContentType(), content_id: parentContentId }))
+            break;
+        case "viewAssignedContent":
+            break;
+        case "relatedElements":
+            break;
+        case "assignElement":
             break;
         case "delete":
             isDeleteModalOpen.value = true

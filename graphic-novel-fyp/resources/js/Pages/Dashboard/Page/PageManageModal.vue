@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-<template>
-    </template>
-=======
 <script setup>
 import { onClickOutside } from '@vueuse/core'
 import { ref, inject, onMounted, computed } from 'vue'
@@ -15,7 +11,6 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import axios from 'axios';
-import APICalls from '@/Utilities/APICalls';
 
 const emit = defineEmits(['closeModal', 'createElement'])
 
@@ -37,7 +32,6 @@ const props = defineProps({
     page: {
         type: Object,
     },
-    
 })
 
 
@@ -96,17 +90,12 @@ function deleteExistingThumbnail() {
 }
 
 onMounted(() => {
+    console.log(props.page)
     // form.universe_name = props.universe.universe_name
-
-    APICalls.getElements('pages', props.page.page_id).then(response => {
-        elements.value = response.data
-        console.log(elements.value)
-    }).catch(error => console.log(error))
 })
 
 const files = computed(() => {
-    console.log(props.page)
-    if (props.page.page_image !== null || props.page.page_image !== '') {
+    if (props.page.page_image !== '') {
         return [
             {
                 source: props.page.page_image.replace('http://localhost', ''),
@@ -201,16 +190,8 @@ function handleCreateElementButtonClicked() {
                     </div>
 
                     <!-- v-for here... -->
-                    <div class="flex flex-col h-full px-1 my-4 overflow-auto">
+                    <div>
 
-                        <div v-for="element in elements" :key="element.element_id" class="flex flex-col items-center">
-                            <div>
-                                <img :src="element.element_thumbnail" alt="element.element_name" class="w-32 h-32 bg-pink-500 rounded-lg">
-                            </div>
-                            <div>
-                                {{ element.element_name ? element.element_name : 'no name' }}
-                            </div>
-                        </div>
                     </div>
 
                     <button @click="handleCreateElementButtonClicked" class="bg-pink-500 rounded-lg">
@@ -221,4 +202,3 @@ function handleCreateElementButtonClicked() {
         </div>
     </div>
 </template>
->>>>>>> Stashed changes

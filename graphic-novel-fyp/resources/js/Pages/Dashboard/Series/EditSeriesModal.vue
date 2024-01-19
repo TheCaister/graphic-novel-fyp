@@ -3,7 +3,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { onClickOutside } from '@vueuse/core'
-import { ref, onMounted, defineProps } from 'vue'
+import { ref, onMounted, defineProps, computed } from 'vue'
 import APICalls from '@/Utilities/APICalls';
 
 import { useForm } from '@inertiajs/vue3';
@@ -32,7 +32,6 @@ const FilePond = vueFilePond(
 const modal = ref(null)
 
 const form = useForm({
-    universe_id: '',
     series_title: '',
     series_summary: '',
     series_genre: '',
@@ -43,10 +42,25 @@ const genres = ref([
 ])
 
 const props = defineProps({
-    parentContentIdNumber: {
-        type: Number,
-        required: true
+    series: {
+        type: Object,
     },
+})
+
+const files = computed(() => {
+
+    if (props.series.series_thumbnail !== '') {
+
+        return [
+            {
+                source: props.series.series_thumbnail.replace('http://localhost', ''),
+                options: {
+                    type: 'local',
+                },
+            },
+        ]
+    }
+    return [];
 })
 
 onClickOutside(modal, () => {
@@ -54,12 +68,9 @@ onClickOutside(modal, () => {
 })
 
 function submit() {
-    form.universe_id = props.parentContentIdNumber
-
-    form.post(route('series.store'), {
+    form.put(route('series.update', props.series.series_id), {
         onFinish: () => {
             form.upload = '';
-            // console.log(form.universe_name)
             close()
         }
     });
@@ -67,22 +78,39 @@ function submit() {
 
 function deleteTempThumbnail() {
 
-if (form.upload) {
+    if (form.upload) {
 
-    axios.delete(route('delete-thumbnail', {
-        isTemp: "true",
-        contentType: "Series",
-        serverId: form.upload,
-    })).catch(error => {
-        console.log(error);
-    });
+        axios.delete(route('delete-thumbnail', {
+            isTemp: "true",
+            contentType: "Series",
+            serverId: form.upload,
+        })).catch(error => {
+            console.log(error);
+        });
+    }
 }
+
+function deleteExistingThumbnail() {
+    if (props.series.series_thumbnail !== '') {
+        axios.delete(route('delete-thumbnail', {
+            isTemp: "false",
+            contentType: "Series",
+            contentId: props.series.series_id,
+        })).catch(error => {
+            console.log(error);
+        });
+    }
 }
 
 onMounted(() => {
     APICalls.getAllGenres().then(response => {
         genres.value = response.data
     }).catch(error => console.log(error))
+
+    form.series_title = props.series.series_title
+    form.series_summary = props.series.series_summary
+    form.series_genre = props.series.series_genre
+    console.log(props.series)
 }
 )
 
@@ -101,25 +129,31 @@ function handleFilePondThumbnailRemove(error, file) {
 <template>
     <div>
         <div ref="modal" class="text-lg bg-black shadow-lg rounded-lg p-8 w-4/5">
-            <h2 class="text-4xl font-bold text-white ">Create Series</h2>
+            <h2 class="text-4xl font-bold text-white ">Edit Series</h2>
             <form @submit.prevent="submit">
                 <div class="flex">
 
                     <div class="w-1/2">
                         <Label>Series Thumbnail</Label>
-
                         <file-pond name="upload" label-idle="Series Thumbnail" accepted-file-types="image/jpeg, image/png"
-                            @processfile="handleFilePondThumbnailProcess" @removefile="handleFilePondThumbnailRemove"
-                          
-                            :server="{
+                            :files="files" @processfile="handleFilePondThumbnailProcess"
+                            @removefile="handleFilePondThumbnailRemove" :server="{
                                 process: {
                                     url: '/upload?media=series_thumbnail',
                                 },
                                 revert: {
-                                    url: '/api/series/' + form.upload + '/thumbnail',
+                                    url: '/api/thumbnail?contentType=Series&serverId=' + form.upload + '&isTemp=true',
+                                },
+                                load: {
+                                    url: '/',
                                 },
                                 headers: {
                                     'X-CSRF-TOKEN': csrfToken
+                                },
+                                remove: (source, load, error) => {
+                                    deleteExistingThumbnail();
+
+                                    load();
                                 }
                             }" />
                     </div>
@@ -165,7 +199,7 @@ function handleFilePondThumbnailRemove(error, file) {
                             </button>
                             <PrimaryButton type="submit"
                                 class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                Create
+                                Save
                             </PrimaryButton>
                         </div>
                     </div>

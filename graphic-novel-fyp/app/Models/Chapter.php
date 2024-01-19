@@ -66,7 +66,7 @@ class Chapter extends Model implements HasMedia
     function delete()
     {
         $this->pages()->delete();
-        $this->elements()->delete();
+        // $this->elements()->delete();
         parent::delete();
     }
 
@@ -77,5 +77,21 @@ class Chapter extends Model implements HasMedia
     public function name(): string
     {
         return $this->chapter_title;
+    }
+
+    public function getRecentsFormattedEntry(){
+        return [
+            'title' => $this->chapter_title,
+            'thumbnail' => $this->chapter_thumbnail,
+            'link' => route('chapters.show', $this->chapter_id),
+        ];
+    }
+
+    public static function getThumbnailCollectionName(){
+        return 'chapter_thumbnail';
+    }
+
+    public function clearThumbnail(){
+        $this->chapter_thumbnail = null;
     }
 }

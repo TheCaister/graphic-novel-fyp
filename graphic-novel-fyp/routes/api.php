@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\UniverseController;
+use App\Http\Controllers\UploadController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +37,8 @@ Route::get('/series/genres', [App\Http\Controllers\SeriesController::class, 'get
 
 Route::get('/series/recent', [App\Http\Controllers\SeriesController::class, 'getRecentSeries'])->name('series.get-recent-series');
 
+Route::get('/recents', [SearchController::class, 'getRecent'])->name('search.get-recent');
+
 Route::get('/series/{series}/chapters', [App\Http\Controllers\SeriesController::class, 'getSeriesChapters'])->name('chapters.get-series-chapters');
 
 Route::get('/series/{universe}', [App\Http\Controllers\SeriesController::class, 'getSeries'])->name('series.get-series');
@@ -42,7 +46,7 @@ Route::get('/series/{universe}', [App\Http\Controllers\SeriesController::class, 
 Route::get('chapters/{chapter}/pages', [PageController::class, 'getChapterPages'])->name('pages.get-chapter-pages');
 
 
-
+Route::get('/chapters/{chapter}/filepond-pages', [ChapterController::class, 'getChapterFilepondPages'])->name('chapters.get-chapter-filepond-pages');
 
 
 
@@ -50,6 +54,8 @@ Route::get('chapters/{chapter}/pages', [PageController::class, 'getChapterPages'
 Route::get('/genres', [SeriesController::class, 'getGenres'])->name('series.get-genres');
 
 Route::get('/elements', [App\Http\Controllers\ElementController::class, 'getElements'])->name('elements.get-elements');
+
+Route::delete('/thumbnail',[ UploadController::class, 'deleteThumbnail'])->name('delete-thumbnail');
 
 Route::delete('/universes/{serverId}/thumbnail', [App\Http\Controllers\UploadController::class, 'deleteUniverseThumbnail'])->name('universes.delete-thumbnail');
 

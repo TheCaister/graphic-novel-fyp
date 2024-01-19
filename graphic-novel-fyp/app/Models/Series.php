@@ -73,11 +73,29 @@ class Series extends Model implements HasMedia
         return $this->series_title;
     }
 
+    public function getRecentsFormattedEntry()
+    {
+        return [
+            'title' => $this->series_title,
+            'thumbnail' => $this->series_thumbnail,
+            'link' => route('series.show', $this->series_id),
+        ];
+    }
+
+    public static function getThumbnailCollectionName()
+    {
+        return 'series_thumbnail';
+    }
+
     function delete()
     {
         $this->chapters()->delete();
-        $this->elements()->delete();
+        // $this->elements()->delete();
 
         parent::delete();
+    }
+
+    public function clearThumbnail(){
+        $this->series_thumbnail = null;
     }
 }

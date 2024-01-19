@@ -3,6 +3,18 @@ import { onClickOutside } from '@vueuse/core'
 import { ref, inject, onMounted, computed } from 'vue'
 import { useForm } from '@inertiajs/vue3';
 
+const props = defineProps({
+    parentContentId: {
+        type: Number,
+        default: null
+    },
+    parentContentType: {
+        type: String,
+        default: null
+    },
+
+})
+
 const emit = defineEmits(['closeModal'])
 function close() {
     emit('closeModal');
@@ -29,8 +41,18 @@ const form = useForm({
 const submit = (elementType) => {
     // console.log(parentContentType)
     form.elementType = elementType;
-    form.contentType = getParentContentType();
-    form.contentId = parentContentId;
+
+    // If we pass in the props, use those, otherwise use the injects
+    if (props.parentContentId && props.parentContentType) {
+        form.contentType = props.parentContentType;
+        form.contentId = props.parentContentId;
+    }
+    else{
+        form.contentType = getParentContentType();
+        form.contentId = parentContentId;
+    }
+
+    
     form.post(route('elements.store'), {
         onFinish: () => {
             form.reset();

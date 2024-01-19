@@ -19,7 +19,7 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
 const emit = defineEmits(['closeModal'])
 function close() {
-    deleteMedia();
+    deleteTempThumbnail();
     emit('closeModal');
 };
 
@@ -36,6 +36,7 @@ const form = useForm({
 });
 
 onClickOutside(modal, () => {
+    console.log('you have clicked outside')
     close()
 })
 
@@ -59,13 +60,18 @@ function handleFilePondThumbnailRemove(error, file) {
     form.upload = '';
 }
 
-function deleteMedia() {
-    
-    if (form.upload) {
-        axios.delete('/api/universes/' + form.upload + '/thumbnail').catch(error => {
-            console.log(error);
-        });
-    }
+function deleteTempThumbnail() {
+
+if (form.upload) {
+
+    axios.delete(route('delete-thumbnail', {
+        isTemp: "true",
+        contentType: "Universe",
+        serverId: form.upload,
+    })).catch(error => {
+        console.log(error);
+    });
+}
 }
 </script>
 
@@ -87,7 +93,7 @@ function deleteMedia() {
                                     url: '/upload?media=universe_thumbnail',
                                 },
                                 revert: {
-                                    url: '/api/universes/' + form.upload + '/thumbnail',
+                                    url: '/api/thumbnail?contentType=Universe&serverId=' + form.upload + '&isTemp=true',
                                 },
                                 headers: {
                                     'X-CSRF-TOKEN': csrfToken
