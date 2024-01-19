@@ -98,11 +98,44 @@ class Element extends Model
         });
     }
 
-    public function scopeOwnedByUsers($query, array $userIds)
+    public function scopeElementType($query, $elementType)
     {
-        return $query->whereHas('elementable.page.chapter.series.universe', function ($query) use ($userIds) {
-            $query->whereIn('user_id', $userIds);
+        $query->where('derived_element_type', $elementType);
+    }
+
+    // WORK IN PROGRESS
+    // WILL RECEIVE LIST OF AUTHORS AS WELL AS WHETHER TO INCLUDE OR EXCLUDE
+    public function scopeAuthors($query, $authors)
+    {
+        $query->whereHas('owner', function ($query) use ($authors) {
+            $query->whereIn('username', $authors);
         });
     }
 
+    // WIP
+    // MIGHT NEED TO SWAP OUT WITH ELEMENT_ID
+    // MIGHT HAVE TO LOOK INTO CONTAINER ELEMENTS TABLE
+    public function scopeIncludedElements($query, $includedElements)
+    {
+        $query->whereHas('elementType', function ($query) use ($includedElements) {
+            $query->whereIn('element_name', $includedElements);
+        });
+    }
+
+    // WORK IN PROGRESS
+    // RECEIVES A CONTENT WHETHER IT BE A SERIES, CHAPTER, OR PAGE
+    // MUST SOMEHOW EXCLUDE ELEMENTS THAT COME BEFORE THE CONTENT
+    // IF IT'S A SERIES, MUST BE THE SAME SERIES IF USING IN CONJUNCTION WITH SCOPEPRESENTTO
+    public function scopePresentFrom($query, $presentFrom)
+    {
+        $query->where('created_at', '>=', $presentFrom);
+    }
+
+    // WORK IN PROGRESS
+    // RECEIVES A CONTENT WHETHER IT BE A SERIES, CHAPTER, OR PAGE
+    // MUST SOMEHOW EXCLUDE ELEMENTS THAT COME AFTER THE CONTENT
+    public function scopePresentTo($query, $presentTo)
+    {
+        $query->where('created_at', '<=', $presentTo);
+    }
 }

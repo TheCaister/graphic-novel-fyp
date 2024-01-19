@@ -80,13 +80,16 @@ class SearchController extends Controller
         //     ->toArray();
         // dd($elements);
 
-        dd($user->elementsThroughUniverse()->get()
-        ->concat($user->elementsThroughSeries()->get())
-        ->concat($user->elementsThroughChapter()->get())
-        ->concat($user->elementsThroughPage()->get())
-        ->unique());
+        dd($user->elementsThroughUniverse()->get()->unique());
 
-        $resultsList = Element::latest()->filter(request(['search']))->ownedByUsers([request()->userId])->limit(request()->limit)->get();
+        // $resultsList = Element::latest()->filter(request(['search']))->ownedByUsers([request()->userId])->limit(request()->limit)->get();
+
+        $resultsList = $user->elementsThroughUniverse()->filter(request(['search']))->limit(request()->limit)->get();
+
+        // Depending on whether to include parent and child elements, concat the results with the parent and child elements
+        // The most straightforward approach would be to get a list of all the elements, create another list of parent elements and child elements, then concat the results
+        // When including query in parent, for example, if your search is 'Johnny', you'll get a Johnny element, and perhaps a MindMap element that contains Johnny
+        // On the other hand, if you search for 'Relationships', you'll get a Relationships element, and all the elements that are contained within it
 
         // dd($resultsList);
 
