@@ -75,6 +75,11 @@ class Element extends Model
         return $this->morphTo('elementType', 'derived_element_type', 'derived_element_id');
     }
 
+    public function elementable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
     public function getRecentsFormattedEntry()
     {
         return [
@@ -92,4 +97,12 @@ class Element extends Model
                 ->orWhereRaw("LOWER(content) LIKE CONCAT('%', LOWER(?), '%')", [$search]);
         });
     }
+
+    public function scopeOwnedByUsers($query, array $userIds)
+    {
+        return $query->whereHas('elementable.page.chapter.series.universe', function ($query) use ($userIds) {
+            $query->whereIn('user_id', $userIds);
+        });
+    }
+
 }

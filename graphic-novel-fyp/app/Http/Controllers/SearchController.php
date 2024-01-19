@@ -71,12 +71,11 @@ class SearchController extends Controller
     {
         $resultsList = [];
 
-        // search for elements
-        if (request()->limit) {
-            $resultsList = Element::latest()->filter(request(['search']))->limit(request()->limit)->get();
-        } else {
-            $resultsList = Element::latest()->filter(request(['search']))->get();
-        }
+        $user = User::find(request()->userId);
+
+        dd($user->series);
+
+        $resultsList = Element::latest()->filter(request(['search']))->ownedByUsers([request()->userId])->limit(request()->limit)->get();
 
         // dd($resultsList);
 
@@ -90,10 +89,6 @@ class SearchController extends Controller
         // from request()->userid, get the user
         $user = User::find(request()->userId);
 
-        // dd($user);
-
-        // print the current auth user
-
         $resultsList = User::latest()->filter(request(['search']))->hasUniverse(request()->hasUniverse)->limit(request()->limit)->get();
 
         return $resultsList;
@@ -101,15 +96,11 @@ class SearchController extends Controller
 
     private function searchContent()
     {
+
+        $user = User::find(request()->userId);
+
         $resultsList = [];
-
-
-        // search for content
-        if (request()->limit) {
-            $resultsList = Element::latest()->filter(request(['search']))->limit(request()->limit)->get();
-        } else {
-            $resultsList = Element::latest()->filter(request(['search']))->get();
-        }
+        $resultsList = Element::latest()->filter(request(['search']))->limit(request()->limit)->get();
 
         // dd($resultsList);
 
