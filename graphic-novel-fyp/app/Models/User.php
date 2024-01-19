@@ -7,8 +7,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+// use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+
 class User extends Authenticatable
 {
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
     use HasFactory;
 
     /**
@@ -53,10 +56,10 @@ class User extends Authenticatable
         return $this->hasMany(Universe::class, 'owner_id', 'id');
     }
 
-    public function elements(): HasMany
-    {
-        return $this->hasMany(Element::class, 'owner_id', 'id');
-    }
+    // public function elements(): HasMany
+    // {
+    //     return $this->hasMany(Element::class, 'owner_id', 'id');
+    // }
 
     public function moderatableUniverses(): MorphToMany
     {
@@ -67,6 +70,34 @@ class User extends Authenticatable
     {
         return $this->morphedByMany(Series::class, 'moderatable', 'approved_moderators', 'moderator_id', 'moderatable_id', 'id', 'series_id');
     }
+
+    public function elements()
+    {
+        // return $this->hasManyDeep(
+        //     Element::class,
+        //     [Universe::class, Series::class, Chapter::class, Page::class],
+        //     [
+        //         'owner_id',
+        //         'universe_id',
+        //         'series_id',
+        //         'chapter_id',
+        //     ],
+        //     [
+        //         'id',
+        //         'universe_id',
+        //         'series_id',
+        //         'chapter_id',
+        //     ]
+        // );
+
+        return $this->hasManyDeep(
+            Element::class,
+            [User::class, Universe::class, Series::class, Chapter::class, Page::class, 'elementables'],
+            ['id', 'owner_id', 'universe_id', 'series_id', 'chapter_id', 'elementable_id', 'element_id'],
+            [null, null, null, null, null, 'page_id', 'element_i']
+        );
+    }
+
 
     public function delete()
     {
@@ -85,11 +116,11 @@ class User extends Authenticatable
 
     public function scopeHasUniverse($query, $hasUniverse)
     {
-       
+
         if ($hasUniverse != null) {
             // $query->has('universes');
 
-            if($hasUniverse == 'true') {
+            if ($hasUniverse == 'true') {
                 $query->has('universes');
             } else {
                 $query->doesntHave('universes');

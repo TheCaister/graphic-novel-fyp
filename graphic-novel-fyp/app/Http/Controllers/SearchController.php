@@ -73,7 +73,7 @@ class SearchController extends Controller
 
         $user = User::find(request()->userId);
 
-        dd($user->series);
+        dd($user->elements);
 
         $resultsList = Element::latest()->filter(request(['search']))->ownedByUsers([request()->userId])->limit(request()->limit)->get();
 
