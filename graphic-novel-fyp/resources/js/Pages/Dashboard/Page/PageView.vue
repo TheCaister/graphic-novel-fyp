@@ -22,7 +22,7 @@
                                     v-if="selectedPage.page_id === page.page_id && isCardMenuOpen === true"
                                     class="absolute z-50" :events="dropDownMenuOptions"
                                     @menuItemClick="handleMenuItemClicked" @closeMenu="isCardMenuOpen = false"
-                                    @click.stop/>
+                                    @click.stop />
                             </Transition>
                         </button>
                     </div>
@@ -43,12 +43,14 @@
 
     <Teleport to="body">
         <Transition name="modal">
-            <page-manage-modal v-if="isPageManageOpen" @closeModal="isPageManageOpen = false; updateContentList()" @createElement="isCreateElementOpen = true"
+            <page-manage-modal v-if="isPageManageOpen" @closeModal="isPageManageOpen = false; updateContentList()"
+                @createElement="isCreateElementOpen = true"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" :page="selectedPage" />
         </Transition>
 
         <Transition name="modal" class="z-50">
             <create-element-modal v-if="isCreateElementOpen" @closeModal="isCreateElementOpen = false"
+                :parent-content-id="selectedPage.page_id" parent-content-type="pages"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
