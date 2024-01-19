@@ -71,31 +71,60 @@ class User extends Authenticatable
         return $this->morphedByMany(Series::class, 'moderatable', 'approved_moderators', 'moderator_id', 'moderatable_id', 'id', 'series_id');
     }
 
-    public function elements()
+    public function elementsThroughUniverse()
     {
-        // return $this->hasManyDeep(
-        //     Element::class,
-        //     [Universe::class, Series::class, Chapter::class, Page::class],
-        //     [
-        //         'owner_id',
-        //         'universe_id',
-        //         'series_id',
-        //         'chapter_id',
-        //     ],
-        //     [
-        //         'id',
-        //         'universe_id',
-        //         'series_id',
-        //         'chapter_id',
-        //     ]
-        // );
-
         return $this->hasManyDeep(
             Element::class,
-            [User::class, Universe::class, Series::class, Chapter::class, Page::class, 'elementables'],
-            ['id', 'owner_id', 'universe_id', 'series_id', 'chapter_id', 'elementable_id', 'element_id'],
-            [null, null, null, null, null, 'page_id', 'element_i']
+            [Universe::class, 'elementables'],
+            ['owner_id', ['elementable_type', 'elementable_id']],
+            [null, 'universe_id', 'element_id']
         );
+    }
+
+    public function elementsThroughSeries()
+    {
+        return $this->hasManyDeep(
+            Element::class,
+            [Universe::class, Series::class, 'elementables'],
+            ['owner_id', 'universe_id', ['elementable_type', 'elementable_id']],
+            [null, null, 'series_id', 'element_id']
+        );
+    }
+
+    public function elementsThroughChapter()
+    {
+        return $this->hasManyDeep(
+            Element::class,
+            [Universe::class, Series::class, Chapter::class, 'elementables'],
+            ['owner_id', 'universe_id', 'series_id', ['elementable_type', 'elementable_id']],
+            [null, null, null, 'chapter_id', 'element_id']
+        );
+    }
+
+    public function elementsThroughPage()
+    {
+        return $this->hasManyDeep(
+            Element::class,
+            [Universe::class, Series::class, Chapter::class, Page::class, 'elementables'],
+            ['owner_id', 'universe_id', 'series_id', 'chapter_id', ['elementable_type', 'elementable_id']],
+            [null, null, null, null, 'page_id', 'element_id']
+        );
+    }
+
+    public function elements()
+    {
+
+
+        return;
+
+        // return $this->hasManyDeep(
+        //     Element::class,
+        //     [Universe::class, Series::class, Chapter::class, 'elementables', Page::class, 'elementables'],
+        //     // ['id', 'owner_id', 'universe_id', 'series_id', 'chapter_id', 'elementable_id', 'element_id'],
+        //     // [null, null, null, null, null, 'page_id', 'element_i']
+        //     ['owner_id', 'universe_id', 'series_id', ['elementable_type', 'elementable_id'], 'chapter_id', ['elementable_type', 'elementable_id']],
+        //     [null, null, null, null, 'page_id', 'element_id']
+        // );
     }
 
 

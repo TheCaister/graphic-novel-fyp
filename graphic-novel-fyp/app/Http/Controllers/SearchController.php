@@ -73,7 +73,18 @@ class SearchController extends Controller
 
         $user = User::find(request()->userId);
 
-        dd($user->elements);
+        // $elements = $user->elementsThroughUniverse()
+        //     ->pluck(
+        //         // 'elementables.element_id', 
+        //     'elementables.elementable_id')
+        //     ->toArray();
+        // dd($elements);
+
+        dd($user->elementsThroughUniverse()->get()
+        ->concat($user->elementsThroughSeries()->get())
+        ->concat($user->elementsThroughChapter()->get())
+        ->concat($user->elementsThroughPage()->get())
+        ->unique());
 
         $resultsList = Element::latest()->filter(request(['search']))->ownedByUsers([request()->userId])->limit(request()->limit)->get();
 
