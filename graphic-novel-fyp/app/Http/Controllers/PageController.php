@@ -65,6 +65,14 @@ class PageController extends Controller
         return back();
     }
 
+    public function destroy(Page $page)
+    {
+        $page->clearMediaCollection('page_image');
+        $page->delete();
+
+        return back();
+    }
+
     public function getJsonPage($pageId)
     {
         $page = Page::find($pageId);

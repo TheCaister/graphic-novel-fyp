@@ -209,6 +209,7 @@ Route::resource('chapters', ChapterController::class);
 Route::get('/series/genres', [SeriesController::class, 'genres'])->name('series.genres');
 Route::resource('series', SeriesController::class);
 Route::resource('comic-pages', PageController::class);
+Route::resource('pages', PageController::class);
 
 ////////////////////////// ELEMENT ROUTES ////////////////////////
 Route::get('user/main/elementsforge', [ElementController::class, 'elementsforge'])->name('user.main.elementsforge');
