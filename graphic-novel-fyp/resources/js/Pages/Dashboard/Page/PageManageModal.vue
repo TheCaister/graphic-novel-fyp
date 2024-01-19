@@ -12,7 +12,8 @@ import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import axios from 'axios';
 
-const emit = defineEmits(['closeModal'])
+const emit = defineEmits(['closeModal', 'createElement'])
+
 function close() {
     deleteTempThumbnail();
     emit('closeModal');
@@ -25,6 +26,8 @@ const FilePond = vueFilePond(
 
 const modal = ref(null)
 
+const elements = ref([])
+
 const props = defineProps({
     page: {
         type: Object,
@@ -33,7 +36,6 @@ const props = defineProps({
 
 
 const form = useForm({
-    universe_name: '',
     upload: '',
 });
 
@@ -88,21 +90,21 @@ function deleteExistingThumbnail() {
 }
 
 onMounted(() => {
-    // console.log(props.universe)
+    console.log(props.page)
     // form.universe_name = props.universe.universe_name
 })
 
 const files = computed(() => {
-    // if (props.universe.thumbnail !== '') {
-    //     return [
-    //         {
-    //             source: props.universe.thumbnail.replace('http://localhost', ''),
-    //             options: {
-    //                 type: 'local',
-    //             },
-    //         },
-    //     ]
-    // }
+    if (props.page.page_image !== '') {
+        return [
+            {
+                source: props.page.page_image.replace('http://localhost', ''),
+                options: {
+                    type: 'local',
+                },
+            },
+        ]
+    }
     return [];
 })
 
@@ -144,35 +146,28 @@ function getParentContentType() {
     }
 
 }
+
+function handleCreateElementButtonClicked() {
+    emit('createElement')
+    close()
+}
 </script>
 
 <template>
     <div>
-        <div ref="modal" class="text-lg bg-black shadow-lg rounded-lg p-8 w-4/5">
-            <div class="flex">
-                <!-- upload, remove and add element buttons -->
-                <div class="flex flex-col">
-                    <button>
-                        Upload image
-                    </button>
-                    <button>
-                        Remove image
-                    </button>
-                    <button>
-                        Add element
-                    </button>
-                </div>
+        <div ref="modal" class="text-lg rounded-lg p-8 w-4/5 h-4/5 text-white">
+            <div class="flex h-full gap-8">
 
                 <!-- Page image here -->
-                <div>
-                    <file-pond name="upload" label-idle="Universe Thumbnail" accepted-file-types="image/jpeg, image/png"
+                <div class="w-full h-full">
+                    <file-pond  name="upload" label-idle="Page Image" accepted-file-types="image/jpeg, image/png"
                         :files="files" @processfile="handleFilePondThumbnailProcess"
                         @removefile="handleFilePondThumbnailRemove" :server="{
                             process: {
-                                url: '/upload?media=universe_thumbnail',
+                                url: '/upload?media=page_image',
                             },
                             revert: {
-                                url: '/api/thumbnail?contentType=Universe&serverId=' + form.upload + '&isTemp=true',
+                                url: '/api/thumbnail?contentType=Page&serverId=' + form.upload + '&isTemp=true',
                             },
                             load: {
                                 url: '/',
@@ -189,7 +184,7 @@ function getParentContentType() {
                 </div>
 
                 <!-- List of elements -->
-                <div class="flex flex-col">
+                <div class="flex flex-col bg-black px-4 py-8 rounded-lg justify-between">
                     <div>
                         Elements
                     </div>
@@ -198,6 +193,10 @@ function getParentContentType() {
                     <div>
 
                     </div>
+
+                    <button @click="handleCreateElementButtonClicked" class="bg-pink-500 rounded-lg">
+                        Add element
+                    </button>
                 </div>
             </div>
         </div>

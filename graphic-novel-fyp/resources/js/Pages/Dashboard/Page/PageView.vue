@@ -21,7 +21,8 @@
                                 <DashboardDropdownMenu
                                     v-if="selectedPage.page_id === page.page_id && isCardMenuOpen === true"
                                     class="absolute z-50" :events="dropDownMenuOptions"
-                                    @menuItemClick="handleMenuItemClicked" @closeMenu="isCardMenuOpen = false" />
+                                    @menuItemClick="handleMenuItemClicked" @closeMenu="isCardMenuOpen = false"
+                                    @click.stop/>
                             </Transition>
                         </button>
                     </div>
@@ -42,12 +43,15 @@
 
     <Teleport to="body">
         <Transition name="modal">
-            <page-manage-modal v-if="isPageManageOpen" @closeModal="isPageManageOpen = false; updateContentList()"
+            <page-manage-modal v-if="isPageManageOpen" @closeModal="isPageManageOpen = false; updateContentList()" @createElement="isCreateElementOpen = true"
+                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" :page="selectedPage" />
+        </Transition>
+
+        <Transition name="modal" class="z-50">
+            <create-element-modal v-if="isCreateElementOpen" @closeModal="isCreateElementOpen = false"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
-    </Teleport>
 
-    <Teleport to="body">
         <Transition name="modal">
             <create-page-modal v-if="isCreatePageOpen" @closeModal="isCreatePageOpen = false; updateContentList()"
                 :parentContentIdNumber="props.parentContentId"
@@ -73,6 +77,7 @@ import PageManageModal from './PageManageModal.vue'
 import CreatePageModal from './CreatePageModal.vue'
 import DashboardDropdownMenu from '../DashboardDropdownMenu.vue'
 import DeleteModal from '../DeleteModal.vue'
+import CreateElementModal from '../Element/CreateElementModal.vue'
 
 const props = defineProps({
     parentContentId: {
@@ -87,6 +92,8 @@ const selectedPage = ref({});
 const isPageManageOpen = ref(false)
 
 const isCreatePageOpen = ref(false)
+const isCreateElementOpen = ref(false)
+
 const isCardMenuOpen = ref(false)
 
 const pagesLoaded = ref(false)
