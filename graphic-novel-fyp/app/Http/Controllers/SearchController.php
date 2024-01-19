@@ -84,13 +84,15 @@ class SearchController extends Controller
         $resultsList = [];
 
         // search for users
-        if (request()->limit) {
-            $resultsList = User::latest()->filter(request(['search']))->limit(request()->limit)->get();
-        } else {
-            $resultsList = User::latest()->filter(request(['search']))->get();
-        }
+        // if (request()->limit) {
+        //     $resultsList = User::latest()->filter(request(['search']))->limit(request()->limit)->get();
+        // } else {
+        //     $resultsList = User::latest()->filter(request(['search']))->get();
+        // }
 
-        // dd($resultsList);
+        $resultsList = User::latest()->filter(request(['search']))->hasUniverse(request()->hasUniverse)->get();
+
+        dd($resultsList);
 
         return $resultsList;
     }

@@ -82,4 +82,18 @@ class User extends Authenticatable
             $query->whereRaw("LOWER(username) LIKE CONCAT('%', LOWER(?), '%')", [$search]);
         });
     }
+
+    public function scopeHasUniverse($query, $hasUniverse)
+    {
+       
+        if ($hasUniverse != null) {
+            // $query->has('universes');
+
+            if($hasUniverse == 'true') {
+                $query->has('universes');
+            } else {
+                $query->doesntHave('universes');
+            }
+        };
+    }
 }

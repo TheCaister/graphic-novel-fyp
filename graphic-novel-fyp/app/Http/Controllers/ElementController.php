@@ -296,20 +296,22 @@ class ElementController extends Controller
         return $this->assign($request);
     }
 
-    public function getElements(Request $request)
+    public function getElements()
     {
         // Get the type of content. It could be universes, series, chapters, or pages. With content_id, we can get the content.
 
         // Set content to nothing
         $content = null;
 
-        $content = $this->getElementable($request->type, $request->content_id);
+        $content = $this->getElementable(request()->type, request()->content_id);
 
         $elements = $content->elements;
 
-        return response()->json([
-            'elements' => $elements,
-        ]);
+        // return response()->json([
+        //     'elements' => $elements,
+        // ]);
+
+        return response()->json($elements);
     }
 
     public function getElementable($type, $id)

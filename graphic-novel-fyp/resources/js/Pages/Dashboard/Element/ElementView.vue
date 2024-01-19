@@ -97,7 +97,7 @@ onMounted(async () => {
 
 function updateContentList() {
     APICalls.getElements(getParentContentType(), parentContentId).then(response => {
-        elements.value = response.data.elements
+        elements.value = response.data
         elementsLoaded.value = true
     }).catch(error => console.log(error))
 }

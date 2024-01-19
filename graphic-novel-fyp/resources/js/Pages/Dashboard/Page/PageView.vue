@@ -1,5 +1,6 @@
 <template>
     <!-- Loop through the universes and display them in cards -->
+<<<<<<< Updated upstream
     <div v-if="pagesLoaded" class="w-full flex flex-wrap">
         <div v-for="page in pages" :key="page.page_id" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
             <button @click="isPageManageOpen = true" class="w-full">
@@ -10,6 +11,35 @@
                             pending
                         </span>
                     </button>
+=======
+    <div v-if="pagesLoaded" class="w-full flex flex-wrap justify-center">
+        <div v-for="page in pages" :key="page.page_id" class=" w-64 mx-8 mb-4">
+            <button @click="selectedPage = page; isPageManageOpen = true" class="w-full">
+                <div class="rounded-lg shadow-lg hover:shadow-white transition-all duration-200">
+                    <div class="relative rounded-lg ">
+                        <div class="h-full flex items-center">
+                            <div class="h-96 w-full bg-pink-300 flex justify-center rounded-lg">
+                                <img v-if="page.page_image" :src="page.page_image" alt="Content Image"
+                                    class="rounded-lg object-cover w-full" />
+                                <div v-else class="text-white text-xl flex items-center">P{{ page.page_id }}</div>
+                            </div>
+                        </div>
+                        <button class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
+                            <span @click.stop="switchSelectedContent(page.page_id);"
+                                class="material-symbols-outlined text-pink-300 drop-shadow-[-2px_2px_0_rgba(0,0,0,1)]">
+                                pending
+                            </span>
+                            <Transition name="fade">
+                                <DashboardDropdownMenu
+                                    v-if="selectedPage.page_id === page.page_id && isCardMenuOpen === true"
+                                    class="absolute z-50" :events="dropDownMenuOptions"
+                                    @menuItemClick="handleMenuItemClicked" @closeMenu="isCardMenuOpen = false"
+                                    @click.stop />
+                            </Transition>
+                        </button>
+                    </div>
+                </div>
+>>>>>>> Stashed changes
 
                     <img v-if="page.page_image" :src="page.page_image" alt="Page Image"
                         class="w-full h-full rounded-lg" />
