@@ -18,9 +18,10 @@
                                 pending
                             </span>
                             <Transition name="fade">
-                                <DashboardDropdownMenu v-if="selectedPage.page_id === page.page_id && isCardMenuOpen" class="absolute z-50"
-                                    :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked"
-                                    @closeMenu="isCardMenuOpen = false" />
+                                <DashboardDropdownMenu
+                                    v-if="selectedPage.page_id === page.page_id && isCardMenuOpen === true"
+                                    class="absolute z-50" :events="dropDownMenuOptions"
+                                    @menuItemClick="handleMenuItemClicked" @closeMenu="isCardMenuOpen = false" />
                             </Transition>
                         </button>
                     </div>
@@ -30,16 +31,7 @@
             </button>
         </div>
 
-        <button @click="isCreatePageOpen = true" class="bg-black rounded-lg shadow-md w-2/5 mx-8">
-            <div class="w-full h-64 flex items-center justify-center rounded-lg">
-
-                <span class="material-symbols-outlined dark"
-                    style="font-size: 10rem; font-variation-settings: 'wght' 100; color: #f9a8d4;">
-                    add_circle
-                </span>
-            </div>
-            <p class="text-white pt-4 text-center">Create Page</p>
-        </button>
+        <add-button @click="isCreateModalOpen = true" label="Create Page" class="w-64" />
 
     </div>
     <div v-else>
@@ -61,6 +53,13 @@
                 :parentContentIdNumber="props.parentContentId"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
+
+        <Transition name="modal" class="z-50">
+            <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()" :content="{
+                content_id: selectedPage.page_id,
+                content_name: selectedPage.page_number,
+            }" type="pages" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+        </Transition>
     </Teleport>
 </template>
 
@@ -68,11 +67,12 @@
 
 import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
-import { usePage } from '@inertiajs/vue3';
+import AddButton from '../AddButton.vue'
 import { ref } from 'vue';
 import PageManageModal from './PageManageModal.vue'
 import CreatePageModal from './CreatePageModal.vue'
 import DashboardDropdownMenu from '../DashboardDropdownMenu.vue'
+import DeleteModal from '../DeleteModal.vue'
 
 const props = defineProps({
     parentContentId: {
@@ -90,19 +90,21 @@ const isCreatePageOpen = ref(false)
 const isCardMenuOpen = ref(false)
 
 const pagesLoaded = ref(false)
+const isDeleteModalOpen = ref(false)
 
 const dropDownMenuOptions = [
     { id: 1, text: "Edit", eventName: "edit" },
     { id: 2, text: "View Elements", eventName: "viewElements" },
+    { id: 3, text: "Assign Elements", eventName: "assignElements" },
     { id: 3, text: "Delete", eventName: "delete" },
 ]
 
 function handleMenuItemClicked(eventName) {
-    console.log(eventName)
+    isCardMenuOpen.value = false
     // switch
     switch (eventName) {
         case "edit":
-            isEditModalOpen.value = true
+            isPageManageOpen.value = true
             break;
         case "viewElements":
             break;
@@ -128,7 +130,6 @@ function updateContentList() {
     APICalls.getPagesByChapterId(props.parentContentId).then(response => {
         pages.value = response.data
         pagesLoaded.value = true
-        console.log(pages.value)
     }).catch(error => console.log(error))
 
 }

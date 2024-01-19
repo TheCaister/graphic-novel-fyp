@@ -90,7 +90,7 @@ class Series extends Model implements HasMedia
     function delete()
     {
         $this->chapters()->delete();
-        $this->elements()->delete();
+        // $this->elements()->delete();
 
         parent::delete();
     }

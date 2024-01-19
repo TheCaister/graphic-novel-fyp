@@ -66,7 +66,7 @@ class Chapter extends Model implements HasMedia
     function delete()
     {
         $this->pages()->delete();
-        $this->elements()->delete();
+        // $this->elements()->delete();
         parent::delete();
     }
 
