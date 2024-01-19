@@ -55,7 +55,7 @@ Route::get('/genres', [SeriesController::class, 'getGenres'])->name('series.get-
 
 Route::get('/elements', [App\Http\Controllers\ElementController::class, 'getElements'])->name('elements.get-elements');
 
-Route::delete('/thumbnail',[ UploadController::class, 'deleteThumbnail'])->name('delete-thumbnail');
+Route::delete('/thumbnail', [UploadController::class, 'deleteThumbnail'])->name('delete-thumbnail');
 
 Route::delete('/universes/{serverId}/thumbnail', [App\Http\Controllers\UploadController::class, 'deleteUniverseThumbnail'])->name('universes.delete-thumbnail');
 
@@ -69,6 +69,7 @@ Route::delete('images/{serverId}', [App\Http\Controllers\UploadController::class
 
 // Route::delete('/pages', [App\Http\Controllers\UploadController::class, 'deletePageImage'])->name('pages.delete-image');
 
+
 Route::group([], function () {
     Route::get('universes/{universe}', [UniverseController::class, 'getJsonUniverse'])->name('universes.get-universe-json');
     Route::get('series/{series}', [SeriesController::class, 'getJsonSeries'])->name('series.get-series-json');
@@ -80,6 +81,4 @@ Route::group([], function () {
     Route::get('universes/{universe}/thumbnail', [UniverseController::class, 'getThumbnailJson'])->name('universes.get-thumbnail-json');
 });
 
-Route::group([], function () {
-    Route::get('search', [SearchController::class, 'searchJson'])->name('search.json');
-});
+Route::get('search', [SearchController::class, 'searchJson'])->name('search.json');

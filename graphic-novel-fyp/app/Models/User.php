@@ -96,4 +96,22 @@ class User extends Authenticatable
             }
         };
     }
+
+    public function scopeAssignedToExistingContent($query, $assignedToExistingContent, $owner)
+    {
+        // WIP MUST IMPLEMENT ADMIN FUNCTIONALITY FIRST
+        if ($assignedToExistingContent != null) {
+            $query->whereHas('moderatableUniverses', function ($query) use ($owner) {
+                $query->whereIn('id', function ($query) use ($owner) {
+                    $query->select('id')
+                        ->from('universes')
+                        ->where('owner', $owner);
+                });
+            })->orWhereHas('moderatableSeries', function ($query) use ($owner) {
+                $query->whereHas('universe', function ($query) use ($owner) {
+                    $query->where('owner', $owner);
+                });
+            });
+        }
+    }
 }
