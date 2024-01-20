@@ -19,11 +19,12 @@ import TriCheckbox from './TriCheckbox.vue';
 
 import {defineEmits} from 'vue';
 
-const emits = defineEmits(['update:resultsList'])
+const emits = defineEmits(['updateAdvancedSearch'])
+
 
 function updateOwnsUniverse (checked) {
     // console.log(checked)
-    emits('update:resultsList', 
+    emits('updateAdvancedSearch', 
     {
         name: 'ownsUniverse',
         value: checked
@@ -32,7 +33,7 @@ function updateOwnsUniverse (checked) {
 
 function updateAssignedToExisting (checked) {
     // console.log(checked)
-    emits('update:resultsList', 
+    emits('updateAdvancedSearch', 
     {
         name: 'assignedToExisting',
         value: checked

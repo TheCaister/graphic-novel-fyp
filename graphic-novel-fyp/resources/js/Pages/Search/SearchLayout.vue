@@ -21,7 +21,7 @@
 
         <!-- big button -->
         <div>
-            <button @click="printForm">
+            <button @click="test">
                 Print form
             </button>
         </div>
@@ -30,7 +30,7 @@
         <div>
 
             <KeepAlive>
-                <component :is="AdvancedFiltersComponent" :resultsList="resultsList" v-model="form.advanced" />
+                <component :is="AdvancedFiltersComponent" @update-advanced-search="updateAdvancedSearch" />
             </KeepAlive>
         </div>
 
@@ -103,7 +103,7 @@ const AdvancedFiltersComponent = computed(() => {
 
 const form = useForm({
     search: '',
-    advanced: [],
+    advanced: {        },
 });
 
 function search() {
@@ -118,7 +118,18 @@ function back() {
     router.back();
 }
 
-function printForm(){
+
+
+function test(){
     console.log(form)
+}
+
+function updateAdvancedSearch({name, value}) {
+    if (value === null) {
+        delete form.advanced[name];
+    } else {
+        form.advanced[name] = value;
+    }
+    console.log(form.advanced);
 }
 </script>
