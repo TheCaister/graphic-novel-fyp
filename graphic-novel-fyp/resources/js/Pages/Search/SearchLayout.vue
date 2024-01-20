@@ -12,18 +12,25 @@
                 <option value="">Elements</option>
             </select>
             <!-- input, with dropdown on the right for 3 options -->
-            <input type="text" class="bg-gray-500 border-4 border-gray-300" />
+            <input type="text" class="bg-gray-500 border-4 border-gray-300" v-model="form.search" />
             <button>
                 Search
             </button>
 
         </div>
 
+        <!-- big button -->
+        <div>
+            <button @click="printForm">
+                Print form
+            </button>
+        </div>
+
         <!-- Advanced search -->
         <div>
 
             <KeepAlive>
-                <component :is="AdvancedFiltersComponent" :resultsList="resultsList" />
+                <component :is="AdvancedFiltersComponent" :resultsList="resultsList" v-model="form.advanced" />
             </KeepAlive>
         </div>
 
@@ -39,7 +46,7 @@
 
 <script setup>
 import { Head } from '@inertiajs/vue3';
-import { onMounted, computed, inject, ref } from 'vue'
+import { onMounted, computed, inject, ref, watch } from 'vue'
 import { useForm } from '@inertiajs/vue3';
 import SearchContentResults from './SearchContentResults.vue';
 import SearchElementsResults from './SearchElementsResults.vue';
@@ -60,8 +67,10 @@ const props = defineProps({
 
 const resultsList = ref(props.initResultsList)
 
+
+
 const ResultsViewComponent = computed(() => {
-    return SearchUsersResults
+    // return SearchUsersResults
 
     // Switch statement to return the correct dashboard view
     switch (props.searchType) {
@@ -77,7 +86,7 @@ const ResultsViewComponent = computed(() => {
 })
 
 const AdvancedFiltersComponent = computed(() => {
-    return AdvancedUserFilters
+    // return AdvancedUserFilters
 
     // Switch statement to return the correct dashboard view
     switch (props.searchType) {
@@ -94,6 +103,7 @@ const AdvancedFiltersComponent = computed(() => {
 
 const form = useForm({
     search: '',
+    advanced: [],
 });
 
 function search() {
@@ -106,5 +116,9 @@ function search() {
 
 function back() {
     router.back();
+}
+
+function printForm(){
+    console.log(form)
 }
 </script>

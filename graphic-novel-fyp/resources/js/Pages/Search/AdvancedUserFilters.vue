@@ -5,8 +5,8 @@
         </div>
 
         <div class="flex w-full">
-            <TriCheckbox label="Owns a universe" class="w-1/2"/>
-            <TriCheckbox label="Assigned to existing content" class="w-1/2"/>
+            <TriCheckbox label="Owns a universe" class="w-1/2" @checked="updateOwnsUniverse"/>
+            <TriCheckbox label="Assigned to existing content" class="w-1/2" @checked="updateAssignedToExisting"/>
         </div>
 
 
@@ -16,4 +16,27 @@
 
 <script setup>
 import TriCheckbox from './TriCheckbox.vue';
+
+import {defineEmits} from 'vue';
+
+const emits = defineEmits(['update:resultsList'])
+
+function updateOwnsUniverse (checked) {
+    // console.log(checked)
+    emits('update:resultsList', 
+    {
+        name: 'ownsUniverse',
+        value: checked
+    })
+}
+
+function updateAssignedToExisting (checked) {
+    // console.log(checked)
+    emits('update:resultsList', 
+    {
+        name: 'assignedToExisting',
+        value: checked
+    })
+}
+
 </script>
