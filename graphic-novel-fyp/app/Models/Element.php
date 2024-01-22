@@ -75,6 +75,11 @@ class Element extends Model
         return $this->morphTo('elementType', 'derived_element_type', 'derived_element_id');
     }
 
+    public function elementable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
     public function getRecentsFormattedEntry()
     {
         return [
@@ -91,5 +96,46 @@ class Element extends Model
             $query->whereRaw("LOWER(element_name) LIKE CONCAT('%', LOWER(?), '%')", [$search])
                 ->orWhereRaw("LOWER(content) LIKE CONCAT('%', LOWER(?), '%')", [$search]);
         });
+    }
+
+    public function scopeElementType($query, $elementType)
+    {
+        $query->where('derived_element_type', $elementType);
+    }
+
+    // WORK IN PROGRESS
+    // WILL RECEIVE LIST OF AUTHORS AS WELL AS WHETHER TO INCLUDE OR EXCLUDE
+    public function scopeAuthors($query, $authors)
+    {
+        $query->whereHas('owner', function ($query) use ($authors) {
+            $query->whereIn('username', $authors);
+        });
+    }
+
+    // WIP
+    // MIGHT NEED TO SWAP OUT WITH ELEMENT_ID
+    // MIGHT HAVE TO LOOK INTO CONTAINER ELEMENTS TABLE
+    public function scopeIncludedElements($query, $includedElements)
+    {
+        $query->whereHas('elementType', function ($query) use ($includedElements) {
+            $query->whereIn('element_name', $includedElements);
+        });
+    }
+
+    // WORK IN PROGRESS
+    // RECEIVES A CONTENT WHETHER IT BE A SERIES, CHAPTER, OR PAGE
+    // MUST SOMEHOW EXCLUDE ELEMENTS THAT COME BEFORE THE CONTENT
+    // IF IT'S A SERIES, MUST BE THE SAME SERIES IF USING IN CONJUNCTION WITH SCOPEPRESENTTO
+    public function scopePresentFrom($query, $presentFrom)
+    {
+        $query->where('created_at', '>=', $presentFrom);
+    }
+
+    // WORK IN PROGRESS
+    // RECEIVES A CONTENT WHETHER IT BE A SERIES, CHAPTER, OR PAGE
+    // MUST SOMEHOW EXCLUDE ELEMENTS THAT COME AFTER THE CONTENT
+    public function scopePresentTo($query, $presentTo)
+    {
+        $query->where('created_at', '<=', $presentTo);
     }
 }

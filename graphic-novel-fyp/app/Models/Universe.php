@@ -91,4 +91,26 @@ class Universe extends Model implements HasMedia
     public function clearThumbnail(){
         return;
     }
+
+    // WIP
+    // WILL USE SIMILAR LOGIC FOR SERIES, CHAPTERS, PAGES
+    public function scopeFilter($query, array $filters)
+    {
+        // dd($query);
+        $query->when($filters['search'] ?? null, function ($query, $search) {
+            $query->whereRaw("LOWER(universe_name) LIKE CONCAT('%', LOWER(?), '%')", [$search]);
+        });
+    }
+
+    public function scopeAuthors($query, $user)
+    {
+        $query->where('owner_id', $user->id);
+    }
+
+    public function scopeIncludedElements($query, $elementType)
+    {
+        $query->whereHas('elements', function ($query) use ($elementType) {
+            $query->where('derived_element_type', $elementType);
+        });
+    }
 }
