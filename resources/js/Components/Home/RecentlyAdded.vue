@@ -13,7 +13,7 @@
             <p>Genre: {{ series.series_genre }}</p>
             <!-- Display the series cover -->
             <!-- <img :src="series.series_thumbnail" alt="Series cover"> -->
-            <img src="/assets/black_page.jpg" alt="">
+            <!-- <img src="/" alt=""> -->
             <!-- <img src="" alt=""> -->
         </div>
     </div>
