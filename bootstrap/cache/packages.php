@@ -91,6 +91,13 @@
       0 => 'Spatie\\MediaLibrary\\MediaLibraryServiceProvider',
     ),
   ),
+  'staudenmeir/eloquent-has-many-deep' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Staudenmeir\\EloquentHasManyDeep\\IdeHelperServiceProvider',
+    ),
+  ),
   'tightenco/ziggy' => 
   array (
     'providers' => 

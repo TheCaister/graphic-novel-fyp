@@ -35,11 +35,12 @@
     31 => 'Termwind\\Laravel\\TermwindServiceProvider',
     32 => 'Spatie\\LaravelIgnition\\IgnitionServiceProvider',
     33 => 'Spatie\\MediaLibrary\\MediaLibraryServiceProvider',
-    34 => 'Tightenco\\Ziggy\\ZiggyServiceProvider',
-    35 => 'App\\Providers\\AppServiceProvider',
-    36 => 'App\\Providers\\AuthServiceProvider',
-    37 => 'App\\Providers\\EventServiceProvider',
-    38 => 'App\\Providers\\RouteServiceProvider',
+    34 => 'Staudenmeir\\EloquentHasManyDeep\\IdeHelperServiceProvider',
+    35 => 'Tightenco\\Ziggy\\ZiggyServiceProvider',
+    36 => 'App\\Providers\\AppServiceProvider',
+    37 => 'App\\Providers\\AuthServiceProvider',
+    38 => 'App\\Providers\\EventServiceProvider',
+    39 => 'App\\Providers\\RouteServiceProvider',
   ),
   'eager' => 
   array (
@@ -213,6 +214,7 @@
     'Laravel\\Sail\\Console\\InstallCommand' => 'Laravel\\Sail\\SailServiceProvider',
     'Laravel\\Sail\\Console\\PublishCommand' => 'Laravel\\Sail\\SailServiceProvider',
     'command.tinker' => 'Laravel\\Tinker\\TinkerServiceProvider',
+    'Barryvdh\\LaravelIdeHelper\\Console\\ModelsCommand' => 'Staudenmeir\\EloquentHasManyDeep\\IdeHelperServiceProvider',
   ),
   'when' => 
   array (
@@ -262,6 +264,9 @@
     array (
     ),
     'Laravel\\Tinker\\TinkerServiceProvider' => 
+    array (
+    ),
+    'Staudenmeir\\EloquentHasManyDeep\\IdeHelperServiceProvider' => 
     array (
     ),
   ),
