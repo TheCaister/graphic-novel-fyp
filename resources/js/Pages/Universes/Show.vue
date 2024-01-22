@@ -7,7 +7,7 @@
         <div class="flex-shrink-0">
             <!-- <img class="h-10 w-10 rounded-full" :src="comment.user.profile_photo_url" alt=""> -->
             <!-- Set profile photo to the black png -->
-            <img class="h-10 w-10 rounded-full" src="/assets/black_page.jpg" alt="">
+            <!-- <img class="h-10 w-10 rounded-full" src="/assets/black_page.jpg" alt=""> -->
         </div>
         <div class="ml-4">
             <div class="text-sm font-medium text-gray-900">
