@@ -13,8 +13,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-            ElementSeeder::class,
-            ModeratorSeeder::class,
+            // ElementSeeder::class,
+            // ModeratorSeeder::class,
         ]);
         // \App\Models\User::factory(100)->create();
         

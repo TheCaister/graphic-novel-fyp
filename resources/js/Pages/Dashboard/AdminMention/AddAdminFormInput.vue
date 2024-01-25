@@ -8,7 +8,7 @@
 import AdminEditor from '@/Components/Editors/AdminEditor.vue';
 import { watch, ref } from 'vue'
 
-const admins = ref('')
+const admins = ref('test')
 
 // Define the emits for the component
 const emit = defineEmits(['updateElement'])

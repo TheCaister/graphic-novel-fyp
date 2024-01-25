@@ -25,7 +25,6 @@ class UserFactory extends Factory
             'username' => $this->faker->userName,
             'password' => $this->faker->password,
             'email' => $this->faker->safeEmail,
-            'date_of_birth' => $this->faker->date(),
             'is_banned' => $this->faker->boolean,
             'bio' => $this->faker->text,
             'profile_picture' => $this->faker->word,

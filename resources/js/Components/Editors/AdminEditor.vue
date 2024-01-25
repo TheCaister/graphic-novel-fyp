@@ -16,7 +16,8 @@ import Mention from '@tiptap/extension-mention'
 import Paragraph from '@tiptap/extension-paragraph'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import suggestion_admin from './suggestion_admin'
+import suggestion from './SuggestionAdmin/suggestion'
+
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
 
@@ -82,7 +83,7 @@ export default {
                         //   Onclick function
                         onclick: `alert(testing())`,
                     },
-                    `${node.attrs.label ?? node.attrs.id.element_name}`,
+                    `${node.attrs.label ?? "testing"}`,
                 ];
             },
         });
@@ -99,20 +100,23 @@ export default {
                 CustomMention.configure({
                     HTMLAttributes: {
                         class: 'mention',
-                        onclick: 'alert(event.target.getAttribute("data-id"))',
-                        // onclick: 'testing(event)',
                     },
                     renderLabel({ options, node }) {
                         console.log(node)
 
                         // node.attrs.id is the element object that is returned when a suggestion is selected.
-                        return `${options.suggestion_admin.char}${node.attrs.label ?? node.attrs.id.element_name}`
+                        // return `${options.suggestion_admin.char}${node.attrs.label ?? node.attrs.id.element_name}`
+                        return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id.element_name}`
+
                     },
-                    suggestion_admin,
+                    // suggestion_admin,
+                    suggestion,
+
                 }),
             ],
             content: this.modelValue,
             onUpdate: () => {
+                console.log('updated...')
             },
         })
     },

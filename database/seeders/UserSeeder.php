@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
                 'username' => 'Test User',
                 // Hash the password
                 'password' => bcrypt('test'),
-                'email' => 'test@test.com',
+                // 'email' => 'test@test.com',
                 'is_admin' => true,
             ]);
 

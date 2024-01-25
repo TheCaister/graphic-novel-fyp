@@ -100,8 +100,7 @@ class SearchController extends Controller
     {
         $resultsList = [];
 
-        // from request()->userid, get the user
-        $user = User::find(request()->userId);
+        $user = auth('sanctum')->user();
 
         $resultsList = User::latest()->filter(request(['search']))->hasUniverse(request()->hasUniverse)->limit(request()->limit)->get();
 

@@ -29,7 +29,7 @@ class SeriesFactory extends Factory
             'series_thumbnail' => $this->faker->word,
             // rating is a random integer between 1 and 5
             // 'rating' => $this->faker->numberBetween(1, 5),
-            'rating' => 0,
+            // 'rating' => 0,
         ];
     }
 
