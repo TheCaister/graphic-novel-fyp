@@ -191,11 +191,9 @@ export default {
                 CustomMention.configure({
                     HTMLAttributes: {
                         class: 'mention',
-                        onclick: 'alert(event.target.getAttribute("data-id"))',
-                        // onclick: 'testing(event)',
                     },
                     renderLabel({ options, node }) {
-                        console.log(node)
+                        // console.log(node)
 
                         // node.attrs.id is the element object that is returned when a suggestion is selected.
                         return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id.element_name}`

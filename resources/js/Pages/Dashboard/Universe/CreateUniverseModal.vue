@@ -2,7 +2,7 @@
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
-import AddAdminText from '../AddAdminText.vue'
+import AddAdminFormInput from '../AdminMention/AddAdminFormInput.vue'
 import { onClickOutside } from '@vueuse/core'
 import { ref } from 'vue'
 
@@ -115,7 +115,7 @@ if (form.upload) {
                                 <TextInput id="admins" type="text" class="mt-1 block w-full" autofocus />
                                 <InputError class="mt-2" message="" />
 
-                                <AddAdminText class="bg-white w-64 h-64"/>
+                                <AddAdminFormInput class="bg-white w-64 h-64"/>
                             </div>
                         </div>
                         <div class="flex justify-end">

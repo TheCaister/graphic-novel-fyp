@@ -1,11 +1,11 @@
 <template>
     <div class="bg-white">
-        <SimpleEditor v-model="admins" />
+        <AdminEditor v-model="admins" />
     </div>
 </template>
 
 <script setup>
-import SimpleEditor from '@/Components/Editors/SimpleEditor.vue';
+import AdminEditor from '@/Components/Editors/AdminEditor.vue';
 import { watch, ref } from 'vue'
 
 const admins = ref('')

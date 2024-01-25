@@ -18,7 +18,10 @@
     },
     "dependencies": {
         "@headlessui/vue": "^1.7.16",
+        "@tiptap/extension-document": "^2.1.16",
         "@tiptap/extension-mention": "^2.1.15",
+        "@tiptap/extension-paragraph": "^2.1.16",
+        "@tiptap/extension-text": "^2.1.16",
         "@tiptap/pm": "^2.0.3",
         "@tiptap/starter-kit": "^2.0.3",
         "@tiptap/suggestion": "^2.1.15",
