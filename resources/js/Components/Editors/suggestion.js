@@ -4,14 +4,24 @@ import tippy from 'tippy.js'
 import MentionList from '@/Components/MentionList.vue'
 import APICalls from '@/Utilities/APICalls'
 
-let list = []
-
 export default {
 
     items: async ({ query }) => {
         // This is the list of items that will be passed to the MentionList component
         // we can do all this, or we can simply call the api here
         return APICalls.searchElements(query, 5)
+        // return [{
+        //     element_name: 'test',
+        // },
+        // {
+        //     element_name: 'test2',
+        // },
+        // {
+        //     element_name: 'test3',
+        // },
+        // {
+        //     element_name: 'test4',
+        // },]
 
     },
     command: ({ editor, range, props }) => {
@@ -88,9 +98,6 @@ export default {
 
             //   Updating the props
             onUpdate(props) {
-                // console.log(component.editor)
-     
-
                 component.updateProps(props)
 
                 if (!props.clientRect) {

@@ -48,8 +48,7 @@ Route::get('chapters/{chapter}/pages', [PageController::class, 'getChapterPages'
 
 Route::get('/chapters/{chapter}/filepond-pages', [ChapterController::class, 'getChapterFilepondPages'])->name('chapters.get-chapter-filepond-pages');
 
-
-
+Route::get('/search', [SearchController::class, 'searchJson'])->name('search.json');
 
 Route::get('/genres', [SeriesController::class, 'getGenres'])->name('series.get-genres');
 
@@ -81,4 +80,4 @@ Route::group([], function () {
     Route::get('universes/{universe}/thumbnail', [UniverseController::class, 'getThumbnailJson'])->name('universes.get-thumbnail-json');
 });
 
-Route::get('search', [SearchController::class, 'searchJson'])->name('search.json');
+

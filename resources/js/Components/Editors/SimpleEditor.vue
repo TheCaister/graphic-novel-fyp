@@ -220,7 +220,7 @@ export default {
 
                 // this.editor.commands.setContent(before, false)
 
-                console.log(this.editor.getJSON())
+                // console.log(this.editor.getJSON())
 
                 // In before.content, Remove any entry that has an null text field
                 // Go through each node in the content array

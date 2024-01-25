@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Universe;
 use App\Models\Series;
 use App\Models\Chapter;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class SearchController extends Controller
@@ -64,36 +65,35 @@ class SearchController extends Controller
                 break;
         }
 
-        return $resultsList;
+        return response()->json($resultsList);
     }
 
     private function searchElements()
     {
         $resultsList = [];
 
-        $user = User::find(request()->userId);
+        $user = auth('sanctum')->user();
 
-        // $elements = $user->elementsThroughUniverse()
-        //     ->pluck(
-        //         // 'elementables.element_id', 
-        //     'elementables.elementable_id')
-        //     ->toArray();
-        // dd($elements);
+        // dd($user);
 
-        dd($user->elementsThroughUniverse()->get()->unique());
+        // Get user with id 1
+        // $user = User::find(1);
+
+        // dd($user->elementsThroughUniverse()->get()->unique());
 
         // $resultsList = Element::latest()->filter(request(['search']))->ownedByUsers([request()->userId])->limit(request()->limit)->get();
 
         $resultsList = $user->elementsThroughUniverse()->filter(request(['search']))->limit(request()->limit)->get();
+
+        // dd(json_encode($resultsList));
 
         // Depending on whether to include parent and child elements, concat the results with the parent and child elements
         // The most straightforward approach would be to get a list of all the elements, create another list of parent elements and child elements, then concat the results
         // When including query in parent, for example, if your search is 'Johnny', you'll get a Johnny element, and perhaps a MindMap element that contains Johnny
         // On the other hand, if you search for 'Relationships', you'll get a Relationships element, and all the elements that are contained within it
 
-        // dd($resultsList);
-
         return $resultsList;
+        // return 1;
     }
 
     private function searchUsers()

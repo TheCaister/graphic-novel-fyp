@@ -83,6 +83,7 @@ export default {
         return axios.get('/api/search', {
             params: {
                 searchType: 'elements',
+                // userId: userId,
                 search: query,
                 limit: limit,
             }
