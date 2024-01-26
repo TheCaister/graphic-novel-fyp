@@ -9,19 +9,10 @@ export default {
     items: async ({ query }) => {
         // This is the list of items that will be passed to the MentionList component
         // we can do all this, or we can simply call the api here
-        return APICalls.searchElements(query, 5, 'users')
-        // return [{
-        //     element_name: 'test',
-        // },
-        // {
-        //     element_name: 'test2',
-        // },
-        // {
-        //     element_name: 'test3',
-        // },
-        // {
-        //     element_name: 'test4',
-        // },]
+        // return APICalls.searchElements(query, 5, 'users')
+        return APICalls.searchMention(query, 5, 'users')
+
+
 
     },
     command: ({ editor, range, props }) => {

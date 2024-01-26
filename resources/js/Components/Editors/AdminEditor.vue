@@ -1,13 +1,20 @@
 <template>
     <div class="bg-black text-white">
-        <editor-content class="p-4 editor-field" :editor="editor" @itemSelected="itemSelected" />
+        <editor-content class="p-4 editor-field border-4 border-white" :editor="editor" @itemSelected="itemSelected" />
     </div>
 </template>
 
 <script setup>
 
+
+import { defineEmits } from 'vue'
+const emits = defineEmits(['addAdminId'])
+
+
+
 function itemSelected(props) {
-    console.log(props)
+    // console.log(props.id.id)
+    emits('addAdminId', props.id.id)
 }
 </script>
   
@@ -15,7 +22,6 @@ function itemSelected(props) {
 import Mention from '@tiptap/extension-mention'
 import Paragraph from '@tiptap/extension-paragraph'
 import { Editor, EditorContent } from '@tiptap/vue-3'
-import StarterKit from '@tiptap/starter-kit'
 import suggestion from './SuggestionAdmin/suggestion'
 
 import Document from '@tiptap/extension-document'
@@ -53,6 +59,8 @@ export default {
                 return
             }
 
+            console.log(this.editor.getJSON())
+
             this.editor.commands.setContent(value, false)
         },
     },
@@ -62,9 +70,6 @@ export default {
             const newHTML = this.editor.getHTML().replaceAll(/<li><p>(.*?)<\/p><(\/?)(ol|li|ul)>/gi, "<li>$1<$2$3>")
 
             this.editor.commands.setContent(newHTML, false)
-        },
-        testing(event) {
-            console.log(event)
         },
     },
 
@@ -81,32 +86,27 @@ export default {
                         style: 'color: red; border: 2px solid pink;',
                         target: '_blank',
                         //   Onclick function
-                        onclick: `alert(testing())`,
                     },
-                    `${node.attrs.label ?? "testing"}`,
+                    `${node.attrs.label ?? node.attrs.id.name}`,
                 ];
             },
         });
 
         this.editor = new Editor({
             extensions: [
-                // Document,
-                // Text,
-                // Paragraph,
-                StarterKit.configure(
-                    {
-                    }
-                ),
+                Document,
+                Text,
+                Paragraph,
                 CustomMention.configure({
                     HTMLAttributes: {
                         class: 'mention',
                     },
                     renderLabel({ options, node }) {
-                        console.log(node)
+                        // console.log(node)
 
                         // node.attrs.id is the element object that is returned when a suggestion is selected.
                         // return `${options.suggestion_admin.char}${node.attrs.label ?? node.attrs.id.element_name}`
-                        return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id.element_name}`
+                        return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id.name}`
 
                     },
                     // suggestion_admin,
@@ -116,7 +116,9 @@ export default {
             ],
             content: this.modelValue,
             onUpdate: () => {
-                console.log('updated...')
+                // console.log(JSON.parse(JSON.stringify(this.editor.getJSON())))
+                // this.$emit('update:modelValue', JSON.parse(JSON.stringify(this.editor.getJSON())))
+                // console.log('updated...')
             },
         })
     },

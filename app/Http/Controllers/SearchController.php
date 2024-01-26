@@ -68,6 +68,39 @@ class SearchController extends Controller
         return response()->json($resultsList);
     }
 
+    public function searchMention(){
+        $resultsList = [];
+
+        // do a switch on the search type
+        switch (request()->searchType) {
+            case 'elements':
+                $resultsList = $this->searchElements();
+
+                // id = element_id, name = element_name
+                foreach($resultsList as $result){
+                    $result->id = $result->element_id;
+                    $result->name = $result->element_name;
+                }
+                break;
+            case 'users':
+                $resultsList = $this->searchUsers();
+
+                foreach($resultsList as $result){
+                    $result->name = $result->username;
+                }
+
+                break;
+            case 'content':
+                $resultsList = $this->searchContent();
+                break;
+            default:
+                $resultsList = [];
+                break;
+        }
+
+        return response()->json($resultsList);
+    }
+
     private function searchElements()
     {
         $resultsList = [];

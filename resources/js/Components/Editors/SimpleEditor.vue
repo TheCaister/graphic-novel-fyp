@@ -82,7 +82,7 @@
 <script setup>
 
 function itemSelected(props) {
-    console.log(props.id.element_id)
+    console.log(props.id.id)
 }
 </script>
   
@@ -157,7 +157,7 @@ export default {
                         //   Onclick function
                         onclick: `alert(testing())`,
                     },
-                    `${node.attrs.label ?? node.attrs.id.element_name}`,
+                    `${node.attrs.label ?? node.attrs.id.name}`,
                 ];
             },
         });
@@ -196,7 +196,7 @@ export default {
                         // console.log(node)
 
                         // node.attrs.id is the element object that is returned when a suggestion is selected.
-                        return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id.element_name}`
+                        return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id.name}`
                     },
                     suggestion,
                 }),

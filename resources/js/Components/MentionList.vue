@@ -2,12 +2,15 @@
 <template>
   <div class="items">
     <template v-if="this.items.data.length">
+      <!-- <button class="w-64 h-64" @click="console.log(this.items)">
+
+      </button> -->
       <!-- <template v-if="items.length"> -->
       <!-- <button class="item" :class="{ 'is-selected': index === selectedIndex }" v-for="(item, index) in items" -->
 
       <button class="item" :class="{ 'is-selected': index === selectedIndex }" v-for="(item, index) in items.data"
         :key="index" @click="selectItem(index)">
-        {{ item.element_name }}
+        {{ item.name }}
       </button>
     </template>
     <div class="item" v-else>
@@ -84,7 +87,7 @@ export default {
 
     //   Gets the item at the given index and calls the command
     selectItem(index) {
-      console.log(this.items)
+      // console.log(this.items)
 
       const item = this.items.data[index]
 
@@ -94,9 +97,6 @@ export default {
         this.command({ id: item })
       }
     },
-  },
-  mounted() {
-    console.log('testing')
   },
 }
 </script>

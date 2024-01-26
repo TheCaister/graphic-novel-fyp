@@ -89,6 +89,16 @@ export default {
             }
         })
     },
+    searchMention(query, limit, searchType='elements'){
+        return axios.get('/api/search/mention', {
+            params: {
+                searchType: searchType,
+                // userId: userId,
+                search: query,
+                limit: limit,
+            }
+        })
+    },
     getRecents(limit){
         return axios.get('/api/recents', {
             params: {

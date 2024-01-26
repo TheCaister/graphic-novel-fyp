@@ -50,6 +50,9 @@ Route::get('/chapters/{chapter}/filepond-pages', [ChapterController::class, 'get
 
 Route::get('/search', [SearchController::class, 'searchJson'])->name('search.json');
 
+Route::get('/search/mention', [SearchController::class, 'searchMention'])->name('search.mention');
+
+
 Route::get('/genres', [SeriesController::class, 'getGenres'])->name('series.get-genres');
 
 Route::get('/elements', [App\Http\Controllers\ElementController::class, 'getElements'])->name('elements.get-elements');

@@ -34,10 +34,10 @@ const modal = ref(null)
 const form = useForm({
     universe_name: '',
     upload: '',
+    admins: [],
 });
 
 onClickOutside(modal, () => {
-    console.log('you have clicked outside')
     close()
 })
 
@@ -83,8 +83,12 @@ if (form.upload) {
             <h2 class="text-4xl font-bold text-white ">Create Universe</h2>
             <form @submit.prevent="submit">
                 <div class="flex">
-
+                    <button class="w-64 h-64 text-white" @click="console.log(form.admins)">
+                        Check admins
+                    </button>
                     <div class="w-1/2">
+                        
+
                         <Label>Universe Thumbnail</Label>
 
                         <file-pond name="upload" label-idle="Universe Thumbnail" accepted-file-types="image/jpeg, image/png"
@@ -115,7 +119,7 @@ if (form.upload) {
                                 <TextInput id="admins" type="text" class="mt-1 block w-full" autofocus />
                                 <InputError class="mt-2" message="" />
 
-                                <AddAdminFormInput class="bg-white w-64 h-64"/>
+                                <AddAdminFormInput v-model="form.admins"/>
                             </div>
                         </div>
                         <div class="flex justify-end">

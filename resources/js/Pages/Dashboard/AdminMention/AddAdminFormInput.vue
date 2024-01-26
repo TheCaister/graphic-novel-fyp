@@ -1,6 +1,12 @@
 <template>
     <div class="bg-white">
-        <AdminEditor v-model="admins" />
+        <!-- Go through everything in model.value -->
+        <div class="w-64 h-16">
+            <div v-for="admin in model.value" :key="admin">
+                <p>{{ admin }}</p>
+            </div>
+        </div>
+        <AdminEditor @add-admin-id="addAdminId" />
     </div>
 </template>
 
@@ -8,13 +14,18 @@
 import AdminEditor from '@/Components/Editors/AdminEditor.vue';
 import { watch, ref } from 'vue'
 
-const admins = ref('test')
-
-// Define the emits for the component
-const emit = defineEmits(['updateElement'])
-
-watch(admins, (admin) => {
-    // console.log(element)
-    emit('updateElement', admin)
+const model = defineModel({
+    default: [],
 })
+
+function addAdminId(id) {
+    console.log(model.value)
+
+
+    if (!model.value.includes(id)) {
+        model.value.push(id)
+    }
+
+
+}
 </script>
