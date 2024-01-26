@@ -3,20 +3,6 @@
         <editor-content class="p-4 editor-field border-4 border-white" :editor="editor" @itemSelected="itemSelected" />
     </div>
 </template>
-
-<script setup>
-
-
-import { defineEmits } from 'vue'
-const emits = defineEmits(['addAdminId'])
-
-
-
-function itemSelected(props) {
-    // console.log(props.id.id)
-    emits('addAdminId', props.id.id)
-}
-</script>
   
 <script>
 import Mention from '@tiptap/extension-mention'
@@ -39,7 +25,7 @@ export default {
         },
     },
 
-    emits: ['update:modelValue'],
+    emits: ['update:modelValue', 'addAdminId'],
 
     data() {
         return {
@@ -71,6 +57,11 @@ export default {
 
             this.editor.commands.setContent(newHTML, false)
         },
+        itemSelected(props) {
+    this.$emit('addAdminId', props.id)
+    console.log('Deleting...')
+    this.editor.commands.setContent('', false)
+}
     },
 
     mounted() {
