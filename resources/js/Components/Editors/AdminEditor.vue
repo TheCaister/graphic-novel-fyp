@@ -25,7 +25,7 @@ export default {
         },
     },
 
-    emits: ['update:modelValue', 'addAdminId'],
+    emits: ['update:modelValue', 'addAdmin'],
 
     data() {
         return {
@@ -58,7 +58,7 @@ export default {
             this.editor.commands.setContent(newHTML, false)
         },
         itemSelected(props) {
-    this.$emit('addAdminId', props.id)
+    this.$emit('addAdmin', props.id)
     console.log('Deleting...')
     this.editor.commands.setContent('', false)
 }

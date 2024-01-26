@@ -6,7 +6,7 @@
                 <Tag :label="admin.username" @close-tag="removeAdmin(admin)"/>
             </div>
         </div>
-        <AdminEditor @add-admin-id="addAdmin" />
+        <AdminEditor @add-admin="addAdmin" />
     </div>
 </template>
 
@@ -20,12 +20,9 @@ const model = defineModel({
 })
 
 function addAdmin(admin) {
-    console.log(model.value)
-
-
-    if (!model.value.includes(admin)) {
-        model.value.push(admin)
-    }
+    if (!model.value.some(obj => obj.id === admin.id)) {
+  model.value.push(admin);
+}
 }
 
 function removeAdmin(admin) {
