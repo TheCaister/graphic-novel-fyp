@@ -3,6 +3,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { onClickOutside } from '@vueuse/core'
+import AddAdminFormInput from '../AdminMention/AddAdminFormInput.vue'
 import { ref, onMounted, defineProps, computed } from 'vue'
 
 import { useForm } from '@inertiajs/vue3';
@@ -39,6 +40,7 @@ const props = defineProps({
 const form = useForm({
     universe_name: '',
     upload: '',
+    moderators: [],
 });
 
 onClickOutside(modal, () => {
@@ -46,6 +48,9 @@ onClickOutside(modal, () => {
 })
 
 function submit() {
+    form.moderators = form.moderators.map(moderator => moderator.id)
+
+
     form.put(route('universes.update', props.universe.universe_id), {
         onFinish: () => {
             form.upload = '';
@@ -92,8 +97,9 @@ function deleteExistingThumbnail() {
 }
 
 onMounted(() => {
-    console.log(props.universe)
+    // console.log(props.universe)
     form.universe_name = props.universe.universe_name
+    form.moderators = props.universe.moderators
 })
 
 const files = computed(() => {
@@ -157,9 +163,7 @@ const files = computed(() => {
                             </div>
 
                             <div>
-                                <InputLabel for="admins" value="Invite admins (Optional):" />
-                                <TextInput id="admins" type="text" class="mt-1 block w-full" autofocus />
-                                <InputError class="mt-2" message="" />
+                                <AddAdminFormInput v-model="form.moderators"/>
                             </div>
                         </div>
                         <div class="flex justify-end">

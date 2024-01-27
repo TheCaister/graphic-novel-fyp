@@ -71,6 +71,11 @@ class User extends Authenticatable
         return $this->morphedByMany(Series::class, 'moderatable', 'approved_moderators', 'moderator_id', 'moderatable_id', 'id', 'series_id');
     }
 
+    public function moderatableChapters(): MorphToMany
+    {
+        return $this->morphedByMany(Chapter::class, 'moderatable', 'approved_moderators', 'moderator_id', 'moderatable_id', 'id', 'chapter_id');
+    }
+
     public function elementsThroughUniverse()
     {
         return $this->hasManyDeep(
@@ -133,6 +138,7 @@ class User extends Authenticatable
         $this->universes()->delete();
         $this->moderatableUniverses()->detach();
         $this->moderatableSeries()->detach();
+        $this->moderatableChapters()->detach();
         parent::delete();
     }
 

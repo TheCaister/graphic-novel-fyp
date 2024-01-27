@@ -54,6 +54,8 @@ class UniverseController extends Controller
             $tempThumbnail->delete();
         }
 
+        $universe->moderators()->sync($request->moderators);
+
         return redirect()->route('home');
     }
 
@@ -92,6 +94,8 @@ class UniverseController extends Controller
         $formFields = $request->validate([
             'universe_name' => 'required',
         ]);
+
+        $universe->moderators()->sync($request->moderators);
 
         $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
 
@@ -138,6 +142,9 @@ class UniverseController extends Controller
 
         foreach ($universes as $universe) {
             $universe->thumbnail = $universe->getFirstMediaUrl('universe_thumbnail');
+
+            // Get universe moderators
+            $universe->moderators = $universe->moderators()->get();
             }
 
         // dd($universes);

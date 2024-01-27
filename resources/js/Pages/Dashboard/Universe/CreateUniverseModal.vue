@@ -34,7 +34,7 @@ const modal = ref(null)
 const form = useForm({
     universe_name: '',
     upload: '',
-    admins: [],
+    moderators: [],
 });
 
 onClickOutside(modal, () => {
@@ -42,6 +42,10 @@ onClickOutside(modal, () => {
 })
 
 function submit() {
+
+    // In admins, extract only the id's
+    form.moderators = form.moderators.map(moderator => moderator.id)
+
     form.post(route('universes.store'), {
         onFinish: () => {
             // console.log(form.universe_name)
@@ -83,7 +87,7 @@ if (form.upload) {
             <h2 class="text-4xl font-bold text-white ">Create Universe</h2>
             <form @submit.prevent="submit">
                 <div class="flex">
-                    <button class="w-64 h-64 text-white" @click="console.log(form.admins)">
+                    <button class="w-64 h-64 text-white" @click="console.log(form.moderators)">
                         Check admins
                     </button>
                     <div class="w-1/2">
@@ -114,13 +118,7 @@ if (form.upload) {
                                 <InputError class="mt-2" message="" />
                             </div>
 
-                            <div>
-                                <InputLabel for="admins" value="Invite admins (Optional):" />
-                                <TextInput id="admins" type="text" class="mt-1 block w-full" autofocus />
-                                <InputError class="mt-2" message="" />
-
-                                <AddAdminFormInput v-model="form.admins"/>
-                            </div>
+                           
                         </div>
                         <div class="flex justify-end">
                             <!-- Button to cancel and button to create -->

@@ -74,6 +74,11 @@ class Chapter extends Model implements HasMedia
         return $this->morphToMany(Element::class, 'elementable', 'elementables', 'elementable_id', 'element_id');
     }
 
+    public function moderators(): MorphToMany
+    {
+        return $this->morphToMany(User::class, 'moderatable', 'approved_moderators', 'moderatable_id', 'moderator_id', 'chapter_id');
+    }
+
     public function name(): string
     {
         return $this->chapter_title;
