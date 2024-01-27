@@ -29,7 +29,7 @@
                     </Link>
 
                     <!-- <PrimaryButton class="mr-4">Projects</PrimaryButton> -->
-                    <DropdownSubtle :options="universes" />
+                    <DropdownSubtle :options="universes" @option-selected="goToUniverse" />
                     <PrimaryButton class="mr-4">About Us</PrimaryButton>
                 </div>
 
@@ -91,7 +91,7 @@
 </style>
 
 <script setup>
-import { useForm, usePage } from '@inertiajs/vue3';
+import { useForm, usePage, router } from '@inertiajs/vue3';
 import DropdownSubtle from '@/Components/DropdownSubtle.vue';
 import APICalls from '@/Utilities/APICalls';
 import { onMounted, ref } from 'vue'
@@ -129,7 +129,10 @@ APICalls.getUniversesByUserId(page.props.auth.user.id, false).then(response => {
         console.log(universes.value)
     }).catch(error => console.log(error))
 
-
+function goToUniverse(option){
+    console.log(option)
+    router.visit(route('universes.show', option.id))
+}
 
 
 
