@@ -14,7 +14,8 @@
         <link rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     </Head>
 
@@ -27,7 +28,8 @@
                     <PrimaryButton class="mr-4">Home</PrimaryButton>
                     </Link>
 
-                    <PrimaryButton class="mr-4">Projects</PrimaryButton>
+                    <!-- <PrimaryButton class="mr-4">Projects</PrimaryButton> -->
+                    <DropdownSubtle :options="universes" />
                     <PrimaryButton class="mr-4">About Us</PrimaryButton>
                 </div>
 
@@ -61,9 +63,9 @@
                         class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
                     Log Out</Link>
 
-                        <Avatar
-                        src='https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg' :link="route('profile.edit')" />
-                 
+                    <Avatar src='https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg'
+                        :link="route('profile.edit')" />
+
                 </div>
 
             </header>
@@ -89,7 +91,14 @@
 </style>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
+import DropdownSubtle from '@/Components/DropdownSubtle.vue';
+import APICalls from '@/Utilities/APICalls';
+import { onMounted, ref } from 'vue'
+
+const page = usePage();
+
+const universes = ref([]);
 
 const form = useForm({
     search: '',
@@ -109,6 +118,24 @@ function search() {
         })
     }
 }
+
+APICalls.getUniversesByUserId(page.props.auth.user.id, false).then(response => {
+        universes.value = response.data.map(item => ({
+            name: item.universe_name,
+            id: item.universe_id
+        }));
+
+        console.log('Universes')
+        console.log(universes.value)
+    }).catch(error => console.log(error))
+
+
+
+
+
+
+
+
 </script>
 
 <script>
