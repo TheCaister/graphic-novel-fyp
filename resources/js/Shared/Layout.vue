@@ -55,16 +55,17 @@
 
 
                     <!-- Settings button with gear icon -->
-                    <button type="submit">
+                    <Link  :href="route('profile.show', page.props.auth.user.id)" >
                         <span class="material-symbols-outlined dark">settings</span>
-                    </button>
+                    </Link>
 
                     <Link :href="route('logout')" method="post" as="button"
                         class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
                     Log Out</Link>
 
+                    <!-- Need to get current user id -->
                     <Avatar src='https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg'
-                        :link="route('profile.edit')" />
+                    :link="route('profile.edit')"/>
 
                 </div>
 
@@ -125,8 +126,8 @@ APICalls.getUniversesByUserId(page.props.auth.user.id, false).then(response => {
             id: item.universe_id
         }));
 
-        console.log('Universes')
-        console.log(universes.value)
+        //console.log('Universes')
+        // console.log(universes.value)
     }).catch(error => console.log(error))
 
 function goToUniverse(option){

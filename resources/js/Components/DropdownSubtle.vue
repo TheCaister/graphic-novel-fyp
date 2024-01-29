@@ -3,7 +3,7 @@
 <div class="text-white">
 <!-- Selected option here + Prompt -->
 
-    <div @click="isDropDownVisible = true">
+    <div @click="isDropDownVisible = !isDropDownVisible">
         <!-- {{ selectedOption.hasOwnProperty('name') ? selectedOption.name : "Select an option" }} -->
         Projects
     </div>
