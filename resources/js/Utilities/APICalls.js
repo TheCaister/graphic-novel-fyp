@@ -51,6 +51,14 @@ export default {
             }
         })
     },
+    getSiblingContent(type, id){
+        return axios.get('/api/content/get-siblings', {
+            params: {
+                type: type,
+                id: id,
+            }
+        })
+    },
     getContent(type, id){
         // Switch
         switch(type){

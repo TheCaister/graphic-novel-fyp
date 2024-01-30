@@ -68,6 +68,38 @@ class SearchController extends Controller
         return response()->json($resultsList);
     }
 
+    // This will get content type and id
+    public function getSiblingContent(){
+        // dd('hey baby');
+
+        $content = null;
+        $id = request()->id;
+
+        // dd($id);
+        $resultsList = [];
+
+        switch(request()->type){
+            case 'universe':
+                // $content = Universe::find($id);
+                $user = auth('sanctum')->user();
+                $resultsList = $user->universes()->get()->toArray();
+                // dd($resultsList);
+                break;
+            case 'series':
+                $content = Series::find($id);
+                $resultsList = $content->universe()->series()->get()->toArray();
+                break;
+            case 'chapter':
+                $content = Chapter::find($id);
+                $resultsList = $content->series()->chapters()->get()->toArray();
+                break;
+        }
+
+        // dd($resultsList);
+
+        return $resultsList;
+    }
+
     public function searchMention(){
         $resultsList = [];
 
@@ -107,18 +139,9 @@ class SearchController extends Controller
 
         $user = auth('sanctum')->user();
 
-        // dd($user);
-
-        // Get user with id 1
-        // $user = User::find(1);
-
-        // dd($user->elementsThroughUniverse()->get()->unique());
-
-        // $resultsList = Element::latest()->filter(request(['search']))->ownedByUsers([request()->userId])->limit(request()->limit)->get();
 
         $resultsList = $user->elementsThroughUniverse()->filter(request(['search']))->limit(request()->limit)->get();
 
-        // dd(json_encode($resultsList));
 
         // Depending on whether to include parent and child elements, concat the results with the parent and child elements
         // The most straightforward approach would be to get a list of all the elements, create another list of parent elements and child elements, then concat the results

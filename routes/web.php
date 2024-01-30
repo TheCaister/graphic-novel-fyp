@@ -186,52 +186,53 @@ Route::middleware('auth')->group(function () {
 
     Route::get('user/main/show', [ProfileController::class, 'showMain'])->name('user.main.show');
     Route::get('user/main/edit', [ProfileController::class, 'editMain'])->name('user.main.edit');
-
-    
-
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard/{content-type}/{content-id}', function ($contentType, $contentId) {
     });
+
+    Route::get('/about-us', function() {
+        return Inertia::render('AboutUs/AboutUs');
+
+    })->name('about-us');
+
+    Route::post('/upload', [UploadController::class, 'store'])->name('upload.store');
+
+    Route::get('/publish', [SeriesController::class, 'publish'])->name('publish');
+
+    Route::resource('universes', UniverseController::class);
+
+    //////////////////////// SERIES ROUTES ////////////////////////
+    Route::get('{series}/chapters/create', [ChapterController::class, 'create'])->name('chapter.create');
+    Route::get('{series}/chapters/manage', [SeriesController::class, 'manageChapters'])->name('chapter.manage');
+    Route::resource('chapters', ChapterController::class);
+
+    // Route::get('{universe}/series/create', [SeriesController::class, 'create'])->name('series.create');
+    Route::get('/series/genres', [SeriesController::class, 'genres'])->name('series.genres');
+    Route::resource('series', SeriesController::class);
+    Route::resource('comic-pages', PageController::class);
+    Route::resource('pages', PageController::class);
+
+    ////////////////////////// ELEMENT ROUTES ////////////////////////
+    Route::get('user/main/elementsforge', [ElementController::class, 'elementsforge'])->name('user.main.elementsforge');
+
+    Route::get('/elements/assign/getParent', [ElementController::class, 'assignGetParent'])->name('elements.assign.get-parent');
+
+    Route::get('/elements/assign', [ElementController::class, 'assign'])->name('elements.assign');
+
+    Route::post('/elements/assign', [ElementController::class, 'assignStore'])->name('elements.assign.store');
+
+    Route::resource('elements', ElementController::class);
+
+    ////////////////////////// FORGE ROUTES ////////////////////////
+    Route::get('/forge/show', [ElementController::class, 'forgeShow'])->name('forge.show');
+
+    ////////////////////////// MEDIA ROUTES ////////////////////////
+    // http://localhost/upload?media=series_thumbnail 
+
+    ////////////////////////// SEARCH ROUTES ////////////////////////
+    Route::get('/search', [SearchController::class, 'search'])->name('search');
 });
-
-
-Route::post('/upload', [UploadController::class, 'store'])->name('upload.store');
-
-Route::get('/publish', [SeriesController::class, 'publish'])->name('publish');
-
-Route::resource('universes', UniverseController::class);
-
-//////////////////////// SERIES ROUTES ////////////////////////
-Route::get('{series}/chapters/create', [ChapterController::class, 'create'])->name('chapter.create');
-Route::get('{series}/chapters/manage', [SeriesController::class, 'manageChapters'])->name('chapter.manage');
-Route::resource('chapters', ChapterController::class);
-
-// Route::get('{universe}/series/create', [SeriesController::class, 'create'])->name('series.create');
-Route::get('/series/genres', [SeriesController::class, 'genres'])->name('series.genres');
-Route::resource('series', SeriesController::class);
-Route::resource('comic-pages', PageController::class);
-Route::resource('pages', PageController::class);
-
-////////////////////////// ELEMENT ROUTES ////////////////////////
-Route::get('user/main/elementsforge', [ElementController::class, 'elementsforge'])->name('user.main.elementsforge');
-
-Route::get('/elements/assign/getParent', [ElementController::class, 'assignGetParent'])->name('elements.assign.get-parent');
-
-Route::get('/elements/assign', [ElementController::class, 'assign'])->name('elements.assign');
-
-Route::post('/elements/assign', [ElementController::class, 'assignStore'])->name('elements.assign.store');
-
-Route::resource('elements', ElementController::class);
-
-////////////////////////// FORGE ROUTES ////////////////////////
-Route::get('/forge/show', [ElementController::class, 'forgeShow'])->name('forge.show');
-
-////////////////////////// MEDIA ROUTES ////////////////////////
-// http://localhost/upload?media=series_thumbnail 
-
-////////////////////////// SEARCH ROUTES ////////////////////////
-Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 require __DIR__ . '/auth.php';

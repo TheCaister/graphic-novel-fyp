@@ -30,7 +30,9 @@
 
                     <!-- <PrimaryButton class="mr-4">Projects</PrimaryButton> -->
                     <DropdownSubtle :options="universes" @option-selected="goToUniverse" />
-                    <PrimaryButton class="mr-4">About Us</PrimaryButton>
+                    <Link :href="route('about-us')">
+                        <PrimaryButton class="mr-4">About Us</PrimaryButton>
+                    </Link>
                 </div>
 
                 <div class="flex items-center ">

@@ -77,6 +77,7 @@ Route::group([], function () {
     Route::get('series/{series}', [SeriesController::class, 'getJsonSeries'])->name('series.get-series-json');
     Route::get('chapters/{chapter}', [SeriesController::class, 'getJsonChapter'])->name('chapters.get-chapter-json');
     Route::get('pages/{page}', [PageController::class, 'getJsonPage'])->name('pages.get-page-json');
+    Route::middleware('auth:sanctum')->get('content/get-siblings', [SearchController::class, 'getSiblingContent'])->name('content.get-siblings');
 });
 
 Route::group([], function () {

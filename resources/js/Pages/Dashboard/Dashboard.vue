@@ -9,6 +9,7 @@ import RecentsList from './RecentsList.vue';
 import TabsWrapper from './TabsWrapper.vue';
 import Tab from './Tab.vue';
 import { ref, defineProps, onMounted, computed, provide } from 'vue'
+import APICalls from '@/Utilities/APICalls'
 
 const props = defineProps({
     dashboardViewType: {
@@ -22,6 +23,7 @@ const props = defineProps({
 
 const dashboardView = ref(props.dashboardViewType)
 const parentContentIdNumber = ref(props.parentContentId)
+const siblingContentList = ref([])
 const size = ref(0)
 
 const DashboardViewComponent = computed(() => {
@@ -45,13 +47,46 @@ provide('parentContentId', parentContentIdNumber.value)
 
 onMounted(async () => {
     console.log(props.dashboardViewType)
+
+    updateSiblingContentDropdown()
 })
 
 function updateDashboard(dashboardViewString, parentContentId) {
+    updateSiblingContentDropdown()
 
     parentContentIdNumber.value = parentContentId
     dashboardView.value = dashboardViewString
 }
+
+function updateSiblingContentDropdown() {
+
+    let type = null
+
+    switch (dashboardView.value) {
+        case 'UniverseView':
+            return
+        case 'SeriesView':
+            type = 'universe'
+            break
+        case 'ChapterView':
+            type = 'series'
+            break
+        case 'PageView':
+            type = 'chapter'
+            break
+        default:
+            return
+    }
+
+    if (dashboardView.value !== 'UniverseView') {
+        APICalls.getSiblingContent(type, props.parentContentId).then(response => {
+            siblingContentList.value = response.data
+        }).catch(error => console.log(error))
+    }
+
+}
+
+
 
 function goBack() {
     router.visit(route('content.get-parent', { type: dashboardView.value, id: parentContentIdNumber.value }))
@@ -74,9 +109,25 @@ function updateSize(event) {
                     Go back
                 </PrimaryButton>
             </div>
-            <PrimaryButton>
-                Universe 1
-            </PrimaryButton>
+
+
+            <!-- Dropdown for anything other than universe view -->
+            <div v-if="dashboardView !== 'UniverseView'">
+                <!-- We have the view type as well as the parent content id -->
+                <!-- This means if we're in a series view, we have the universe type and id -->
+                <!-- In this case, we'll just display all the universes that the user has access to -->
+                <!-- If we're in chapter view, we have the series' details. -->
+                <!-- From here, we need to get its 'siblings' by going up another level (to universes) and calling series() -->
+
+                <!-- similar case for page view, except with chapters -->
+
+                <!-- Now, if we're in a series view, we want to display dropdown of other universes -->
+                <!-- Chapter view, other series -->
+                <!-- Page view,  other chapters -->
+                <PrimaryButton>
+                    Universe 1
+                </PrimaryButton>
+            </div>
         </div>
 
         <div>
