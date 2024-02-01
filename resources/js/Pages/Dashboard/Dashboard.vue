@@ -10,6 +10,7 @@ import TabsWrapper from './TabsWrapper.vue';
 import Tab from './Tab.vue';
 import { ref, defineProps, onMounted, computed, provide } from 'vue'
 import APICalls from '@/Utilities/APICalls'
+import DropdownSubtle from '@/Components/DropdownSubtle.vue';
 
 const props = defineProps({
     dashboardViewType: {
@@ -92,6 +93,25 @@ function goBack() {
     router.visit(route('content.get-parent', { type: dashboardView.value, id: parentContentIdNumber.value }))
 }
 
+function goToContent(option){
+
+    let id = option.id
+
+    switch(props.dashboardViewType){
+        case 'SeriesView':
+            router.visit(route('universes.show', id))
+            break
+        case 'ChapterView':
+            router.visit(route('series.show', id))
+            break
+        case 'PageView':
+            router.visit(route('chapters.show', id))
+            break
+        default:
+            return
+    }
+}
+
 function updateSize(event) {
     console.log('successfully updated element list size')
     size.value = event
@@ -124,9 +144,11 @@ function updateSize(event) {
                 <!-- Now, if we're in a series view, we want to display dropdown of other universes -->
                 <!-- Chapter view, other series -->
                 <!-- Page view,  other chapters -->
-                <PrimaryButton>
+                <!-- <PrimaryButton>
                     Universe 1
-                </PrimaryButton>
+                </PrimaryButton> -->
+
+                <DropdownSubtle :options="siblingContentList" @option-selected="goToContent"/>
             </div>
         </div>
 

@@ -82,20 +82,25 @@ class SearchController extends Controller
             case 'universe':
                 // $content = Universe::find($id);
                 $user = auth('sanctum')->user();
-                $resultsList = $user->universes()->get()->toArray();
+                $resultsList = $user->universes()->select('universe_name as name', 'universe_id as id')->get();
                 // dd($resultsList);
                 break;
             case 'series':
                 $content = Series::find($id);
-                $resultsList = $content->universe()->series()->get()->toArray();
+
+                // After getting the series, get the universe, then get all
+                // the series of that universe
+                $universe = $content->universe;
+
+                $resultsList = $universe->series()->select('series_title as name', 'series_id as id')->get();
                 break;
             case 'chapter':
                 $content = Chapter::find($id);
-                $resultsList = $content->series()->chapters()->get()->toArray();
+                $series = $content->series;
+
+                $resultsList = $series->chapters()->select('chapter_title as name', 'chapter_id as id')->get();
                 break;
         }
-
-        // dd($resultsList);
 
         return $resultsList;
     }
