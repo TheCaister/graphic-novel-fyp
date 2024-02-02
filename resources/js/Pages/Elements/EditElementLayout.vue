@@ -46,6 +46,9 @@ function updateForm(element) {
 
 function saveElement(assign = false) {
 
+    console.log('updating...')
+    console.log(form.upload)
+
     form.put(route('elements.update', {
         element: form.element.element_id, assign: assign, content_type: assign ? props.parentContentType : '', content_id: assign ? props.parentContentId : '', preSelectedElements: [{
             element_id: form.element.element_id,
@@ -63,6 +66,12 @@ function saveElement(assign = false) {
 
 }
 
+function updateUpload(upload){
+    form.upload = upload
+
+    saveElement()
+}
+
 onMounted(() => {
     form.element = props.element
 })
@@ -71,9 +80,9 @@ function back() {
     window.history.back();
 }
 
-function updateThumbnail() {
-    console.log('updating thumbnail...')
-}
+// function updateThumbnail() {
+//     console.log('updating thumbnail...')
+// }
 </script>
 
 <template>
@@ -82,7 +91,9 @@ function updateThumbnail() {
     <Teleport to="body">
         <Transition name="modal" class="z-50">
             <ElementThumbnailModal v-if="isEditThumbnailModalOpen"
-                @closeModal="isEditThumbnailModalOpen = false; updateThumbnail()" :element="props.element"
+                @closeModal="isEditThumbnailModalOpen = false"
+                @save-thumbnail="updateUpload"
+                :element="props.element"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
     </Teleport>
@@ -109,11 +120,11 @@ function updateThumbnail() {
 
         <!-- Thumbnail with option to edit name -->
         <div class="w-full h-64 flex items-center p-6"
-            style="background-image: url('https://images.unsplash.com/photo-1481349518771-20055b2a7b24?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fHww')">
+            :style="'background-image: url(' + props.element.element_thumbnail + ')'">
             <div class="flex items-center gap-8">
                 <button @click="isEditThumbnailModalOpen = true">
-                    <img class="w-32 h-32 shadow-2xl rounded-lg"
-                        src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fHww"
+                    <img class="w-32 h-32 shadow-2xl rounded-lg hover:scale-105 transition-transform duration-300"
+                        :src="props.element.element_thumbnail"
                         alt="" srcset="">
                 </button>
 

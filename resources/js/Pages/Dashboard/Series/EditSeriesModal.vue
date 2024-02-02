@@ -71,7 +71,7 @@ onClickOutside(modal, () => {
 
 function submit() {
 
-    console.log(form.moderators)
+    // console.log(form.moderators)
 
     form.moderators = form.moderators.map(moderator => moderator.id)
 

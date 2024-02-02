@@ -1,6 +1,6 @@
 <script setup>
 import { onClickOutside } from '@vueuse/core'
-import { ref, onMounted, defineProps, computed } from 'vue'
+import { ref, defineProps, computed } from 'vue'
 
 import { useForm } from '@inertiajs/vue3';
 
@@ -13,7 +13,7 @@ import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import axios from 'axios';
 
-const emit = defineEmits(['closeModal'])
+const emit = defineEmits(['closeModal', 'saveThumbnail'])
 function close() {
     deleteTempThumbnail();
     emit('closeModal');
@@ -41,18 +41,6 @@ onClickOutside(modal, () => {
     close()
 })
 
-function submit() {
-    form.moderators = form.moderators.map(moderator => moderator.id)
-
-
-    form.put(route('elements.update', props.element.element_id), {
-        onFinish: () => {
-            form.upload = '';
-            close()
-        }
-    });
-};
-
 let csrfToken = document.querySelector('meta[name="csrf-token"]').content
 
 function handleFilePondThumbnailProcess(error, file) {
@@ -66,6 +54,8 @@ function handleFilePondThumbnailRemove(error, file) {
 function deleteTempThumbnail() {
 
     if (form.upload) {
+        console.log('yes, there is upload present...')
+        console.log(form.upload)
 
         axios.delete(route('delete-thumbnail', {
             isTemp: "true",
@@ -89,6 +79,11 @@ function deleteExistingThumbnail() {
     }
 }
 
+function save(){
+    emit('saveThumbnail', form.upload)
+    close()
+}
+
 const files = computed(() => {
     console.log(props.element)
 
@@ -109,13 +104,11 @@ const files = computed(() => {
 
 <template>
     <div>
-        <div ref="modal" class="text-lg bg-black shadow-lg rounded-lg p-8 w-4/5">
-            <button class="text-white" @click="deleteExistingThumbnail">
-                Delete thumbnail
-            </button>
+        <div ref="modal" class="text-lg bg-black shadow-lg rounded-lg p-8">
             <h2 class="text-4xl font-bold text-white ">Edit Thumbnail</h2>
-            <form @submit.prevent="submit">
-                <div class="flex">
+            <!-- <form @submit.prevent="submit"> -->
+                <form>
+                <div class="flex flex-col items-center">
 
                     <div class="w-1/2">
                         <Label>Element Thumbnail</Label>
@@ -142,18 +135,17 @@ const files = computed(() => {
                                 }
                             }" />
                     </div>
-                    <div class="flex flex-col justify-between w-1/2 ml-8">
-                       
-                        <div class="flex justify-end">
-                            <button @click="close" type="button"
-                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                Cancel
-                            </button>
-                            <PrimaryButton type="submit"
-                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                Save
-                            </PrimaryButton>
-                        </div>
+                    <div class="flex w-1/2">
+
+                        <button @click="close" type="button"
+                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                            Cancel
+                        </button>
+
+                        <!-- Button for save -->
+                        <button @click="save" type="button" class="bg-pink-500 text-white font-bold py-2 px-4 rounded">
+                            Save
+                        </button>
                     </div>
 
                 </div>

@@ -121,9 +121,7 @@ const files = computed(() => {
 <template>
     <div>
         <div ref="modal" class="text-lg bg-black shadow-lg rounded-lg p-8 w-4/5">
-            <button class="text-white" @click="deleteExistingThumbnail">
-                Delete thumbnail
-            </button>
+       
             <h2 class="text-4xl font-bold text-white ">Edit Universe</h2>
             <form @submit.prevent="submit">
                 <div class="flex">

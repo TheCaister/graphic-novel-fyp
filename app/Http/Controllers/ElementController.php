@@ -9,6 +9,7 @@ use App\Models\Page;
 use App\Models\PanelPlannerElement;
 use App\Models\Series;
 use App\Models\SimpleTextElement;
+use App\Models\TemporaryFile;
 use App\Models\Universe;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -45,8 +46,18 @@ class ElementController extends Controller
             return redirect()->back();
         }
 
-        // dd($element->universes->first());
+        $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
 
+        if ($tempThumbnail) {
+            $element->addMedia(storage_path('app/public/uploads/element_thumbnail/tmp/' . $tempThumbnail->folder . '/' . $tempThumbnail->filename))->toMediaCollection('element_thumbnail');
+
+            rmdir(storage_path('app/public/uploads/element_thumbnail/tmp/' . $tempThumbnail->folder));
+
+            $element->element_thumbnail = $element->getFirstMediaUrl('element_thumbnail');
+            $element->save();
+
+            $tempThumbnail->delete();
+        }
         // Check if the element is already attached to a universe
         if (is_null($element->universes->first())) {
             $universe = $this->getUniverse($elementable, $elementable_id);
@@ -147,6 +158,22 @@ class ElementController extends Controller
                     $value = ' ';
                 }
             });
+        }
+
+
+        $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
+
+        // dd($tempThumbnail);
+
+
+        if ($tempThumbnail) {
+            $element->addMedia(storage_path('app/public/uploads/element_thumbnail/tmp/' . $tempThumbnail->folder . '/' . $tempThumbnail->filename))->toMediaCollection('element_thumbnail');
+
+            rmdir(storage_path('app/public/uploads/element_thumbnail/tmp/' . $tempThumbnail->folder));
+
+            $element->element_thumbnail = $element->getFirstMediaUrl('element_thumbnail');
+
+            $tempThumbnail->delete();
         }
 
         $element->update([
