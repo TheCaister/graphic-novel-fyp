@@ -5,7 +5,7 @@
             <content-card-detailed :content="{
                 content_id: element.element_id,
                 content_name: element.element_name,
-                subheading: element.derived_element_type,
+                subheading: getElementTypeText(element.derived_element_type),
                 description: '',
                 thumbnail: element.element_thumbnail,
             }"
@@ -87,6 +87,17 @@ function updateContentList() {
 
         emits('updateSize', elements.value.length)
     }).catch(error => console.log(error))
+}
+
+function getElementTypeText(text){
+    switch(text){
+        case 'App\\Models\\SimpleTextElement':
+            return 'Simple Text'
+        case 'App\\Models\\MindmapElement':
+            return 'Mindmap'
+        case 'App\\Models\\PanelPlannerElement':
+            return 'Panel Planner'
+    }
 }
 
 function getParentContentType() {
