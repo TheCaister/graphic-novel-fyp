@@ -81,12 +81,11 @@ function deleteExistingThumbnail() {
 
 function save(){
     emit('saveThumbnail', form.upload)
+    form.upload = '';
     close()
 }
 
 const files = computed(() => {
-    console.log(props.element)
-
     if (props.element.element_thumbnail !== '' && props.element.element_thumbnail) {
         return [
             {
