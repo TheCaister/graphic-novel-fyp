@@ -8,6 +8,9 @@ import APICalls from '@/Utilities/APICalls';
 
 import { useForm } from '@inertiajs/vue3';
 
+import AddAdminFormInput from '../AdminMention/AddAdminFormInput.vue'
+
+
 
 import vueFilePond from 'vue-filepond';
 
@@ -40,6 +43,7 @@ const form = useForm({
     chapter_notes: '',
     // scheduled_publish: '',
     pages: [],
+    moderators: [],
     upload: '',
 });
 
@@ -59,6 +63,9 @@ onClickOutside(modal, () => {
 
 function submit() {
     form.series_id = props.parentContentIdNumber
+
+    form.moderators = form.moderators.map(moderator => moderator.id)
+
 
     form.post(route('chapters.store'), {
         onFinish: () => {
@@ -206,9 +213,7 @@ onMounted(() => {
                             </div>
 
                             <div>
-                                <InputLabel for="admins" value="Invite admins (Optional):" />
-                                <TextInput id="admins" type="text" class="mt-1 block w-full" autofocus />
-                                <InputError class="mt-2" message="" />
+                                <AddAdminFormInput v-model="form.moderators"/>
                             </div>
 
                             <div>

@@ -55,6 +55,9 @@ class SeriesController extends Controller
             $tempThumbnail->delete();
         }
 
+        $series->moderators()->sync($request->moderators);
+
+
         return back();
     }
 
@@ -126,6 +129,9 @@ class SeriesController extends Controller
         }
 
 
+        $series->moderators()->sync($request->moderators);
+
+
         // Update the series
         $series->update($formFields);
 
@@ -190,6 +196,10 @@ class SeriesController extends Controller
         // Get all the series in the universe
         $series = $universe->series;
 
+        foreach($series as $s){
+            $s->moderators = $s->moderators()->get();
+        }
+
         // Return the series as a json response
         return response()->json($series);
     }
@@ -246,6 +256,10 @@ class SeriesController extends Controller
 
         // Get all the chapters in the series
         $chapters = $series->chapters;
+
+        foreach($chapters as $chapter){
+            $chapter->moderators = $chapter->moderators()->get();
+        }
 
         // Return the chapters as a json response
         return response()->json($chapters);

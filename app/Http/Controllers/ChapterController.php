@@ -103,6 +103,9 @@ class ChapterController extends Controller
             }
         }
 
+        $chapter->moderators()->sync($request->moderators);
+
+
         return back();
     }
 
@@ -266,6 +269,9 @@ class ChapterController extends Controller
                 $curPage->save();
             }
         }
+
+        $chapter->moderators()->sync($request->moderators);
+
 
         return redirect()->back();
     }

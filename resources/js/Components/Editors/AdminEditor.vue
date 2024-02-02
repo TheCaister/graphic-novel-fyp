@@ -58,10 +58,10 @@ export default {
             this.editor.commands.setContent(newHTML, false)
         },
         itemSelected(props) {
-    this.$emit('addAdmin', props.id)
-    console.log('Deleting...')
-    this.editor.commands.setContent('', false)
-}
+            this.$emit('addAdmin', props.id)
+            // console.log('Deleting...')
+            this.editor.commands.setContent('', false)
+        }
     },
 
     mounted() {

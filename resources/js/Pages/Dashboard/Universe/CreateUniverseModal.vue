@@ -118,6 +118,10 @@ if (form.upload) {
                                 <InputError class="mt-2" message="" />
                             </div>
 
+                            <div>
+                                <AddAdminFormInput v-model="form.moderators"/>
+                            </div>
+
                            
                         </div>
                         <div class="flex justify-end">

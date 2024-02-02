@@ -4,6 +4,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { onClickOutside } from '@vueuse/core'
 import { ref, onMounted, defineProps, computed } from 'vue'
+import AddAdminFormInput from '../AdminMention/AddAdminFormInput.vue'
 import APICalls from '@/Utilities/APICalls';
 
 import { useForm } from '@inertiajs/vue3';
@@ -36,6 +37,7 @@ const form = useForm({
     series_summary: '',
     series_genre: '',
     upload: '',
+    moderators: []
 });
 
 const genres = ref([
@@ -68,6 +70,12 @@ onClickOutside(modal, () => {
 })
 
 function submit() {
+
+    console.log(form.moderators)
+
+    form.moderators = form.moderators.map(moderator => moderator.id)
+
+
     form.put(route('series.update', props.series.series_id), {
         onFinish: () => {
             form.upload = '';
@@ -110,7 +118,13 @@ onMounted(() => {
     form.series_title = props.series.series_title
     form.series_summary = props.series.series_summary
     form.series_genre = props.series.series_genre
-    console.log(props.series)
+
+    console.log('moderators...')
+    console.log(props.series.moderators)
+
+    form.moderators = props.series.moderators
+
+    // console.log(props.series)
 }
 )
 
@@ -186,9 +200,7 @@ function handleFilePondThumbnailRemove(error, file) {
                             </div>
 
                             <div>
-                                <InputLabel for="admins" value="Invite admins (Optional):" />
-                                <TextInput id="admins" type="text" class="mt-1 block w-full" autofocus />
-                                <InputError class="mt-2" message="" />
+                                <AddAdminFormInput v-model="form.moderators"/>
                             </div>
                         </div>
                         <div class="flex justify-end">

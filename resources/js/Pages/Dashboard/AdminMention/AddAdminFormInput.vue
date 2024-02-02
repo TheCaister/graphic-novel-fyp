@@ -13,7 +13,6 @@
 <script setup>
 import AdminEditor from '@/Components/Editors/AdminEditor.vue';
 import Tag from '@/Components/Tag.vue';
-import { watch, ref } from 'vue'
 
 const model = defineModel({
     default: [],

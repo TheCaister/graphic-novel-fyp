@@ -8,6 +8,8 @@ import APICalls from '@/Utilities/APICalls';
 
 import { useForm } from '@inertiajs/vue3';
 
+import AddAdminFormInput from '../AdminMention/AddAdminFormInput.vue'
+
 
 import vueFilePond from 'vue-filepond';
 
@@ -39,6 +41,7 @@ const form = useForm({
     chapter_number: '',
     chapter_notes: '',
     pages: [],
+    moderators: [],
     upload: '',
 });
 
@@ -100,6 +103,9 @@ function formatForm() {
 
 function submit() {
     formatForm();
+
+    form.moderators = form.moderators.map(moderator => moderator.id)
+
 
     form.put(route('chapters.update', props.chapter.chapter_id), {
         onFinish: () => {
@@ -227,6 +233,8 @@ onMounted(() => {
     form.chapter_notes = props.chapter.chapter_notes
     form.chapter_number = props.chapter.chapter_number
 
+    form.moderators = props.chapter.moderators
+
     APICalls.getFilepondPages(props.chapter.chapter_id).then(response => {
         form.pages = response.data
     }).catch(error => console.log(error))
@@ -297,9 +305,7 @@ onMounted(() => {
                             </div>
 
                             <div>
-                                <InputLabel for="admins" value="Invite admins (Optional):" />
-                                <TextInput id="admins" type="text" class="mt-1 block w-full" autofocus />
-                                <InputError class="mt-2" message="" />
+                                <AddAdminFormInput v-model="form.moderators" />
                             </div>
 
                             <div>
