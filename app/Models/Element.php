@@ -7,10 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Element extends Model
+class Element extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('element_thumbnail')->singleFile();
+    }
+
     // public $timestamps = false;
     protected $primaryKey = 'element_id';
 
@@ -89,6 +98,14 @@ class Element extends Model
         ];
     }
 
+    public static function getThumbnailCollectionName()
+    {
+        return 'element_thumbnail';
+    }
+
+    public function clearThumbnail(){
+        $this->element_thumbnail = null;
+    }
     public function scopeFilter($query, array $filters)
     {
         // dd($query);

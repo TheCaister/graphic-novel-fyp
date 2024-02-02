@@ -14,7 +14,7 @@
                 @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked" />
         </div>
 
-        <add-button @click="isCreateModalOpen = true" label="Create Chapter" class="w-96"/>
+        <add-button @click="isCreateModalOpen = true" label="Create Chapter" class="w-96" />
 
     </div>
     <div v-else>
@@ -32,8 +32,7 @@
 
         <Transition name="modal" class="z-50">
             <edit-chapter-modal v-if="isEditModalOpen" @closeModal="isEditModalOpen = false; updateContentList()"
-                :chapter="selectedChapter"
-                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+                :chapter="selectedChapter" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
         <Transition name="modal" class="z-50">

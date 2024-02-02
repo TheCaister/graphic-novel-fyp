@@ -3,7 +3,8 @@ import { Head } from '@inertiajs/vue3';
 import EditSimpleText from './SimpleText/EditSimpleText.vue';
 import EditMindMap from './Mindmap/EditMindMap.vue';
 import EditPanelPlanner from './PanelPlanner/EditPanelPlanner.vue';
-import { onMounted, computed, inject, ref } from 'vue'
+import ElementThumbnailModal from './ElementThumbnailModal.vue';
+import { onMounted, computed, ref } from 'vue'
 import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -30,14 +31,16 @@ const DashboardViewComponent = computed(() => {
             return EditSimpleText
     }
 })
+
+const isEditThumbnailModalOpen = ref(false)
+
+
 const form = useForm({
     element: {},
     upload: '',
 });
 
 function updateForm(element) {
-    // console.log('updating form...')
-    // console.log(element)
     form.element = element
 }
 
@@ -61,33 +64,36 @@ function saveElement(assign = false) {
 }
 
 onMounted(() => {
-    console.log('mounting...')
-    console.log(props.element)
-    console.log(form.element)
     form.element = props.element
-    console.log('setting up...')
-    console.log(props.element)
-    console.log(form)
-    console.log(form.element)
 })
 
 function back() {
     window.history.back();
+}
+
+function updateThumbnail() {
+    console.log('updating thumbnail...')
 }
 </script>
 
 <template>
     <Head title="Element" />
 
+    <Teleport to="body">
+        <Transition name="modal" class="z-50">
+            <ElementThumbnailModal v-if="isEditThumbnailModalOpen"
+                @closeModal="isEditThumbnailModalOpen = false; updateThumbnail()" :element="props.element"
+                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+        </Transition>
+    </Teleport>
+
     <div>
         <!-- Buttons for saving, going back -->
         <div class="flex mb-8 w-full">
             <div class="flex justify-between w-full">
-                <Link @click="back">
-                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                <button @click="back" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Back
                 </button>
-                </Link>
                 <div>
                     <button @click="saveElement()"
                         class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
@@ -105,15 +111,17 @@ function back() {
         <div class="w-full h-64 flex items-center p-6"
             style="background-image: url('https://images.unsplash.com/photo-1481349518771-20055b2a7b24?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fHww')">
             <div class="flex items-center gap-8">
-                <img class="w-32 h-32 shadow-2xl rounded-lg"
-                    src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fHww"
-                    alt="" srcset="">
+                <button @click="isEditThumbnailModalOpen = true">
+                    <img class="w-32 h-32 shadow-2xl rounded-lg"
+                        src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tfGVufDB8fDB8fHww"
+                        alt="" srcset="">
+                </button>
 
                 <!-- Input v-model form.element.element_name -->
                 <div>
                     <input id="element_name" type="text" class="mt-1 block w-full bg-transparent border-none"
                         v-model="form.element.element_name" required autofocus />
-                    </div>  
+                </div>
             </div>
 
         </div>
@@ -122,4 +130,18 @@ function back() {
         <KeepAlive>
             <component :is="DashboardViewComponent" :element="props.element" @updateElement="updateForm" />
         </KeepAlive>
-</div></template>
+    </div>
+</template>
+
+<style scoped>
+.modal-enter-active,
+.modal-leave-active {
+    transition: all 0.25s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    opacity: 0;
+    transform: scale(1.1);
+}
+</style>
