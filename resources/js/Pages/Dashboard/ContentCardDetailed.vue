@@ -27,7 +27,7 @@
                 {{ content.subheading }}
             </div>
             <div class="flex items-center">{{ content.content_name }}</div>
-            <div class="text-base h-[6rem] font-thin overflow-hidden text-ellipsis">
+            <div v-if="props.showDescription === true" class="text-base h-[6rem] font-thin overflow-hidden text-ellipsis">
                 {{ content.description }}
             </div>
         </div>
@@ -54,6 +54,10 @@ const props = defineProps({
     dropDownMenuOptions: {
         type: Array,
     },
+    showDescription: {
+        type: Boolean,
+        default: true,
+    }
 })
 
 const isCardMenuOpen = ref(false)

@@ -6,11 +6,11 @@
                 content_id: element.element_id,
                 content_name: element.element_name,
                 subheading: getElementTypeText(element.derived_element_type),
-                description: '',
                 thumbnail: element.element_thumbnail,
             }"
                 :link='route("elements.edit", { element: element.element_id, content_type: getParentContentType(), content_id: parentContentId })'
                 :selected="element.element_id === selectedElement.element_id" :drop-down-menu-options="dropDownMenuOptions"
+                :show-description="false"
                 @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked" />
         </div>
 
