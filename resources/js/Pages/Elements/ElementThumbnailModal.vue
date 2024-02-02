@@ -92,7 +92,7 @@ function deleteExistingThumbnail() {
 const files = computed(() => {
     console.log(props.element)
 
-    if (props.element.element_thumbnail !== '') {
+    if (props.element.element_thumbnail !== '' && props.element.element_thumbnail) {
         return [
             {
                 source: props.element.element_thumbnail.replace('http://localhost', ''),
@@ -145,7 +145,6 @@ const files = computed(() => {
                     <div class="flex flex-col justify-between w-1/2 ml-8">
                        
                         <div class="flex justify-end">
-                            <!-- Button to cancel and button to create -->
                             <button @click="close" type="button"
                                 class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                                 Cancel
