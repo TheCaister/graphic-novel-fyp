@@ -57,7 +57,7 @@
 
 
                     <!-- Settings button with gear icon -->
-                    <Link  :href="route('profile.show', page.props.auth.user.id)" >
+                    <Link  :href="route('profile.edit') " >
                         <span class="material-symbols-outlined dark">settings</span>
                     </Link>
 
@@ -67,7 +67,7 @@
 
                     <!-- Need to get current user id -->
                     <Avatar src='https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg'
-                    :link="route('profile.edit')"/>
+                    :link="route('profile.show', page.props.auth.user.id)"/>
 
                 </div>
 

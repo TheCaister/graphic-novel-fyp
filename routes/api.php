@@ -39,12 +39,13 @@ Route::get('/series/recent', [App\Http\Controllers\SeriesController::class, 'get
 
 Route::get('/recents', [SearchController::class, 'getRecent'])->name('search.get-recent');
 
+Route::get('/series/{series}/latest-number', [SeriesController::class, 'getLatestChapterNumber'])->name('series.get-latest-number');
+
 Route::get('/series/{series}/chapters', [App\Http\Controllers\SeriesController::class, 'getSeriesChapters'])->name('chapters.get-series-chapters');
 
 Route::get('/series/{universe}', [App\Http\Controllers\SeriesController::class, 'getSeries'])->name('series.get-series');
 
 Route::get('chapters/{chapter}/pages', [PageController::class, 'getChapterPages'])->name('pages.get-chapter-pages');
-
 
 Route::get('/chapters/{chapter}/filepond-pages', [ChapterController::class, 'getChapterFilepondPages'])->name('chapters.get-chapter-filepond-pages');
 

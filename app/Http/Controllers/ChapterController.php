@@ -170,6 +170,8 @@ class ChapterController extends Controller
         ]);
     }
 
+  
+
     public function getChapterFilepondPages(Chapter $chapter)
     {
         // Initiliase array to store chapter pages. It has size of the number of pages in the chapter
@@ -209,6 +211,7 @@ class ChapterController extends Controller
         $formFields = $request->validate([
             'chapter_title' => 'required',
             'chapter_notes' => 'nullable',
+            'chapter_number' => 'numeric'
         ]);
 
         $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();

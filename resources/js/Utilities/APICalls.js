@@ -116,5 +116,9 @@ export default {
     },
     getFilepondPages(chapterId){
         return axios.get('/api/chapters/' + chapterId + '/filepond-pages')
+    },
+    getLatestChapterNumber(seriesId){
+        return axios.get('/api/series/' + seriesId + '/latest-number')
+
     }
 }

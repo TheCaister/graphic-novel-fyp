@@ -68,12 +68,14 @@ function submit() {
     });
 };
 
-function getNextChapterNumber() {
-    // APICalls.getNextChapterNumber(props.parentContentIdNumber).then(response => {
-    //     form.chapter_number = response.data
-    // }).catch(error => console.log(error))
+function setFormToLatestChapterNumber() {
+    APICalls.getLatestChapterNumber(props.parentContentIdNumber).then(
+        response => {
+            form.chapter_number = Number(response.data) + 1
 
-    return 1
+            // console.log(Number(response.data))
+        }
+    ).catch(error => console.log(error))
 }
 
 function handleFilePondThumbnailProcess(error, file) {
@@ -138,7 +140,9 @@ onMounted(() => {
         genres.value = response.data
     }).catch(error => console.log(error))
 
-    form.chapter_number = getNextChapterNumber()
+    setFormToLatestChapterNumber()
+
+    // form.chapter_number = getNextChapterNumber()
 }
 )
 </script>

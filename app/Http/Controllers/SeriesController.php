@@ -142,6 +142,14 @@ class SeriesController extends Controller
         return redirect()->back();
     }
 
+    public function getLatestChapterNumber(Series $series){
+        // From all the chapters of the series, return the value of the highest chapter number
+
+        $highestChapterNumber = $series->chapters()->max('chapter_number');
+
+        return $highestChapterNumber;
+    }
+
     // Show all series
     public function index()
     {
