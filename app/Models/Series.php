@@ -97,5 +97,6 @@ class Series extends Model implements HasMedia
 
     public function clearThumbnail(){
         $this->series_thumbnail = null;
+
     }
 }

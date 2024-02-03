@@ -3,7 +3,7 @@
         <!-- Go through everything in model.value -->
         <div class="w-64 h-16 flex">
             <div v-for="admin in model" :key="admin.id">
-                <Tag :label="admin.username" @close-tag="removeAdmin(admin)"/>
+                <Tag :label="admin.username ?? 'User'" @close-tag="removeAdmin(admin)"/>
             </div>
         </div>
         <AdminEditor @add-admin="addAdmin" />

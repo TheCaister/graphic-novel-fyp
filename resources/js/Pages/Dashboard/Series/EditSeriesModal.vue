@@ -119,12 +119,7 @@ onMounted(() => {
     form.series_summary = props.series.series_summary
     form.series_genre = props.series.series_genre
 
-    console.log('moderators...')
-    console.log(props.series.moderators)
-
     form.moderators = props.series.moderators
-
-    // console.log(props.series)
 }
 )
 

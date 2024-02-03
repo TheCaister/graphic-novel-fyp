@@ -92,8 +92,13 @@ class UploadController extends Controller
             $content->delete();
         } else {
             $content->clearThumbnail();
+
+
             $content->save();
         }
+
+        dd($content);
+
     }
 
     public function deletePageImage(Request $request)
