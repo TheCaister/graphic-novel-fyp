@@ -94,7 +94,7 @@ class Element extends Model implements HasMedia
         return [
             'title' => $this->element_name,
             'thumbnail' => $this->element_thumbnail,
-            'link' => route('elements.show', $this->element_id),
+            'link' => route('elements.edit', $this->element_id),
         ];
     }
 

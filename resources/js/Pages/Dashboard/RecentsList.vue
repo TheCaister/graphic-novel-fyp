@@ -30,14 +30,12 @@ const recentsListLimit = 10
 const recentsList = ref([])
 
 onMounted(async () => {
-    // console.log(props.recentsList)
-
     updateRecentsList()
 })
 
 function updateRecentsList() {
     APICalls.getRecents(recentsListLimit).then(response => {
-        console.log(response.data)
+        // console.log(response.data)
         recentsList.value = response.data
     }).catch(error => {
         console.log(error)

@@ -4,7 +4,7 @@ import EditSimpleText from './SimpleText/EditSimpleText.vue';
 import EditMindMap from './Mindmap/EditMindMap.vue';
 import EditPanelPlanner from './PanelPlanner/EditPanelPlanner.vue';
 import ElementThumbnailModal from './ElementThumbnailModal.vue';
-import { onMounted, computed, ref } from 'vue'
+import { onMounted, computed, ref, watch } from 'vue'
 import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -40,6 +40,14 @@ const form = useForm({
     upload: '',
 });
 
+watch(form.element.content , (newVal) => {
+    // parse newVal if it is a string
+    if(typeof newVal === 'string'){
+        form.element.content = JSON.parse(newVal)
+    }
+    
+})
+
 function updateForm(element) {
     form.element = element
 }
@@ -73,6 +81,14 @@ function updateUpload(upload){
 }
 
 onMounted(() => {
+
+    console.log('Element:')
+    console.log(props.element)
+
+    if(typeof props.element.content === 'string'){
+        props.element.content = JSON.parse(props.element.content)
+    }
+
     form.element = props.element
 })
 
@@ -139,7 +155,7 @@ function back() {
 
         <!-- Element Edit View -->
         <KeepAlive>
-            <component :is="DashboardViewComponent" :element="props.element" @updateElement="updateForm" />
+            <component :is="DashboardViewComponent" v-bind:element="props.element" @updateElement="updateForm" />
         </KeepAlive>
     </div>
 </template>

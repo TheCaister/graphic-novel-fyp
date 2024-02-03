@@ -194,14 +194,11 @@ class SearchController extends Controller
             ->sortByDesc('updated_at')
             ->take(request()->limit);
 
-        // dd($tempList);
 
         // loop through the results and convert them to a formatted entry
         foreach ($tempList as $result) {
             $resultsList[] = $result->getRecentsFormattedEntry();
         }
-
-        // dd($resultsList);
 
         return $resultsList;
     }

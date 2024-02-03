@@ -74,42 +74,26 @@ class ElementController extends Controller
      */
     public function show(Element $element)
     {
-        // return Inertia::render('Dashboard/Dashboard',
-        // [
-        //     'dashboardViewType' => 'SeriesView',
-        //     'parentContentId' => $universe->universe_id,   
-        // ]);
+        // dd($element);
 
 
         return Inertia::render(
             'Elements/EditElementLayout',
             [
                 'element' => $element,
-
             ]
         );
-
-        // return Inertia::render('Elements/Show', [
-        //     'element' => $element,
-        //     'universes' => $element->universes,
-        //     'series' => $element->series,
-        //     'chapters' => $element->chapters,
-        //     'pages' => $element->pages,
-        // ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Element $element, Request $request)
+    public function edit(Element $element)
     {
         // convert $element->content to object
         $element->content = json_decode($element->content);
 
-
-
-
-        // $content = null;
+        $universe = $element->universes->first();
 
         // if($element->universes->count() > 0){
         //     $content = $element->universes->first();
@@ -126,20 +110,26 @@ class ElementController extends Controller
         //     $content = $element->pages->first();
         // }
 
-
-
-        // dd($content);
-        // dd($request->all());
-
-
-        return Inertia::render(
-            'Elements/EditElementLayout',
-            [
-                'element' => $element,
-                'parentContentType' => $request->content_type,
-                'parentContentId' => intval($request->content_id),
-            ]
-        );
+        if (request()->has('content_type')) {
+            return Inertia::render(
+                'Elements/EditElementLayout',
+                [
+                    'element' => $element,
+                    'parentContentType' => request()->content_type,
+                    'parentContentId' => intval(request()->content_id),
+                ]
+            );
+        }
+        else{
+            return Inertia::render(
+                'Elements/EditElementLayout',
+                [
+                    'element' => $element,
+                    'parentContentType' => 'universes',
+                    'parentContentId' => $universe->universe_id,
+                ]
+            );
+        }
     }
 
     /**

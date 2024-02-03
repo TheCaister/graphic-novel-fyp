@@ -47,8 +47,6 @@ provide('dashboardView', dashboardView.value)
 provide('parentContentId', parentContentIdNumber.value)
 
 onMounted(async () => {
-    console.log(props.dashboardViewType)
-
     updateSiblingContentDropdown()
 })
 
