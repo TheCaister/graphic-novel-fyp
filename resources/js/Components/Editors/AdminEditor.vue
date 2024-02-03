@@ -45,18 +45,13 @@ export default {
                 return
             }
 
-            console.log(this.editor.getJSON())
+            // console.log(this.editor.getJSON())
 
             this.editor.commands.setContent(value, false)
         },
     },
 
     methods: {
-        removePfromList() {
-            const newHTML = this.editor.getHTML().replaceAll(/<li><p>(.*?)<\/p><(\/?)(ol|li|ul)>/gi, "<li>$1<$2$3>")
-
-            this.editor.commands.setContent(newHTML, false)
-        },
         itemSelected(props) {
             this.$emit('addAdmin', props.id)
             // console.log('Deleting...')
@@ -100,7 +95,6 @@ export default {
                         return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id.name}`
 
                     },
-                    // suggestion_admin,
                     suggestion,
 
                 }),

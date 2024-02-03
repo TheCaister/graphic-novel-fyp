@@ -43,8 +43,15 @@ const form = useForm({
     moderators: [],
 });
 
-onClickOutside(modal, () => {
-    close()
+onClickOutside(modal, (event) => {
+
+    // In MentionList.vue, each button has
+    // and id mention-list. This is to
+    // prevent the modal from closing when
+    // the user clicks on the mention list
+    if (event.target.id !== "mention-list") {
+        close()
+    }
 })
 
 function submit() {

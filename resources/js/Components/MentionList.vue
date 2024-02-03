@@ -1,15 +1,11 @@
 <!-- This is created everytime the @ key is pressed. With items and commands passed in -->
 <template>
-  <div class="items">
+  <div class="items" id="mention-list">
     <template v-if="this.items.data.length">
-      <!-- <button class="w-64 h-64" @click="console.log(this.items)">
 
-      </button> -->
-      <!-- <template v-if="items.length"> -->
-      <!-- <button class="item" :class="{ 'is-selected': index === selectedIndex }" v-for="(item, index) in items" -->
-
-      <button class="item" :class="{ 'is-selected': index === selectedIndex }" v-for="(item, index) in items.data"
-        :key="index" @click="selectItem(index)">
+      <button class="item" id="mention-list" :class="{ 'is-selected': index === selectedIndex }" v-for="(item, index) in items.data"
+        :key="index" @click="selectItem(index)"
+        @mouseover="selectedIndex = index">
         {{ item.name }}
       </button>
     </template>
@@ -87,9 +83,11 @@ export default {
 
     //   Gets the item at the given index and calls the command
     selectItem(index) {
-      // console.log(this.items)
+      // console.log(this.items.data[index])
 
       const item = this.items.data[index]
+
+     
 
       // const item = this.items[index]
 
