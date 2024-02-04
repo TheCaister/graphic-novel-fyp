@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\TemporaryFile;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -87,9 +88,23 @@ class ProfileController extends Controller
             $request->user()->email_verified_at = null;
         }
 
+        $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
+
+        // dd($tempThumbnail);
+
+        if ($tempThumbnail) {
+            $request->user()->addMedia(storage_path('app/public/uploads/profile_picture/tmp/' . $tempThumbnail->folder . '/' . $tempThumbnail->filename))->toMediaCollection('profile_picture');
+
+            rmdir(storage_path('app/public/uploads/profile_picture/tmp/' . $tempThumbnail->folder));
+
+            $request->user()->profile_picture = $request->user()->getFirstMediaUrl('profile_picture');
+
+            $tempThumbnail->delete();
+        }
+
         $request->user()->save();
 
-        // dd($request->validated());
+        // dd($request->user());
 
         return Redirect::route('profile.edit');
     }

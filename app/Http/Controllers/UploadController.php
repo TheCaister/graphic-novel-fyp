@@ -97,8 +97,6 @@ class UploadController extends Controller
             $content->save();
         }
 
-        dd($content);
-
     }
 
     public function deletePageImage(Request $request)

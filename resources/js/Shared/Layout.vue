@@ -66,7 +66,10 @@
                     Log Out</Link>
 
                     <!-- Need to get current user id -->
-                    <Avatar src='https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg'
+                    <!-- <Avatar src='https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg'
+                    :link="route('profile.show', page.props.auth.user.id)"/> -->
+
+                    <Avatar :src='page.props.auth.user.profile_picture'
                     :link="route('profile.show', page.props.auth.user.id)"/>
 
                 </div>
