@@ -65,6 +65,28 @@ class PageController extends Controller
         return back();
     }
 
+    public function update(Request $request, Page $page)
+    {
+
+        $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
+
+        if ($tempThumbnail) {
+            $page->addMedia(storage_path('app/public/uploads/page_image/tmp/' . $tempThumbnail->folder . '/' . $tempThumbnail->filename))->toMediaCollection('page_image');
+
+            rmdir(storage_path('app/public/uploads/page_image/tmp/' . $tempThumbnail->folder));
+
+            $page->page_image = $page->getFirstMediaUrl('page_image');
+
+            $tempThumbnail->delete();
+        }
+
+
+        $page->update();
+        
+        // Redirect back to the dashboard
+        return redirect()->back();
+    }
+
     public function destroy(Page $page)
     {
         $page->clearMediaCollection('page_image');

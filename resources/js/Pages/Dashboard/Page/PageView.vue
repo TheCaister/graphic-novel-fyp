@@ -2,7 +2,7 @@
     <!-- Loop through the universes and display them in cards -->
     <div v-if="pagesLoaded" class="w-full flex flex-wrap justify-center">
         <div v-for="page in pages" :key="page.page_id" class=" w-64 mx-8 mb-4">
-            <button @click="isPageManageOpen = true" class="w-full">
+            <button @click="switchSelectedContent(page.page_id); isPageManageOpen = true" class="w-full">
                 <div class="rounded-lg shadow-lg hover:shadow-white transition-all duration-200">
                     <div class="relative rounded-lg ">
                         <div class="h-full flex items-center">
@@ -13,7 +13,7 @@
                             </div>
                         </div>
                         <button class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
-                            <span @click.stop="switchSelectedContent(page.page_id);"
+                            <span @click.stop="switchSelectedContent(page.page_id); isCardMenuOpen = true"
                                 class="material-symbols-outlined text-pink-300 drop-shadow-[-2px_2px_0_rgba(0,0,0,1)]">
                                 pending
                             </span>
@@ -144,9 +144,9 @@ function updateContentList() {
 }
 
 function switchSelectedContent(contentId) {
-    // console.log(pages.value)
+    console.log(pages.value)
     selectedPage.value = pages.value.find(page => page.page_id == contentId)
-    isCardMenuOpen.value = true;
+    
 }
 </script>
 

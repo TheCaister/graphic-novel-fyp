@@ -40,16 +40,20 @@ const form = useForm({
 });
 
 onClickOutside(modal, () => {
-    close()
+    // close()
+    submit()
 })
 
 function submit() {
-    // form.put(route('universes.update', props.universe.universe_id), {
-    //     onFinish: () => {
-    //         form.upload = '';
-    //         close()
-    //     }
-    // });
+
+    console.log(props.page)
+
+    form.put(route('pages.update', props.page.page_id), {
+        onFinish: () => {
+            form.upload = '';
+            close()
+        }
+    });
 };
 
 let csrfToken = document.querySelector('meta[name="csrf-token"]').content
@@ -66,36 +70,34 @@ function deleteTempThumbnail() {
 
     if (form.upload) {
 
-        // axios.delete(route('delete-thumbnail', {
-        //     isTemp: "true",
-        //     contentType: "Universe",
-        //     serverId: form.upload,
-        // })).catch(error => {
-        //     console.log(error);
-        // });
+        axios.delete(route('delete-thumbnail', {
+            isTemp: "true",
+            contentType: "Page",
+            serverId: form.upload,
+        })).catch(error => {
+            console.log(error);
+        });
     }
 }
 
 function deleteExistingThumbnail() {
-    // if (props.universe.media && props.universe.media.length > 0) {
-    if (props.universe.thumbnail !== '') {
-        // axios.delete(route('delete-thumbnail', {
-        //     isTemp: "false",
-        //     contentType: "Universe",
-        //     contentId: props.universe.universe_id,
-        // })).catch(error => {
-        //     console.log(error);
-        // });
+    if (props.page.page_image !== '') {
+        axios.delete(route('delete-thumbnail', {
+            isTemp: "false",
+            contentType: "Page",
+            contentId: props.page.page_id,
+        })).catch(error => {
+            console.log(error);
+        });
     }
 }
 
 onMounted(() => {
-    console.log(props.page)
-    // form.universe_name = props.universe.universe_name
+    // console.log(props.page)
 })
 
 const files = computed(() => {
-    if (props.page.page_image !== '') {
+    if (props.page.page_image !== '' && props.page.page_image) {
         return [
             {
                 source: props.page.page_image.replace('http://localhost', ''),
