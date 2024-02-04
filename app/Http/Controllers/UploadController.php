@@ -58,7 +58,7 @@ class UploadController extends Controller
     public function deleteThumbnail()
     {
         if (request()->isTemp == 'false') {
-            $this->clearMediaCollection(request()->contentType, request()->contentId);
+            $this->clearMediaCollection(request()->contentType, request()->contentId, request()->deletePage);
         } else {
             $temporaryFile = TemporaryFile::where('folder', request()->serverId)->first();
 
@@ -81,14 +81,18 @@ class UploadController extends Controller
         }
     }
 
-    private function clearMediaCollection($contentType, $contentId)
+    private function clearMediaCollection($contentType, $contentId, $deletePage = true)
     {
+
+
+
 
         $content = $this->getClassName($contentType)::find($contentId);
 
         $content->clearMediaCollection($this->getClassName($contentType)::getThumbnailCollectionName());
 
-        if ($contentType == 'Page') {
+        // 
+        if ($contentType == 'Page' && $deletePage) {
             $content->delete();
         } else {
             $content->clearThumbnail();

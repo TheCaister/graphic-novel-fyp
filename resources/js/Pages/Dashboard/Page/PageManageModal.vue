@@ -86,6 +86,7 @@ function deleteExistingThumbnail() {
             isTemp: "false",
             contentType: "Page",
             contentId: props.page.page_id,
+            deletePage: false
         })).catch(error => {
             console.log(error);
         });

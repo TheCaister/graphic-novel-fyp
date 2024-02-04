@@ -70,7 +70,6 @@ class SearchController extends Controller
 
     // This will get content type and id
     public function getSiblingContent(){
-        // dd('hey baby');
 
         $content = null;
         $id = request()->id;
@@ -99,8 +98,11 @@ class SearchController extends Controller
                 $series = $content->series;
 
                 $resultsList = $series->chapters()->select('chapter_title as name', 'chapter_id as id')->get();
+                
                 break;
         }
+
+        // dd($resultsList);
 
         return $resultsList;
     }

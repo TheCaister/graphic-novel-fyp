@@ -78,8 +78,10 @@ function updateSiblingContentDropdown() {
     }
 
     if (dashboardView.value !== 'UniverseView') {
+        console.log('getting sibling...')
         APICalls.getSiblingContent(type, props.parentContentId).then(response => {
             siblingContentList.value = response.data
+            // console.log(response)
         }).catch(error => console.log(error))
     }
 

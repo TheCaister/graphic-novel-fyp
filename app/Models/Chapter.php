@@ -16,12 +16,6 @@ class Chapter extends Model implements HasMedia
     use InteractsWithMedia;
     // public $timestamps = false;
     protected $primaryKey = 'chapter_id';
-    protected $appends = ['url'];
-
-    public function getUrlAttribute()
-    {
-        return route('chapters.show', $this->chapter_id);
-    }
 
     public function registerMediaCollections(): void
     {

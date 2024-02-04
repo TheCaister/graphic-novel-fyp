@@ -70,9 +70,6 @@ Route::delete('/pages/{serverId}', [App\Http\Controllers\UploadController::class
 
 Route::delete('images/{serverId}', [App\Http\Controllers\UploadController::class, 'deleteImage'])->name('images.delete-image');
 
-// Route::delete('/pages', [App\Http\Controllers\UploadController::class, 'deletePageImage'])->name('pages.delete-image');
-
-
 Route::group([], function () {
     Route::get('universes/{universe}', [UniverseController::class, 'getJsonUniverse'])->name('universes.get-universe-json');
     Route::get('series/{series}', [SeriesController::class, 'getJsonSeries'])->name('series.get-series-json');
