@@ -6,13 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 // use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
     use HasFactory;
+    use InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -50,6 +53,11 @@ class User extends Authenticatable
         'is_banned' => 'boolean',
         'created_at' => 'timestamp',
     ];
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('profile_picture')->singleFile();
+    }
 
     public function universes(): HasMany
     {
@@ -142,6 +150,15 @@ class User extends Authenticatable
         parent::delete();
     }
 
+    public static function getThumbnailCollectionName()
+    {
+        return 'profile_picture';
+    }
+
+    public function clearThumbnail(){
+        $this->profile_picture = null;
+    }
+    
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? null, function ($query, $search) {
