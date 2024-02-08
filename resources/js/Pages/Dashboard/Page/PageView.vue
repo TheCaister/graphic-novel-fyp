@@ -55,7 +55,7 @@
         </Transition>
 
         <Transition name="modal">
-            <create-page-modal v-if="isCreatePageOpen" @closeModal="isCreatePageOpen = false; updateContentList()"
+            <create-page-modal v-if="isCreateModalOpen" @closeModal="isCreateModalOpen = false; updateContentList()"
                 :parentContentIdNumber="props.parentContentId"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
@@ -93,7 +93,7 @@ const selectedPage = ref({});
 
 const isPageManageOpen = ref(false)
 
-const isCreatePageOpen = ref(false)
+const isCreateModalOpen = ref(false)
 const isCreateElementOpen = ref(false)
 
 const isCardMenuOpen = ref(false)
