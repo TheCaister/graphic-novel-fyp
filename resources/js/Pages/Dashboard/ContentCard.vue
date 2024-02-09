@@ -6,11 +6,14 @@
                 <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
                     <img v-if="content.thumbnail" :src="content.thumbnail" alt="Content Image"
                         class="rounded-lg object-cover w-full" />
-                    <div v-else class="text-white text-xl flex items-center">U{{ content.content_id }}</div>
+                    <img v-else src="/assets/black_page.jpg" alt="Content Image"
+                        class="rounded-lg object-cover w-full" />
+                    <!-- <div v-else class="text-white text-xl flex items-center">U{{ content.content_id }}</div> -->
                 </div>
             </div>
             <button class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
-                <span @click.prevent="switchSelectedContent(content.content_id);" class="material-symbols-outlined text-pink-300 drop-shadow-[-2px_2px_0_rgba(0,0,0,1)]">
+                <span @click.prevent="switchSelectedContent(content.content_id);"
+                    class="material-symbols-outlined text-pink-300 drop-shadow-[-2px_2px_0_rgba(0,0,0,1)]">
                     pending
                 </span>
                 <Transition name="fade">
@@ -89,7 +92,7 @@ function handleMenuItemClicked(event) {
     font-size: 42px;
 }
 
-.submenu{
+.submenu {
     z-index: 1000;
 }
 </style>

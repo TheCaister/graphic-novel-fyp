@@ -35,6 +35,7 @@ const FilePond = vueFilePond(
 );
 
 const modal = ref(null)
+const filepondPages = ref(null)
 
 const form = useForm({
     chapter_title: '',
@@ -228,6 +229,11 @@ function handleFilePondPagesReorderFiles(files) {
     console.log(form.pages);
 }
 
+function addEmptyPage(){
+    console.log('Adding empty page...')
+    $refs.filepondPages.addFile('/assets/black_page.jpg')
+}
+
 onMounted(() => {
     form.chapter_title = props.chapter.chapter_title
     form.chapter_notes = props.chapter.chapter_notes
@@ -310,11 +316,20 @@ onMounted(() => {
 
                             <div>
 
-                                <button @click="handleFilePondPagesRevert('testing')" class="text-white">
+                                <!-- <button @click="handleFilePondPagesRevert('testing')" class="text-white">
+                                    test
+                                </button> -->
+
+                                <!-- <button @click="FilePond.addFile('/assets/black_page.jpg')" class="text-white">
+                                    test
+                                </button> -->
+
+                                <button type="button" @click=" console.log('Adding empty page...');
+    $refs.filepondPages.addFile('/assets/black_page.jpg');" class="text-white">
                                     test
                                 </button>
 
-                                <file-pond id="pagepond" name="upload" label-idle="Pages" allow-multiple="true"
+                                <file-pond ref="filepondPages" id="pagepond" name="upload" label-idle="Pages" allow-multiple="true"
                                     allow-reorder="true" :files="form.pages" @processfile="handleFilePondPagesProcess"
                                     @reorderfiles="handleFilePondPagesReorderFiles"
                                     accepted-file-types="image/jpeg, image/png" :server="{

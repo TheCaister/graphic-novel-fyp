@@ -136,11 +136,13 @@ function back() {
 
         <!-- Thumbnail with option to edit name -->
         <div class="w-full h-64 flex items-center p-6"
-            :style="'background-image: url(' + props.element.element_thumbnail + ')'">
+            :style="'background-image: url(' + props.element.element_thumbnail ? props.element.element_thumbnail : '/assets/black_page.jpg' + ')'"
+            
+            >
             <div class="flex items-center gap-8">
                 <button @click="isEditThumbnailModalOpen = true">
                     <img class="w-32 h-32 shadow-2xl rounded-lg hover:scale-105 transition-transform duration-300"
-                        :src="props.element.element_thumbnail"
+                    :src="props.element.element_thumbnail ? props.element.element_thumbnail : '/assets/black_page.jpg'"
                         alt="" srcset="">
                 </button>
 
