@@ -119,6 +119,14 @@ export default {
     },
     getLatestChapterNumber(seriesId){
         return axios.get('/api/series/' + seriesId + '/latest-number')
-
+    },
+    // This will take in a content type, list of content ids, and return a list of assigned elements
+    getAssignedElements(type, contentIdList){
+        return axios.get('/api/elements/assigned/', {
+            params: {
+                type: type,
+                contentIdList: contentIdList,
+            }
+        })
     }
 }

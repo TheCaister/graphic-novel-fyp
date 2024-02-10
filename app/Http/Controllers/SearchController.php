@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Universe;
 use App\Models\Series;
 use App\Models\Chapter;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Page;
 use Inertia\Inertia;
 
 class SearchController extends Controller
@@ -183,6 +183,22 @@ class SearchController extends Controller
         return $resultsList;
     }
 
+    public function getAssignedElements(){
+        $resultsList = [];
+        
+        // I have request()->type and request()->contentIdList
+        // I will get a list of content based on the type and id
+
+        $contentList = $this->getClassName(request()->type)::find(request()->contentIdList);
+
+        // From contentlist, append to the resultsList the elements and keep it unique
+        $resultsList = $contentList->map(function ($content) {
+            return $content->elements;
+        })->unique('element_id')->values()->toArray();
+
+        return $resultsList;
+    }
+
     public function getRecent()
     {
         $resultsList = [];
@@ -203,5 +219,10 @@ class SearchController extends Controller
         }
 
         return $resultsList;
+    }
+
+    private function getClassName($contentType)
+    {
+        return 'App\\Models\\' . $contentType;
     }
 }

@@ -2,6 +2,9 @@
     <div class="p-8 border border-white rounded-lg text-white">
         <!-- Content title here, with option  to go back... -->
         <div class="flex">
+            <button @click="updatePreSelectedElementList">
+                Refresh
+            </button>
             <Link
                 :href="route('elements.assign.get-parent', { type: parentContent.type, content_id: parentContent.content_id })"
                 v-if="parentContent.type !== 'universes'">
@@ -50,6 +53,8 @@ import ElementsList from './ElementsList.vue';
 import ContentList from './ContentList.vue';
 import SearchBar from './SearchBar.vue';
 import { useForm, } from '@inertiajs/vue3';
+import APICalls from '@/Utilities/APICalls'
+
 
 const props = defineProps({
     parentContent: {
@@ -103,6 +108,38 @@ function updateSelectedContentList(event) {
     }
 }
 
+function updatePreSelectedElementList(){
+
+    console.log(form.selectedContentList)
+
+    let type = ''
+    let contentIdList = []
+
+    switch (props.parentContent.type) {
+        case 'universes':
+            type = 'Series'
+            break
+        case 'series':
+            type = 'Chapter'
+            break
+        case 'chapters':
+            type = 'Page'
+            break
+    }
+
+    // from form.selectedContentList, get the content_id of each content and add it to the contentIdList
+    form.selectedContentList.forEach(content => {
+        contentIdList.push(content.content_id)
+    })
+
+    APICalls.getAssignedElements(type, contentIdList).then(response => {
+        console.log(response.data)
+        form.preSelectedElements = response.data
+
+
+    }).catch(error => console.log(error))
+}
+
 function updateSelectedElementList(event) {
 
     // if element_id in event is checked === null, remove it from the list. Otherwise, add it to the list with the checked value.
@@ -139,10 +176,6 @@ function goBack(){
         case 'chapters':
             router.visit(route('chapters.show', { chapter: props.parentContent.content_id }))
             break;
-        // case 'pages':
-        //     router.visit(route('pages.show', { page: parentContent.content_id }))
-        //     break;
-
         default:
             break;
     }

@@ -151,12 +151,10 @@ class ElementController extends Controller
 
         $element->update([
             'element_name' => $newElement['element_name'],
-            // 'content' => json_encode($newElement['content']),
 
             'content' => $newElement['content'],
             // 'hidden' => $request->hidden,
         ]);
-
 
         if ($request->assign) {
             return redirect()->route(

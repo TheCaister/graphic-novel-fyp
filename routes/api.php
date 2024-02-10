@@ -56,6 +56,8 @@ Route::get('/search/mention', [SearchController::class, 'searchMention'])->name(
 
 Route::get('/genres', [SeriesController::class, 'getGenres'])->name('series.get-genres');
 
+Route::get('/elements/assigned', [SearchController::class, 'getAssignedElements'])->name('elements.get-assigned-elements');
+
 Route::get('/elements', [App\Http\Controllers\ElementController::class, 'getElements'])->name('elements.get-elements');
 
 Route::delete('/thumbnail', [UploadController::class, 'deleteThumbnail'])->name('delete-thumbnail');

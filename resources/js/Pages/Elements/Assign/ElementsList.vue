@@ -3,6 +3,10 @@
         Here is a list of all the elements:
     </h1>
 
+    <button @click="console.log(elements)">
+        Check
+    </button>
+
     <div class="h-96 overflow-auto">
         <TransitionGroup name="list" tag="ul">
             <div v-for="element in elements" :key="element.element_id">
@@ -26,15 +30,15 @@ const props = defineProps({
     },
     preSelectedElements: {
         type: Array,
-        default: [],
-        // required: true
+        // default: [],
+        required: true
     }
 })
 
 const elements = ref(props.elementList)
 
 function check(elementId, event) {
-
+    
     const selectedElement = elements.value.find(element => element.element_id === elementId)
 
     selectedElement.checked = event
@@ -56,7 +60,7 @@ function check(elementId, event) {
     })
 }
 
-onMounted(() => {
+onBeforeMount(() => {
     // Set all elements to checked === null
     elements.value.forEach(element => {
         element.checked = null
