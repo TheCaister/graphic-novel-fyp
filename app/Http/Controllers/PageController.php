@@ -20,6 +20,11 @@ class PageController extends Controller
     {
         $pages = $chapter->pages()->get()->sortBy('page_number')->values()->all();
 
+        // For every page, attach elements()
+        foreach ($pages as $page) {
+            $page->elements = $page->elements()->get();
+        }
+
         // Sort pages by page number
         // $pages = $pages->sortBy('page_number');
 

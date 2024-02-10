@@ -36,9 +36,16 @@ const isEditThumbnailModalOpen = ref(false)
 
 
 const form = useForm({
-    element: {},
+    element: {
+        content: {},
+    },
     upload: '',
 });
+
+const elementThumbnailImage = computed(() => {
+    return form.element.element_thumbnail ? form.element.element_thumbnail : '/assets/black_page.jpg'
+
+})
 
 watch(form.element.content , (newVal) => {
     // parse newVal if it is a string
@@ -53,8 +60,6 @@ function updateForm(element) {
 }
 
 function saveElement(assign = false) {
-
-    console.log('updating...')
     console.log(form.upload)
 
     form.put(route('elements.update', {
@@ -95,10 +100,6 @@ onMounted(() => {
 function back() {
     window.history.back();
 }
-
-// function updateThumbnail() {
-//     console.log('updating thumbnail...')
-// }
 </script>
 
 <template>
@@ -133,10 +134,10 @@ function back() {
                 </div>
             </div>
         </div>
-
+        
         <!-- Thumbnail with option to edit name -->
         <div class="w-full h-64 flex items-center p-6"
-            :style="'background-image: url(' + props.element.element_thumbnail ? props.element.element_thumbnail : '/assets/black_page.jpg' + ')'"
+            :style="'background-image: url(' + elementThumbnailImage + ')'"
             
             >
             <div class="flex items-center gap-8">

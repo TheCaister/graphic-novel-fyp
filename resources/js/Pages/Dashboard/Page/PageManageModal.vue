@@ -40,7 +40,6 @@ const form = useForm({
 });
 
 onClickOutside(modal, () => {
-    // close()
     submit()
 })
 
@@ -114,25 +113,12 @@ const files = computed(() => {
 const dashboardView = inject('dashboardView')
 const parentContentId = inject('parentContentId')
 
-console.log(dashboardView)
-console.log(parentContentId)
+// console.log(dashboardView)
+// console.log(parentContentId)
 
 onClickOutside(modal, () => {
     close()
 })
-
-// const submit = (elementType) => {
-//     // console.log(parentContentType)
-//     form.elementType = elementType;
-//     form.contentType = getParentContentType();
-//     form.contentId = parentContentId;
-//     form.post(route('elements.store'), {
-//         onFinish: () => {
-//             form.reset();
-//             close();
-//         }
-//     })
-// };
 
 function getParentContentType() {
     switch (dashboardView) {
@@ -163,7 +149,7 @@ function handleCreateElementButtonClicked() {
 
                 <!-- Page image here -->
                 <div class="w-full h-full">
-                    <file-pond  name="upload" label-idle="Page Image" accepted-file-types="image/jpeg, image/png"
+                    <file-pond name="upload" label-idle="Page Image" accepted-file-types="image/jpeg, image/png"
                         :files="files" @processfile="handleFilePondThumbnailProcess"
                         @removefile="handleFilePondThumbnailRemove" :server="{
                             process: {
@@ -193,9 +179,18 @@ function handleCreateElementButtonClicked() {
                     </div>
 
                     <!-- v-for here... -->
-                    <div>
+                    <Link :href="route('elements.edit', {element: element.element_id,
+                    content_type: 'pages',
+                    content_id: props.page.page_id})" v-for="element in props.page.elements" :key="element.element_id" class="flex flex-col">
+                        <!-- image, then text -->
+                        <div class="w-1/2">
+                            <img :src="element.element_thumbnail ? element.element_thumbnail : '/assets/black_page.jpg'" alt="element image" class="w-24 h-24 rounded-lg" />
+                        </div>
+                        <div class="w-1/2">
+                            <p>{{ element.element_name }}</p>
+                        </div>
 
-                    </div>
+                    </Link>
 
                     <button @click="handleCreateElementButtonClicked" class="bg-pink-500 rounded-lg">
                         Add element

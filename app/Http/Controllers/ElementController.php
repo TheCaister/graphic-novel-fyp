@@ -95,21 +95,6 @@ class ElementController extends Controller
 
         $universe = $element->universes->first();
 
-        // if($element->universes->count() > 0){
-        //     $content = $element->universes->first();
-        // }
-        // else if($element->series->count() > 0){
-        //     $content = $element->series->first();
-
-        // }
-        // else if($element->chapters->count() > 0){
-        //     $content = $element->chapters->first();
-
-        // }
-        // else if($element->pages->count() > 0){
-        //     $content = $element->pages->first();
-        // }
-
         if (request()->has('content_type')) {
             return Inertia::render(
                 'Elements/EditElementLayout',
@@ -153,8 +138,6 @@ class ElementController extends Controller
 
         $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
 
-        // dd($tempThumbnail);
-
 
         if ($tempThumbnail) {
             $element->addMedia(storage_path('app/public/uploads/element_thumbnail/tmp/' . $tempThumbnail->folder . '/' . $tempThumbnail->filename))->toMediaCollection('element_thumbnail');
@@ -168,10 +151,12 @@ class ElementController extends Controller
 
         $element->update([
             'element_name' => $newElement['element_name'],
-            'content' => json_encode($newElement['content']),
-            // 'content' => $newElement['content'],
+            // 'content' => json_encode($newElement['content']),
+
+            'content' => $newElement['content'],
             // 'hidden' => $request->hidden,
         ]);
+
 
         if ($request->assign) {
             return redirect()->route(
@@ -182,7 +167,6 @@ class ElementController extends Controller
                     'preSelectedElements' => $request->preSelectedElements,
                 ]
             );
-            // return $this->assign($request);
         } else {
             return redirect()->back();
         }
@@ -323,10 +307,6 @@ class ElementController extends Controller
         $content = $this->getElementable(request()->type, request()->content_id);
 
         $elements = $content->elements;
-
-        // return response()->json([
-        //     'elements' => $elements,
-        // ]);
 
         return response()->json($elements);
     }
