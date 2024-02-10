@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, defineEmits, onBeforeMount} from 'vue'
+import { defineProps, ref, defineEmits, onBeforeMount, onMounted} from 'vue'
 import TriCheckbox from './TriCheckbox.vue';
 
 const emits = defineEmits(['elementChecked'])
@@ -26,7 +26,8 @@ const props = defineProps({
     },
     preSelectedElements: {
         type: Array,
-        required: true
+        default: [],
+        // required: true
     }
 })
 
@@ -55,7 +56,7 @@ function check(elementId, event) {
     })
 }
 
-onBeforeMount(() => {
+onMounted(() => {
     // Set all elements to checked === null
     elements.value.forEach(element => {
         element.checked = null

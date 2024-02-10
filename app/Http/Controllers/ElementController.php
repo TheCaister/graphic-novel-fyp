@@ -164,7 +164,7 @@ class ElementController extends Controller
                 [
                     'content_type' => $request->content_type,
                     'content_id' => $request->content_id,
-                    'preSelectedElements' => $request->preSelectedElements,
+                    'preSelectedElements' => $request->preSelectedElements ? $request->preSelectedElements : [],
                 ]
             );
         } else {
@@ -216,23 +216,19 @@ class ElementController extends Controller
         // $content = $this->getElementable($request->type, $request->content_id);
         $subContentList = $this->generateSubcontent($request->content_type, $request->content_id);
 
-
-
-
-        // // Set $elements to the elements of the content, filter duplicates by using unique()
-        // $elements = $content->elements->unique();
+            // dd($subContentList);
 
         return Inertia::render('Elements/Assign/AssignElements', [
             'parentContent' => $selectedContent,
             'subContentList' => $subContentList,
-            'preSelectedElements' => $request->preSelectedElements,
+            'preSelectedElements' => $request->preSelectedElements ? $request->preSelectedElements : [],
             'elementList' => $this->getUniverse($request->content_type, $request->content_id)->elements->unique(),
         ]);
     }
 
+    // Going up a level in the assigning page
     public function assignGetParent(Request $request)
     {
-        // { type: props.parentContent.type, id: props.parentContent.content_id })
         $content_type = $request->type;
         $content_id = $request->content_id;
         $parent_content_type = null;
@@ -243,7 +239,6 @@ class ElementController extends Controller
         // For example, if we're currently on SeriesView, then the parent model is a Universe
         switch ($content_type) {
             case 'series':
-                // return redirect()->route('home');
                 $model = Series::find($content_id);
                 $parent = $model->universe;
                 $parent = $this->generateSelectedContent('universes', $parent->universe_id);
@@ -252,15 +247,22 @@ class ElementController extends Controller
             case 'chapters':
                 $model = Chapter::find($content_id);
                 $parent = $model->series;
-                $parent = $this->generateSubcontent('series', $parent->series_id);
-                $parent_content_type = 'series';
 
-                // $result['show'] = 'universes';
-                // $result['parentid'] = $parent->universe_id;
+                $parent = $this->generateSelectedContent('series', $parent->series_id);
+                $parent_content_type = 'series';
+                break;
+
+            case 'pages':
+                $model = Page::find($content_id);
+                $parent = $model->chapter;
+
+                $parent = $this->generateSelectedContent('chapters', $parent->chapter_id);
+                $parent_content_type = 'chapters';
                 break;
             default:
                 return redirect()->route('home');
         }
+
         // redirect to the correct view
         return redirect()->route('elements.assign', [
             'content_type' => $parent_content_type,
@@ -359,8 +361,6 @@ class ElementController extends Controller
         // Set content to nothing
         $subcontent = [];
 
-        // dd($type, $id);
-
         // Create a switch statement to determine the type of content
         switch ($type) {
             case 'universes':
@@ -385,15 +385,12 @@ class ElementController extends Controller
                 break;
             case 'chapters':
                 $content = Chapter::find($id);
-                // $subcontent = $content->pages;
 
                 foreach ($content->pages as $page) {
                     $subcontent[] = $this->generateSelectedContent('pages', $page->page_id);
                 }
                 break;
         }
-
-
 
         return $subcontent;
     }
@@ -437,7 +434,7 @@ class ElementController extends Controller
                 // $selectedContent['name'] = $content->page_title;
 
                 // Name format will be something like C3P4. This means we need to first get the chapter number, then the page number.
-                $selectedContent['name'] = 'C' . $content->chapter->chapter_number . 'P' . $content->page_number;
+                $selectedContent['content_name'] = 'C' . $content->chapter->chapter_number . 'P' . $content->page_number;
                 break;
         }
 

@@ -32,6 +32,9 @@ const props = defineProps({
     page: {
         type: Object,
     },
+    chapter_id: {
+        type: Number,
+    }
 })
 
 
@@ -180,8 +183,8 @@ function handleCreateElementButtonClicked() {
 
                     <!-- v-for here... -->
                     <Link :href="route('elements.edit', {element: element.element_id,
-                    content_type: 'pages',
-                    content_id: props.page.page_id})" v-for="element in props.page.elements" :key="element.element_id" class="flex flex-col">
+                    content_type: 'chapters',
+                    content_id: props.chapter_id})" v-for="element in props.page.elements" :key="element.element_id" class="flex flex-col">
                         <!-- image, then text -->
                         <div class="w-1/2">
                             <img :src="element.element_thumbnail ? element.element_thumbnail : '/assets/black_page.jpg'" alt="element image" class="w-24 h-24 rounded-lg" />

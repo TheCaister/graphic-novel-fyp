@@ -45,7 +45,8 @@
         <Transition name="modal">
             <page-manage-modal v-if="isPageManageOpen" @closeModal="isPageManageOpen = false; updateContentList()"
                 @createElement="isCreateElementOpen = true"
-                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" :page="selectedPage" />
+                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" :page="selectedPage"
+                :chapter_id="parentContentId" />
         </Transition>
 
         <Transition name="modal" class="z-50">

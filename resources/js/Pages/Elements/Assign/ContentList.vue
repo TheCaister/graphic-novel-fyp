@@ -3,6 +3,10 @@
         Here is a list of all the content:
     </h1>
 
+    <button @click="console.log(props.subContentList)">
+        Check
+    </button>
+
     <div class="h-96 overflow-auto">
      
             <div v-for="content in subContentList" :key="content.content_id">
