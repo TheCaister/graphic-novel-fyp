@@ -34,11 +34,11 @@ const DashboardViewComponent = computed(() => {
 
 const isEditThumbnailModalOpen = ref(false)
 
-
 const form = useForm({
     element: {
         content: {},
     },
+    subElements: [],
     upload: '',
 });
 
@@ -47,12 +47,12 @@ const elementThumbnailImage = computed(() => {
 
 })
 
-watch(form.element.content , (newVal) => {
+watch(form.element.content, (newVal) => {
     // parse newVal if it is a string
-    if(typeof newVal === 'string'){
+    if (typeof newVal === 'string') {
         form.element.content = JSON.parse(newVal)
     }
-    
+
 })
 
 function updateForm(element) {
@@ -60,26 +60,26 @@ function updateForm(element) {
 }
 
 function saveElement(assign = false) {
-    console.log(form.upload)
 
     form.put(route('elements.update', {
-        element: form.element.element_id, assign: assign, content_type: assign ? props.parentContentType : '', content_id: assign ? props.parentContentId : '', preSelectedElements: [{
+        element: form.element.element_id,
+        assign: assign, content_type: assign ? props.parentContentType : '',
+        content_id: assign ? props.parentContentId : '',
+        preSelectedElements: [{
             element_id: form.element.element_id,
             checked: true
         }]
     })), {
         onSuccess: () => {
             console.log('success')
-
         },
         onError: (e) => {
             console.log(e)
         }
     }
-
 }
 
-function updateUpload(upload){
+function updateUpload(upload) {
     form.upload = upload
 
     saveElement()
@@ -90,7 +90,7 @@ onMounted(() => {
     console.log('Element:')
     console.log(props.element)
 
-    if(typeof props.element.content === 'string'){
+    if (typeof props.element.content === 'string') {
         props.element.content = JSON.parse(props.element.content)
     }
 
@@ -107,10 +107,8 @@ function back() {
 
     <Teleport to="body">
         <Transition name="modal" class="z-50">
-            <ElementThumbnailModal v-if="isEditThumbnailModalOpen"
-                @closeModal="isEditThumbnailModalOpen = false"
-                @save-thumbnail="updateUpload"
-                :element="props.element"
+            <ElementThumbnailModal v-if="isEditThumbnailModalOpen" @closeModal="isEditThumbnailModalOpen = false"
+                @save-thumbnail="updateUpload" :element="props.element"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
     </Teleport>
@@ -134,16 +132,13 @@ function back() {
                 </div>
             </div>
         </div>
-        
+
         <!-- Thumbnail with option to edit name -->
-        <div class="w-full h-64 flex items-center p-6"
-            :style="'background-image: url(' + elementThumbnailImage + ')'"
-            
-            >
+        <div class="w-full h-64 flex items-center p-6" :style="'background-image: url(' + elementThumbnailImage + ')'">
             <div class="flex items-center gap-8">
                 <button @click="isEditThumbnailModalOpen = true">
                     <img class="w-32 h-32 shadow-2xl rounded-lg hover:scale-105 transition-transform duration-300"
-                    :src="props.element.element_thumbnail ? props.element.element_thumbnail : '/assets/black_page.jpg'"
+                        :src="props.element.element_thumbnail ? props.element.element_thumbnail : '/assets/black_page.jpg'"
                         alt="" srcset="">
                 </button>
 

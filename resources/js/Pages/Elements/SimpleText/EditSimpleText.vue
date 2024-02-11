@@ -19,7 +19,6 @@ const props = defineProps({
 const emit = defineEmits(['updateElement'])
 
 watch(props.element, (element) => {
-    // console.log(element)
     emit('updateElement', element)
 })
 

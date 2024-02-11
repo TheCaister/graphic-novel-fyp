@@ -120,11 +120,18 @@ class ElementController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Element $element)
+    public function update(Element $element)
     {
 
         // dd($request->all());
-        $newElement = $request->element;
+        $newElement = request()->element;
+        $upload = request()->upload;
+        $assign = request()->assign;
+        $contentType = request()->content_type;
+        $contentId = request()->content_id;
+        $preSelectedElements = request()->preSelectedElements;
+        $hidden = request()->hidden;
+        $childrenElements = request()->childrenElements;
 
         // By default, it seems that Laravel converts empty strings or strings with just spaces to null. Here's a recursive function to convert all null text values to empty strings. This is to ensure that the content renders properly. For TipTap, as it doesn't render properly if the text value is null.
         if (!is_null($newElement['content'])) {
@@ -136,7 +143,7 @@ class ElementController extends Controller
         }
 
 
-        $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
+        $tempThumbnail = TemporaryFile::where('folder', $upload)->first();
 
 
         if ($tempThumbnail) {
@@ -151,18 +158,20 @@ class ElementController extends Controller
 
         $element->update([
             'element_name' => $newElement['element_name'],
-
             'content' => $newElement['content'],
-            // 'hidden' => $request->hidden,
         ]);
 
-        if ($request->assign) {
+        if ($childrenElements) {
+            $element->childelements()->sync($childrenElements);
+        }
+
+        if ($assign) {
             return redirect()->route(
                 'elements.assign',
                 [
-                    'content_type' => $request->content_type,
-                    'content_id' => $request->content_id,
-                    'preSelectedElements' => $request->preSelectedElements ? $request->preSelectedElements : [],
+                    'content_type' => $contentType,
+                    'content_id' => $contentId,
+                    'preSelectedElements' => $preSelectedElements ? $preSelectedElements : [],
                 ]
             );
         } else {

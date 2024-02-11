@@ -55,7 +55,6 @@
                     </div>
                     <!-- </form> -->
 
-
                     <!-- Settings button with gear icon -->
                     <Link  :href="route('profile.edit') " >
                         <span class="material-symbols-outlined dark">settings</span>
@@ -64,10 +63,6 @@
                     <Link :href="route('logout')" method="post" as="button"
                         class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
                     Log Out</Link>
-
-                    <!-- Need to get current user id -->
-                    <!-- <Avatar src='https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg'
-                    :link="route('profile.show', page.props.auth.user.id)"/> -->
 
                     <Avatar :src='page.props.auth.user.profile_picture'
                     :link="route('profile.show', page.props.auth.user.id)"/>

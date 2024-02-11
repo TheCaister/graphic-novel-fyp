@@ -5,15 +5,14 @@
         <!-- Search bar with buttons for users, content and elements -->
         <div>
 
-            <select name="
-                " id="" class="bg-gray-500">
-                <option value="">Users</option>
-                <option value="">Content</option>
-                <option value="">Elements</option>
+            <select v-model="form.searchType" class="bg-gray-500">
+                <option value="users">Users</option>
+                <option value="content">Content</option>
+                <option value="elements">Elements</option>
             </select>
             <!-- input, with dropdown on the right for 3 options -->
             <input type="text" class="bg-gray-500 border-4 border-gray-300" v-model="form.search" />
-            <button>
+            <button @click="search">
                 Search
             </button>
 
@@ -45,7 +44,7 @@
 </template>
 
 <script setup>
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { onMounted, computed, inject, ref, watch } from 'vue'
 import { useForm } from '@inertiajs/vue3';
 import SearchContentResults from './SearchContentResults.vue';
@@ -58,16 +57,24 @@ import AdvancedUserFilters from './AdvancedUserFilters.vue';
 const props = defineProps({
     searchType: {
         type: String,
+        default: 'users'
     },
     initResultsList: {
         type: Array,
-        default: () => []
+        default: []
     }
 })
 
 const resultsList = ref(props.initResultsList)
+// const searchType = ref(props.searchType)
 
-
+const form = useForm({
+    search: '',
+    searchType: props.searchType,
+    // In advanced, it's a bunch of 
+    // key : something like boolean to toggle that search option
+    advanced: {},
+});
 
 const ResultsViewComponent = computed(() => {
     // return SearchUsersResults
@@ -86,8 +93,6 @@ const ResultsViewComponent = computed(() => {
 })
 
 const AdvancedFiltersComponent = computed(() => {
-    // return AdvancedUserFilters
-
     // Switch statement to return the correct dashboard view
     switch (props.searchType) {
         case 'content':
@@ -101,16 +106,20 @@ const AdvancedFiltersComponent = computed(() => {
     }
 })
 
-const form = useForm({
-    search: '',
-    advanced: {        },
-});
+
 
 function search() {
     if (form.search !== '') {
-        router.get(route('search'), {
-            search: form.search,
-        });
+        // router.get(route('search'), {
+        //     search: form.search,
+        // });
+
+        form.get(route('search'), {
+            onFinish: () => {
+                console.log('success')
+                form.search = ''
+            }
+        })
     }
 }
 
@@ -118,13 +127,11 @@ function back() {
     router.back();
 }
 
-
-
-function test(){
+function test() {
     console.log(form)
 }
 
-function updateAdvancedSearch({name, value}) {
+function updateAdvancedSearch({ name, value }) {
     if (value === null) {
         delete form.advanced[name];
     } else {

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\MediaLibrary\HasMedia;
@@ -88,6 +89,19 @@ class Element extends Model implements HasMedia
     {
         return $this->morphTo();
     }
+
+    // relationship - subelements. many to many. Not polymorphic
+    // Using the container_elements table, which has parent_element_id and child_element_id columns
+    public function childelements(): BelongsToMany
+    {
+        return $this->belongsToMany(Element::class, 'container_elements', 'parent_element_id', 'child_element_id');
+    }
+
+    public function parentelements(): BelongsToMany
+    {
+        return $this->belongsToMany(Element::class, 'container_elements', 'child_element_id', 'parent_element_id');
+    }
+    
 
     public function getRecentsFormattedEntry()
     {
