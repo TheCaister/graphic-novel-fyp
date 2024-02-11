@@ -3,7 +3,12 @@
         <button @click="toggleChecked" class="flex items-center border border-pink-500 rounded-md justify-between">
 
             <div class="flex items-center">
-                <img src="https://cc-prod.scene7.com/is/image/CCProdAuthor/What-is-Stock-Photography_P1_mobile?$pjpeg$&jpegSize=200&wid=720"
+                <!-- <img src="https://cc-prod.scene7.com/is/image/CCProdAuthor/What-is-Stock-Photography_P1_mobile?$pjpeg$&jpegSize=200&wid=720"
+                    alt="" class="rounded-full w-16 h-16">
+                
+                -->
+
+                <img :src="props.image ? props.image : '/assets/black_page.jpg'"
                     alt="" class="rounded-full w-16 h-16">
                 <div>
                     {{ label }}

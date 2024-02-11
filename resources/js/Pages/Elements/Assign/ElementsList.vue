@@ -10,7 +10,7 @@
     <div class="h-96 overflow-auto">
         <TransitionGroup name="list" tag="ul">
             <div v-for="element in elements" :key="element.element_id">
-                <TriCheckbox :label="element.element_name" image="" v-model="element.checked" />
+                <TriCheckbox :label="element.element_name" :image="element.element_thumbnail" v-model="element.checked" />
             </div>
         </TransitionGroup>
     </div>

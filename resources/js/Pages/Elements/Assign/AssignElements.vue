@@ -36,7 +36,7 @@
             <div class="flex flex-col items-center">
                 <SearchBar />
 
-                <button>
+                <button @click="toggleAll">
                     Toggle all
                 </button>
 
@@ -191,17 +191,14 @@ function toggleAll(){
     const checkedElements = elements.value.filter(element => element.checked === true)
     const uncheckedElements = elements.value.filter(element => element.checked === false)
 
-    if (checkedElements.length > 0 && uncheckedElements.length > 0) {
-        elements.value.forEach(element => element.checked = true)
-    } else if (checkedElements.length === elements.value.length) {
+    if (checkedElements.length === elements.value.length) {
         elements.value.forEach(element => element.checked = false)
     } else if (uncheckedElements.length === elements.value.length) {
         elements.value.forEach(element => element.checked = null)
     }
-
-
-
-
+    else{
+        elements.value.forEach(element => element.checked = true)
+    }
 }
 
 onMounted(() => {

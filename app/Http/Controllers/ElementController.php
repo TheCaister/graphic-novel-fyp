@@ -405,12 +405,13 @@ class ElementController extends Controller
                 $content = Universe::find($id);
                 $selectedContent['content_id'] = $content->universe_id;
                 $selectedContent['content_name'] = $content->universe_name;
-                // $selectedContent['thumbnail'] = $content->universe_thumbnail;
+                $selectedContent['thumbnail'] = $content->getFirstMediaUrl('universe_thumbnail');
                 break;
             case 'series':
                 $content = Series::find($id);
                 $selectedContent['content_id'] = $content->series_id;
                 $selectedContent['content_name'] = $content->series_title;
+                $selectedContent['thumbnail'] = $content->series_thumbnail;
 
                 if ($includeDescription) {
                     $selectedContent['description'] = $content->series_summary;
@@ -420,6 +421,7 @@ class ElementController extends Controller
                 $content = Chapter::find($id);
                 $selectedContent['content_id'] = $content->chapter_id;
                 $selectedContent['content_name'] = $content->chapter_title;
+                $selectedContent['thumbnail'] = $content->chapter_thumbnail;
 
                 if ($includeDescription) {
                     $selectedContent['description'] = $content->chapter_notes;
@@ -428,6 +430,8 @@ class ElementController extends Controller
             case 'pages':
                 $content = Page::find($id);
                 $selectedContent['content_id'] = $content->page_id;
+                $selectedContent['thumbnail'] = $content->page_image;
+
                 // $selectedContent['name'] = $content->page_title;
 
                 // Name format will be something like C3P4. This means we need to first get the chapter number, then the page number.

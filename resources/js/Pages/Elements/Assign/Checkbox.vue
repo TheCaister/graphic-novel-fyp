@@ -3,8 +3,8 @@
         <button @click="toggleChecked" class="flex items-center border border-pink-500 rounded-md justify-between">
 
             <div class="flex items-center">
-                <!-- image -->
-                <img src="https://cc-prod.scene7.com/is/image/CCProdAuthor/What-is-Stock-Photography_P1_mobile?$pjpeg$&jpegSize=200&wid=720"
+
+                <img :src="content.thumbnail ? content.thumbnail : '/assets/black_page.jpg'"
                     alt="" class="rounded-full w-16 h-16">
                 <!-- label -->
                 <div>
@@ -39,6 +39,7 @@ const props = defineProps({
 const checked = ref(false)
 
 function toggleChecked() {
+    console.log(props.content)
     checked.value = !checked.value
     emits('checked', checked.value)
 }
