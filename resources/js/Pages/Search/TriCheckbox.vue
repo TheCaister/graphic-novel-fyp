@@ -46,6 +46,9 @@ const props = defineProps({
 const checked = ref(props.preChecked)
 
 function toggleChecked() {
+
+    console.log(checked.value)
+
     if(checked.value === null) {
         checked.value = true
     } else if(checked.value === true) {

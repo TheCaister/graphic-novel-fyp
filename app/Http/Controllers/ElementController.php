@@ -214,7 +214,7 @@ class ElementController extends Controller
         // $content = $this->getElementable($request->type, $request->content_id);
         $subContentList = $this->generateSubcontent($request->content_type, $request->content_id);
 
-            // dd($subContentList);
+            // dd($request->preSelectedElements ? $request->preSelectedElements : []);
 
         return Inertia::render('Elements/Assign/AssignElements', [
             'parentContent' => $selectedContent,

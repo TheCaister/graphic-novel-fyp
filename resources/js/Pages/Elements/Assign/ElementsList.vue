@@ -10,39 +10,26 @@
     <div class="h-96 overflow-auto">
         <TransitionGroup name="list" tag="ul">
             <div v-for="element in elements" :key="element.element_id">
-                <TriCheckbox :label="element.element_name" image="" :pre-checked="element.checked"
-                    @checked="(event) => check(element.element_id, event)" />
+                <TriCheckbox :label="element.element_name" image="" v-model="element.checked" />
             </div>
         </TransitionGroup>
     </div>
 </template>
 
 <script setup>
-import { defineProps, ref, defineEmits, onBeforeMount, onMounted} from 'vue'
+import { defineEmits, watch } from 'vue'
 import TriCheckbox from './TriCheckbox.vue';
 
 const emits = defineEmits(['elementChecked'])
 
-const props = defineProps({
-    elementList: {
-        type: Array,
-        required: true
-    },
-    preSelectedElements: {
-        type: Array,
-        // default: [],
-        required: true
-    }
+const elements = defineModel()
+
+watch(elements.value, () => {
+    reorderElements()
 })
 
-const elements = ref(props.elementList)
-
-function check(elementId, event) {
-    
-    const selectedElement = elements.value.find(element => element.element_id === elementId)
-
-    selectedElement.checked = event
-
+// This places the checked === true elements at the top of the list, with checked === false following and checked === null at the bottom.
+function reorderElements() {
     // Rearrange the elements array so that the checked === true elements are at the top of the list, with checked === false following and checked === null at the bottom.
     elements.value.sort((a, b) => {
 
@@ -53,30 +40,8 @@ function check(elementId, event) {
         // In the first section, if ONLY first or second is null, the null value will be at the bottom of the list. If both are not null, we continue to the next section and compare by value.
         return (first === null) - (second === null) || +(first > second) || -(first < second)
     })
-
-    emits('elementChecked', {
-        element_id: selectedElement.element_id,
-        checked: selectedElement.checked
-    })
 }
 
-onBeforeMount(() => {
-    // Set all elements to checked === null
-    elements.value.forEach(element => {
-        element.checked = null
-    })
-
-    // In the preSelectedElements array, find the element in the elements array that has the same element_id as the one in the preSelectedElements array. Set the checked value to true.
-    props.preSelectedElements.forEach(preSelectedElement => {
-
-        // first, convert the elementId to a number, then find
-        const selectedElement = elements.value.find(element => element.element_id === Number(preSelectedElement.element_id))
-
-        if (selectedElement) {
-            check(selectedElement.element_id, preSelectedElement.checked === '1');
-        }
-    })
-})
 </script>
 
 <style scoped>

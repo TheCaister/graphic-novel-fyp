@@ -35,9 +35,8 @@
             </div>
             <div class="flex flex-col items-center">
                 <SearchBar />
-                <ElementsList :elementList="elementList" :preSelectedElements="preSelectedElements"
-                @element-checked="(event) => updateSelectedElementList(event)" />
 
+                <ElementsList v-model="elements" @element-checked="(event) => updateSelectedElementList(event)" />
 
                 <button @click="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Save
@@ -48,12 +47,12 @@
 </template>
 
 <script setup>
-import { router } from '@inertiajs/vue3';
+import { router, useForm } from '@inertiajs/vue3';
 import ElementsList from './ElementsList.vue';
 import ContentList from './ContentList.vue';
 import SearchBar from './SearchBar.vue';
-import { useForm, } from '@inertiajs/vue3';
 import APICalls from '@/Utilities/APICalls'
+import { onMounted, ref } from 'vue'
 
 
 const props = defineProps({
@@ -76,16 +75,20 @@ const props = defineProps({
     }
 })
 
+const elements = ref(props.elementList)
+
 const form = useForm({
     content_type: props.parentContent.type,
     content_id: props.parentContent.content_id,
     selectedContentList: [],
-    selectedElementList: [],
+    selectedElementList: props.preSelectedElements,
 })
 
-function submit(){
+// During submit, I'll remove any element with checked null
+function submit() {
     form.post(route('elements.assign.store'), {
-        onFinish: () => {form.reset()
+        onFinish: () => {
+            form.reset()
             console.log('form reset')
         },
     });
@@ -108,9 +111,7 @@ function updateSelectedContentList(event) {
     }
 }
 
-function updatePreSelectedElementList(){
-
-    console.log(form.selectedContentList)
+function updatePreSelectedElementList() {
 
     let type = ''
     let contentIdList = []
@@ -127,16 +128,46 @@ function updatePreSelectedElementList(){
             break
     }
 
+    let assignedElementsList = []
+
     // from form.selectedContentList, get the content_id of each content and add it to the contentIdList
     form.selectedContentList.forEach(content => {
         contentIdList.push(content.content_id)
     })
 
     APICalls.getAssignedElements(type, contentIdList).then(response => {
-        console.log(response.data)
-        form.preSelectedElements = response.data
+        console.log('response data...')
+        console.log(response.data[0])
+        assignedElementsList = response.data[0]
+        // console.log(assignedElementsList)
 
 
+        form.selectedElementList = []
+
+        // Loop through assignedElementsList and update the preSelectedElements list
+        props.elementList.forEach(element => {
+
+
+            // check if element is inside assignedElementsList
+            const assignedElement = assignedElementsList.find(assignedElement => assignedElement.element_id === element.element_id)
+
+            // console.log(assignedElement)
+
+            if (assignedElement) {
+
+                form.selectedElementList.push({
+                    element_id: element.element_id,
+                    checked: true
+                })
+            } else {
+                form.selectedElementList.push({
+                    element_id: element.element_id,
+                    checked: false
+                })
+            }
+        })
+
+        // props.preSelectedElements = form.selectedElementList
     }).catch(error => console.log(error))
 }
 
@@ -164,7 +195,7 @@ function updateSelectedElementList(event) {
     }
 }
 
-function goBack(){
+function goBack() {
     // switch on the parentContent.type
     switch (props.parentContent.type) {
         case 'universes':
@@ -180,4 +211,19 @@ function goBack(){
             break;
     }
 }
+
+onMounted(() => {
+
+    // Go through all elements in elements and see if an element is in preSelectedElements. If it is, set the checked value to true. If it isn't, set the checked value to null.
+    elements.value.forEach(element => {
+
+        const preSelectedElement = props.preSelectedElements.find(preSelectedElement => Number(preSelectedElement.element_id) === element.element_id)
+
+        if (preSelectedElement && preSelectedElement.checked === '1') {
+            element.checked = true
+        } else {
+            element.checked = null
+        }
+    })
+})
 </script>

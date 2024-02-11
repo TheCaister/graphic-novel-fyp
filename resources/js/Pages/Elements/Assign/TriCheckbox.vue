@@ -3,10 +3,8 @@
         <button @click="toggleChecked" class="flex items-center border border-pink-500 rounded-md justify-between">
 
             <div class="flex items-center">
-                <!-- image -->
                 <img src="https://cc-prod.scene7.com/is/image/CCProdAuthor/What-is-Stock-Photography_P1_mobile?$pjpeg$&jpegSize=200&wid=720"
                     alt="" class="rounded-full w-16 h-16">
-                <!-- label -->
                 <div>
                     {{ label }}
                 </div>
@@ -16,7 +14,6 @@
                 check_circle
             </span>
 
-            <!-- Else if... -->
             <span v-else-if="checked === false" class="material-symbols-outlined dark">
                 remove
             </span>
@@ -25,17 +22,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
-const emits = defineEmits(['checked'])
+const checked = defineModel()
 
 const props = defineProps({
     image: {
         type: String,
-    },
-    preChecked: {
-        type: Boolean,
-        default: null
     },
     label: {
         type: String,
@@ -43,17 +34,15 @@ const props = defineProps({
     }
 })
 
-const checked = ref(props.preChecked)
-
 function toggleChecked() {
-    if(checked.value === null) {
+
+    if (checked.value === null) {
         checked.value = true
-    } else if(checked.value === true) {
+    } else if (checked.value === true) {
         checked.value = false
-    } else if(checked.value === false) {
+    } else if (checked.value === false) {
         checked.value = null
     }
-    emits('checked', checked.value)
 }
 
 </script>
