@@ -204,8 +204,6 @@ class ElementController extends Controller
         //     'type' => $request->type,
         // ];
 
-        // dd($request->all());
-
         $selectedContent = null;
         $subContentList = null;
 
@@ -214,7 +212,6 @@ class ElementController extends Controller
         // $content = $this->getElementable($request->type, $request->content_id);
         $subContentList = $this->generateSubcontent($request->content_type, $request->content_id);
 
-            // dd($request->preSelectedElements ? $request->preSelectedElements : []);
 
         return Inertia::render('Elements/Assign/AssignElements', [
             'parentContent' => $selectedContent,
@@ -294,7 +291,9 @@ class ElementController extends Controller
             }
         }
 
-        return $this->assign($request);
+        // return $this->assign($request);
+        return redirect()->back();
+
     }
 
     public function getElements()

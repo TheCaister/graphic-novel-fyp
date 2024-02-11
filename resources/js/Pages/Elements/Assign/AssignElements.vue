@@ -2,7 +2,7 @@
     <div class="p-8 border border-white rounded-lg text-white">
         <!-- Content title here, with option  to go back... -->
         <div class="flex">
-            <button @click="updatePreSelectedElementList">
+            <button @click="console.log('hi')">
                 Refresh
             </button>
             <Link
@@ -36,7 +36,11 @@
             <div class="flex flex-col items-center">
                 <SearchBar />
 
-                <ElementsList v-model="elements" @element-checked="(event) => updateSelectedElementList(event)" />
+                <button>
+                    Toggle all
+                </button>
+
+                <ElementsList v-model="elements" />
 
                 <button @click="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Save
@@ -81,11 +85,16 @@ const form = useForm({
     content_type: props.parentContent.type,
     content_id: props.parentContent.content_id,
     selectedContentList: [],
-    selectedElementList: props.preSelectedElements,
+    selectedElementList: [],
 })
 
 // During submit, I'll remove any element with checked null
 function submit() {
+
+    // Remove any element  with checked null in elements and set it to form.selectedElementList
+    form.selectedElementList = elements.value.filter(element => element.checked !== null)
+
+
     form.post(route('elements.assign.store'), {
         onFinish: () => {
             form.reset()
@@ -94,24 +103,12 @@ function submit() {
     });
 }
 
-function updateSelectedContentList(event) {
-    // First, check if the content is already in the selectedContentList by comparing the contentId. If it is, remove it from the list. If it isn't, add it to the list.
-    const selectedContent = form.selectedContentList.find(content => content.type === event.type && content.content_id === event.content_id)
-
-    if (selectedContent) {
-        // Remove the content from the list
-        form.selectedContentList = form.selectedContentList.filter(content => content.content_id !== event.content_id)
-    } else {
-        // Add the content to the list
-        form.selectedContentList.push({
-            content_id: event.content_id,
-            type: event.type,
-            checked: event.checked
-        })
-    }
-}
-
 function updatePreSelectedElementList() {
+
+    // if form.selectedContentList is empty, return
+    if (form.selectedContentList.length === 0) {
+        return
+    }
 
     let type = ''
     let contentIdList = []
@@ -136,63 +133,39 @@ function updatePreSelectedElementList() {
     })
 
     APICalls.getAssignedElements(type, contentIdList).then(response => {
-        console.log('response data...')
-        console.log(response.data[0])
         assignedElementsList = response.data[0]
-        // console.log(assignedElementsList)
-
-
         form.selectedElementList = []
 
         // Loop through assignedElementsList and update the preSelectedElements list
-        props.elementList.forEach(element => {
-
-
+        elements.value.forEach(element => {
             // check if element is inside assignedElementsList
             const assignedElement = assignedElementsList.find(assignedElement => assignedElement.element_id === element.element_id)
 
-            // console.log(assignedElement)
-
             if (assignedElement) {
-
-                form.selectedElementList.push({
-                    element_id: element.element_id,
-                    checked: true
-                })
-            } else {
-                form.selectedElementList.push({
-                    element_id: element.element_id,
-                    checked: false
-                })
-            }
+                element.checked = true
+            } 
         })
 
-        // props.preSelectedElements = form.selectedElementList
     }).catch(error => console.log(error))
 }
 
-function updateSelectedElementList(event) {
+function updateSelectedContentList(event) {
+    // First, check if the content is already in the selectedContentList by comparing the contentId. If it is, remove it from the list. If it isn't, add it to the list.
+    const selectedContent = form.selectedContentList.find(content => content.type === event.type && content.content_id === event.content_id)
 
-    // if element_id in event is checked === null, remove it from the list. Otherwise, add it to the list with the checked value.
-    if (event.checked === null) {
-        // Remove the element from the list
-        form.selectedElementList = form.selectedElementList.filter(element => element.element_id !== event.element_id)
+    if (selectedContent) {
+        // Remove the content from the list
+        form.selectedContentList = form.selectedContentList.filter(content => content.content_id !== event.content_id)
     } else {
-
-        // if the element is already in the list, update the checked value. Otherwise, add it to the list.
-        const selectedElement = form.selectedElementList.find(element => element.element_id === event.element_id)
-
-        if (selectedElement) {
-            // Update the checked value
-            selectedElement.checked = event.checked
-        } else {
-            // Add the element to the list
-            form.selectedElementList.push({
-                element_id: event.element_id,
-                checked: event.checked
-            })
-        }
+        // Add the content to the list
+        form.selectedContentList.push({
+            content_id: event.content_id,
+            type: event.type,
+            checked: event.checked
+        })
     }
+
+    updatePreSelectedElementList()
 }
 
 function goBack() {
@@ -210,6 +183,25 @@ function goBack() {
         default:
             break;
     }
+}
+
+function toggleAll(){
+
+    // If there is a mix of checked and unchecked elements, set all elements to checked = true. If all elements are checked, set all elements to checked = false. If all elements are check = false, set all elements to checked = null.
+    const checkedElements = elements.value.filter(element => element.checked === true)
+    const uncheckedElements = elements.value.filter(element => element.checked === false)
+
+    if (checkedElements.length > 0 && uncheckedElements.length > 0) {
+        elements.value.forEach(element => element.checked = true)
+    } else if (checkedElements.length === elements.value.length) {
+        elements.value.forEach(element => element.checked = false)
+    } else if (uncheckedElements.length === elements.value.length) {
+        elements.value.forEach(element => element.checked = null)
+    }
+
+
+
+
 }
 
 onMounted(() => {

@@ -41,7 +41,6 @@ function reorderElements() {
         return (first === null) - (second === null) || +(first > second) || -(first < second)
     })
 }
-
 </script>
 
 <style scoped>
