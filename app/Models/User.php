@@ -9,11 +9,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-// use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class User extends Authenticatable implements HasMedia
 {
-    // use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+    use HasRelationships;
     use HasFactory;
     use InteractsWithMedia;
 
@@ -62,6 +62,18 @@ class User extends Authenticatable implements HasMedia
     public function universes(): HasMany
     {
         return $this->hasMany(Universe::class, 'owner_id', 'id');
+    }
+
+    public function series(){
+        return $this->hasManyThrough(Series::class, Universe::class);
+    }
+
+    public function chapters(){
+        return $this->hasManyDeepFromRelations($this->series(), (new Series())->chapters());
+    }
+
+    public function pages(){
+        return $this->hasManyDeepFromRelations($this->chapters(), (new Chapter())->pages());
     }
 
     // public function elements(): HasMany
@@ -155,10 +167,11 @@ class User extends Authenticatable implements HasMedia
         return 'profile_picture';
     }
 
-    public function clearThumbnail(){
+    public function clearThumbnail()
+    {
         $this->profile_picture = null;
     }
-    
+
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? null, function ($query, $search) {

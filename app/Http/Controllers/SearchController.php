@@ -14,7 +14,7 @@ class SearchController extends Controller
 {
     //
 
-   
+
 
     public function search()
     {
@@ -176,13 +176,13 @@ class SearchController extends Controller
 
         $user = auth('sanctum')->user();
 
-         $contentTypeList = [
-        'App\\Models\\Universe',
-        'App\\Models\\Series',
-        'App\\Models\\Chapter',
-        'App\\Models\\Page',
-    ];
-        
+        $contentTypeList = [
+            'App\\Models\\Universe',
+            'App\\Models\\Series',
+            'App\\Models\\Chapter',
+            'App\\Models\\Page',
+        ];
+
 
         $resultsList = [];
 
@@ -195,8 +195,22 @@ class SearchController extends Controller
 
         // We loop through all types of models
 
-        foreach($contentTypeList as $contentType){
+        foreach ($contentTypeList as $contentType) {
             $resultsList[] = $contentType::latest()->filter(request(['search']))->limit(request()->limit)->get();
+        }
+
+        $tempList = $user->universes()
+            ->limit(request()->limit)->get()
+            ->concat(Series::latest()->limit(request()->limit)->get())
+            ->concat(Chapter::latest()->limit(request()->limit)->get())
+            ->concat(Element::latest()->limit(request()->limit)->get())
+            ->sortByDesc('updated_at')
+            ->take(request()->limit);
+
+
+        // loop through the results and convert them to a formatted entry
+        foreach ($tempList as $result) {
+            $resultsList[] = $result->getRecentsFormattedEntry();
         }
 
         // We do limiting here
