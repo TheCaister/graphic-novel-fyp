@@ -13,7 +13,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class User extends Authenticatable implements HasMedia
 {
-    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+    // use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
     use HasFactory;
     use InteractsWithMedia;
 

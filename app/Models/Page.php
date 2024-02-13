@@ -54,6 +54,11 @@ class Page extends Model implements HasMedia
         return $this->morphToMany(Element::class, 'elementable', 'elementables', 'elementable_id', 'element_id');
     }
 
+    public function owner(): BelongsTo
+    {
+        return $this->chapter()->series()->universe()->owner();
+    }
+
     function delete()
     {
         // $this->elements()->delete();

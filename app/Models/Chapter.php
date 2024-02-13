@@ -73,6 +73,11 @@ class Chapter extends Model implements HasMedia
         return $this->morphToMany(User::class, 'moderatable', 'approved_moderators', 'moderatable_id', 'moderator_id', 'chapter_id');
     }
 
+    public function owner(): BelongsTo
+    {
+        return $this->series()->universe()->owner();
+    }
+
     public function name(): string
     {
         return $this->chapter_title;

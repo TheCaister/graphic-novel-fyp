@@ -52,6 +52,11 @@ class Series extends Model implements HasMedia
         return $this->belongsTo(Universe::class, 'universe_id', 'universe_id');
     }
 
+    public function owner(): BelongsTo
+    {
+        return $this->universe()->owner();
+    }
+
     public function chapters(): HasMany
     {
         return $this->hasMany(Chapter::class, 'series_id', 'series_id');

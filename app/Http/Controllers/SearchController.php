@@ -14,10 +14,10 @@ class SearchController extends Controller
 {
     //
 
+   
+
     public function search()
     {
-        // dd(request()->all());
-
         $resultsList = [];
 
         // do a switch on the search type
@@ -69,15 +69,15 @@ class SearchController extends Controller
     }
 
     // This will get content type and id
-    public function getSiblingContent(){
+    public function getSiblingContent()
+    {
 
         $content = null;
         $id = request()->id;
 
-        // dd($id);
         $resultsList = [];
 
-        switch(request()->type){
+        switch (request()->type) {
             case 'universe':
                 // $content = Universe::find($id);
                 $user = auth('sanctum')->user();
@@ -98,7 +98,7 @@ class SearchController extends Controller
                 $series = $content->series;
 
                 $resultsList = $series->chapters()->select('chapter_title as name', 'chapter_id as id')->get();
-                
+
                 break;
         }
 
@@ -107,7 +107,8 @@ class SearchController extends Controller
         return $resultsList;
     }
 
-    public function searchMention(){
+    public function searchMention()
+    {
         $resultsList = [];
 
         // do a switch on the search type
@@ -116,7 +117,7 @@ class SearchController extends Controller
                 $resultsList = $this->searchElements();
 
                 // id = element_id, name = element_name
-                foreach($resultsList as $result){
+                foreach ($resultsList as $result) {
                     $result->id = $result->element_id;
                     $result->name = $result->element_name;
                 }
@@ -124,7 +125,7 @@ class SearchController extends Controller
             case 'users':
                 $resultsList = $this->searchUsers();
 
-                foreach($resultsList as $result){
+                foreach ($resultsList as $result) {
                     $result->name = $result->username;
                 }
 
@@ -173,19 +174,40 @@ class SearchController extends Controller
     private function searchContent()
     {
 
-        $user = User::find(request()->userId);
+        $user = auth('sanctum')->user();
+
+         $contentTypeList = [
+        'App\\Models\\Universe',
+        'App\\Models\\Series',
+        'App\\Models\\Chapter',
+        'App\\Models\\Page',
+    ];
+        
 
         $resultsList = [];
-        $resultsList = Element::latest()->filter(request(['search']))->limit(request()->limit)->get();
 
-        // dd($resultsList);
+
+
+        // $resultsList = Element::latest()->filter(request(['search']))->limit(request()->limit)->get();
+
+
+        // From this user, get all universes, series, chapters and pages, put them all through the same filters. Afterwards, place a limit if necessary.
+
+        // We loop through all types of models
+
+        foreach($contentTypeList as $contentType){
+            $resultsList[] = $contentType::latest()->filter(request(['search']))->limit(request()->limit)->get();
+        }
+
+        // We do limiting here
 
         return $resultsList;
     }
 
-    public function getAssignedElements(){
+    public function getAssignedElements()
+    {
         $resultsList = [];
-        
+
         // I have request()->type and request()->contentIdList
         // I will get a list of content based on the type and id
 
@@ -204,6 +226,7 @@ class SearchController extends Controller
         $resultsList = [];
 
         // Aggregate universes, series, chapters and elements. Order by updated_at and limit to the request limit
+        // Eventualy, I want to use $contentTypeList here as well. Also, it only gets the latest, not the ones owned by the user.
         $tempList = Universe::latest()
             ->limit(request()->limit)->get()
             ->concat(Series::latest()->limit(request()->limit)->get())
