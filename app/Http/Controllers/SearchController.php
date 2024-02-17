@@ -195,15 +195,12 @@ class SearchController extends Controller
 
         // We loop through all types of models
 
-        foreach ($contentTypeList as $contentType) {
-            $resultsList[] = $contentType::latest()->filter(request(['search']))->limit(request()->limit)->get();
-        }
 
         $tempList = $user->universes()
             ->limit(request()->limit)->get()
-            ->concat(Series::latest()->limit(request()->limit)->get())
-            ->concat(Chapter::latest()->limit(request()->limit)->get())
-            ->concat(Element::latest()->limit(request()->limit)->get())
+            ->concat($user->series()->limit(request()->limit)->get())
+            ->concat($user->chapters()->limit(request()->limit)->get())
+            ->concat($user->pages()->limit(request()->limit)->get())
             ->sortByDesc('updated_at')
             ->take(request()->limit);
 
