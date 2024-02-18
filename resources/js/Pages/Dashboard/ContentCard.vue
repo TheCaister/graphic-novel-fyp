@@ -6,7 +6,11 @@
                 <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
                     <img v-if="content.thumbnail" :src="content.thumbnail" alt="Content Image"
                         class="rounded-lg object-cover w-full" />
-                    <img v-else src="/assets/black_page.jpg" alt="Content Image"
+                    <!-- <img v-else src="/public/assets/black_page.jpg" alt="Content Image"
+                        class="rounded-lg object-cover w-full" /> -->
+                        
+                        <img v-else src='/assets/black_page.jpg'     alt="Content Image"
+
                         class="rounded-lg object-cover w-full" />
                     <!-- <div v-else class="text-white text-xl flex items-center">U{{ content.content_id }}</div> -->
                 </div>
@@ -31,6 +35,7 @@
 <script setup>
 import { ref, defineEmits } from 'vue';
 import DashboardDropdownMenu from './DashboardDropdownMenu.vue'
+import APICalls from '@/Utilities/APICalls';
 
 const emits = defineEmits(['switchSelectedContent', 'menuItemClick']);
 
