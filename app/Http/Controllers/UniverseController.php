@@ -137,8 +137,14 @@ class UniverseController extends Controller
     // Return universes in JSON format
     public function getUniverses(Request $request)
     {
-        // Get all universe owned by the user in the request
-        $universes = Universe::where('owner_id', $request->user_id)->get();
+        $user = auth('sanctum')->user();
+
+        // Get all universe owned by the user in the request as well as user->moderatableUniverses()
+        $universes = $user->universes()->get()->concat($user->moderatableUniverses()->get());
+        
+        
+        
+        // $universes = Universe::where('owner_id', $user->id)->get();
 
         foreach ($universes as $universe) {
             $universe->thumbnail = $universe->getFirstMediaUrl('universe_thumbnail');
