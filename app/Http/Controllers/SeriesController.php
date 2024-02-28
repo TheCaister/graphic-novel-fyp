@@ -148,7 +148,8 @@ class SeriesController extends Controller
         return redirect()->back();
     }
 
-    public function getLatestChapterNumber(Series $series){
+    public function getLatestChapterNumber(Series $series)
+    {
         // From all the chapters of the series, return the value of the highest chapter number
 
         $highestChapterNumber = $series->chapters()->max('chapter_number');
@@ -193,10 +194,19 @@ class SeriesController extends Controller
 
     public function getSeries(Universe $universe)
     {
+        $user = auth('sanctum')->user();
         // Get all the series in the universe
         $series = $universe->series;
 
-        foreach($series as $s){
+        foreach ($series as $s) {
+
+            if ($s->moderators()->where('moderator_id', $user->id)->exists()) {
+                $s->can_edit = true;
+            } else {
+                $s->can_edit = false;
+            }
+
+
             $s->moderators = $s->moderators()->get();
         }
 
@@ -257,7 +267,7 @@ class SeriesController extends Controller
         // Get all the chapters in the series
         $chapters = $series->chapters;
 
-        foreach($chapters as $chapter){
+        foreach ($chapters as $chapter) {
             $chapter->moderators = $chapter->moderators()->get();
         }
 
