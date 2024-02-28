@@ -142,6 +142,27 @@ class UniverseController extends Controller
         // Get all universe owned by the user in the request as well as user->moderatableUniverses()
         $universes = $user->universes()->get()->concat($user->moderatableUniverses()->get());
         
+        $universes->each(function ($universe) {
+            $universe->can_edit = true;
+        });
+
+        $moderatableSeries = $user->moderatableSeries()->get();
+
+        foreach ($moderatableSeries as $series) {
+
+            $universe = $series->universe()->first();
+
+            // if user is a moderator of the universe, add the universe to the list
+            // with canEdit set to true. Otherwise, add the universe to the list 
+            // with canEdit set to false. we can check $universe->moderators() to see if the user is a moderator
+            if ($universe->moderators()->where('moderator_id', $user->id)->exists()) {
+                $universe->can_edit = true;
+            } else {
+                $universe->can_edit = false;
+              
+            }
+            $universes->push($universe);
+        }
         
         
         // $universes = Universe::where('owner_id', $user->id)->get();
@@ -150,10 +171,12 @@ class UniverseController extends Controller
             $universe->thumbnail = $universe->getFirstMediaUrl('universe_thumbnail');
 
             // Get universe moderators
-            $universe->moderators = $universe->moderators()->get();
-            }
+            // $universe->moderators = $universe->moderators()->get();
 
-        // dd($universes);
+            $universe->moderators_avatars = $universe->moderators()->get()->map(function ($moderator) {
+                return $moderator->getFirstMediaUrl('profile_picture');
+            });
+            }
 
         return response()->json($universes);
     }

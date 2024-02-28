@@ -8,9 +8,9 @@
                 content_name: universe.universe_name,
                 thumbnail: universe.thumbnail
             }" :link="route('universes.show', universe.universe_id)"
-                :selected="universe.universe_id === selectedUniverse.universe_id"
-                :drop-down-menu-options="dropDownMenuOptions" @switch-selected-content="switchSelectedContent"
-                @menu-item-click="handleMenuItemClicked" />
+                :selected="universe.universe_id === selectedUniverse.universe_id" :drop-down-menu-options="dropDownMenuOptions.filter(option =>
+                    !option.needsAdmin || (option.needsAdmin && universe.can_edit)
+                )" @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked" />
         </div>
 
         <add-button @click="isCreateModalOpen = true" label="Create Universe" class="w-96" />
@@ -71,9 +71,9 @@ const universeLoaded = ref(false)
 const selectedUniverse = ref({ universe_id: 0, universe_name: "" })
 
 const dropDownMenuOptions = [
-    { id: 1, text: "Edit", eventName: "edit" },
-    { id: 2, text: "View Elements", eventName: "viewElements" },
-    { id: 3, text: "Delete", eventName: "delete" },
+    { id: 1, text: "Edit", eventName: "edit", needsAdmin: true },
+    { id: 2, text: "View Elements", eventName: "viewElements", needsAdmin: false },
+    { id: 3, text: "Delete", eventName: "delete", needsAdmin: true },
 ]
 
 const props = defineProps({

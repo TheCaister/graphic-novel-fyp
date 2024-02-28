@@ -47,6 +47,13 @@ class Chapter extends Model implements HasMedia
         'scheduled_publish' => 'timestamp',
     ];
 
+    public function universe(){
+        // return $this->hasOneThrough(Universe::class, Series::class, 'series_id', 'universe_id', 'series_id', 'universe_id');
+
+        return $this->hasOneThrough(Universe::class, Series::class, 'universe_id', 'series_id', 'chapter_id', 'series_id');
+
+    }
+
     public function series(): BelongsTo
     {
         return $this->belongsTo(Series::class, 'series_id', 'series_id');
