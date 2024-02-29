@@ -210,33 +210,32 @@ class SearchController extends Controller
 
         $types = ['Universes', 'Series', 'Chapters', 'Pages'];
 
+           // concat user moderatableuniverses, moderatableseries, moderatablechapters while also filtering
+           $tempList = $tempList->concat($user->moderatableUniverses()->filter(request(['search']))->limit(request()->limit)->get());
+
+           $tempList = $tempList->concat($user->moderatableSeries()->filter(request(['search']))->limit(request()->limit)->get());
+   
+           $tempList = $tempList->concat($user->moderatableChapters()->filter(request(['search']))->limit(request()->limit)->get());
+
         foreach ($types as $type) {
             // if (request('include' . $type) != false) {
                 if (true) {
                 $method = lcfirst($type);
-                // $tempList = $tempList->concat($user->$method()->filter(request(['search']))->limit(request()->limit)->get());
 
                 $tempList = $tempList->concat($user->$method()->filter(request(['search']))->limit(request()->limit)->get());
             }
         }
 
-        // concat user moderatableuniverses, moderatableseries, moderatablechapters while also filtering
-        $tempList = $tempList->concat($user->moderatableUniverses()->filter(request(['search']))->limit(request()->limit)->get());
-
-        $tempList = $tempList->concat($user->moderatableSeries()->filter(request(['search']))->limit(request()->limit)->get());
-
-        $tempList = $tempList->concat($user->moderatableChapters()->filter(request(['search']))->limit(request()->limit)->get());
+     
 
         $tempList = $tempList->sortByDesc('updated_at')
             ->take(request()->limit);
-
-
 
         // loop through the results and convert them to a formatted entry
         foreach ($tempList as $result) {
             $resultsList[] = $result->getSearchFormattedEntry();
         }
-        dd($resultsList);
+        // dd($resultsList);
         // We do limiting here
 
         return $resultsList;
