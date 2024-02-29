@@ -98,11 +98,28 @@ class Chapter extends Model implements HasMedia
         ];
     }
 
+    public function getSearchFormattedEntry(){
+        return [
+            'title' => $this->chapter_title,
+            'type' => 'chapter',
+            'thumbnail' => $this->chapter_thumbnail,
+            'link' => route('chapters.show', $this->chapter_id),
+        ];
+    }
+
     public static function getThumbnailCollectionName(){
         return 'chapter_thumbnail';
     }
 
     public function clearThumbnail(){
         $this->chapter_thumbnail = null;
+    }
+
+    public function scopeFilter($query, array $filters)
+    {
+        // dd($query);
+        $query->when($filters['search'] ?? null, function ($query, $search) {
+            $query->whereRaw("LOWER(chapter_title) LIKE CONCAT('%', LOWER(?), '%')", [$search]);
+        });
     }
 }

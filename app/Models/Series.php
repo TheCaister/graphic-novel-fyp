@@ -87,6 +87,15 @@ class Series extends Model implements HasMedia
         ];
     }
 
+    public function getSearchFormattedEntry(){
+        return [
+            'title' => $this->series_title,
+            'type' => 'series',
+            'thumbnail' => $this->series_thumbnail,
+            'link' => route('series.show', $this->series_id),
+        ];
+    }
+
     public static function getThumbnailCollectionName()
     {
         return 'series_thumbnail';
@@ -103,5 +112,13 @@ class Series extends Model implements HasMedia
     public function clearThumbnail(){
         $this->series_thumbnail = null;
 
+    }
+
+    public function scopeFilter($query, array $filters)
+    {
+        // dd($query);
+        $query->when($filters['search'] ?? null, function ($query, $search) {
+            $query->whereRaw("LOWER(series_title) LIKE CONCAT('%', LOWER(?), '%')", [$search]);
+        });
     }
 }

@@ -205,20 +205,45 @@ class SearchController extends Controller
         // We loop through all types of models
 
 
-        $tempList = $user->universes()
-            ->limit(request()->limit)->get()
-            ->concat($user->series()->limit(request()->limit)->get())
-            ->concat($user->chapters()->limit(request()->limit)->get())
-            ->concat($user->pages()->limit(request()->limit)->get())
-            ->sortByDesc('updated_at')
+
+        $tempList = collect();
+
+        // if(request('includeUniverses') != false){
+        //     $tempList = $tempList->concat($user->universes()->limit(request()->limit)->get());
+        // }
+
+        // if(request('includeSeries') != false){
+        //     $tempList = $tempList->concat($user->series()->limit(request()->limit)->get());
+        // }
+
+        // if(request('includeChapters') != false){
+        //     $tempList = $tempList->concat($user->chapters()->limit(request()->limit)->get());
+        // }
+
+        // if(request('includePages') != false){
+        //     $tempList = $tempList->concat($user->pages()->limit(request()->limit)->get());
+        // }
+
+        $types = ['Universes', 'Series', 'Chapters', 'Pages'];
+
+        foreach ($types as $type) {
+            // if (request('include' . $type) != false) {
+                if (true) {
+                $method = lcfirst($type);
+                $tempList = $tempList->concat($user->$method()->filter(request(['search']))->limit(request()->limit)->get());
+            }
+        }
+
+        $tempList = $tempList->sortByDesc('updated_at')
             ->take(request()->limit);
+
 
 
         // loop through the results and convert them to a formatted entry
         foreach ($tempList as $result) {
-            $resultsList[] = $result->getRecentsFormattedEntry();
+            $resultsList[] = $result->getSearchFormattedEntry();
         }
-
+        dd($resultsList);
         // We do limiting here
 
         return $resultsList;

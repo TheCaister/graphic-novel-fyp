@@ -65,7 +65,7 @@ class User extends Authenticatable implements HasMedia
     }
 
     public function series(){
-        return $this->hasManyThrough(Series::class, Universe::class);
+        return $this->hasManyThrough(Series::class, Universe::class, 'owner_id', 'universe_id');
     }
 
     public function chapters(){

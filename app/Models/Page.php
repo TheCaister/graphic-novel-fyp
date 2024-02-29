@@ -74,4 +74,21 @@ class Page extends Model implements HasMedia
 
         $this->page_image = null;
     }
+
+    public function getSearchFormattedEntry(){
+        return [
+            'title' => 'Page ' . $this->page_number,
+            'type' => 'page',
+            'thumbnail' => $this->page_image,
+            'link' => route('chapters.show', $this->chapter->chapter_id),
+        ];
+    }
+
+    public function scopeFilter($query, array $filters)
+    {
+        // dd($query);
+        // $query->when($filters['search'] ?? null, function ($query, $search) {
+        //     $query->whereRaw("LOWER(universe_name) LIKE CONCAT('%', LOWER(?), '%')", [$search]);
+        // });
+    }
 }
