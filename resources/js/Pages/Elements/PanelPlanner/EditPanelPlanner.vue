@@ -21,27 +21,28 @@
                     class="rounded-lg relative border-4 border-pink-500 text-white p-4"
                     @mousemove.stop="showAddElementHint = false" @click.stop="">
                     Testing...
-                    <span class="absolute top-0 right-0 cursor-pointer mt-2 mr-2"  @click="removeGridItem(item.i)">X</span>
+                    <span class="absolute top-0 right-0 cursor-pointer mt-2 mr-2" @click="removeGridItem(item.i)">X</span>
                 </grid-item>
 
-                
+
 
                 <!-- Make an empty div with a border with the aspect ratio of a page to be overlayed on top of the grid -->
-                     <div class="border-4 border-blue-500 rounded-lg" :style="{ paddingBottom: pageStyleAspectRatio + '%' }"></div>
+                <div class="border-4 border-blue-500 rounded-lg" :style="{ paddingBottom: pageStyleAspectRatio + '%' }">
+                </div>
 
-                     <!-- <div class="border-4 border-blue-500 rounded-lg" style="padding-bottom: 141.0;"></div> -->
+                <!-- <div class="border-4 border-blue-500 rounded-lg" style="padding-bottom: 141.0;"></div> -->
 
-           
+
             </GridLayout>
             <div class="flex justify-center">
                 <button>
                     &lt;- </button>
-                        <div>
-                            12/29
-                        </div>
-                        <button>
-                            ->
-                        </button>
+                <div>
+                    12/29
+                </div>
+                <button>
+                    ->
+                </button>
             </div>
         </div>
 
@@ -84,7 +85,7 @@
 
 <script lang="ts" setup>
 import { watch } from 'vue';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { GridLayout, GridItem } from 'vue3-grid-layout-next';
 
 const responsive = ref(true)
@@ -103,32 +104,28 @@ const props = defineProps({
 })
 
 
-const emit = defineEmits(['updateElement'])
+const emit = defineEmits(['updateElement', 'updateChildrenElementIDs'])
 
 // Set const layout to random values
 // I should consider adding...
 // static so that it won't move when I drag other panels over it
 // list-index so that I can keep track of the order of the panels in the list on the right
-const layout = ref(props.element.content)
 
-// layout.value = [
-//     {
-//         "x": 0, "y": 0, "w": 2, "h": 2, "i": "0", "text": "Some lore here", "elements": [{
-//             "element_id": 1,
-//             "element_name": "Grudd",
-//         }]
-//     },
-//     { "x": 2, "y": 0, "w": 2, "h": 4, "i": "1" },
-//     { "x": 4, "y": 0, "w": 2, "h": 5, "i": "2" },
-//     { "x": 6, "y": 0, "w": 2, "h": 3, "i": "3" },
-//     { "x": 8, "y": 0, "w": 2, "h": 3, "i": "4" },
-//     { "x": 10, "y": 0, "w": 2, "h": 3, "i": "5" },
-// ]
+// const layout = ref(props.element.content)
+const layout = ref([])
 
 watch(layout, (newVal) => {
     console.log('updated...')
     props.element.content = newVal
+
+    // console.log(props.element)
     emit('updateElement', props.element)
+})
+
+onMounted(() => {
+
+    layout.value = props.element.content ? props.element.content : [];
+    // layout.value = []
 })
 
 // computed pageStyle to return the correct page aspect ratio
@@ -146,12 +143,6 @@ const pageStyleAspectRatio = computed(() => {
             return 141.42
     }
 })
-
-
-// const layout = reactive([]) // will cause some bug
-
-// it will work, when responsive is false
-// const layout = reactive([])
 
 function updateMousePosition(event) {
     mouseX.value = event.clientX

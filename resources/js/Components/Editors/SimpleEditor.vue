@@ -80,9 +80,10 @@
 </template>
 
 <script setup>
+const emit = defineEmits([''])
 
 function itemSelected(props) {
-    console.log(props.id.id)
+    // console.log(props.id.id)
 }
 </script>
   

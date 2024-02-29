@@ -8,13 +8,13 @@
                 subheading: series.series_genre,
                 description: series.series_summary,
                 thumbnail: series.series_thumbnail,
-            }" :link="route('series.show', series.series_id)"
-                :selected="series.series_id === selectedSeries.series_id"
-                :drop-down-menu-options="dropDownMenuOptions" @switch-selected-content="switchSelectedContent"
-                @menu-item-click="handleMenuItemClicked" />
+            }" :link="route('series.show', series.series_id)" :selected="series.series_id === selectedSeries.series_id"
+                :drop-down-menu-options="dropDownMenuOptions.filter(option =>
+                    !option.needsAdmin || (option.needsAdmin && series.can_edit)
+                )" @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked" />
         </div>
 
-        <add-button @click="isCreateModalOpen = true" label="Create Series" class="w-96"/>
+        <add-button @click="isCreateModalOpen = true" label="Create Series" class="w-96" />
 
     </div>
     <div v-else>
@@ -32,8 +32,7 @@
 
         <Transition name="modal" class="z-50">
             <edit-series-modal v-if="isEditModalOpen" @closeModal="isEditModalOpen = false; updateContentList()"
-                :series="selectedSeries"
-                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+                :series="selectedSeries" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
         <Transition name="modal" class="z-50">
@@ -70,10 +69,10 @@ const isEditModalOpen = ref(false)
 const isDeleteModalOpen = ref(false)
 
 const dropDownMenuOptions = [
-    { id: 1, text: "Edit", eventName: "edit" },
-    { id: 2, text: "View Elements", eventName: "viewElements" },
-    { id: 3, text: "Assign Elements", eventName: "assignElements" },
-    { id: 3, text: "Delete", eventName: "delete" },
+    { id: 1, text: "Edit", eventName: "edit", needsAdmin: true },
+    { id: 2, text: "View Elements", eventName: "viewElements", needsAdmin: false },
+    { id: 3, text: "Assign Elements", eventName: "assignElements", needsAdmin: true },
+    { id: 3, text: "Delete", eventName: "delete", needsAdmin: true },
 ]
 
 const seriesLoaded = ref(false)

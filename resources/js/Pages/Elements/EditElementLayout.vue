@@ -38,7 +38,7 @@ const form = useForm({
     element: {
         content: {},
     },
-    subElements: [],
+    childrenElements: [],
     upload: '',
 });
 
@@ -59,7 +59,13 @@ function updateForm(element) {
     form.element = element
 }
 
+function updateChildrenElements(elements){
+    form.childrenElements = elements
+}
+
 function saveElement(assign = false) {
+
+    console.log(form.childrenElements)
 
     form.put(route('elements.update', {
         element: form.element.element_id,
@@ -68,7 +74,8 @@ function saveElement(assign = false) {
         preSelectedElements: [{
             element_id: form.element.element_id,
             checked: true
-        }]
+        }],
+        childrenElements: form.childrenElements
     })), {
         onSuccess: () => {
             console.log('success')
@@ -86,9 +93,6 @@ function updateUpload(upload) {
 }
 
 onMounted(() => {
-
-    console.log('Element:')
-    console.log(props.element)
 
     if (typeof props.element.content === 'string') {
         props.element.content = JSON.parse(props.element.content)
@@ -153,7 +157,7 @@ function back() {
 
         <!-- Element Edit View -->
         <KeepAlive>
-            <component :is="DashboardViewComponent" v-bind:element="props.element" @updateElement="updateForm" />
+            <component :is="DashboardViewComponent" v-bind:element="props.element" @updateElement="updateForm" @updateChildrenElementIDs="updateChildrenElements"/>
         </KeepAlive>
     </div>
 </template>
