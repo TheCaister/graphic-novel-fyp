@@ -38,7 +38,7 @@ const form = useForm({
     element: {
         content: {},
     },
-    childElements: [],
+    childrenElements: [],
     upload: '',
 });
 
@@ -60,10 +60,12 @@ function updateForm(element) {
 }
 
 function updateChildrenElements(elements){
-    form.childElements = elements
+    form.childrenElements = elements
 }
 
 function saveElement(assign = false) {
+
+    console.log(form.childrenElements)
 
     form.put(route('elements.update', {
         element: form.element.element_id,
@@ -72,7 +74,8 @@ function saveElement(assign = false) {
         preSelectedElements: [{
             element_id: form.element.element_id,
             checked: true
-        }]
+        }],
+        childrenElements: form.childrenElements
     })), {
         onSuccess: () => {
             console.log('success')
