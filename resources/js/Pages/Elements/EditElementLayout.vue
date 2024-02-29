@@ -38,7 +38,7 @@ const form = useForm({
     element: {
         content: {},
     },
-    subElements: [],
+    childElements: [],
     upload: '',
 });
 
@@ -57,6 +57,10 @@ watch(form.element.content, (newVal) => {
 
 function updateForm(element) {
     form.element = element
+}
+
+function updateChildrenElements(elements){
+    form.childElements = elements
 }
 
 function saveElement(assign = false) {
@@ -86,9 +90,6 @@ function updateUpload(upload) {
 }
 
 onMounted(() => {
-
-    console.log('Element:')
-    console.log(props.element)
 
     if (typeof props.element.content === 'string') {
         props.element.content = JSON.parse(props.element.content)
@@ -153,7 +154,7 @@ function back() {
 
         <!-- Element Edit View -->
         <KeepAlive>
-            <component :is="DashboardViewComponent" v-bind:element="props.element" @updateElement="updateForm" />
+            <component :is="DashboardViewComponent" v-bind:element="props.element" @updateElement="updateForm" @updateChildrenElementIDs="updateChildrenElements"/>
         </KeepAlive>
     </div>
 </template>
