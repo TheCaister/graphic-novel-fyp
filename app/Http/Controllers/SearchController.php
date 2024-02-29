@@ -148,7 +148,17 @@ class SearchController extends Controller
         $user = auth('sanctum')->user();
 
 
-        $resultsList = $user->elementsThroughUniverse()->filter(request(['search']))->limit(request()->limit)->get();
+        // Get all universes and moderatableUniverses of the user, then get all the elements of those universes
+        $elementsWithSearch = function ($query) {
+            $query->filter(request(['search']));
+        };
+
+        // Using eager loading
+        $resultsList = $user->universes()->with(['elements' => $elementsWithSearch])
+            ->get()
+            ->concat($user->moderatableUniverses()->with(['elements' => $elementsWithSearch])->get())
+            ->pluck('elements')
+            ->flatten();
 
 
         // Depending on whether to include parent and child elements, concat the results with the parent and child elements
@@ -157,7 +167,6 @@ class SearchController extends Controller
         // On the other hand, if you search for 'Relationships', you'll get a Relationships element, and all the elements that are contained within it
 
         return $resultsList;
-        // return 1;
     }
 
     private function searchUsers()
