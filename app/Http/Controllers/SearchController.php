@@ -208,31 +208,24 @@ class SearchController extends Controller
 
         $tempList = collect();
 
-        // if(request('includeUniverses') != false){
-        //     $tempList = $tempList->concat($user->universes()->limit(request()->limit)->get());
-        // }
-
-        // if(request('includeSeries') != false){
-        //     $tempList = $tempList->concat($user->series()->limit(request()->limit)->get());
-        // }
-
-        // if(request('includeChapters') != false){
-        //     $tempList = $tempList->concat($user->chapters()->limit(request()->limit)->get());
-        // }
-
-        // if(request('includePages') != false){
-        //     $tempList = $tempList->concat($user->pages()->limit(request()->limit)->get());
-        // }
-
         $types = ['Universes', 'Series', 'Chapters', 'Pages'];
 
         foreach ($types as $type) {
             // if (request('include' . $type) != false) {
                 if (true) {
                 $method = lcfirst($type);
+                // $tempList = $tempList->concat($user->$method()->filter(request(['search']))->limit(request()->limit)->get());
+
                 $tempList = $tempList->concat($user->$method()->filter(request(['search']))->limit(request()->limit)->get());
             }
         }
+
+        // concat user moderatableuniverses, moderatableseries, moderatablechapters while also filtering
+        $tempList = $tempList->concat($user->moderatableUniverses()->filter(request(['search']))->limit(request()->limit)->get());
+
+        $tempList = $tempList->concat($user->moderatableSeries()->filter(request(['search']))->limit(request()->limit)->get());
+
+        $tempList = $tempList->concat($user->moderatableChapters()->filter(request(['search']))->limit(request()->limit)->get());
 
         $tempList = $tempList->sortByDesc('updated_at')
             ->take(request()->limit);
