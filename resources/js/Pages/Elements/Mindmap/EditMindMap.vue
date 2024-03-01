@@ -18,6 +18,9 @@ import { MiniMap } from '@vue-flow/minimap'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import CustomNode from './CustomNode.vue'
 import CustomEdge from './CustomEdge.vue'
+import CustomConnectionLine from './CustomConnectionLine.vue'
+import RelationEdge from './RelationEdge.vue'
+import ElementNode from './ElementNode.vue'
 import SearchElementModal from '../SearchElementModal.vue'
 import { watch, onMounted } from 'vue'
 
@@ -63,7 +66,7 @@ onPaneClick((params) => {
     paneX.value = params.offsetX
     paneY.value = params.offsetY
 
-    if(showAddElementButton.value == false) {
+    if (showAddElementButton.value == false) {
         showAddElementButton.value = true
     }
     else {
@@ -71,15 +74,24 @@ onPaneClick((params) => {
     }
 })
 
+onConnect((params) => {
+    // console.log(params)
+    params.type = 'relation';
+    addEdges([params])
+
+    console.log(nodesEdges.value)
+})
+
 function insertNode(data) {
     // console.log(props.element)
     addNodes([{
-            id: getNextNodeId(),
-            label: data.element_name,
-            position: { x: paneX.value, y: paneY.value },
+        id: getNextNodeId(),
+        label: data.element_name,
+        position: { x: paneX.value, y: paneY.value },
+        type: 'element',
 
-            data: data
-        }])
+        data: data
+    }])
 }
 
 function getNextNodeId() {
@@ -131,9 +143,23 @@ onMounted(() => {
                 <CustomNode v-bind="nodeProps" />
             </template>
 
-            <template #edge-custom="edgeProps">
-                <CustomEdge v-bind="edgeProps" />
+            <template #node-element="nodeProps">
+                <ElementNode v-bind="nodeProps" />
             </template>
+
+            <!-- <template #edge-custom="edgeProps">
+                <CustomEdge v-bind="edgeProps" />
+            </template> -->
+
+            <template #edge-relation="edgeProps">
+                <RelationEdge v-bind="edgeProps" />
+            </template>
+
+
+            <!-- This is for when you want the connection line to be different when dragging them out -->
+            <!-- <template #connection-line="{ sourceX, sourceY, targetX, targetY }">
+                <CustomConnectionLine :source-x="sourceX" :source-y="sourceY" :target-x="targetX" :target-y="targetY" />
+            </template> -->
 
             <button @click="onAddElementButtonClicked" v-if="showAddElementButton"
                 :style="{ position: 'fixed', top: clickedMouseY + 'px', left: clickedMouseX + 'px' }"

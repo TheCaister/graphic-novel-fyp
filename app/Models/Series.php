@@ -61,7 +61,7 @@ class Series extends Model implements HasMedia
     public function chapters(): HasMany
     {
         return $this->hasMany(Chapter::class, 'series_id', 'series_id');
-    }
+}
 
 
     public function elements(): MorphToMany
