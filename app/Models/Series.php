@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -52,9 +53,9 @@ class Series extends Model implements HasMedia
         return $this->belongsTo(Universe::class, 'universe_id', 'universe_id');
     }
 
-    public function owner(): BelongsTo
+    public function owner(): HasOneThrough
     {
-        return $this->universe()->owner();
+        return $this->hasOneThrough(User::class, Universe::class, 'universe_id', 'id', 'universe_id', 'owner_id');
     }
 
     public function chapters(): HasMany

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class Chapter extends Model implements HasMedia
 {
@@ -48,8 +49,6 @@ class Chapter extends Model implements HasMedia
     ];
 
     public function universe(){
-        // return $this->hasOneThrough(Universe::class, Series::class, 'series_id', 'universe_id', 'series_id', 'universe_id');
-
         return $this->hasOneThrough(Universe::class, Series::class, 'universe_id', 'series_id', 'chapter_id', 'series_id');
 
     }
@@ -80,9 +79,10 @@ class Chapter extends Model implements HasMedia
         return $this->morphToMany(User::class, 'moderatable', 'approved_moderators', 'moderatable_id', 'moderator_id', 'chapter_id');
     }
 
-    public function owner(): BelongsTo
+    public function owner()
     {
-        return $this->series()->universe()->owner();
+        return $this->hasOneDeep(User::class, [Series::class, Universe::class], ['series_id', 'universe_id', 'owner_id', 'id']);
+        // return $this->series()->universe()->owner();
     }
 
     public function name(): string

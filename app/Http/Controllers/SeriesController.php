@@ -200,7 +200,7 @@ class SeriesController extends Controller
 
         foreach ($series as $s) {
 
-            if ($s->moderators()->where('moderator_id', $user->id)->exists()) {
+            if ($s->moderators()->where('moderator_id', $user->id)->exists() || $s->owner->id === $user->id) {
                 $s->can_edit = true;
             } else {
                 $s->can_edit = false;
