@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import type { EdgeProps } from '@vue-flow/core'
 import { BaseEdge, EdgeLabelRenderer, getBezierPath, useEdge, useVueFlow } from '@vue-flow/core'
 
@@ -30,13 +30,13 @@ export default {
             position: 'absolute',
             transform: `translate(-50%, -50%) translate(${path[1]}px,${path[2]}px)`,
         }">
-            <button class="edgebutton" @click="removeEdges(id)">×</button>
+            <button class="edgebutton text-white" @click="removeEdges(id)">×</button>
 
             <!-- Provide an area to edit text -->
 
             <div>
-                <input type="text" v-model="edge.edge.data" style="background-color: transparent; border: none;" />
-                <button @click="console.log(edge)">Check props</button>
+                <input type="text" v-model="edge.edge.data" class="text-white bg-transparent" placeholder="Type here" />
+                <!-- <button @click="console.log(edge)" class="text-white">Check props</button> -->
 
             </div>
         </div>

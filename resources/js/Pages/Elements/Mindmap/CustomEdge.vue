@@ -23,7 +23,7 @@ export default {
 <template>
     <BaseEdge :path="path[0]" />
 
-    <EdgeLabelRenderer>
+    <EdgeLabelRenderer >
         <div :style="{
             pointerEvents: 'all',
             position: 'absolute',

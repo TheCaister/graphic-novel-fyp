@@ -34,7 +34,7 @@ const DashboardViewComponent = computed(() => {
 
 const isEditThumbnailModalOpen = ref(false)
 
-const isHeaderOpen = ref(false)
+const isHeaderOpen = ref(true)
 
 const form = useForm({
     element: {
@@ -120,7 +120,7 @@ function back() {
         </Transition>
     </Teleport>
 
-    <div>
+    <div class="relative">
         <!-- Buttons for saving, going back -->
         <div class="flex mb-8 w-full">
             <div class="flex justify-between w-full">
@@ -142,9 +142,9 @@ function back() {
 
         <!-- Thumbnail with option to edit name -->
 
-        <div class="relative">
+        <div>
             <div class="absolute z-10 w-full">
-                <div v-if="!isHeaderOpen" class=" h-64 flex items-center p-6"
+                <div v-if="isHeaderOpen" class=" h-64 flex items-center p-6"
                     :style="'background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url(' + elementThumbnailImage + ')'">
                     <div class="flex items-center gap-8">
                         <button @click="isEditThumbnailModalOpen = true">
