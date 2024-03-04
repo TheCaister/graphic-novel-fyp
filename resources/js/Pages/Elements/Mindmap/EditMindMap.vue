@@ -120,7 +120,9 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="h-96">
+    <!-- <div :style="{ height: '3000px' }" class="h-screen"> -->
+        <div class="h-screen">
+
         <Teleport to="body">
             <Transition name="modal" class="z-50">
                 <search-element-modal v-if="isSearchElementModalOpen" @closeElementSearchModal="onCloseElementSearchModal"
