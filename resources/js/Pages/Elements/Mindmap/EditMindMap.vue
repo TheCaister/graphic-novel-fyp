@@ -128,7 +128,7 @@ onMounted(() => {
             </Transition>
         </Teleport>
 
-        <VueFlow v-model="nodesEdges" fit-view-on-init class="border-4 border-green-500 bg-blue-500 vue-flow-basic-example"
+        <VueFlow v-model="nodesEdges" fit-view-on-init class=" vue-flow-basic-example"
             :default-zoom="1.5" :min-zoom="0.2" :max-zoom="4" auto-connect>
 
 
