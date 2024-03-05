@@ -183,7 +183,7 @@ function handleCreateElementButtonClicked() {
 
                     <!-- v-for here... -->
                     <Link :href="route('elements.edit', {element: element.element_id,
-                    content_type: 'chapters',
+                    content_type: 'Chapter',
                     content_id: props.chapter_id})" v-for="element in props.page.elements" :key="element.element_id" class="flex flex-col">
                         <!-- image, then text -->
                         <div class="w-1/2">

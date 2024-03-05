@@ -114,7 +114,7 @@ class SearchController extends Controller
         // do a switch on the search type
         switch (request()->searchType) {
             case 'elements':
-                $resultsList = $this->searchElements();
+                $resultsList = $this->searchElements(request()->contentType, request()->contentId);
 
                 // id = element_id, name = element_name
                 foreach ($resultsList as $result) {
@@ -141,7 +141,7 @@ class SearchController extends Controller
         return response()->json($resultsList);
     }
 
-    private function searchElements()
+    private function searchElements($contentType = null, $contentId = null)
     {
         $resultsList = [];
 
@@ -154,11 +154,16 @@ class SearchController extends Controller
         };
 
         // Using eager loading
-        $resultsList = $user->universes()->with(['elements' => $elementsWithSearch])
-            ->get()
-            ->concat($user->moderatableUniverses()->with(['elements' => $elementsWithSearch])->get())
-            ->pluck('elements')
-            ->flatten();
+        if ($contentType === null) {
+            $resultsList = $user->universes()->with(['elements' => $elementsWithSearch])
+                ->get()
+                ->concat($user->moderatableUniverses()->with(['elements' => $elementsWithSearch])->get())
+                ->pluck('elements')
+                ->flatten();
+        } else {
+            $content = $this->getClassName($contentType)::find($contentId);
+            $resultsList = $content->elements()->filter(request(['search']))->get();
+        }
 
 
         // Depending on whether to include parent and child elements, concat the results with the parent and child elements
@@ -185,12 +190,12 @@ class SearchController extends Controller
 
         $user = auth('sanctum')->user();
 
-        $contentTypeList = [
-            'App\\Models\\Universe',
-            'App\\Models\\Series',
-            'App\\Models\\Chapter',
-            'App\\Models\\Page',
-        ];
+        // $contentTypeList = [
+        //     'App\\Models\\Universe',
+        //     'App\\Models\\Series',
+        //     'App\\Models\\Chapter',
+        //     'App\\Models\\Page',
+        // ];
 
 
         $resultsList = [];

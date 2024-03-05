@@ -109,7 +109,7 @@ class ElementController extends Controller
                 'Elements/EditElementLayout',
                 [
                     'element' => $element,
-                    'parentContentType' => 'universes',
+                    'parentContentType' => 'Universe',
                     'parentContentId' => $universe->universe_id,
                 ]
             );
@@ -327,20 +327,22 @@ class ElementController extends Controller
         $content = null;
 
         // Create a switch statement to determine the type of content
-        switch ($type) {
-            case 'universes':
-                $content = Universe::find($id);
-                break;
-            case 'series':
-                $content = Series::find($id);
-                break;
-            case 'chapters':
-                $content = Chapter::find($id);
-                break;
-            case 'pages':
-                $content = Page::find($id);
-                break;
-        }
+        // switch ($type) {
+        //     case 'universes':
+        //         $content = Universe::find($id);
+        //         break;
+        //     case 'series':
+        //         $content = Series::find($id);
+        //         break;
+        //     case 'chapters':
+        //         $content = Chapter::find($id);
+        //         break;
+        //     case 'pages':
+        //         $content = Page::find($id);
+        //         break;
+        // }
+
+        $content = $this->getClassName($type)::find($id);
 
         return $content;
     }
@@ -501,5 +503,10 @@ class ElementController extends Controller
 
             return $element;
         }
+    }
+
+    private function getClassName($contentType)
+    {
+        return 'App\\Models\\' . $contentType;
     }
 }
