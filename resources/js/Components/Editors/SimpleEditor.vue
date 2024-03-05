@@ -121,11 +121,15 @@ export default {
             // const isSame = this.editor.getHTML() === value
 
             // JSON
-            const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)
+            // const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)
 
-            if (isSame) {
-                return
-            }
+            // if (isSame) {
+            //     return
+            // }
+
+            // console.log(value)
+
+          
 
             this.editor.commands.setContent(value, false)
         },
