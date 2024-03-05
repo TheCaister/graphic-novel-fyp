@@ -42,7 +42,7 @@ class ElementController extends Controller
 
         $element = $this->createElement();
 
-        if(is_null($element)){
+        if (is_null($element)) {
             return redirect()->back();
         }
 
@@ -104,8 +104,7 @@ class ElementController extends Controller
                     'parentContentId' => intval(request()->content_id),
                 ]
             );
-        }
-        else{
+        } else {
             return Inertia::render(
                 'Elements/EditElementLayout',
                 [
@@ -187,7 +186,10 @@ class ElementController extends Controller
         //
         $element->delete();
 
-        return redirect()->route('dashboard');
+        // return redirect()->route('dashboard');
+
+        // Redirect to the previous page
+        return redirect()->back();
     }
 
     public function elementsforge()
@@ -302,7 +304,6 @@ class ElementController extends Controller
 
         // return $this->assign($request);
         return redirect()->back();
-
     }
 
     public function getElements()

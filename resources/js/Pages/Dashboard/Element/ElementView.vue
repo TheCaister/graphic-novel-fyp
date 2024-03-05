@@ -33,7 +33,7 @@
             <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()" :content="{
                 content_id: selectedElement.element_id,
                 content_name: selectedElement.element_name,
-            }" type="series" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+            }" type="elements" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
     </Teleport>

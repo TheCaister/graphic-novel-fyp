@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-const emit = defineEmits([''])
+const emit = defineEmits(['update:modelValue'])
 
 function itemSelected(props) {
     // console.log(props.id.id)

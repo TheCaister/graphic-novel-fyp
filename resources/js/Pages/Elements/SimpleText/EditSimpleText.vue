@@ -31,15 +31,17 @@ onMounted(() => {
 })
 
 function updateChildrenElementIDs() {
-    let mentions = extractMentions(props.element.content.content);
-    let childrenElementIDs = []
+    if (props.element.content && props.element.content.content) {
+        let mentions = extractMentions(props.element.content.content);
+        let childrenElementIDs = []
 
-    // Go through mentions, then extract attrs.id.element_id and add to a children array
-    mentions.forEach(mention => {
-        childrenElementIDs.push(mention.attrs.id.element_id)
-    })
+        // Go through mentions, then extract attrs.id.element_id and add to a children array
+        mentions.forEach(mention => {
+            childrenElementIDs.push(mention.attrs.id.element_id)
+        })
 
-    emit('updateChildrenElementIDs', childrenElementIDs)
+        emit('updateChildrenElementIDs', childrenElementIDs)
+    }
 }
 
 function extractMentions(obj) {
