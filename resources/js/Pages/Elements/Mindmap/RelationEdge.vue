@@ -9,6 +9,10 @@ const { removeEdges } = useVueFlow()
 
 const edge = useEdge()
 
+if (edge.edge.data && Object.keys(edge.edge.data).length === 0) {
+    edge.edge.data = ''
+}
+
 const path = computed(() => getBezierPath(props))
 </script>
 
@@ -35,7 +39,7 @@ export default {
             <!-- Provide an area to edit text -->
 
             <div>
-                <input type="text" v-model="edge.edge.data" class="text-white bg-transparent" placeholder="Type here" />
+                <input type="text" v-model="edge.edge.data" class=" bg-white rounded-lg" placeholder="Type here" />
                 <!-- <button @click="console.log(edge)" class="text-white">Check props</button> -->
 
             </div>
