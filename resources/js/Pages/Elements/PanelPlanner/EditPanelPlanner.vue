@@ -8,6 +8,10 @@
                 </div>
                 <div v-for="element in item.elements">
                     {{ element.element_name }}
+
+                    <button @click="removeElement(item, element)">
+                        X
+                    </button>
                 </div>
             </div>
         </div>
@@ -42,7 +46,7 @@
                     <Teleport to="#gridHolder">
                         <Transition name="fade">
                             <DashboardDropdownMenu v-if="selectedGridId == item.i && isGridMenuOpen"
-                                :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked($event, item.i)"
+                                :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked($event, item)"
                                 @closeMenu="isGridMenuOpen = false" />
                         </Transition>
                     </Teleport>
@@ -52,15 +56,10 @@
 
 
                 <!-- Make an empty div with a border with the aspect ratio of a page to be overlayed on top of the grid -->
-                <!-- <div class="border-4 border-blue-500 rounded-lg" :style="{ paddingBottom: pageStyleAspectRatio + '%' }">
-                </div> -->
 
                 <div class="border-4 border-blue-500 rounded-lg " :style="{
                 aspectRatio: pageStyleAspectRatio
             }"></div>
-
-                <!-- <div class="border-4 border-blue-500 rounded-lg" style="
-                    aspect-ratio: 4/2.4"></div> -->
 
             </GridLayout>
             <div class="flex justify-center">
@@ -115,6 +114,13 @@
             Click to add panel
         </div>
     </div>
+
+    <Teleport to="body">
+        <Transition name="modal" class="z-50">
+            <search-element-modal v-if="isSearchElementModalOpen" @closeElementSearchModal="onCloseElementSearchModal"
+                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+        </Transition>
+    </Teleport>
 </template>
 
 
@@ -123,10 +129,12 @@ import { watch } from 'vue';
 import { ref, computed, onMounted } from 'vue';
 import { GridLayout, GridItem } from 'vue3-grid-layout-next';
 import DashboardDropdownMenu from '../../Dashboard/DashboardDropdownMenu.vue';
+import SearchElementModal from '../SearchElementModal.vue'
 
 const responsive = ref(true)
 
 const showAddElementButton = ref(false)
+const isSearchElementModalOpen = ref(false)
 const showAddElementHint = ref(false)
 const mouseX = ref(0)
 const mouseY = ref(0)
@@ -273,14 +281,52 @@ function updateMousePosition(event) {
     showAddElementHint.value = true
 }
 
-function handleMenuItemClicked(event, gridId) {
+function handleMenuItemClicked(event, grid) {
 
-    console.log(event)
+
+    // switch statement for event
+    switch (event) {
+        case 'fixPosition':
+            grid.static = !grid.static
+            break
+        case 'addElements':
+            console.log('add elements')
+            isSearchElementModalOpen.value = true
+            isGridMenuOpen.value = false
+            break
+        default:
+            console.log('default')
+    }
+
+    // find the grid in 
+}
+
+function onCloseElementSearchModal(event) {
+    isSearchElementModalOpen.value = false
+
+    if (event) {
+        // insert event into the selected grid... 
+        // first, we find the selected grid
+        // afterwards, if it has an elements array, we push the event into it
+        // if it doesn't, we create an elements array and push the event into it
+        const index = layout.value.map(item => item.i).indexOf(selectedGridId.value);
+        if (layout.value[index].elements) {
+            layout.value[index].elements.push(event)
+        } else {
+            layout.value[index].elements = [event]
+        }
+    }
 }
 
 function updateMouseClickPosition(event) {
     mouseClickX.value = event.clientX;
     mouseClickY.value = event.clientY;
+}
+
+function removeElement(grid, element) {
+    const index = layout.value.map(item => item.i).indexOf(grid.i);
+    const elementIndex = layout.value[index].elements.map(item => item.element_id).indexOf(element.element_id);
+    layout.value[index].elements.splice(elementIndex, 1);
 }
 
 function addGridItem() {
@@ -294,10 +340,11 @@ function addGridItem() {
         "h": 2,
         "i": layout.value.length.toString(),
         "text": "",
-        "elements": [{
-            "element_id": 1,
-            "element_name": "Grudd",
-        }],
+        // "elements": [{
+        //     "element_id": 1,
+        //     "element_name": "Grudd",
+        // }],
+        "elements": [],
     })
 }
 
@@ -345,5 +392,16 @@ function removeGridItem(val) {
         'GRAD' 0,
         'opsz' 40;
     font-size: 42px;
+}
+
+.modal-enter-active,
+.modal-leave-active {
+    transition: all 0.25s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    opacity: 0;
+    transform: scale(1.1);
 }
 </style>
