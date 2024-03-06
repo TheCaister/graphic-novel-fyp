@@ -230,7 +230,7 @@ onMounted(() => {
                     y: parseFloat(item.y),
                     static: parseFloat(item.static) === 1 ? true : false,
                     moved: parseFloat(item.moved) === 1 ? true : false,
-                    elements: JSON.parse(JSON.stringify(item.elements))
+                    elements: item.elements ? item.elements : []
                 };
             });
         }

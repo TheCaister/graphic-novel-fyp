@@ -85,6 +85,15 @@ class Universe extends Model implements HasMedia
         ];
     }
 
+    public function getAssignFormattedEntry($includeDescription = false){
+        return [
+            'content_id' => $this->universe_id,
+            'content_name' => $this->universe_name,
+            'content_thumbnail' => $this->getFirstMediaUrl('universe_thumbnail'),
+            'description' => 'Universe.',
+        ];
+    }
+
     public static function getThumbnailCollectionName(){
         return 'universe_thumbnail';
     }

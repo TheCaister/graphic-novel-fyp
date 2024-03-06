@@ -97,9 +97,25 @@ class Series extends Model implements HasMedia
         ];
     }
 
+    public function getAssignFormattedEntry($includeDescription = false){
+        return [
+            'content_id' => $this->series_id,
+            'content_name' => $this->series_title,
+            'content_thumbnail' => $this->series_thumbnail,
+            'description' => $includeDescription ? $this->series_summary : '',
+        ];
+    }
+
     public static function getThumbnailCollectionName()
     {
         return 'series_thumbnail';
+    }
+
+    public function getParentContent(){
+        return [
+            'content_type' => 'Universe',
+            'content_id' => $this->universe()->first()->universe_id
+        ];
     }
 
     function delete()

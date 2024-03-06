@@ -15,6 +15,7 @@ class Chapter extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
+    use HasRelationships;
     // public $timestamps = false;
     protected $primaryKey = 'chapter_id';
 
@@ -82,7 +83,6 @@ class Chapter extends Model implements HasMedia
     public function owner()
     {
         return $this->hasOneDeep(User::class, [Series::class, Universe::class], ['series_id', 'universe_id', 'owner_id', 'id']);
-        // return $this->series()->universe()->owner();
     }
 
     public function name(): string
@@ -104,6 +104,22 @@ class Chapter extends Model implements HasMedia
             'type' => 'chapter',
             'thumbnail' => $this->chapter_thumbnail,
             'link' => route('chapters.show', $this->chapter_id),
+        ];
+    }
+
+    public function getAssignFormattedEntry($includeDescription = false){
+        return [
+            'content_id' => $this->chapter_id,
+            'content_name' => $this->chapter_title,
+            'content_thumbnail' => $this->chapter_thumbnail,
+            'description' => $includeDescription ? $this->chapter_notes : '',
+        ];
+    }
+
+    public function getParentContent(){
+        return [
+            'content_type' => 'Series',
+            'content_id' => $this->series()->first()->series_id
         ];
     }
 

@@ -8,14 +8,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class Page extends Model implements HasMedia
-{ 
+{
     use HasFactory;
     public $timestamps = false;
     protected $primaryKey = 'page_id';
 
     use InteractsWithMedia;
+    use HasRelationships;
+
 
     public function registerMediaCollections(): void
     {
@@ -54,9 +57,13 @@ class Page extends Model implements HasMedia
         return $this->morphToMany(Element::class, 'elementable', 'elementables', 'elementable_id', 'element_id');
     }
 
-    public function owner(): BelongsTo
+    public function owner()
     {
-        return $this->chapter()->series()->universe()->owner();
+        return $this->hasOneDeep(User::class, [Chapter::class, Series::class, Universe::class], ['chapter_id', 'series_id', 'universe_id', 'owner_id', 'id']);
+    }
+
+    public function universe(){
+        return $this->hasOneDeep(Universe::class, [Chapter::class, Series::class], ['chapter_id', 'series_id', 'universe_id']);
     }
 
     function delete()
@@ -65,22 +72,41 @@ class Page extends Model implements HasMedia
         parent::delete();
     }
 
-    public static function getThumbnailCollectionName(){
+    public static function getThumbnailCollectionName()
+    {
         return 'page_image';
     }
 
-    public function clearThumbnail(){
+    public function clearThumbnail()
+    {
         // $this->delete();
 
         $this->page_image = null;
     }
 
-    public function getSearchFormattedEntry(){
+    public function getSearchFormattedEntry()
+    {
         return [
             'title' => 'Page ' . $this->page_number,
             'type' => 'page',
             'thumbnail' => $this->page_image,
             'link' => route('chapters.show', $this->chapter->chapter_id),
+        ];
+    }
+
+    public function getAssignFormattedEntry($includeDescription = false){
+        return [
+            'content_id' => $this->page_id,
+            'content_name' => 'C' . $this->chapter->chapter_number . 'P' . $this->page_number,
+            'content_thumbnail' => $this->page_image,
+            'description' => 'Page.',
+        ];
+    }
+
+    public function getParentContent(){
+        return [
+            'content_type' => 'Chapter',
+            'content_id' => $this->chapter()->first()->chapter_id
         ];
     }
 
