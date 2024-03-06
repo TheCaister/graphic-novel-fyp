@@ -13,7 +13,7 @@
         </div>
         <div class="w-2/3 min-h-10">
             <div>
-                <button @click="isMirrored = !isMirrored">
+                <button @click="isMirrored = !isMirrored; console.log(isMirrored)">
                     Flip layout
                 </button>
                 <button @click="console.log(props.element)">
@@ -22,22 +22,26 @@
             </div>
 
             <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout" :col-num="12"
-                :row-height="30" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored" :vertical-compact="false"
-                :margin="[10, 10]" :restore-on-drag="true" :use-css-transforms="true"
+                :row-height="30" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored"
+                :vertical-compact="false" :margin="[10, 10]" :restore-on-drag="true" :use-css-transforms="true"
                 class="border-4 border-pink-500 rounded-lg  touch-none" @click="addGridItem"
-                @mousemove="updateMousePosition" @mouseleave="showAddElementHint = false">
+                @mousemove="updateMousePosition" @mouseleave="showAddElementHint = false" :key="isMirrored">
 
-                <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :key="item.i"
-                    class="rounded-lg relative border-4 border-pink-500 text-white p-4"
+                <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
+                    :key="item.i" class="rounded-lg relative border-4 border-pink-500 text-white p-4"
                     @mousemove.stop="showAddElementHint = false" @click.stop="">
                     Testing...
-                    <span class="absolute top-0 right-0 cursor-pointer mt-2 mr-2" @click="removeGridItem(item.i)">X</span>
+                    {{ item.i }}
+                    <span class="absolute top-0 right-0 cursor-pointer mt-2 mr-2"
+                        @click="removeGridItem(item.i)">X</span>
                 </grid-item>
 
 
 
                 <!-- Make an empty div with a border with the aspect ratio of a page to be overlayed on top of the grid -->
-                <div class="border-4 border-blue-500 rounded-lg" :style="{ paddingBottom: pageStyleAspectRatio + '%' }">
+                <!-- <div class="border-4 border-blue-500 rounded-lg" :style="{ paddingBottom: pageStyleAspectRatio + '%' }">
+                </div> -->
+                <div class="border-4 border-blue-500 rounded-lg" style="padding-bottom: 40%;">
                 </div>
 
                 <!-- <div class="border-4 border-blue-500 rounded-lg" style="padding-bottom: 141.0;"></div> -->
@@ -65,19 +69,19 @@
             </select>
 
             <!-- select tag for left-to-right and right-to-left -->
-            <select name="pageDirection" id="pageDirection" class="bg-gray-500 rounded-lg border-2 border-gray-300">
-                <option value="ltr">Left to Right</option>
-                <option value="rtl">Right to Left</option>
+            <select name="pageDirection" id="pageDirection" class="bg-gray-500 rounded-lg border-2 border-gray-300" v-model="isMirrored">
+                <option :value="false">Left to Right</option>
+                <option :value="true">Right to Left</option>
             </select>
         </div>
         <div>
             <div v-for="item in layout" class="rounded-lg relative border-4 border-pink-500 p-4">
                 <div>
-                    <!-- Do something like Panel + item.i -->
                     {{ 'Panel ' + item.i }}
                 </div>
                 <div>
-                    {{ item.text }}
+                    <input type="text" v-model="item.text" class="text-black" placeholder="Type here" />
+
                 </div>
             </div>
         </div>
@@ -91,7 +95,7 @@
         </div>
     </div>
 </template>
-  
+
 
 <script lang="ts" setup>
 import { watch } from 'vue';
@@ -104,7 +108,9 @@ const showAddElementButton = ref(false)
 const showAddElementHint = ref(false)
 const mouseX = ref(0)
 const mouseY = ref(0)
-const pageStyle = ref('a5')
+// const pageStyle = ref('a5')
+const pageStyle = ref('double_standard_american')
+
 
 const isMirrored = ref(false)
 
@@ -134,6 +140,16 @@ watch(layout, (newVal) => {
             layout: newVal
         }
     }
+
+    // first sort by y, then by x
+
+    layout.value = layout.value.sort((a, b) => {
+        if (a.y === b.y) {
+            return a.x - b.x
+        }
+        return a.y - b.y
+    })
+
     // props.element.content.layout = newVal
     emit('updateElement', props.element)
 })
@@ -198,11 +214,11 @@ function addGridItem() {
         "w": 2,
         "h": 2,
         "i": layout.value.length.toString(),
-        "text": "Some lore here", "elements": [{
+        "text": "",
+        "elements": [{
             "element_id": 1,
             "element_name": "Grudd",
         }],
-        "static": false,
     })
 }
 
