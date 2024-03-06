@@ -1,6 +1,7 @@
 <template>
     <div class="bg-white">
-        <SimpleEditor v-model="element.content" />
+        <SimpleEditor v-model="element.content"/>
+        <!-- <SimpleEditor  :modelValue="element.content" @update:modelValue="updateContent"/> -->
     </div>
 </template>
 
@@ -27,8 +28,15 @@ watch(props.element, (element) => {
 })
 
 onMounted(() => {
+
+    console.log('newly mounted, baby')
+
     updateChildrenElementIDs()
 })
+
+function updateContent(content) {
+    emit('updateElement', content)
+}
 
 function updateChildrenElementIDs() {
     if (props.element.content && props.element.content.content) {

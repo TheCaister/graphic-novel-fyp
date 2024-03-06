@@ -49,15 +49,18 @@ const elementThumbnailImage = computed(() => {
 
 })
 
-watch(form.element.content, (newVal) => {
-    // parse newVal if it is a string
-    if (typeof newVal === 'string') {
-        form.element.content = JSON.parse(newVal)
-    }
+// watch(form.element.content, (newVal) => {
+//     // parse newVal if it is a string
+//     if (typeof newVal === 'string') {
+//         form.element.content = JSON.parse(newVal)
+//     }
 
-})
+// })
 
 function updateForm(element) {
+
+    // console.log(element.content)
+
     form.element = element
 }
 
@@ -67,25 +70,29 @@ function updateChildrenElements(elements) {
 
 function saveElement(assign = false) {
 
-    console.log(form.childrenElements)
+
+    console.log('saving...')
+    form.element = props.element
 
     form.put(route('elements.update', {
         element: form.element.element_id,
         assign: assign, content_type: assign ? props.parentContentType : '',
+        content_type_id: assign ? props.parentContentId : '',
         content_id: assign ? props.parentContentId : '',
         preSelectedElements: [{
             element_id: form.element.element_id,
             checked: true
         }],
         childrenElements: form.childrenElements
-    })), {
-        onSuccess: () => {
-            console.log('success')
-        },
-        onError: (e) => {
-            console.log(e)
-        }
-    }
+    }),
+        {
+            onSuccess: () => {
+                console.log('success')
+            },
+            onError: (e) => {
+                console.log(e)
+            }
+        })
 }
 
 function updateUpload(upload) {
@@ -137,6 +144,11 @@ function back() {
                         Save and Assign
                     </button>
                 </div>
+            </div>
+            <div>
+                <button class="text-white" @click="console.log(props.element)">
+                    check prop
+                </button>
             </div>
         </div>
 

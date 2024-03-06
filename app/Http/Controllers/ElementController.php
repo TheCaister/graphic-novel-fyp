@@ -122,8 +122,9 @@ class ElementController extends Controller
     public function update(Element $element)
     {
 
-        // dd($request->all());
+        // dd(request()->all());
         $newElement = request()->element;
+        // $elementContent = request()->element_content;
         $upload = request()->upload;
         $assign = request()->assign;
         $contentType = request()->content_type;
@@ -155,13 +156,24 @@ class ElementController extends Controller
             $tempThumbnail->delete();
         }
 
+        // dd($newElement);
+
         $element->update([
             'element_name' => $newElement['element_name'],
             'content' => $newElement['content'],
+            // 'content' => $elementContent,
         ]);
 
+        // dd($element->content);
+
         if ($childrenElements) {
-            $element->childelements()->sync($childrenElements);
+            // $element->childelements()->sync($childrenElements);
+
+            // Get the IDs of existing child elements
+            $existingChildren = Element::whereIn('element_id', $childrenElements)->get()->pluck('element_id');
+
+            // Sync only the existing child elements
+            $element->childelements()->sync($existingChildren);
         }
 
         if ($assign) {
@@ -174,7 +186,8 @@ class ElementController extends Controller
                 ]
             );
         } else {
-            return redirect()->back();
+            return;
+            // return redirect()->back();
         }
     }
 
