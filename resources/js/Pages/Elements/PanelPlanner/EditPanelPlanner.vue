@@ -61,7 +61,7 @@
         </div>
 
         <div class="flex flex-col">
-            <select name="pageType" id="pageType" class="bg-gray-500 rounded-lg border-2 border-gray-300">
+            <select name="pageType" id="pageType" class="bg-gray-500 rounded-lg border-2 border-gray-300" v-model="pageStyle">
                 <option value="standard_american">Standard American</option>
                 <option value="double_standard_american">Double Standard American</option>
                 <option value="a5">Single A5</option>
@@ -69,7 +69,8 @@
             </select>
 
             <!-- select tag for left-to-right and right-to-left -->
-            <select name="pageDirection" id="pageDirection" class="bg-gray-500 rounded-lg border-2 border-gray-300" v-model="isMirrored">
+            <select name="pageDirection" id="pageDirection" class="bg-gray-500 rounded-lg border-2 border-gray-300"
+                v-model="isMirrored">
                 <option :value="false">Left to Right</option>
                 <option :value="true">Right to Left</option>
             </select>
@@ -154,33 +155,58 @@ watch(layout, (newVal) => {
     emit('updateElement', props.element)
 })
 
+watch(pageStyle, (newVal) => {
+    props.element.content.pageStyle = newVal
+    emit('updateElement', props.element)
+})
+
+watch(isMirrored, (newVal) => {
+    props.element.content.isMirrored = newVal
+    emit('updateElement', props.element)
+})
+
 onMounted(() => {
-    console.log(props.element)
+    // console.log(props.element)
+
+    // SETTING LAYOUT, MIRRORED AND ASPECT RATIO
     if (props.element.content && props.element.content.layout) {
         console.log('setting layout...')
         layout.value = props.element.content.layout;
 
         console.log(layout.value)
+
+        layout.value = layout.value.map(item => {
+            return {
+                ...item,
+                h: parseFloat(item.h),
+                i: parseFloat(item.i),
+                w: parseFloat(item.w),
+                x: parseFloat(item.x),
+                y: parseFloat(item.y),
+                // static: false,
+                static: parseFloat(item.static) === 1 ? true : false,
+                moved: parseFloat(item.moved) === 1 ? true : false,
+                elements: JSON.parse(JSON.stringify(item.elements))
+            };
+        });
     } else {
         layout.value = [];
     }
 
-    layout.value = layout.value.map(item => {
-        return {
-            ...item,
-            h: parseFloat(item.h),
-            i: parseFloat(item.i),
-            w: parseFloat(item.w),
-            x: parseFloat(item.x),
-            y: parseFloat(item.y),
-            // static: false,
-            static: parseFloat(item.static) === 1 ? true : false,
-            moved: parseFloat(item.moved) === 1 ? true : false,
-            elements: JSON.parse(JSON.stringify(item.elements))
-        };
-    });
+    // check if props.element.content.pageStyle exists, if it does, set pageStyle to that value
+    if (props.element.content) {
 
-    console.log(layout.value)
+        if (props.element.content.pageStyle) {
+            pageStyle.value = props.element.content.pageStyle
+        }
+
+        // do something similar for isMirrored
+        if (props.element.content.isMirrored) {
+            isMirrored.value = props.element.content.isMirrored
+        }
+    }
+
+    // console.log(layout.value)
 })
 
 // computed pageStyle to return the correct page aspect ratio
