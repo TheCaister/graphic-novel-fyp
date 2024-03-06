@@ -51,7 +51,7 @@ const props = defineProps({
 
 const files = computed(() => {
 
-    if (props.series.series_thumbnail !== '') {
+    if (props.series.series_thumbnail !== '' && props.series.series_thumbnail !== null) {
 
         return [
             {

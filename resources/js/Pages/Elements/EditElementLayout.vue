@@ -58,9 +58,6 @@ const elementThumbnailImage = computed(() => {
 // })
 
 function updateForm(element) {
-
-    // console.log(element.content)
-
     form.element = element
 }
 
@@ -69,13 +66,14 @@ function updateChildrenElements(elements) {
 }
 
 function saveElement(assign = false) {
+    // form.element = props.element
 
-
-    console.log('saving...')
-    form.element = props.element
+    console.log('form content...')
+    console.log(form.element.content)
 
     form.put(route('elements.update', {
         element: form.element.element_id,
+        element_content: form.element.content,
         assign: assign, content_type: assign ? props.parentContentType : '',
         content_type_id: assign ? props.parentContentId : '',
         content_id: assign ? props.parentContentId : '',

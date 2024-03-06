@@ -91,6 +91,9 @@ class ElementController extends Controller
     public function edit(Element $element)
     {
         // convert $element->content to object
+
+      
+
         $element->content = json_decode($element->content);
 
         $universe = $element->universes->first();
@@ -121,10 +124,9 @@ class ElementController extends Controller
      */
     public function update(Element $element)
     {
-
         // dd(request()->all());
         $newElement = request()->element;
-        // $elementContent = request()->element_content;
+        $elementContent = request()->element_content;
         $upload = request()->upload;
         $assign = request()->assign;
         $contentType = request()->content_type;
@@ -134,17 +136,23 @@ class ElementController extends Controller
         $childrenElements = request()->childrenElements;
 
         // By default, it seems that Laravel converts empty strings or strings with just spaces to null. Here's a recursive function to convert all null text values to empty strings. This is to ensure that the content renders properly. For TipTap, as it doesn't render properly if the text value is null.
-        if (!is_null($newElement['content'])) {
-            array_walk_recursive($newElement['content'], function (&$value, $key) {
+        if (!is_null($elementContent)) {
+            array_walk_recursive($elementContent, function (&$value, $key) {
                 if ($key === 'text' && is_null($value)) {
                     $value = ' ';
                 }
             });
         }
 
+        // if (!is_null($newElement['content'])) {
+        //     array_walk_recursive($newElement['content'], function (&$value, $key) {
+        //         if ($key === 'text' && is_null($value)) {
+        //             $value = ' ';
+        //         }
+        //     });
+        // }
 
         $tempThumbnail = TemporaryFile::where('folder', $upload)->first();
-
 
         if ($tempThumbnail) {
             $element->addMedia(storage_path('app/public/uploads/element_thumbnail/tmp/' . $tempThumbnail->folder . '/' . $tempThumbnail->filename))->toMediaCollection('element_thumbnail');
@@ -156,19 +164,12 @@ class ElementController extends Controller
             $tempThumbnail->delete();
         }
 
-        // dd($newElement);
-
         $element->update([
             'element_name' => $newElement['element_name'],
-            'content' => $newElement['content'],
-            // 'content' => $elementContent,
+            'content' => $elementContent,
         ]);
 
-        // dd($element->content);
-
         if ($childrenElements) {
-            // $element->childelements()->sync($childrenElements);
-
             // Get the IDs of existing child elements
             $existingChildren = Element::whereIn('element_id', $childrenElements)->get()->pluck('element_id');
 

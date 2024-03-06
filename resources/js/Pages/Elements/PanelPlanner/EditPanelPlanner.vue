@@ -12,11 +12,21 @@
             </div>
         </div>
         <div class="w-2/3 min-h-10">
+            <div>
+                <button @click="isMirrored = !isMirrored">
+                    Flip layout
+                </button>
+                <button @click="console.log(props.element)">
+                    Check element
+                </button>
+            </div>
+
             <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout" :col-num="12"
-                :row-height="30" :is-draggable="true" :is-resizable="true" :is-mirrored="true" :vertical-compact="false"
+                :row-height="30" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored" :vertical-compact="false"
                 :margin="[10, 10]" :restore-on-drag="true" :use-css-transforms="true"
                 class="border-4 border-pink-500 rounded-lg  touch-none" @click="addGridItem"
                 @mousemove="updateMousePosition" @mouseleave="showAddElementHint = false">
+
                 <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i" :key="item.i"
                     class="rounded-lg relative border-4 border-pink-500 text-white p-4"
                     @mousemove.stop="showAddElementHint = false" @click.stop="">
@@ -96,6 +106,8 @@ const mouseX = ref(0)
 const mouseY = ref(0)
 const pageStyle = ref('a5')
 
+const isMirrored = ref(false)
+
 const props = defineProps({
     element: {
         type: Object,
@@ -115,17 +127,44 @@ const emit = defineEmits(['updateElement', 'updateChildrenElementIDs'])
 const layout = ref([])
 
 watch(layout, (newVal) => {
-    console.log('updated...')
-    props.element.content = newVal
-
-    // console.log(props.element)
+    if (props.element.content && props.element.content.layout) {
+        props.element.content.layout = newVal
+    } else {
+        props.element.content = {
+            layout: newVal
+        }
+    }
+    // props.element.content.layout = newVal
     emit('updateElement', props.element)
 })
 
 onMounted(() => {
+    console.log(props.element)
+    if (props.element.content && props.element.content.layout) {
+        console.log('setting layout...')
+        layout.value = props.element.content.layout;
 
-    layout.value = props.element.content ? props.element.content : [];
-    // layout.value = []
+        console.log(layout.value)
+    } else {
+        layout.value = [];
+    }
+
+    layout.value = layout.value.map(item => {
+        return {
+            ...item,
+            h: parseFloat(item.h),
+            i: parseFloat(item.i),
+            w: parseFloat(item.w),
+            x: parseFloat(item.x),
+            y: parseFloat(item.y),
+            // static: false,
+            static: parseFloat(item.static) === 1 ? true : false,
+            moved: parseFloat(item.moved) === 1 ? true : false,
+            elements: JSON.parse(JSON.stringify(item.elements))
+        };
+    });
+
+    console.log(layout.value)
 })
 
 // computed pageStyle to return the correct page aspect ratio
@@ -162,7 +201,8 @@ function addGridItem() {
         "text": "Some lore here", "elements": [{
             "element_id": 1,
             "element_name": "Grudd",
-        }]
+        }],
+        "static": false,
     })
 }
 
