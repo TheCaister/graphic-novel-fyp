@@ -109,6 +109,7 @@ const AdvancedFiltersComponent = computed(() => {
 
 
 function search() {
+
     form.get(route('search'), {
             onFinish: () => {
                 console.log('success')

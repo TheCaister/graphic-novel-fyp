@@ -177,12 +177,25 @@ class SearchController extends Controller
 
     private function searchUsers()
     {
-        dd(request()->all());
+        // dd(request()->advanced['hasUniverse']);
+
+        // check if request()->advanced exists
+        $hasUniverse = false;
+
+        if (request()->advanced) {
+
+            $hasUniverse = request()->advanced['hasUniverse'] === 'true';
+        }
+
         $resultsList = [];
 
         $user = auth('sanctum')->user();
 
-        $resultsList = User::latest()->filter(request(['search']))->hasUniverse(request()->hasUniverse)->limit(request()->limit)->get();
+        $resultsList = User::latest()->filter(request(['search']))->hasUniverse($hasUniverse)->limit(request()->limit)->get();
+
+        // dd($resultsList);
+        
+        // ->limit(request()->limit)->get();
 
         return $resultsList;
     }

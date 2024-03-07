@@ -64,15 +64,18 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(Universe::class, 'owner_id', 'id');
     }
 
-    public function series(){
+    public function series()
+    {
         return $this->hasManyThrough(Series::class, Universe::class, 'owner_id', 'universe_id');
     }
 
-    public function chapters(){
+    public function chapters()
+    {
         return $this->hasManyDeepFromRelations($this->series(), (new Series())->chapters());
     }
 
-    public function pages(){
+    public function pages()
+    {
         return $this->hasManyDeepFromRelations($this->chapters(), (new Chapter())->pages());
     }
 
@@ -181,17 +184,25 @@ class User extends Authenticatable implements HasMedia
 
     public function scopeHasUniverse($query, $hasUniverse)
     {
+        if ($hasUniverse !== null) {
 
-        if ($hasUniverse != null) {
-            // $query->has('universes');
-
-            // if ($hasUniverse == 'true') {
-            //     $query->has('universes');
-            // } else {
-            //     $query->doesntHave('universes');
-            // }
+            if ($hasUniverse) {
+                return $query->has('universes');
+            } else {
+                
+                return $query->doesntHave('universes');
+            }
         };
     }
+
+
+    // $query->has('universes');
+
+    // if ($hasUniverse == 'true') {
+    //     $query->has('universes');
+    // } else {
+    //     $query->doesntHave('universes');
+    // }
 
     public function scopeAssignedToExistingContent($query, $assignedToExistingContent, $owner)
     {
