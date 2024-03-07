@@ -23,8 +23,7 @@
             </div>
         </div>
 
-        <div class="flex w-full">
-            <!-- input with label -->
+        <!-- <div class="flex w-full">
             <div>
                 <label for="" class="block">Present on/from</label>
                 <input type="text" class="w-full text-black"/>
@@ -34,7 +33,7 @@
                 <label for="" class="block">Present before</label>
                 <input type="text" class="w-full text-black"/>
             </div>
-        </div>
+        </div> -->
 
         <div class="flex w-full">
             <TriCheckbox label="Include query in parent" @checked="updateFilter('includeUniverses', $event)" />
@@ -55,6 +54,34 @@ import { defineEmits } from 'vue';
 const emits = defineEmits(['updateAdvancedSearch'])
 
 function updateFilter(filterName, value) {
+
+
+    switch (filterName) {
+        case 'includeSimpleText':
+            emits('updateAdvancedSearch',
+                {
+                    name: 'derivedElementType',
+                    value: value
+                })
+            break;
+        case 'includeMindmap':
+            emits('updateAdvancedSearch',
+                {
+                    name: 'derivedElementType',
+                    value: value
+                })
+            break;
+        case 'includePanelPlanner':
+            emits('updateAdvancedSearch',
+                {
+                    name: 'derivedElementType',
+                    value: value
+                })
+            break;
+        default:
+            break;
+    }
+
     emits('updateAdvancedSearch',
         {
             name: filterName,
