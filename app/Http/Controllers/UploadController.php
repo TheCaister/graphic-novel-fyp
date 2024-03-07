@@ -75,9 +75,9 @@ class UploadController extends Controller
                 if (Storage::disk('public')->exists($fullPath)) {
                     Storage::disk('public')->delete($fullPath);
                 }
-            }
 
-            $temporaryFile->delete();
+                $temporaryFile->delete();
+            }
         }
     }
 
@@ -100,7 +100,6 @@ class UploadController extends Controller
 
             $content->save();
         }
-
     }
 
     public function deletePageImage(Request $request)

@@ -4,11 +4,11 @@
         <div class="relative rounded-lg ">
             <div class="h-full flex items-center">
                 <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
-                    <img v-if="content.thumbnail" :src="content.thumbnail" alt="Content Image"
+                    <div v-if="content.thumbnail">
+                        <img  :src="content.thumbnail" alt="Content Image"
                         class="rounded-lg object-cover w-full" />
-                    <img v-else src="/assets/black_page.jpg" alt="Content Image"
-                        class="rounded-lg object-cover w-full" />
-                    <!-- <div v-else class="text-white text-xl flex items-center">U{{ content.content_id }}</div> -->
+                    </div>
+                    <div v-else class="text-white text-xl flex items-center">{{ content.content_name }}</div>
                 </div>
             </div>
             <button class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">

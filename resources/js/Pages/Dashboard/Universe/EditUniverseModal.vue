@@ -55,7 +55,10 @@ onClickOutside(modal, (event) => {
 })
 
 function submit() {
-    form.moderators = form.moderators.map(moderator => moderator.id)
+    // console.log(form)
+    if (form.moderators && form.moderators.length > 0) {
+        form.moderators = form.moderators.map(moderator => moderator.id)
+    }
 
 
     form.put(route('universes.update', props.universe.universe_id), {

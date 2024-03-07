@@ -33,10 +33,11 @@ class SeriesController extends Controller
 
         if ($request->hasFile('series_thumbnail')) {
             $formFields['series_thumbnail'] = $request->file('series_thumbnail')->store('series_thumbnails', 'public');
-        } else {
-            // Set it to the black image
-            $formFields['series_thumbnail'] = 'series_thumbnails/black.png';
         }
+        // else {
+        //     // Set it to the black image
+        //     $formFields['series_thumbnail'] = 'series_thumbnails/black.png';
+        // }
 
         $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
 

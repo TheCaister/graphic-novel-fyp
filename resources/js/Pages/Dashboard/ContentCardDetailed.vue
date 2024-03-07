@@ -6,8 +6,8 @@
                 <div class="h-full flex items-center">
                     <div class="h-64 w-full flex justify-center rounded-lg ">
                         <img v-if="content.thumbnail" :src="content.thumbnail" alt="Content Image"
-                            class="rounded-lg object-cover w-full mb-4 shadow-lg hover:shadow-black transition-all duration-200" />
-                        <div v-else class="text-white text-xl flex items-center">U{{ content.content_id }}</div>
+                            class="rounded-lg object-cover w-full shadow-lg hover:shadow-black transition-all duration-200" />
+                        <div v-else class="text-white text-xl flex items-center bg-pink-300 w-full rounded-lg justify-center shadow-lg hover:shadow-black transition-all duration-200">{{ content.content_name }}</div>
                     </div>
                 </div>
                 <button class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
