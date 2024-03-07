@@ -31,12 +31,17 @@ const clickedMouseY = ref(0)
 const paneX = ref(0)
 const paneY = ref(0)
 
-const props = defineProps({
-    element: {
-        type: Object,
-        required: true
-    }
-})
+const element = defineModel()
+
+// const element = ref(null)
+
+
+// const props = defineProps({
+//     element: {
+//         type: Object,
+//         required: true
+//     }
+// })
 
 const emit = defineEmits(['updateElement'])
 
@@ -44,11 +49,11 @@ const nodesEdges = ref([])
 
 
 watch(nodesEdges, (list) => {
-    // Making a copy to prevent reactivity issues
-    const updatedElement = JSON.parse(JSON.stringify(props.element))
+    console.log('map changed')
 
-    updatedElement.content = list
-    emit('updateElement', updatedElement)
+    element.value.content = JSON.parse(JSON.stringify(list))
+
+    console.log(element.value.content)
 })
 
 // https://vueflow.dev/typedocs/interfaces/Actions.html#addedges
@@ -78,12 +83,9 @@ onConnect((params) => {
     // console.log(params)
     params.type = 'relation';
     addEdges([params])
-
-    console.log(nodesEdges.value)
 })
 
 function insertNode(data) {
-    // console.log(props.element)
     addNodes([{
         id: getNextNodeId(),
         label: data.element_name,
@@ -96,6 +98,7 @@ function insertNode(data) {
 
 function getNextNodeId() {
     return nodesEdges.value.length + 1
+    // return element.value.content.length + 1
 }
 
 function onAddElementButtonClicked() {
@@ -112,9 +115,23 @@ function onCloseElementSearchModal(event) {
 }
 
 onMounted(() => {
-    if (props.element.content !== null) {
-        nodesEdges.value = props.element.content
+    console.log(element.value.content)
+
+    // if (element.value.content === null || element.value.content === undefined) {
+    //     element.value.content = []
+    // }
+
+    if (element.value.content !== null && element.value.content !== undefined) {
+        nodesEdges.value = JSON.parse(JSON.stringify(element.value.content))
     }
+
+    // going through each item in element.value.content, and converting some of the properties from string to boolean,
+    // the properties are dragging, selected
+    nodesEdges.value.forEach(item => {
+        item.dragging = item.dragging === '1' ? true : false
+        item.selected = item.selected === '0' ? true : false
+    })
+    
 })
 
 </script>

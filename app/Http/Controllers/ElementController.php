@@ -82,16 +82,16 @@ class ElementController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Element $element)
-    {
+    // public function show(Element $element)
+    // {
 
-        return Inertia::render(
-            'Elements/EditElementLayout',
-            [
-                'element' => $element,
-            ]
-        );
-    }
+    //     return Inertia::render(
+    //         'Elements/EditElementLayout',
+    //         [
+    //             'element' => $element,
+    //         ]
+    //     );
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -102,6 +102,8 @@ class ElementController extends Controller
        
 
         $element->content = json_decode($element->content);
+
+        // dd($element);
 
         $universe = $element->universes->first();
 
@@ -132,9 +134,7 @@ class ElementController extends Controller
      */
     public function update(Element $element)
     {
-        // dd(request()->all());
         $newElement = request()->element;
-        $elementContent = request()->element_content;
         $upload = request()->upload;
         $assign = request()->assign;
         $contentType = request()->contentType;
@@ -144,21 +144,13 @@ class ElementController extends Controller
         $childrenElements = request()->childrenElements;
 
         // By default, it seems that Laravel converts empty strings or strings with just spaces to null. Here's a recursive function to convert all null text values to empty strings. This is to ensure that the content renders properly. For TipTap, as it doesn't render properly if the text value is null.
-        if (!is_null($elementContent)) {
-            array_walk_recursive($elementContent, function (&$value, $key) {
+        if (!is_null($newElement['content'])) {
+            array_walk_recursive($newElement['content'], function (&$value, $key) {
                 if ($key === 'text' && is_null($value)) {
                     $value = ' ';
                 }
             });
         }
-
-        // if (!is_null($newElement['content'])) {
-        //     array_walk_recursive($newElement['content'], function (&$value, $key) {
-        //         if ($key === 'text' && is_null($value)) {
-        //             $value = ' ';
-        //         }
-        //     });
-        // }
 
         $tempThumbnail = TemporaryFile::where('folder', $upload)->first();
 
@@ -174,8 +166,10 @@ class ElementController extends Controller
 
         $element->update([
             'element_name' => $newElement['element_name'],
-            'content' => $elementContent,
+            'content' => $newElement['content'],
         ]);
+
+        // dd($element->content);
 
         if ($childrenElements) {
             // Get the IDs of existing child elements
@@ -196,7 +190,6 @@ class ElementController extends Controller
             );
         } else {
             return;
-            // return redirect()->back();
         }
     }
 
@@ -268,9 +261,6 @@ class ElementController extends Controller
 
     public function assignStore(Request $request)
     {
-
-        // $request->preSelectedElements = $request->selectedElementList;
-
         $request->merge([
             'preSelectedElements' => $request->selectedElementList,
         ]);
@@ -314,23 +304,6 @@ class ElementController extends Controller
 
         // Set content to nothing
         $content = null;
-
-        // Create a switch statement to determine the type of content
-        // switch ($type) {
-        //     case 'universes':
-        //         $content = Universe::find($id);
-        //         break;
-        //     case 'series':
-        //         $content = Series::find($id);
-        //         break;
-        //     case 'chapters':
-        //         $content = Chapter::find($id);
-        //         break;
-        //     case 'pages':
-        //         $content = Page::find($id);
-        //         break;
-        // }
-
         $content = $this->getClassName($type)::find($id);
 
         return $content;
@@ -381,8 +354,6 @@ class ElementController extends Controller
                 }
                 break;
         }
-
-        // dd($subcontent);
 
         return $subcontent;
     }
@@ -436,6 +407,11 @@ class ElementController extends Controller
         }
     }
 
+    /**
+     * Get the class name for the content type
+     * @param string $contentType
+     * @return string $className
+     */
     private function getClassName($contentType)
     {
         return 'App\\Models\\' . $contentType;

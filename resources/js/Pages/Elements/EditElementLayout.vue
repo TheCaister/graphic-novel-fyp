@@ -16,6 +16,15 @@ const props = defineProps({
     },
     parentContentId: {
         type: Number,
+    },
+    errors: {
+        type: Object,
+    },
+    auth: {
+        type: Object,
+    },
+    ziggy: {
+        type: Object,
     }
 });
 
@@ -37,28 +46,22 @@ const isEditThumbnailModalOpen = ref(false)
 const isHeaderOpen = ref(true)
 
 const form = useForm({
-    element: {
-        content: {},
-    },
+    element: props.element,
     childrenElements: [],
     upload: '',
+    assign: false,
+    contentType: '',
+    content_id: '',
+    preSelectedElements: [],
 });
 
 const elementThumbnailImage = computed(() => {
-    return form.element.element_thumbnail ? form.element.element_thumbnail : '/assets/black_page.jpg'
-
+    return form.element.element_thumbnail ? form.element.element_thumbnail : '/assets/black_page.jpg';
 })
 
-// watch(form.element.content, (newVal) => {
-//     // parse newVal if it is a string
-//     if (typeof newVal === 'string') {
-//         form.element.content = JSON.parse(newVal)
-//     }
-
-// })
-
 function updateForm(element) {
-    form.element = element
+    console.log('updating')
+    // form.element = element
 }
 
 function updateChildrenElements(elements) {
@@ -67,24 +70,25 @@ function updateChildrenElements(elements) {
 
 function saveElement(assign = false) {
     // form.element = props.element
-    
-    console.log(props.parentContentId)
 
-    form.put(route('elements.update', {
-        element: form.element.element_id,
-        element_content: form.element.content,
-        assign: assign, contentType: assign ? props.parentContentType : '',
-        // content_type_id: assign ? props.parentContentId : '',
-        content_id: assign ? props.parentContentId : '',
-        preSelectedElements: [{
-            element_id: form.element.element_id,
-            checked: true
-        }],
-        childrenElements: form.childrenElements
-    }),
+    console.log(form.element)
+
+    form.assign = assign
+    form.contentType = assign ? props.parentContentType : ''
+    form.content_id = assign ? props.parentContentId : ''
+    form.preSelectedElements = [{
+        element_id: form.element.element_id,
+        checked: true
+    }]
+    form.childrenElements = form.childrenElements
+
+
+    form.put(route('elements.update', form.element.element_id), {
+    },
         {
             onSuccess: () => {
                 console.log('success')
+                console.log(form.element)
             },
             onError: (e) => {
                 console.log(e)
@@ -99,13 +103,24 @@ function updateUpload(upload) {
 }
 
 onMounted(() => {
-    // console.log(props.parentContentId)
 
-    if (typeof props.element.content === 'string') {
-        props.element.content = JSON.parse(props.element.content)
+    // console.log(JSON.parse(JSON.stringify(props.element)))
+    // console.log(form.element)
+
+    // form.element = JSON.parse(JSON.stringify(form.element))
+
+    if (typeof form.element.content === 'string') {
+        form.element.content = JSON.parse(form.element.content)
     }
 
-    form.element = props.element
+    console.log(form.element)
+
+    // if form,element,content is null, set it to empty object
+    // if (form.element.content === null) {
+    //     form.element.content = {}
+    // }
+
+   
 })
 
 function back() {
@@ -144,8 +159,8 @@ function back() {
                 </div>
             </div>
             <div>
-                <button class="text-white" @click="console.log(props.element)">
-                    check prop
+                <button class="text-white" @click="console.log(form)">
+                    check form
                 </button>
             </div>
         </div>
@@ -159,7 +174,7 @@ function back() {
                     <div class="flex items-center gap-8">
                         <button @click="isEditThumbnailModalOpen = true">
                             <img class="w-32 h-32 shadow-2xl rounded-lg hover:scale-105 transition-transform duration-300"
-                                :src="props.element.element_thumbnail ? props.element.element_thumbnail : '/assets/black_page.jpg'"
+                                :src="elementThumbnailImage"
                                 alt="" srcset="">
                         </button>
                         <div>
@@ -175,9 +190,15 @@ function back() {
                     Header</button>
             </div>
 
-            <!-- Element Edit View -->
+
+            <!-- <component :is="DashboardViewComponent" v-model="form.element" :element="form.element" 
+                @updateElement="updateForm"
+                    @updateChildrenElementIDs="updateChildrenElements" /> -->
+
             <KeepAlive>
-                <component :is="DashboardViewComponent" v-bind:element="props.element" @updateElement="updateForm"
+
+                <component :is="DashboardViewComponent" v-model="form.element" 
+                @updateElement="updateForm"
                     @updateChildrenElementIDs="updateChildrenElements" />
             </KeepAlive>
         </div>
