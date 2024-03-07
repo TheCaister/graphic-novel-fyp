@@ -189,36 +189,39 @@ class User extends Authenticatable implements HasMedia
             if ($hasUniverse) {
                 return $query->has('universes');
             } else {
-                
+
                 return $query->doesntHave('universes');
             }
         };
     }
 
-
-    // $query->has('universes');
-
-    // if ($hasUniverse == 'true') {
-    //     $query->has('universes');
-    // } else {
-    //     $query->doesntHave('universes');
-    // }
-
     public function scopeAssignedToExistingContent($query, $assignedToExistingContent, $owner)
     {
-        // WIP MUST IMPLEMENT ADMIN FUNCTIONALITY FIRST
-        if ($assignedToExistingContent != null) {
-            $query->whereHas('moderatableUniverses', function ($query) use ($owner) {
-                $query->whereIn('id', function ($query) use ($owner) {
-                    $query->select('id')
-                        ->from('universes')
-                        ->where('owner', $owner);
-                });
-            })->orWhereHas('moderatableSeries', function ($query) use ($owner) {
-                $query->whereHas('universe', function ($query) use ($owner) {
-                    $query->where('owner', $owner);
-                });
-            });
+        if ($assignedToExistingContent !== null) {
+            if ($assignedToExistingContent) {
+                $query->whereHas('moderatableUniverses', function ($query) use ($owner) {
+                    $query->where('owner_id', '=', $owner->id);
+                })
+                    // ->orWhereHas('moderatableSeries', function ($query) use ($owner) {
+                    //     $query->whereHas('universe', function ($query) use ($owner) {
+                    //         $query->where('owner', $owner);
+                    //     });
+                    // })->orWhereHas('moderatableChapters', function ($query) use ($owner) {
+                    //     $query->whereHas('series', function ($query) use ($owner) {
+                    //         $query->whereHas('universe', function ($query) use ($owner) {
+                    //             $query->where('owner', $owner);
+                    //         });
+                    //     });
+                    // })
+                ;
+            } else {
+                $query->whereHas('moderatableUniverses', function ($query) use ($owner) {
+                    $query->where('owner_id', '!=', $owner->id);
+                })
+                ;
+            }
         }
+
+        return $query;
     }
 }
