@@ -148,15 +148,9 @@ const colNum = 12
 
 const isMirrored = ref(false)
 
-const props = defineProps({
-    element: {
-        type: Object,
-        required: true
-    }
-})
+const element = defineModel()
 
-
-const emit = defineEmits(['updateElement', 'updateChildrenElementIDs'])
+const emit = defineEmits(['updateChildrenElementIDs'])
 
 // Set const layout to random values
 // I should consider adding...
@@ -174,10 +168,10 @@ const dropDownMenuOptions = [
 ]
 
 watch(layout, (newVal) => {
-    if (props.element.content && props.element.content.layout) {
-        props.element.content.layout = newVal
+    if (element.value.content && element.value.content.layout) {
+        element.value.content.layout = newVal
     } else {
-        props.element.content = {
+        element.value.content = {
             layout: newVal
         }
     }
@@ -190,21 +184,14 @@ watch(layout, (newVal) => {
         }
         return a.y - b.y
     })
-
-    console.log('layout changed')
-
-    // props.element.content.layout = newVal
-    emit('updateElement', props.element)
 })
 
 watch(pageStyle, (newVal) => {
-    props.element.content.pageStyle = newVal
-    emit('updateElement', props.element)
+    element.value.content.pageStyle = newVal
 })
 
 watch(isMirrored, (newVal) => {
-    props.element.content.isMirrored = newVal
-    emit('updateElement', props.element)
+    element.value.content.isMirrored = newVal
 })
 
 onMounted(() => {
@@ -212,12 +199,12 @@ onMounted(() => {
 
     // SETTING LAYOUT, MIRRORED AND ASPECT RATIO
 
-    if (props.element.content) {
+    if (element.value.content) {
 
-        if (props.element.content.layout) {
+        if (element.value.content.layout) {
             console.log('setting layout...')
 
-            layout.value = props.element.content.layout;
+            layout.value = element.value.content.layout;
             console.log(layout.value)
 
             layout.value = layout.value.map(item => {
@@ -235,13 +222,13 @@ onMounted(() => {
             });
         }
 
-        if (props.element.content.pageStyle) {
-            pageStyle.value = props.element.content.pageStyle
+        if (element.value.content.pageStyle) {
+            pageStyle.value = element.value.content.pageStyle
         }
 
         // do something similar for isMirrored
-        if (props.element.content.isMirrored) {
-            isMirrored.value = parseFloat(props.element.content.isMirrored) === 1 ? true : false
+        if (element.value.content.isMirrored) {
+            isMirrored.value = parseFloat(element.value.content.isMirrored) === 1 ? true : false
         }
     }
 })
@@ -340,10 +327,6 @@ function addGridItem() {
         "h": 2,
         "i": layout.value.length.toString(),
         "text": "",
-        // "elements": [{
-        //     "element_id": 1,
-        //     "element_name": "Grudd",
-        // }],
         "elements": [],
     })
 }

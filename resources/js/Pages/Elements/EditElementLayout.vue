@@ -59,11 +59,6 @@ const elementThumbnailImage = computed(() => {
     return form.element.element_thumbnail ? form.element.element_thumbnail : '/assets/black_page.jpg';
 })
 
-function updateForm(element) {
-    console.log('updating')
-    // form.element = element
-}
-
 function updateChildrenElements(elements) {
     form.childrenElements = elements
 }
@@ -198,7 +193,6 @@ function back() {
             <KeepAlive>
 
                 <component :is="DashboardViewComponent" v-model="form.element" 
-                @updateElement="updateForm"
                     @updateChildrenElementIDs="updateChildrenElements" />
             </KeepAlive>
         </div>
