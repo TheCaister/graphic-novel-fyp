@@ -2,12 +2,10 @@
     <Link Link :href='props.link'>
     <div class="rounded-lg shadow-lg hover:shadow-white transition-all duration-200">
         <div class="relative rounded-lg ">
-            <div class="h-full flex items-center">
+            <div class="flex items-center">
                 <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
-                    <div v-if="content.thumbnail">
-                        <img  :src="content.thumbnail" alt="Content Image"
-                        class="rounded-lg object-cover w-full" />
-                    </div>
+                    <img v-if="content.thumbnail" :src="content.thumbnail" alt="Content Image"
+                        class="rounded-lg object-cover" />
                     <div v-else class="text-white text-xl flex items-center">{{ content.content_name }}</div>
                 </div>
             </div>

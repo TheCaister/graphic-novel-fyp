@@ -34,11 +34,13 @@ class ElementController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store()
     {
 
-        $elementable = $request->contentType;
-        $elementable_id = $request->contentId;
+        // dd(request()->all());
+
+        $elementable = request()->contentType;
+        $elementable_id = request()->contentId;
 
         $element = $this->createElement();
 
@@ -46,7 +48,7 @@ class ElementController extends Controller
             return redirect()->back();
         }
 
-        $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
+        $tempThumbnail = TemporaryFile::where('folder', request()->upload)->first();
 
         if ($tempThumbnail) {
             $element->addMedia(storage_path('app/public/uploads/element_thumbnail/tmp/' . $tempThumbnail->folder . '/' . $tempThumbnail->filename))->toMediaCollection('element_thumbnail');
@@ -58,15 +60,23 @@ class ElementController extends Controller
 
             $tempThumbnail->delete();
         }
+
         // Check if the element is already attached to a universe
         if (is_null($element->universes->first())) {
             $universe = $this->getUniverse($elementable, $elementable_id);
+
+            // dd($universe);
+
             // Attach the element to the universe in case it gets detached from the subcontent
             $universe->elements()->attach($element->element_id);
         }
 
         // Redirect to the element page
-        return redirect()->route('elements.edit', $element->element_id);
+        return redirect()->route('elements.edit', [
+            'element' => $element->element_id,
+            'contentType' => $elementable,
+            'contentId' => $elementable_id,
+        ]);
     }
 
     /**
@@ -74,8 +84,6 @@ class ElementController extends Controller
      */
     public function show(Element $element)
     {
-        // dd($element);
-
 
         return Inertia::render(
             'Elements/EditElementLayout',
@@ -91,19 +99,19 @@ class ElementController extends Controller
     public function edit(Element $element)
     {
         // convert $element->content to object
-
-
+       
 
         $element->content = json_decode($element->content);
 
         $universe = $element->universes->first();
 
-        if (request()->has('content_type')) {
+        if (request()->has('contentType')) {
+            //  dd(intval(request()->content_id));
             return Inertia::render(
                 'Elements/EditElementLayout',
                 [
                     'element' => $element,
-                    'parentContentType' => request()->content_type,
+                    'parentContentType' => request()->contentType,
                     'parentContentId' => intval(request()->content_id),
                 ]
             );
@@ -129,7 +137,7 @@ class ElementController extends Controller
         $elementContent = request()->element_content;
         $upload = request()->upload;
         $assign = request()->assign;
-        $contentType = request()->content_type;
+        $contentType = request()->contentType;
         $contentId = request()->content_id;
         $preSelectedElements = request()->preSelectedElements;
         $hidden = request()->hidden;
@@ -181,7 +189,7 @@ class ElementController extends Controller
             return redirect()->route(
                 'elements.assign',
                 [
-                    'content_type' => $contentType,
+                    'contentType' => $contentType,
                     'content_id' => $contentId,
                     'preSelectedElements' => $preSelectedElements ? $preSelectedElements : [],
                 ]
@@ -216,48 +224,43 @@ class ElementController extends Controller
 
     public function assign()
     {
-        // dd($this->getUniverse(request()->content_type, request()->content_id));
 
-        // // Get the type of content. It could be universes, series, chapters, or pages. With content_id, we can get the content.
-
-        // // Set content to nothing
-        // $content = null;
-
-        // $subcontent = null;
-
-        // // Create a new selectedContent vartiable to pass to the view. It will contain the type of content, along with the name of the content.
-        // $selectedContent = [
-        //     'type' => $request->type,
-        // ];
+        // dd(request()->all());
 
         $selectedContent = null;
         $subContentList = null;
 
-        $selectedContent = $this->generateSelectedContent(request()->content_type, request()->content_id);
+        // Pages are a special case, they don't have subcontent
+        if (request()->contentType === 'Page') {
+            $page = Page::find(request()->content_id);
+            $chapter = $page->chapter;
+            $selectedContent = $this->generateSelectedContent('Chapter', $chapter->chapter_id);
+        } else {
+            $selectedContent = $this->generateSelectedContent(request()->contentType, request()->content_id);
+        }
 
-        // $content = $this->getElementable($request->type, $request->content_id);
-        $subContentList = $this->generateSubcontent(request()->content_type, request()->content_id);
+        $subContentList = $this->generateSubcontent(request()->contentType, request()->content_id);
 
 
         return Inertia::render('Elements/Assign/AssignElements', [
             'parentContent' => $selectedContent,
             'subContentList' => $subContentList,
             'preSelectedElements' => request()->preSelectedElements ? request()->preSelectedElements : [],
-            'elementList' => $this->getUniverse(request()->content_type, request()->content_id)->elements->unique(),
+            'elementList' => $this->getUniverse(request()->contentType, request()->content_id)->elements->unique(),
         ]);
     }
 
     // Going up a level in the assigning page
     public function assignGetParent()
     {
-        $content_type = request()->type;
+        $contentType = request()->type;
         $content_id = request()->content_id;
 
-        $parentContent = $this->getClassName($content_type)::find($content_id)->getParentContent();
+        $parentContent = $this->getClassName($contentType)::find($content_id)->getParentContent();
 
         // redirect to the correct view
         return redirect()->route('elements.assign', [
-            'content_type' => $parentContent['content_type'],
+            'contentType' => $parentContent['content_type'],
             'content_id' => $parentContent['content_id'],
             'preSelectedElements' => []
         ]);
@@ -336,6 +339,9 @@ class ElementController extends Controller
     public function getUniverse($type, $id)
     {
 
+
+
+
         $universe = null;
 
         if ($type == 'Universe') {
@@ -343,14 +349,6 @@ class ElementController extends Controller
         } else {
             $universe = $this->getClassName($type)::find($id)->universe;
         }
-        // } else if ($type == 'Series') {
-        //     $universe = Series::find($id)->universe;
-        // } else if ($type == 'Chapters') {
-        //     $universe = Chapter::find($id)->series->universe;
-        // } else if ($type == 'Pages') {
-        //     $universe = Page::find($id)->chapter->series->universe;
-        // }
-
 
         return $universe;
     }

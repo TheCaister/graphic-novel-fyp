@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -49,9 +50,9 @@ class Chapter extends Model implements HasMedia
         'scheduled_publish' => 'timestamp',
     ];
 
-    public function universe(){
-        return $this->hasOneThrough(Universe::class, Series::class, 'universe_id', 'series_id', 'chapter_id', 'series_id');
-
+    public function universe()
+    {
+        return $this->hasOneDeepFromRelations($this->series(), (new Series())->universe());
     }
 
     public function series(): BelongsTo
@@ -71,7 +72,8 @@ class Chapter extends Model implements HasMedia
         parent::delete();
     }
 
-    public function elements(): MorphToMany{
+    public function elements(): MorphToMany
+    {
         return $this->morphToMany(Element::class, 'elementable', 'elementables', 'elementable_id', 'element_id');
     }
 
@@ -90,7 +92,8 @@ class Chapter extends Model implements HasMedia
         return $this->chapter_title;
     }
 
-    public function getRecentsFormattedEntry(){
+    public function getRecentsFormattedEntry()
+    {
         return [
             'title' => $this->chapter_title,
             'thumbnail' => $this->chapter_thumbnail,
@@ -98,7 +101,8 @@ class Chapter extends Model implements HasMedia
         ];
     }
 
-    public function getSearchFormattedEntry(){
+    public function getSearchFormattedEntry()
+    {
         return [
             'title' => $this->chapter_title,
             'type' => 'chapter',
@@ -107,7 +111,8 @@ class Chapter extends Model implements HasMedia
         ];
     }
 
-    public function getAssignFormattedEntry($includeDescription = false){
+    public function getAssignFormattedEntry($includeDescription = false)
+    {
         return [
             'content_id' => $this->chapter_id,
             'content_name' => $this->chapter_title,
@@ -116,18 +121,21 @@ class Chapter extends Model implements HasMedia
         ];
     }
 
-    public function getParentContent(){
+    public function getParentContent()
+    {
         return [
             'content_type' => 'Series',
             'content_id' => $this->series()->first()->series_id
         ];
     }
 
-    public static function getThumbnailCollectionName(){
+    public static function getThumbnailCollectionName()
+    {
         return 'chapter_thumbnail';
     }
 
-    public function clearThumbnail(){
+    public function clearThumbnail()
+    {
         $this->chapter_thumbnail = null;
     }
 

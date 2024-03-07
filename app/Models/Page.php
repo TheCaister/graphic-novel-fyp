@@ -47,6 +47,11 @@ class Page extends Model implements HasMedia
         'page_number' => 'integer',
     ];
 
+    public function series()
+    {
+        return $this->hasOneDeepFromRelations($this->chapter(), (new Chapter())->series());
+    }
+
     public function chapter(): BelongsTo
     {
         return $this->belongsTo(Chapter::class, 'chapter_id', 'chapter_id');
@@ -63,7 +68,8 @@ class Page extends Model implements HasMedia
     }
 
     public function universe(){
-        return $this->hasOneDeep(Universe::class, [Chapter::class, Series::class], ['chapter_id', 'series_id', 'universe_id']);
+        return $this->hasOneDeepFromRelations($this->series(), (new Series())->universe());
+
     }
 
     function delete()

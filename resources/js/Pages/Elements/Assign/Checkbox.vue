@@ -16,7 +16,7 @@
                 check_circle
             </span>
         </button>
-        <Link :href="route('elements.assign', { content_type: content.type, content_id: content.content_id })" v-if="content.type !== 'Page'">
+        <Link :href="route('elements.assign', { contentType: content.type, content_id: content.content_id })" v-if="content.type !== 'Page'">
             >>
         </Link>
     </div>

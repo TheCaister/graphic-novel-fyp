@@ -82,7 +82,7 @@ const props = defineProps({
 const elements = ref(props.elementList)
 
 const form = useForm({
-    content_type: props.parentContent.type,
+    contentType: props.parentContent.type,
     content_id: props.parentContent.content_id,
     selectedContentList: [],
     selectedElementList: [],

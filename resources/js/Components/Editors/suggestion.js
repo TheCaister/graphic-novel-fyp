@@ -12,7 +12,7 @@ export default {
 
         //   from url, get the content type and content id.
         const url = new URL(window.location.href)
-        const contentType = url.searchParams.get("content_type")
+        const contentType = url.searchParams.get("contentType")
         const contentId = url.searchParams.get("content_id")
 
 

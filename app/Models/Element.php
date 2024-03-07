@@ -62,7 +62,11 @@ class Element extends Model implements HasMedia
 
     public function universes(): MorphToMany
     {
-        return $this->morphedByMany(Universe::class, 'elementable', 'elementables', 'element_id', 'elementable_id');
+        // return $this->morphedByMany(Universe::class, 'elementable', 'elementables',
+        // 'element_id', 'elementable_id');
+    
+        return $this->morphedByMany(Universe::class, 'elementable', 'elementables',
+        'element_id', 'elementable_id', 'element_id', 'universe_id');
     }
 
     public function series(): MorphToMany

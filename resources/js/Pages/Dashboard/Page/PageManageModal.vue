@@ -12,6 +12,8 @@ import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import axios from 'axios';
 
+import DeleteModal from '../../Dashboard/DeleteModal.vue'
+
 const emit = defineEmits(['closeModal', 'createElement'])
 
 function close() {
@@ -27,6 +29,11 @@ const FilePond = vueFilePond(
 const modal = ref(null)
 
 const elements = ref([])
+
+const isDeleteModalOpen = ref(false)
+
+const selectedElement = ref({ element_id: 0, element_name: "" })
+
 
 const props = defineProps({
     page: {
@@ -57,6 +64,15 @@ function submit() {
         }
     });
 };
+
+function updateContentList() {
+    APICalls.getElements('Page', props.page.page_id).then(response => {
+        elements.value = response.data
+        // elementsLoaded.value = true
+
+        // emits('updateSize', elements.value.length)
+    }).catch(error => console.log(error))
+}
 
 let csrfToken = document.querySelector('meta[name="csrf-token"]').content
 
@@ -181,17 +197,27 @@ function handleCreateElementButtonClicked() {
                         Elements
                     </div>
 
-                    <!-- v-for here... -->
-                    <Link :href="route('elements.edit', {element: element.element_id,
-                    content_type: 'Chapter',
-                    content_id: props.chapter_id})" v-for="element in props.page.elements" :key="element.element_id" class="flex flex-col">
-                        <!-- image, then text -->
-                        <div class="w-1/2">
-                            <img :src="element.element_thumbnail ? element.element_thumbnail : '/assets/black_page.jpg'" alt="element image" class="w-24 h-24 rounded-lg" />
-                        </div>
-                        <div class="w-1/2">
-                            <p>{{ element.element_name }}</p>
-                        </div>
+                    <Link :href="route('elements.edit', {
+                            element: element.element_id,
+                            contentType: 'Page',
+                            content_id: props.page.page_id
+                        })" v-for="element in props.page.elements" :key="element.element_id"
+                        class="flex flex-col relative"
+                        @click="console.log('alright!! lets go!!')">
+                    <!-- image, then text -->
+                    <div class="w-1/2">
+                        <img :src="element.element_thumbnail ? element.element_thumbnail : '/assets/black_page.jpg'"
+                            alt="element image" class="w-24 h-24 rounded-lg" />
+                    </div>
+                    <div class="w-1/2">
+                        <p>{{ element.element_name }}</p>
+                    </div>
+
+                    <!-- Button for deletion -->
+                    <div class="absolute top-0 right-0 p-1">
+                        <button @click.prevent="selectedElement = element; isDeleteModalOpen = true;"
+                            class="bg-red-500 text-white rounded-full w-6 h-6">X</button>
+                    </div>
 
                     </Link>
 
@@ -201,5 +227,30 @@ function handleCreateElementButtonClicked() {
                 </div>
             </div>
         </div>
+
+        <Teleport to="body">
+            <Transition name="modal" class="z-50">
+                <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()"
+                    :content="{
+                            content_id: selectedElement.element_id,
+                            content_name: selectedElement.element_name,
+                        }" type="elements"
+                    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+            </Transition>
+
+        </Teleport>
     </div>
 </template>
+
+<style scoped>
+.modal-enter-active,
+.modal-leave-active {
+    transition: all 0.25s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    opacity: 0;
+    transform: scale(1.1);
+}
+</style>

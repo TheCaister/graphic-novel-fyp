@@ -67,15 +67,14 @@ function updateChildrenElements(elements) {
 
 function saveElement(assign = false) {
     // form.element = props.element
-
-    console.log('form content...')
-    console.log(form.element.content)
+    
+    console.log(props.parentContentId)
 
     form.put(route('elements.update', {
         element: form.element.element_id,
         element_content: form.element.content,
-        assign: assign, content_type: assign ? props.parentContentType : '',
-        content_type_id: assign ? props.parentContentId : '',
+        assign: assign, contentType: assign ? props.parentContentType : '',
+        // content_type_id: assign ? props.parentContentId : '',
         content_id: assign ? props.parentContentId : '',
         preSelectedElements: [{
             element_id: form.element.element_id,
@@ -100,6 +99,7 @@ function updateUpload(upload) {
 }
 
 onMounted(() => {
+    // console.log(props.parentContentId)
 
     if (typeof props.element.content === 'string') {
         props.element.content = JSON.parse(props.element.content)

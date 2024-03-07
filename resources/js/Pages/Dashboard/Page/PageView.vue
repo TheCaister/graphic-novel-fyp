@@ -65,7 +65,7 @@
             <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()" :content="{
                 content_id: selectedPage.page_id,
                 content_name: 'Page ' + selectedPage.page_number,
-            }" type="Page" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+            }" type="pages" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
     </Teleport>
 </template>
