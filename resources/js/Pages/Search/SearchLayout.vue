@@ -27,7 +27,6 @@
 
         <!-- Advanced search -->
         <div>
-
             <KeepAlive>
                 <component :is="AdvancedFiltersComponent" @update-advanced-search="updateAdvancedSearch" />
             </KeepAlive>
@@ -74,6 +73,7 @@ const form = useForm({
     // In advanced, it's a bunch of 
     // key : something like boolean to toggle that search option
     advanced: {},
+    limit: 10,
 });
 
 const ResultsViewComponent = computed(() => {
@@ -109,18 +109,19 @@ const AdvancedFiltersComponent = computed(() => {
 
 
 function search() {
-    if (form.search !== '') {
-        // router.get(route('search'), {
-        //     search: form.search,
-        // });
-
-        form.get(route('search'), {
+    form.get(route('search'), {
             onFinish: () => {
                 console.log('success')
                 form.search = ''
             }
         })
-    }
+    // if (form.search !== '') {
+    //     // router.get(route('search'), {
+    //     //     search: form.search,
+    //     // });
+
+       
+    // }
 }
 
 function back() {

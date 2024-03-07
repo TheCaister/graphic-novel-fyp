@@ -185,11 +185,11 @@ class User extends Authenticatable implements HasMedia
         if ($hasUniverse != null) {
             // $query->has('universes');
 
-            if ($hasUniverse == 'true') {
-                $query->has('universes');
-            } else {
-                $query->doesntHave('universes');
-            }
+            // if ($hasUniverse == 'true') {
+            //     $query->has('universes');
+            // } else {
+            //     $query->doesntHave('universes');
+            // }
         };
     }
 

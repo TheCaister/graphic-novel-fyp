@@ -65,6 +65,7 @@ class SearchController extends Controller
                 break;
         }
 
+        $resultsList = array_slice($resultsList, 0, request()->limit);
         return response()->json($resultsList);
     }
 
@@ -176,6 +177,7 @@ class SearchController extends Controller
 
     private function searchUsers()
     {
+        dd(request()->all());
         $resultsList = [];
 
         $user = auth('sanctum')->user();
@@ -190,19 +192,7 @@ class SearchController extends Controller
 
         $user = auth('sanctum')->user();
 
-        // $contentTypeList = [
-        //     'App\\Models\\Universe',
-        //     'App\\Models\\Series',
-        //     'App\\Models\\Chapter',
-        //     'App\\Models\\Page',
-        // ];
-
-
         $resultsList = [];
-
-
-
-        // $resultsList = Element::latest()->filter(request(['search']))->limit(request()->limit)->get();
 
 
         // From this user, get all universes, series, chapters and pages, put them all through the same filters. Afterwards, place a limit if necessary.

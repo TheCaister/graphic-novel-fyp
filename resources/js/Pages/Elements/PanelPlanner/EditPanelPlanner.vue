@@ -62,7 +62,8 @@
             }"></div>
 
             </GridLayout>
-            <div class="flex justify-center">
+            
+            <!-- <div class="flex justify-center">
                 <button>
                     &lt;- </button>
                 <div>
@@ -71,7 +72,7 @@
                 <button>
                     ->
                 </button>
-            </div>
+            </div> -->
         </div>
 
         <div class="flex flex-col">
@@ -279,11 +280,13 @@ function handleMenuItemClicked(event, grid) {
         case 'addElements':
             console.log('add elements')
             isSearchElementModalOpen.value = true
-            isGridMenuOpen.value = false
+          
             break
         default:
             console.log('default')
     }
+
+    isGridMenuOpen.value = false
 
     // find the grid in 
 }

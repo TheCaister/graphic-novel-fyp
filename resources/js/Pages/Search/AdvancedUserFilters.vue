@@ -26,7 +26,7 @@ function updateOwnsUniverse (checked) {
     // console.log(checked)
     emits('updateAdvancedSearch', 
     {
-        name: 'ownsUniverse',
+        name: 'hasUniverse',
         value: checked
     })
 }
