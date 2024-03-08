@@ -144,7 +144,10 @@ class SearchController extends Controller
 
     private function searchElements($contentType = null, $contentId = null)
     {
+
         $resultsList = [];
+
+        dd(request()->all());
 
         $user = auth('sanctum')->user();
 
@@ -152,6 +155,18 @@ class SearchController extends Controller
         // Get all universes and moderatableUniverses of the user, then get all the elements of those universes
         $elementsWithSearch = function ($query) {
             $query->filter(request(['search']));
+            // ->elementType(request('elementType'));
+
+            if(request()->advanced){
+             
+                if(array_key_exists('derivedElementType', request()->advanced)){
+                    // dd('hi');
+                    $query->elementType($this->getElementTypeName(request()->advanced['derivedElementType']['derivedElementType']), request()->advanced['derivedElementType']['include'] === 'true');
+                }
+            }
+
+            // ->elementType($this->getElementTypeName('PanelPlannerElement'));
+
         };
 
         // Using eager loading
@@ -295,5 +310,10 @@ class SearchController extends Controller
     private function getClassName($contentType)
     {
         return 'App\\Models\\' . $contentType;
+    }
+
+    private function getElementTypeName($elementType)
+    {
+        return 'App\\Models\\' . $elementType;
     }
 }

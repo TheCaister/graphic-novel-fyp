@@ -7,19 +7,20 @@
         <div class="flex w-full">
             <TriCheckbox label="Include simple text elements" @checked="updateFilter('includeSimpleText', $event)" />
             <TriCheckbox label="Include mindmap elements" @checked="updateFilter('includeMindmap', $event)" />
-            <TriCheckbox label="Include panel planner elements" @checked="updateFilter('includePanelPlanner', $event)" />
+            <TriCheckbox label="Include panel planner elements"
+                @checked="updateFilter('includePanelPlanner', $event)" />
         </div>
 
         <div class="flex w-full">
             <!-- input with label -->
             <div>
                 <label for="" class="block">Authors</label>
-                <input type="text" class="w-full text-black"/>
+                <input type="text" class="w-full text-black" />
             </div>
 
             <div>
                 <label for="" class="block">Included elements</label>
-                <input type="text" class="w-full text-black"/>
+                <input type="text" class="w-full text-black" />
             </div>
         </div>
 
@@ -53,40 +54,80 @@ import { defineEmits } from 'vue';
 
 const emits = defineEmits(['updateAdvancedSearch'])
 
+let derivedElementTypes = []
+
 function updateFilter(filterName, value) {
 
 
     switch (filterName) {
         case 'includeSimpleText':
-            emits('updateAdvancedSearch',
-                {
-                    name: 'derivedElementType',
-                    value: value
-                })
-            break;
+
+            updateDerivedElementTypes({
+                derivedElementType: 'SimpleTextElement',
+                include: value
+            })
+
+            emits('updateAdvancedSearch', {
+                name: 'derivedElementTypes',
+                value: derivedElementTypes
+            })
+            return;
         case 'includeMindmap':
-            emits('updateAdvancedSearch',
-                {
-                    name: 'derivedElementType',
-                    value: value
-                })
-            break;
+
+            updateDerivedElementTypes({
+                derivedElementType: 'MindmapElement',
+                include: value
+            })
+
+            emits('updateAdvancedSearch', {
+                name: 'derivedElementTypes',
+                value: derivedElementTypes
+            })
+            return;
         case 'includePanelPlanner':
-            emits('updateAdvancedSearch',
-                {
-                    name: 'derivedElementType',
-                    value: value
-                })
-            break;
+
+            updateDerivedElementTypes({
+                derivedElementType: 'PanelPlannerElement',
+                include: value
+            })
+
+            emits('updateAdvancedSearch', {
+                name: 'derivedElementTypes',
+                value: derivedElementTypes
+            })
+            return;
         default:
             break;
     }
+
+    console.log('what the...')
 
     emits('updateAdvancedSearch',
         {
             name: filterName,
             value: value
         })
+}
+
+function updateDerivedElementTypes(value) {
+    // if value.include is null, remove the value from the array through key derivedElementType
+    // if value.include is true/false, add the value to the array through key derivedElementType
+    if (value.include === null) {
+        derivedElementTypes = derivedElementTypes.filter((element) => element.derivedElementType !== value.derivedElementType)
+    } else {
+        // console.log('pushing...')
+        // derivedElementTypes.push(value)
+
+        // if the value is already in the array, set it to the new value
+        let index = derivedElementTypes.findIndex((element) => element.derivedElementType === value.derivedElementType)
+        if (index !== -1) {
+            derivedElementTypes[index] = value
+        } else {
+            derivedElementTypes.push(value)
+        }
+    }
+
+    console.log(derivedElementTypes)
 }
 
 </script>

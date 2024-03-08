@@ -82,16 +82,33 @@ class ElementController extends Controller
     /**
      * Display the specified resource.
      */
-    // public function show(Element $element)
-    // {
+    public function show(Element $element)
+    {
+        return redirect()->route('elements.edit', $element->element_id);
+    }
 
-    //     return Inertia::render(
-    //         'Elements/EditElementLayout',
-    //         [
-    //             'element' => $element,
-    //         ]
-    //     );
-    // }
+    /**
+     * Show the form for editing and include the element's universe.
+     */
+    public function editWithUniverse(Element $element)
+    {
+
+
+
+        $universe = $element->universes->first();
+
+        // dd($universe);
+
+
+        return Inertia::render(
+            'Elements/EditElementLayout',
+            [
+                'element' => $element,
+                'parentContentType' => 'Universe',
+                'parentContentId' => $universe->universe_id,
+            ]
+        );
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -105,10 +122,7 @@ class ElementController extends Controller
 
         // dd($element);
 
-        $universe = $element->universes->first();
-
         if (request()->has('contentType')) {
-            //  dd(intval(request()->content_id));
             return Inertia::render(
                 'Elements/EditElementLayout',
                 [
@@ -118,14 +132,7 @@ class ElementController extends Controller
                 ]
             );
         } else {
-            return Inertia::render(
-                'Elements/EditElementLayout',
-                [
-                    'element' => $element,
-                    'parentContentType' => 'Universe',
-                    'parentContentId' => $universe->universe_id,
-                ]
-            );
+            return $this->editWithUniverse($element);
         }
     }
 
