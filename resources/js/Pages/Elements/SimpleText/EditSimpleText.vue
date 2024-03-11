@@ -1,45 +1,39 @@
 <template>
     <div class="bg-white">
         <SimpleEditor v-model="element.content" />
+
     </div>
 </template>
 
 <script setup>
 import SimpleEditor from '@/Components/Editors/SimpleEditor.vue';
-import { watch, onMounted } from 'vue'
+import { onMounted } from 'vue'
 
-const props = defineProps({
-    element: {
-        type: Object,
-        required: true
-    }
-})
+const element = defineModel()
 
 // Define the emits for the component
 const emit = defineEmits(['updateElement', 'updateChildrenElementIDs'])
 
-watch(props.element, (element) => {
-
-    updateChildrenElementIDs()
-
-    emit('updateElement', element)
-
-})
-
 onMounted(() => {
+    console.log('mounting da edit')
+
+
     updateChildrenElementIDs()
 })
 
 function updateChildrenElementIDs() {
-    let mentions = extractMentions(props.element.content.content);
-    let childrenElementIDs = []
+    if (element.content && element.content.content) {
+        let mentions = extractMentions(element.content.content);
 
-    // Go through mentions, then extract attrs.id.element_id and add to a children array
-    mentions.forEach(mention => {
-        childrenElementIDs.push(mention.attrs.id.element_id)
-    })
+        let childrenElementIDs = []
 
-    emit('updateChildrenElementIDs', childrenElementIDs)
+        // Go through mentions, then extract attrs.id.element_id and add to a children array
+        mentions.forEach(mention => {
+            childrenElementIDs.push(mention.attrs.id.element_id)
+        })
+
+        emit('updateChildrenElementIDs', childrenElementIDs)
+    }
 }
 
 function extractMentions(obj) {

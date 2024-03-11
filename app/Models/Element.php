@@ -62,7 +62,11 @@ class Element extends Model implements HasMedia
 
     public function universes(): MorphToMany
     {
-        return $this->morphedByMany(Universe::class, 'elementable', 'elementables', 'element_id', 'elementable_id');
+        // return $this->morphedByMany(Universe::class, 'elementable', 'elementables',
+        // 'element_id', 'elementable_id');
+    
+        return $this->morphedByMany(Universe::class, 'elementable', 'elementables',
+        'element_id', 'elementable_id', 'element_id', 'universe_id');
     }
 
     public function series(): MorphToMany
@@ -120,6 +124,7 @@ class Element extends Model implements HasMedia
     public function clearThumbnail(){
         $this->element_thumbnail = null;
     }
+
     public function scopeFilter($query, array $filters)
     {
         // dd($query);
@@ -129,9 +134,15 @@ class Element extends Model implements HasMedia
         });
     }
 
-    public function scopeElementType($query, $elementType)
+    public function scopeElementType($query, $elementType, $include)
     {
-        $query->where('derived_element_type', $elementType);
+        // dd($include);
+
+        if ($include) {
+            $query->where('derived_element_type', '=', $elementType);
+        } else {
+            $query->where('derived_element_type', '!=', $elementType);
+        }
     }
 
     // WORK IN PROGRESS

@@ -16,6 +16,15 @@ const props = defineProps({
     },
     parentContentId: {
         type: Number,
+    },
+    errors: {
+        type: Object,
+    },
+    auth: {
+        type: Object,
+    },
+    ziggy: {
+        type: Object,
     }
 });
 
@@ -34,56 +43,52 @@ const DashboardViewComponent = computed(() => {
 
 const isEditThumbnailModalOpen = ref(false)
 
+const isHeaderOpen = ref(true)
+
 const form = useForm({
-    element: {
-        content: {},
-    },
+    element: props.element,
     childrenElements: [],
     upload: '',
+    assign: false,
+    contentType: '',
+    content_id: '',
+    preSelectedElements: [],
 });
 
 const elementThumbnailImage = computed(() => {
-    return form.element.element_thumbnail ? form.element.element_thumbnail : '/assets/black_page.jpg'
-
+    return form.element.element_thumbnail ? form.element.element_thumbnail : '/assets/black_page.jpg';
 })
 
-watch(form.element.content, (newVal) => {
-    // parse newVal if it is a string
-    if (typeof newVal === 'string') {
-        form.element.content = JSON.parse(newVal)
-    }
-
-})
-
-function updateForm(element) {
-    form.element = element
-}
-
-function updateChildrenElements(elements){
+function updateChildrenElements(elements) {
     form.childrenElements = elements
 }
 
 function saveElement(assign = false) {
+    // form.element = props.element
 
-    console.log(form.childrenElements)
+    console.log(form.element)
 
-    form.put(route('elements.update', {
-        element: form.element.element_id,
-        assign: assign, content_type: assign ? props.parentContentType : '',
-        content_id: assign ? props.parentContentId : '',
-        preSelectedElements: [{
-            element_id: form.element.element_id,
-            checked: true
-        }],
-        childrenElements: form.childrenElements
-    })), {
-        onSuccess: () => {
-            console.log('success')
-        },
-        onError: (e) => {
-            console.log(e)
-        }
-    }
+    form.assign = assign
+    form.contentType = assign ? props.parentContentType : ''
+    form.content_id = assign ? props.parentContentId : ''
+    form.preSelectedElements = [{
+        element_id: form.element.element_id,
+        checked: true
+    }]
+    form.childrenElements = form.childrenElements
+
+
+    form.put(route('elements.update', form.element.element_id), {
+    },
+        {
+            onSuccess: () => {
+                console.log('success')
+                console.log(form.element)
+            },
+            onError: (e) => {
+                console.log(e)
+            }
+        })
 }
 
 function updateUpload(upload) {
@@ -94,11 +99,23 @@ function updateUpload(upload) {
 
 onMounted(() => {
 
-    if (typeof props.element.content === 'string') {
-        props.element.content = JSON.parse(props.element.content)
+    // console.log(JSON.parse(JSON.stringify(props.element)))
+    // console.log(form.element)
+
+    // form.element = JSON.parse(JSON.stringify(form.element))
+
+    if (typeof form.element.content === 'string') {
+        form.element.content = JSON.parse(form.element.content)
     }
 
-    form.element = props.element
+    console.log(form.element)
+
+    // if form,element,content is null, set it to empty object
+    // if (form.element.content === null) {
+    //     form.element.content = {}
+    // }
+
+   
 })
 
 function back() {
@@ -107,6 +124,7 @@ function back() {
 </script>
 
 <template>
+
     <Head title="Element" />
 
     <Teleport to="body">
@@ -117,7 +135,7 @@ function back() {
         </Transition>
     </Teleport>
 
-    <div>
+    <div class="relative">
         <!-- Buttons for saving, going back -->
         <div class="flex mb-8 w-full">
             <div class="flex justify-between w-full">
@@ -135,30 +153,51 @@ function back() {
                     </button>
                 </div>
             </div>
+            <div>
+                <button class="text-white" @click="console.log(form)">
+                    check form
+                </button>
+            </div>
         </div>
 
         <!-- Thumbnail with option to edit name -->
-        <div class="w-full h-64 flex items-center p-6" :style="'background-image: url(' + elementThumbnailImage + ')'">
-            <div class="flex items-center gap-8">
-                <button @click="isEditThumbnailModalOpen = true">
-                    <img class="w-32 h-32 shadow-2xl rounded-lg hover:scale-105 transition-transform duration-300"
-                        :src="props.element.element_thumbnail ? props.element.element_thumbnail : '/assets/black_page.jpg'"
-                        alt="" srcset="">
-                </button>
 
-                <!-- Input v-model form.element.element_name -->
-                <div>
-                    <input id="element_name" type="text" class="mt-1 block w-full bg-transparent border-none"
-                        v-model="form.element.element_name" required autofocus />
+        <div>
+            <div class="absolute z-10 w-full">
+                <div v-if="isHeaderOpen" class=" h-64 flex items-center p-6"
+                    :style="'background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url(' + elementThumbnailImage + ')'">
+                    <div class="flex items-center gap-8">
+                        <button @click="isEditThumbnailModalOpen = true">
+                            <img class="w-32 h-32 shadow-2xl rounded-lg hover:scale-105 transition-transform duration-300"
+                                :src="elementThumbnailImage"
+                                alt="" srcset="">
+                        </button>
+                        <div>
+                            <input id="element_name" type="text"
+                                class="mt-1 block w-full bg-transparent border-none rounded-lg shadow-xl text-white"
+                                v-model="form.element.element_name" required autofocus />
+                        </div>
+                    </div>
                 </div>
+
+                <button @click="isHeaderOpen = !isHeaderOpen"
+                    class="bg-black p-2 text-white rounded-lg absolute -translate-y-1/2 left-1/2 -translate-x-1/2 z-50">Toggle
+                    Header</button>
             </div>
 
+
+            <!-- <component :is="DashboardViewComponent" v-model="form.element" :element="form.element" 
+                @updateElement="updateForm"
+                    @updateChildrenElementIDs="updateChildrenElements" /> -->
+
+            <KeepAlive>
+
+                <component :is="DashboardViewComponent" v-model="form.element" 
+                    @updateChildrenElementIDs="updateChildrenElements" />
+            </KeepAlive>
         </div>
 
-        <!-- Element Edit View -->
-        <KeepAlive>
-            <component :is="DashboardViewComponent" v-bind:element="props.element" @updateElement="updateForm" @updateChildrenElementIDs="updateChildrenElements"/>
-        </KeepAlive>
+
     </div>
 </template>
 

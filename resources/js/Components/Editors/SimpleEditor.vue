@@ -75,17 +75,19 @@
     </div>
 
     <div class="bg-black text-white">
-        <editor-content class="p-4 editor-field" :editor="editor" @itemSelected="itemSelected" />
+        <!-- <editor-content class="p-4 editor-field" :editor="editor" @itemSelected="itemSelected" /> -->
+
+        <editor-content class="p-4 editor-field" :editor="editor"  />
     </div>
 </template>
 
-<script setup>
-const emit = defineEmits([''])
+<!-- <script setup>
+const emit = defineEmits(['update:modelValue'])
 
 function itemSelected(props) {
     // console.log(props.id.id)
 }
-</script>
+</script> -->
   
 <script>
 import Mention from '@tiptap/extension-mention'
@@ -121,11 +123,15 @@ export default {
             // const isSame = this.editor.getHTML() === value
 
             // JSON
-            const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)
+            // const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)
 
-            if (isSame) {
-                return
-            }
+            // if (isSame) {
+            //     return
+            // }
+
+            // console.log(value)
+
+          
 
             this.editor.commands.setContent(value, false)
         },
@@ -144,6 +150,9 @@ export default {
     },
 
     mounted() {
+
+        console.log('editor mounted')
+
         // Defining custom mention
         const CustomMention = Mention.extend({
 
@@ -223,6 +232,10 @@ export default {
 
                 // In before.content, Remove any entry that has an null text field
                 // Go through each node in the content array
+
+                // console.log(this.editor.getJSON())
+
+                console.log('emitting!!')
 
                 this.$emit('update:modelValue', JSON.parse(JSON.stringify(this.editor.getJSON())))
                 // console.log(this.editor.getJSON());

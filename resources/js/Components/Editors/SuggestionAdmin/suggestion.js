@@ -10,6 +10,9 @@ export default {
         // This is the list of items that will be passed to the MentionList component
         // we can do all this, or we can simply call the api here
         // return APICalls.searchElements(query, 5, 'users')
+
+      
+
         return APICalls.searchMention(query, 5, 'users')
 
 

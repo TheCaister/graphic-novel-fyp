@@ -9,19 +9,14 @@ export default {
     items: async ({ query }) => {
         // This is the list of items that will be passed to the MentionList component
         // we can do all this, or we can simply call the api here
-        return APICalls.searchMention(query, 5)
-        // return [{
-        //     element_name: 'test',
-        // },
-        // {
-        //     element_name: 'test2',
-        // },
-        // {
-        //     element_name: 'test3',
-        // },
-        // {
-        //     element_name: 'test4',
-        // },]
+
+        //   from url, get the content type and content id.
+        const url = new URL(window.location.href)
+        const contentType = url.searchParams.get("contentType")
+        const contentId = url.searchParams.get("content_id")
+
+
+        return APICalls.searchMention(query, 5, 'elements', contentType, contentId)
 
     },
     command: ({ editor, range, props }) => {

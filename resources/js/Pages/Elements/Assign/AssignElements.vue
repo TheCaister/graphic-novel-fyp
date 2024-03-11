@@ -7,10 +7,10 @@
             </button>
             <Link
                 :href="route('elements.assign.get-parent', { type: parentContent.type, content_id: parentContent.content_id })"
-                v-if="parentContent.type !== 'universes'">
-            <span class="material-symbols-outlined dark">
-                chevron_left
-            </span>
+                v-if="parentContent.type !== 'Universe'">
+                <span class="material-symbols-outlined dark">
+                    chevron_left
+                </span>
             </Link>
 
 
@@ -82,7 +82,7 @@ const props = defineProps({
 const elements = ref(props.elementList)
 
 const form = useForm({
-    content_type: props.parentContent.type,
+    contentType: props.parentContent.type,
     content_id: props.parentContent.content_id,
     selectedContentList: [],
     selectedElementList: [],
@@ -114,13 +114,13 @@ function updatePreSelectedElementList() {
     let contentIdList = []
 
     switch (props.parentContent.type) {
-        case 'universes':
+        case 'Universe':
             type = 'Series'
             break
-        case 'series':
+        case 'Series':
             type = 'Chapter'
             break
-        case 'chapters':
+        case 'Chapter':
             type = 'Page'
             break
     }
@@ -143,7 +143,7 @@ function updatePreSelectedElementList() {
 
             if (assignedElement) {
                 element.checked = true
-            } 
+            }
         })
 
     }).catch(error => console.log(error))
@@ -171,13 +171,13 @@ function updateSelectedContentList(event) {
 function goBack() {
     // switch on the parentContent.type
     switch (props.parentContent.type) {
-        case 'universes':
+        case 'Universe':
             router.visit(route('universes.show', { universe: props.parentContent.content_id }))
             break;
-        case 'series':
+        case 'Series':
             router.visit(route('series.show', { series: props.parentContent.content_id }))
             break;
-        case 'chapters':
+        case 'Chapter':
             router.visit(route('chapters.show', { chapter: props.parentContent.content_id }))
             break;
         default:
@@ -185,7 +185,7 @@ function goBack() {
     }
 }
 
-function toggleAll(){
+function toggleAll() {
 
     // If there is a mix of checked and unchecked elements, set all elements to checked = true. If all elements are checked, set all elements to checked = false. If all elements are check = false, set all elements to checked = null.
     const checkedElements = elements.value.filter(element => element.checked === true)
@@ -196,7 +196,7 @@ function toggleAll(){
     } else if (uncheckedElements.length === elements.value.length) {
         elements.value.forEach(element => element.checked = null)
     }
-    else{
+    else {
         elements.value.forEach(element => element.checked = true)
     }
 }

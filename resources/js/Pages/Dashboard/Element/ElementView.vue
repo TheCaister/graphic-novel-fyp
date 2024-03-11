@@ -8,7 +8,7 @@
                 subheading: getElementTypeText(element.derived_element_type),
                 thumbnail: element.element_thumbnail,
             }"
-                :link='route("elements.edit", { element: element.element_id, content_type: getParentContentType(), content_id: parentContentId })'
+                :link='route("elements.edit", { element: element.element_id, contentType: getParentContentType(), content_id: parentContentId })'
                 :selected="element.element_id === selectedElement.element_id" :drop-down-menu-options="dropDownMenuOptions"
                 :show-description="false"
                 @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked" />
@@ -33,7 +33,7 @@
             <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()" :content="{
                 content_id: selectedElement.element_id,
                 content_name: selectedElement.element_name,
-            }" type="series" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+            }" type="elements" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
     </Teleport>
@@ -105,11 +105,11 @@ function getParentContentType() {
         case 'UniverseView':
             return ''
         case 'SeriesView':
-            return 'universes'
+            return 'Universe'
         case 'ChapterView':
-            return 'series'
+            return 'Series'
         case 'PageView':
-            return 'chapters'
+            return 'Chapter'
         default:
             return ''
     }
@@ -122,9 +122,8 @@ function handleMenuItemClicked(eventName) {
     switch (eventName) {
         case "edit":
             
-            // route("elements.edit", { element: selectedElement.value.element_id, content_type: getParentContentType(), content_id: parentContentId })
             console.log('going to edit...')
-            router.visit(route("elements.edit", { element: selectedElement.value.element_id, content_type: getParentContentType(), content_id: parentContentId }))
+            router.visit(route("elements.edit", { element: selectedElement.value.element_id, contentype: getParentContentType(), content_id: parentContentId }))
             break;
         case "viewAssignedContent":
             break;

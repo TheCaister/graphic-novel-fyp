@@ -33,10 +33,11 @@ class SeriesController extends Controller
 
         if ($request->hasFile('series_thumbnail')) {
             $formFields['series_thumbnail'] = $request->file('series_thumbnail')->store('series_thumbnails', 'public');
-        } else {
-            // Set it to the black image
-            $formFields['series_thumbnail'] = 'series_thumbnails/black.png';
         }
+        // else {
+        //     // Set it to the black image
+        //     $formFields['series_thumbnail'] = 'series_thumbnails/black.png';
+        // }
 
         $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
 
@@ -200,7 +201,7 @@ class SeriesController extends Controller
 
         foreach ($series as $s) {
 
-            if ($s->moderators()->where('moderator_id', $user->id)->exists()) {
+            if ($s->moderators()->where('moderator_id', $user->id)->exists() || $s->owner->id === $user->id) {
                 $s->can_edit = true;
             } else {
                 $s->can_edit = false;

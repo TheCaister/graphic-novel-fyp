@@ -51,7 +51,7 @@
 
         <Transition name="modal" class="z-50">
             <create-element-modal v-if="isCreateElementOpen" @closeModal="isCreateElementOpen = false"
-                :parent-content-id="selectedPage.page_id" parent-content-type="pages"
+                :parent-content-id="selectedPage.page_id" parent-content-type="Page"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 

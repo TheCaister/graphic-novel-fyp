@@ -66,11 +66,11 @@ function getParentContentType() {
         case 'UniverseView':
             return ''
         case 'SeriesView':
-            return 'universes'
+            return 'Universe'
         case 'ChapterView':
-            return 'series'
+            return 'Series'
         case 'PageView':
-            return 'chapters'
+            return 'Chapter'
         default:
             return ''
     }
