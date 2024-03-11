@@ -147,7 +147,7 @@ class SearchController extends Controller
 
         $resultsList = [];
 
-        dd(request()->all());
+        // dd(request()->all());
 
         $user = auth('sanctum')->user();
 
