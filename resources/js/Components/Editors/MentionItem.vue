@@ -42,7 +42,7 @@ const mouseClickY = ref(0)
 
 const dropDownMenuOptions = [
     { id: 1, text: "Visit", eventName: "visit" },
-    { id: 2, text: "Search", eventName: "search" },
+    // { id: 2, text: "Search", eventName: "search" },
 ]
 
 const props = defineProps(
