@@ -75,27 +75,23 @@
     </div>
 
     <div class="bg-black text-white">
-        <!-- <editor-content class="p-4 editor-field" :editor="editor" @itemSelected="itemSelected" /> -->
-
         <editor-content class="p-4 editor-field" :editor="editor"  />
     </div>
 </template>
-
-<!-- <script setup>
-const emit = defineEmits(['update:modelValue'])
-
-function itemSelected(props) {
-    // console.log(props.id.id)
-}
-</script> -->
   
+
+
+
 <script>
 import Mention from '@tiptap/extension-mention'
 import StarterKit from '@tiptap/starter-kit'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import suggestion from './suggestion'
 
-
+function testing() {
+    // Your code here
+    console.log('testing')
+}
 
 export default {
 
@@ -131,8 +127,6 @@ export default {
 
             // console.log(value)
 
-          
-
             this.editor.commands.setContent(value, false)
         },
     },
@@ -142,10 +136,6 @@ export default {
             const newHTML = this.editor.getHTML().replaceAll(/<li><p>(.*?)<\/p><(\/?)(ol|li|ul)>/gi, "<li>$1<$2$3>")
 
             this.editor.commands.setContent(newHTML, false)
-        },
-        testing(event) {
-            console.log(event)
-            console.log('testing')
         },
     },
 
@@ -159,6 +149,11 @@ export default {
             renderHTML(props) {
                 const { node } = props;
                 let id = node.attrs.id;
+
+                console.log('Im... ALIVE!!')
+                console.log(props);
+                testing()
+
                 return [
                     'button',
                     {
