@@ -96,13 +96,13 @@ const emits = defineEmits(['update:modelValue'])
 
 const editor = ref(null)
 
-const testing = () => {
-    console.log('testing')
-}
-
 const removePfromList = () => {
     const newHTML = editor.value.getHTML().replaceAll(/<li><p>(.*?)<\/p><(\/?)(ol|li|ul)>/gi, "<li>$1<$2$3>")
     editor.value.commands.setContent(newHTML, false)
+}
+
+function testing(){
+    console.log('testing')
 }
 
 const CustomMention = Mention.extend({
@@ -111,23 +111,25 @@ const CustomMention = Mention.extend({
         let id = node.attrs.id;
 
         console.log('Im... ALIVE!!')
-        console.log(props);
+        console.log(node);
+        node.attrs.label = 'test'
         testing()
 
         return [
-            'button',
+            'a',
             {
+                // Go to the edit page of the element
+                href: route('elements.edit', node.attrs.id.element_id),
                 style: 'color: red; border: 2px solid pink;',
-                target: '_blank',
-                onclick: `testing(null)`,
             },
-            `${node.attrs.label ?? node.attrs.id.name}`,
+            // `${node.attrs.label ?? node.attrs.id.name}`,
+            `${node.attrs.label}`,
         ];
     },
 });
 
 onMounted(() => {
-    console.log('editor mounted')
+    // console.log('editor mounted')
     editor.value = new Editor({
         extensions: [
             StarterKit.configure(
