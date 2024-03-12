@@ -194,8 +194,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/about-us', function() {
         return Inertia::render('AboutUs/AboutUs');
-
     })->name('about-us');
+
+    
 
     Route::post('/upload', [UploadController::class, 'store'])->name('upload.store');
 

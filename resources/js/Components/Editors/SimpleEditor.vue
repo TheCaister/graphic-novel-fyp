@@ -165,7 +165,7 @@ export default {
                         style: 'color: red; border: 2px solid pink;',
                         target: '_blank',
                         //   Onclick function
-                        onclick: `alert(testing())`,
+                        onclick: `testing(null)`,
                     },
                     `${node.attrs.label ?? node.attrs.id.name}`,
                 ];

@@ -65,7 +65,15 @@ class SearchController extends Controller
                 break;
         }
 
-        $resultsList = array_slice($resultsList, 0, request()->limit);
+        // $resultsList = array_slice($resultsList, 0, request()->limit);
+
+        if (is_array($resultsList)) {
+            $resultsList = array_slice($resultsList, 0, request()->limit);
+        } else {
+            // Assuming $resultsList is a collection
+            $resultsList = $resultsList->take(request()->limit);
+        }
+
         return response()->json($resultsList);
     }
 
@@ -157,9 +165,9 @@ class SearchController extends Controller
             $query->filter(request(['search']));
             // ->elementType(request('elementType'));
 
-            if(request()->advanced){
-             
-                if(array_key_exists('derivedElementType', request()->advanced)){
+            if (request()->advanced) {
+
+                if (array_key_exists('derivedElementType', request()->advanced)) {
                     // dd('hi');
                     $query->elementType($this->getElementTypeName(request()->advanced['derivedElementType']['derivedElementType']), request()->advanced['derivedElementType']['include'] === 'true');
                 }
@@ -209,11 +217,11 @@ class SearchController extends Controller
         $user = auth('sanctum')->user();
 
         $resultsList = User::latest()
-        ->filter(request(['search']))
-        ->hasUniverse($hasUniverse)
-        ->assignedToExistingContent($assignedToExisting, $user)
-        ->limit(request()->limit)
-        ->get();
+            ->filter(request(['search']))
+            ->hasUniverse($hasUniverse)
+            ->assignedToExistingContent($assignedToExisting, $user)
+            ->limit(request()->limit)
+            ->get();
 
         return $resultsList;
     }
@@ -236,23 +244,23 @@ class SearchController extends Controller
 
         $types = ['Universes', 'Series', 'Chapters', 'Pages'];
 
-           // concat user moderatableuniverses, moderatableseries, moderatablechapters while also filtering
-           $tempList = $tempList->concat($user->moderatableUniverses()->filter(request(['search']))->limit(request()->limit)->get());
+        // concat user moderatableuniverses, moderatableseries, moderatablechapters while also filtering
+        $tempList = $tempList->concat($user->moderatableUniverses()->filter(request(['search']))->limit(request()->limit)->get());
 
-           $tempList = $tempList->concat($user->moderatableSeries()->filter(request(['search']))->limit(request()->limit)->get());
-   
-           $tempList = $tempList->concat($user->moderatableChapters()->filter(request(['search']))->limit(request()->limit)->get());
+        $tempList = $tempList->concat($user->moderatableSeries()->filter(request(['search']))->limit(request()->limit)->get());
+
+        $tempList = $tempList->concat($user->moderatableChapters()->filter(request(['search']))->limit(request()->limit)->get());
 
         foreach ($types as $type) {
             // if (request('include' . $type) != false) {
-                if (true) {
+            if (true) {
                 $method = lcfirst($type);
 
                 $tempList = $tempList->concat($user->$method()->filter(request(['search']))->limit(request()->limit)->get());
             }
         }
 
-     
+
 
         $tempList = $tempList->sortByDesc('updated_at')
             ->take(request()->limit);
