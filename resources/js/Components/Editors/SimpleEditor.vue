@@ -75,7 +75,7 @@
     </div>
 
     <div class="bg-black text-white">
-        <editor-content class="p-4 editor-field" :editor="editor" @click="updateMouseClickPosition($event)"/>
+        <editor-content class="p-4 editor-field" :editor="editor" @click="updateMouseClickPosition($event)" />
     </div>
 
     <div id="editorHolder" :style="{ position: 'fixed', top: mouseClickY + 'px', left: mouseClickX + 'px' }"
@@ -163,7 +163,16 @@ onBeforeUnmount(() => {
     editor.value.destroy()
 })
 
+// This watcher fixes the bug where the cursor jumps to the end of the editor when the modelValue changes
 watch(() => props.modelValue, (value) => {
+
+    // JSON
+    const isSame = JSON.stringify(editor.value.getJSON()) === JSON.stringify(value)
+
+    if (isSame) {
+        return
+    }
+
     editor.value.commands.setContent(value, false)
 })
 </script>
