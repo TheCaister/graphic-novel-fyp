@@ -75,176 +75,111 @@
     </div>
 
     <div class="bg-black text-white">
-        <editor-content class="p-4 editor-field" :editor="editor"  />
+        <editor-content class="p-4 editor-field" :editor="editor" />
     </div>
 </template>
-  
 
-
-
-<script>
+<script setup>
+import { onMounted, onBeforeUnmount, ref, watch, defineProps, defineEmits } from 'vue'
 import Mention from '@tiptap/extension-mention'
 import StarterKit from '@tiptap/starter-kit'
-import { Editor, EditorContent } from '@tiptap/vue-3'
 import suggestion from './suggestion'
+import { Editor, EditorContent } from '@tiptap/vue-3'
 
-function testing() {
-    // Your code here
+const props = defineProps({
+    modelValue: {
+        type: Object,
+    },
+})
+
+const emits = defineEmits(['update:modelValue'])
+
+const editor = ref(null)
+
+const testing = () => {
     console.log('testing')
 }
 
-export default {
-
-    components: {
-        EditorContent,
-    },
-
-    props: {
-        modelValue: {
-            type: Object,
-        },
-    },
-
-    emits: ['update:modelValue'],
-
-    data() {
-        return {
-            editor: null,
-        }
-    },
-
-    watch: {
-        modelValue(value) {
-            // HTML
-            // const isSame = this.editor.getHTML() === value
-
-            // JSON
-            // const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)
-
-            // if (isSame) {
-            //     return
-            // }
-
-            // console.log(value)
-
-            this.editor.commands.setContent(value, false)
-        },
-    },
-
-    methods: {
-        removePfromList() {
-            const newHTML = this.editor.getHTML().replaceAll(/<li><p>(.*?)<\/p><(\/?)(ol|li|ul)>/gi, "<li>$1<$2$3>")
-
-            this.editor.commands.setContent(newHTML, false)
-        },
-    },
-
-    mounted() {
-
-        console.log('editor mounted')
-
-        // Defining custom mention
-        const CustomMention = Mention.extend({
-
-            renderHTML(props) {
-                const { node } = props;
-                let id = node.attrs.id;
-
-                console.log('Im... ALIVE!!')
-                console.log(props);
-                testing()
-
-                return [
-                    'button',
-                    {
-                        style: 'color: red; border: 2px solid pink;',
-                        target: '_blank',
-                        //   Onclick function
-                        onclick: `testing(null)`,
-                    },
-                    `${node.attrs.label ?? node.attrs.id.name}`,
-                ];
-            },
-        });
-
-        this.editor = new Editor({
-            extensions: [
-                StarterKit.configure(
-                    {
-                        bulletList: {
-                            HTMLAttributes: {
-                                class: 'list-disc list-inside list',
-                            },
-                        },
-                        orderedList: {
-                            HTMLAttributes: {
-                                class: 'list-decimal list-inside list',
-                            },
-                        },
-                        blockquote: {
-                            HTMLAttributes: {
-                                class: 'border-l-4 border-gray-400 pl-4',
-                            },
-                        },
-                        horizontalRule: {
-                            HTMLAttributes: {
-                                class: 'border-0 border-t-2 border-gray-400 my-4',
-                            },
-                        },
-                    }
-                ),
-                CustomMention.configure({
-                    HTMLAttributes: {
-                        class: 'mention',
-                    },
-                    renderLabel({ options, node }) {
-                        // console.log(node)
-
-                        // node.attrs.id is the element object that is returned when a suggestion is selected.
-                        return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id.name}`
-                    },
-                    suggestion,
-                }),
-            ],
-            content: this.modelValue,
-            onUpdate: () => {
-
-                // this.editor.commands.setContent(, false)
-
-                // console.log(this.editor.getHTML().replaceAll(/<li><p>(.*?)<\/p><(\/?)(ol|li|ul)>/gi, "<li>$1<$2$3>"))
-                // HTML
-                // Emit only the text in the editor, excluding the HTML tags
-                // this.$emit('update:modelValue', this.editor.getHTML().replace(/<[^>]+>/g, ''))
-
-                // this.$emit('update:modelValue', this.editor.getHTML())
-
-                // JSON
-                // this.$emit('update:modelValue', this.editor.getJSON())
-
-                // this.editor.commands.setContent(before, false)
-
-                // console.log(this.editor.getJSON())
-
-                // In before.content, Remove any entry that has an null text field
-                // Go through each node in the content array
-
-                // console.log(this.editor.getJSON())
-
-                console.log('emitting!!')
-
-                this.$emit('update:modelValue', JSON.parse(JSON.stringify(this.editor.getJSON())))
-                // console.log(this.editor.getJSON());
-            },
-        })
-    },
-
-
-
-    beforeUnmount() {
-        this.editor.destroy()
-    },
+const removePfromList = () => {
+    const newHTML = editor.value.getHTML().replaceAll(/<li><p>(.*?)<\/p><(\/?)(ol|li|ul)>/gi, "<li>$1<$2$3>")
+    editor.value.commands.setContent(newHTML, false)
 }
+
+const CustomMention = Mention.extend({
+    renderHTML(props) {
+        const { node } = props;
+        let id = node.attrs.id;
+
+        console.log('Im... ALIVE!!')
+        console.log(props);
+        testing()
+
+        return [
+            'button',
+            {
+                style: 'color: red; border: 2px solid pink;',
+                target: '_blank',
+                onclick: `testing(null)`,
+            },
+            `${node.attrs.label ?? node.attrs.id.name}`,
+        ];
+    },
+});
+
+onMounted(() => {
+    console.log('editor mounted')
+    editor.value = new Editor({
+        extensions: [
+            StarterKit.configure(
+                {
+                    bulletList: {
+                        HTMLAttributes: {
+                            class: 'list-disc list-inside list',
+                        },
+                    },
+                    orderedList: {
+                        HTMLAttributes: {
+                            class: 'list-decimal list-inside list',
+                        },
+                    },
+                    blockquote: {
+                        HTMLAttributes: {
+                            class: 'border-l-4 border-gray-400 pl-4',
+                        },
+                    },
+                    horizontalRule: {
+                        HTMLAttributes: {
+                            class: 'border-0 border-t-2 border-gray-400 my-4',
+                        },
+                    },
+                }
+            ),
+            CustomMention.configure({
+                HTMLAttributes: {
+                    class: 'mention',
+                },
+                renderLabel({ options, node }) {
+                    return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id.name}`
+                },
+                suggestion,
+            }),
+        ],
+        content: props.modelValue,
+        onUpdate: () => {
+            emits('update:modelValue', JSON.parse(JSON.stringify(editor.value.getJSON())))
+        },
+    })
+})
+
+onBeforeUnmount(() => {
+    editor.value.destroy()
+})
+
+watch(() => props.modelValue, (value) => {
+    editor.value.commands.setContent(value, false)
+})
 </script>
+
 
 <style>
 /* Change how the mention looks here */
