@@ -75,8 +75,11 @@
     </div>
 
     <div class="bg-black text-white">
-        <editor-content class="p-4 editor-field" :editor="editor" />
+        <editor-content class="p-4 editor-field" :editor="editor" @click="updateMouseClickPosition($event)"/>
     </div>
+
+    <div id="editorHolder" :style="{ position: 'fixed', top: mouseClickY + 'px', left: mouseClickX + 'px' }"
+        class=" z-10"></div>
 </template>
 
 <script setup>
@@ -85,9 +88,8 @@ import Mention from '@tiptap/extension-mention'
 import StarterKit from '@tiptap/starter-kit'
 import suggestion from './suggestion'
 import { Editor, EditorContent, VueNodeViewRenderer } from '@tiptap/vue-3'
+
 import MentionItem from './MentionItem.vue'
-
-
 
 const props = defineProps({
     modelValue: {
@@ -99,17 +101,24 @@ const emits = defineEmits(['update:modelValue'])
 
 const editor = ref(null)
 
+const mouseClickX = ref(0)
+const mouseClickY = ref(0)
+
 const removePfromList = () => {
     const newHTML = editor.value.getHTML().replaceAll(/<li><p>(.*?)<\/p><(\/?)(ol|li|ul)>/gi, "<li>$1<$2$3>")
     editor.value.commands.setContent(newHTML, false)
 }
 
 const CustomMention = Mention.extend({
-
     addNodeView() {
-    return VueNodeViewRenderer(MentionItem)
-  },
+        return VueNodeViewRenderer(MentionItem)
+    },
 });
+
+function updateMouseClickPosition(event) {
+    mouseClickX.value = event.clientX;
+    mouseClickY.value = event.clientY;
+}
 
 onMounted(() => {
     // console.log('editor mounted')
@@ -140,12 +149,6 @@ onMounted(() => {
                 }
             ),
             CustomMention.configure({
-                HTMLAttributes: {
-                    class: 'mention',
-                },
-                renderLabel({ options, node }) {
-                    return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id.name}`
-                },
                 suggestion,
             }),
         ],
