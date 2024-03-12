@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChapterController;
+use App\Http\Controllers\ElementController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SeriesController;
@@ -57,7 +58,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/elements/assigned', [SearchController::class, 'getAssignedElements'])->name('elements.get-assigned-elements');
 
-    Route::get('/elements', [App\Http\Controllers\ElementController::class, 'getElements'])->name('elements.get-elements');
+    // Get element by id
+    Route::get('/elements/{element}', [ElementController::class, 'getElementById'])->name('elements.get-element');
+
+    Route::get('/elements', [ElementController::class, 'getElements'])->name('elements.get-elements');
 
     Route::delete('/thumbnail', [UploadController::class, 'deleteThumbnail'])->name('delete-thumbnail');
 

@@ -84,6 +84,9 @@ export default {
     getUniverse(universeId){
         return axios.get('/api/universes/' + universeId)
     },
+    getElement(elementId){
+        return axios.get('/api/elements/' + elementId)
+    },
     getUniverseThumbnail(universeId){
         return axios.get('/api/universes/' + universeId + '/thumbnail')
     },

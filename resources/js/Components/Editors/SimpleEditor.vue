@@ -84,7 +84,10 @@ import { onMounted, onBeforeUnmount, ref, watch, defineProps, defineEmits } from
 import Mention from '@tiptap/extension-mention'
 import StarterKit from '@tiptap/starter-kit'
 import suggestion from './suggestion'
-import { Editor, EditorContent } from '@tiptap/vue-3'
+import { Editor, EditorContent, VueNodeViewRenderer } from '@tiptap/vue-3'
+import MentionItem from './MentionItem.vue'
+
+
 
 const props = defineProps({
     modelValue: {
@@ -101,31 +104,11 @@ const removePfromList = () => {
     editor.value.commands.setContent(newHTML, false)
 }
 
-function testing(){
-    console.log('testing')
-}
-
 const CustomMention = Mention.extend({
-    renderHTML(props) {
-        const { node } = props;
-        let id = node.attrs.id;
 
-        console.log('Im... ALIVE!!')
-        console.log(node);
-        node.attrs.label = 'test'
-        testing()
-
-        return [
-            'a',
-            {
-                // Go to the edit page of the element
-                href: route('elements.edit', node.attrs.id.element_id),
-                style: 'color: red; border: 2px solid pink;',
-            },
-            // `${node.attrs.label ?? node.attrs.id.name}`,
-            `${node.attrs.label}`,
-        ];
-    },
+    addNodeView() {
+    return VueNodeViewRenderer(MentionItem)
+  },
 });
 
 onMounted(() => {

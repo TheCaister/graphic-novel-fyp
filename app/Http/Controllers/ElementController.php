@@ -306,6 +306,11 @@ class ElementController extends Controller
         return response()->json($elements);
     }
 
+    public function getElementById(Element $element)
+    {
+        return response()->json($element);
+    }
+
     public function getElementable($type, $id)
     {
 
