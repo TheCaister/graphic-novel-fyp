@@ -36,8 +36,9 @@
 
                 <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
                     :key="item.i" class="rounded-lg border-4 border-pink-500 text-white p-4 bg-black z-0"
-                    @mousemove.stop="showAddElementHint = false"
-                    @click.stop="console.log(selectedGridId); selectedGridId = item.i; isGridMenuOpen = true; updateMouseClickPosition($event)">
+                    @mousemove.stop="showAddElementHint = false; console.log('hi'); isDragging = true; stopIsDraggingAfterDelay(50)"
+                    @mouseup="stopIsDraggingAfterDelay(10)" 
+                    @click.stop="console.log(selectedGridId); selectedGridId = item.i; handleClick(); updateMouseClickPosition($event)">
 
                     {{ item.i }}
                     <span class="absolute top-0 right-0 cursor-pointer mt-2 mr-2"
@@ -62,7 +63,7 @@
             }"></div>
 
             </GridLayout>
-            
+
             <!-- <div class="flex justify-center">
                 <button>
                     &lt;- </button>
@@ -148,6 +149,7 @@ const mouseClickY = ref(0)
 const colNum = 12
 
 const isMirrored = ref(false)
+const isDragging = ref(false)
 
 const element = defineModel()
 
@@ -269,6 +271,21 @@ function updateMousePosition(event) {
     showAddElementHint.value = true
 }
 
+function stopIsDraggingAfterDelay(delay){
+    setTimeout(() => {
+        isDragging.value = false
+    }, delay)
+
+}
+
+function handleClick() {
+    if (!isDragging.value) {
+        // Show your menu here
+        console.log('clicked')
+        isGridMenuOpen.value = true
+    }
+}
+
 function handleMenuItemClicked(event, grid) {
 
 
@@ -280,7 +297,7 @@ function handleMenuItemClicked(event, grid) {
         case 'addElements':
             console.log('add elements')
             isSearchElementModalOpen.value = true
-          
+
             break
         default:
             console.log('default')
