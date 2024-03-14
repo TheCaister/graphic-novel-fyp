@@ -3,125 +3,217 @@
         <editor-content class="p-4 editor-field border-4 border-white" :editor="editor" @itemSelected="itemSelected" />
     </div>
 </template>
-  
-<script>
+
+<script setup>
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import Mention from '@tiptap/extension-mention'
 import Paragraph from '@tiptap/extension-paragraph'
-import { Editor, EditorContent } from '@tiptap/vue-3'
-import suggestion from './SuggestionAdmin/suggestion'
-
+import { Editor, EditorContent, VueNodeViewRenderer } from '@tiptap/vue-3'
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
+import { defineProps, defineEmits } from 'vue'
+import MentionItemDeletable from './MentionItemDeletable.vue'
 
-export default {
+import { VueRenderer } from '@tiptap/vue-3'
+import tippy from 'tippy.js'
 
-    components: {
-        EditorContent,
+import MentionList from '@/Components/MentionList.vue'
+import APICalls from '@/Utilities/APICalls'
+
+const props = defineProps({
+    modelValue: {
+        type: Object,
     },
+})
 
-    props: {
-        modelValue: {
-            type: Object,
-        },
+const emits = defineEmits(['update:modelValue', 'addAdmin'])
+
+const editor = ref(null)
+
+const CustomMention = Mention.extend({
+    addNodeView() {
+        return VueNodeViewRenderer(MentionItemDeletable)
     },
-
-    emits: ['update:modelValue', 'addAdmin'],
-
-    data() {
+    addOptions() {
         return {
-            editor: null,
+            suggestion: {
+                items: async ({ query }) => {
+        // This is the list of items that will be passed to the MentionList component
+        // we can do all this, or we can simply call the api here
+        // return APICalls.searchElements(query, 5, 'users')
+
+      
+
+        return APICalls.searchMention(query, 5, 'users')
+
+
+
+    },
+    command: ({ editor, range, props }) => {
+        // increase range.to by one when the next node is of type "text"
+        // and starts with a space character
+        const nodeAfter = editor.view.state.selection.$to.nodeAfter
+        const overrideSpace = nodeAfter?.text?.startsWith(' ')
+
+        if (overrideSpace) {
+            range.to += 1
         }
+
+        console.log('inserting admin...')
+
+        editor
+            .chain()
+            .focus()
+            .insertContentAt(range, [
+                {
+                    type: 'mention',
+                    attrs: props,
+                },
+                {
+                    type: 'text',
+                    text: ' ',
+                },
+            ])
+            .run()
+
+        editor.contentComponent.emit('itemSelected', props)
+
+        window.getSelection()?.collapseToEnd()
     },
 
-    watch: {
-        modelValue(value) {
-            // HTML
-            // const isSame = this.editor.getHTML() === value
+    render: () => {
+        // Initialize the VueRenderer with the MentionList component
+        let component
+        let popup
 
-            // JSON
-            const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)
+        return {
 
-            if (isSame) {
-                return
+            onStart: props => {
+                // We prepare a new VueRenderer instance with the MentionList component,
+                // and mount it to a DOM element. We also pass the editor instance and
+                // the props from the `suggest` method to the component.
+                // We need to set the editor because we want to call commands like
+                // `chain` or `insertContent` from the component.
+                component = new VueRenderer(MentionList, {
+                    // using vue 2:
+                    // parent: this,
+                    // propsData: props,
+                    // using vue 3:
+                    props,
+                    editor: props.editor,
+                })
+
+                // console.log(props)
+
+                // clientRect is the position of the caret
+                if (!props.clientRect) {
+                    return
+                }
+
+                popup = tippy('body', {
+                    getReferenceClientRect: props.clientRect,
+                    appendTo: () => document.body,
+                    content: component.element,
+                    showOnCreate: true,
+                    interactive: true,
+                    //   determines the events that cause the tippy to show.
+                    // With manual, the tippy must be triggered programmatically.
+                    trigger: 'manual',
+                    placement: 'bottom-start',
+                })
+            },
+
+            //   Updating the props
+            onUpdate(props) {
+                component.updateProps(props)
+
+                if (!props.clientRect) {
+                    return
+                }
+
+                popup[0].setProps({
+                    getReferenceClientRect: props.clientRect,
+                })
+            },
+
+            //   If the escape key is pressed, we hide the suggester.
+            // Otherwise we call the `onKeyDown` method of the VueRenderer instance.
+            onKeyDown(props) {
+                if (props.event.key === 'Escape') {
+                    popup[0].hide()
+
+                    return true
+                }
+
+                return component.ref?.onKeyDown(props)
+            },
+
+            //   When exiting the suggester, we destroy the VueRenderer instance.
+            onExit() {
+                // console.log('exit')
+                // console.log(popup)
+                // popup[0].destroy()
+                // component.destroy()
+
+                if (popup) {
+                    popup[0].destroy()
+                }
+                if (component) {
+                    component.destroy()
+                }
+
+                popup = null
+                component = null
+            },
+        }
+    },
             }
-
-            // console.log(this.editor.getJSON())
-
-            this.editor.commands.setContent(value, false)
-        },
-    },
-
-    methods: {
-        itemSelected(props) {
-            this.$emit('addAdmin', props.id)
-            // console.log('Deleting...')
-            this.editor.commands.setContent('', false)
         }
     },
+})
 
-    mounted() {
-        // Defining custom mention
-        const CustomMention = Mention.extend({
+watch(() => props.modelValue, (value) => {
+    const isSame = JSON.stringify(editor.value.getJSON()) === JSON.stringify(value)
 
-            renderHTML(props) {
-                const { node } = props;
-                let id = node.attrs.id;
-                return [
-                    'button',
-                    {
-                        style: 'color: red; border: 2px solid pink;',
-                        target: '_blank',
-                        //   Onclick function
-                    },
-                    `${node.attrs.label ?? node.attrs.id.name}`,
-                ];
-            },
-        });
+    if (!isSame) {
+        editor.value.commands.setContent(value, false)
+    }
+}, { deep: true })
 
-        this.editor = new Editor({
-            extensions: [
-                Document,
-                Text,
-                Paragraph,
-                CustomMention.configure({
-                    HTMLAttributes: {
-                        class: 'mention',
-                    },
-                    renderLabel({ options, node }) {
-                        // console.log(node)
-
-                        // node.attrs.id is the element object that is returned when a suggestion is selected.
-                        // return `${options.suggestion_admin.char}${node.attrs.label ?? node.attrs.id.element_name}`
-                        return `${options.suggestion.char}${node.attrs.label ?? node.attrs.id.name}`
-
-                    },
-                    suggestion,
-
-                }),
-            ],
-            content: this.modelValue,
-            onUpdate: () => {
-                // console.log(JSON.parse(JSON.stringify(this.editor.getJSON())))
-                // this.$emit('update:modelValue', JSON.parse(JSON.stringify(this.editor.getJSON())))
-                // console.log('updated...')
-            },
-        })
-    },
-
-    beforeUnmount() {
-        this.editor.destroy()
-    },
+function itemSelected(props) {
+    emits('addAdmin', props.id)
+    // editor.value.commands.setContent('', false)
 }
+
+onMounted(() => {
+
+
+    editor.value = new Editor({
+        extensions: [
+            Document,
+            Text,
+            Paragraph,
+            CustomMention.configure({
+                renderLabel() {
+                    return 'hi guys'
+                },
+            }),
+        ],
+        content: props.modelValue,
+        onUpdate: () => {
+            emits('update:modelValue', JSON.parse(JSON.stringify(editor.value.getJSON())))
+        },
+    })
+})
+
+onBeforeUnmount(() => {
+    if (editor.value) {
+        editor.value.destroy()
+    }
+})
 </script>
 
 <style>
-/* Change how the mention looks here */
-.mention {
-    border: 3px solid #c62424;
-    border-radius: 0.4rem;
-    padding: 0.1rem 0.3rem;
-    box-decoration-break: clone;
-}
 
 .not-active {
     background-color: #fff;

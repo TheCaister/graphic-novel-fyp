@@ -65,8 +65,10 @@ const files = computed(() => {
     return [];
 })
 
-onClickOutside(modal, () => {
-    close()
+onClickOutside(modal, (event) => {
+    if (event.target.id !== "mention-list") {
+        close()
+    }
 })
 
 function submit() {
