@@ -232,7 +232,11 @@ class ElementController extends Controller
         if (request()->contentType === 'Page') {
             $page = Page::find(request()->content_id);
             $chapter = $page->chapter;
-            $selectedContent = $this->generateSelectedContent('Chapter', $chapter->chapter_id);
+            return redirect()->route('elements.assign', [
+                'contentType' => 'Chapter',
+                'content_id' => $chapter->chapter_id,
+                'preSelectedElements' => request()->preSelectedElements ? request()->preSelectedElements : [],
+            ]);
         } else {
             $selectedContent = $this->generateSelectedContent(request()->contentType, request()->content_id);
         }
@@ -279,7 +283,7 @@ class ElementController extends Controller
             foreach ($request->selectedElementList as $element) {
                 if ($element['checked']) {
                     // dd('attaching...');
-                    $curContent->elements()->attach($element['element_id']);
+                    $curContent->elements()->syncWithoutDetaching($element['element_id']);
                 } else {
                     $curContent->elements()->detach($element['element_id']);
                 }
