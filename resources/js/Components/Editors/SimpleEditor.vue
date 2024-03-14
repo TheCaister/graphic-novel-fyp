@@ -86,8 +86,14 @@
 import { onMounted, onBeforeUnmount, ref, watch, defineProps, defineEmits } from 'vue'
 import Mention from '@tiptap/extension-mention'
 import StarterKit from '@tiptap/starter-kit'
-import suggestion from './suggestion'
 import { Editor, EditorContent, VueNodeViewRenderer } from '@tiptap/vue-3'
+
+import { VueRenderer } from '@tiptap/vue-3'
+import tippy from 'tippy.js'
+
+import MentionList from '@/Components/MentionList.vue'
+import APICalls from '@/Utilities/APICalls'
+
 
 import MentionItem from './MentionItem.vue'
 
@@ -110,6 +116,82 @@ const removePfromList = () => {
 }
 
 const CustomMention = Mention.extend({
+
+    addOptions() {
+        return {
+            suggestion: {
+                items: async ({ query }) => {
+                    console.log(mouseClickX.value)
+                    const url = new URL(window.location.href)
+                    const contentType = url.searchParams.get("contentType")
+                    const contentId = url.searchParams.get("content_id")
+                    return APICalls.searchMention(query, 5, 'elements', contentType, contentId)
+                },
+                command: ({ editor, range, props }) => {
+                    const nodeAfter = editor.view.state.selection.$to.nodeAfter
+                    const overrideSpace = nodeAfter?.text?.startsWith(' ')
+                    if (overrideSpace) {
+                        range.to += 1
+                    }
+                    editor.chain().focus().insertContentAt(range, [
+                        { type: 'mention', attrs: props },
+                        { type: 'text', text: ' ' },
+                    ]).run()
+                    editor.contentComponent.emit('itemSelected', props)
+                    window.getSelection()?.collapseToEnd()
+                },
+                render: () => {
+                    let component, popup
+                    return {
+                        onStart: props => {
+                            component = new VueRenderer(MentionList, {
+                                props,
+                                editor: props.editor,
+                            })
+                            if (!props.clientRect) {
+                                return
+                            }
+                            popup = tippy('body', {
+                                getReferenceClientRect: props.clientRect,
+                                appendTo: () => document.body,
+                                content: component.element,
+                                showOnCreate: true,
+                                interactive: true,
+                                trigger: 'manual',
+                                placement: 'bottom-start',
+                            })
+                        },
+                        onUpdate: props => {
+                            component.updateProps(props)
+                            if (!props.clientRect) {
+                                return
+                            }
+                            popup[0].setProps({
+                                getReferenceClientRect: props.clientRect,
+                            })
+                        },
+                        onKeyDown: props => {
+                            if (props.event.key === 'Escape') {
+                                popup[0].hide()
+                                return true
+                            }
+                            return component.ref?.onKeyDown(props)
+                        },
+                        onExit: () => {
+                            if (popup) {
+                                popup[0].destroy()
+                            }
+                            if (component) {
+                                component.destroy()
+                            }
+                            popup = null
+                            component = null
+                        },
+                    }
+                },
+            },
+        }
+    },
     addNodeView() {
         return VueNodeViewRenderer(MentionItem)
     },
@@ -149,7 +231,9 @@ onMounted(() => {
                 }
             ),
             CustomMention.configure({
-                suggestion,
+                renderLabel() {
+                    return ''
+                },
             }),
         ],
         content: props.modelValue,
