@@ -66,7 +66,7 @@ function updateChildrenElements(elements) {
 function saveElement(assign = false) {
     // form.element = props.element
 
-    console.log(form.element)
+    console.log(form)
 
     form.assign = assign
     form.contentType = assign ? props.parentContentType : ''

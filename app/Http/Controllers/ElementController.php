@@ -75,7 +75,7 @@ class ElementController extends Controller
         return redirect()->route('elements.edit', [
             'element' => $element->element_id,
             'contentType' => $elementable,
-            'contentId' => $elementable_id,
+            'content_id' => $elementable_id,
         ]);
     }
 
@@ -119,8 +119,6 @@ class ElementController extends Controller
        
 
         $element->content = json_decode($element->content);
-
-        // dd($element);
 
         if (request()->has('contentType')) {
             return Inertia::render(
