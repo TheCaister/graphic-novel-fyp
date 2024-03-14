@@ -12,7 +12,7 @@ import { Editor, EditorContent, VueNodeViewRenderer } from '@tiptap/vue-3'
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
 import { defineProps, defineEmits } from 'vue'
-import MentionItemAdmin from './MentionItemAdmin.vue'
+import MentionItemIncludedElements from './MentionItemIncludedElements.vue'
 
 import { VueRenderer } from '@tiptap/vue-3'
 import tippy from 'tippy.js'
@@ -32,7 +32,7 @@ const editor = ref(null)
 
 const CustomMention = Mention.extend({
     addNodeView() {
-        return VueNodeViewRenderer(MentionItemAdmin)
+        return VueNodeViewRenderer(MentionItemIncludedElements)
     },
     addOptions() {
         return {
@@ -44,7 +44,7 @@ const CustomMention = Mention.extend({
 
       
 
-        return APICalls.searchMention(query, 5, 'users')
+        return APICalls.searchMention(query, 5, 'elements')
 
 
 

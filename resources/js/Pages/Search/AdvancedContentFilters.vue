@@ -19,8 +19,10 @@
             </div>
 
             <div>
-                <label for="" class="block">Included elements</label>
-                <input type="text" class="w-full text-black"/>
+                <!-- <label for="" class="block">Included elements</label>
+                <input type="text" class="w-full text-black"/> -->
+
+                <IncludedElementsEditor class="w-64" />
             </div>
         </div>
 
@@ -36,6 +38,7 @@
 
 <script setup>
 import TriCheckbox from './TriCheckbox.vue';
+import IncludedElementsEditor from '../../Components/Editors/IncludedElementsEditor.vue'
 // import Checkbox from './Checkbox.vue';
 
 import { defineEmits } from 'vue';

@@ -39,11 +39,15 @@ const props = defineProps(
             type: Function,
             required: true,
         },
-
+        editor: {
+            type: Object,
+            required: true,
+        }
     }
 )
 
 onMounted(() => {
-    console.log(props.node)
+    // console.log(props.editor.contentComponent)
+    // props.editor.contentComponent.emit('hi')
 })
 </script>

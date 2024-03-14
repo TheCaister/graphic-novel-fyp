@@ -95,7 +95,7 @@ import MentionList from '@/Components/MentionList.vue'
 import APICalls from '@/Utilities/APICalls'
 
 
-import MentionItem from './MentionItem.vue'
+import MentionItemSimpleText from './MentionItemSimpleText.vue'
 
 const props = defineProps({
     modelValue: {
@@ -116,7 +116,9 @@ const removePfromList = () => {
 }
 
 const CustomMention = Mention.extend({
-
+    addNodeView() {
+        return VueNodeViewRenderer(MentionItemSimpleText)
+    },
     addOptions() {
         return {
             suggestion: {
@@ -192,9 +194,7 @@ const CustomMention = Mention.extend({
             },
         }
     },
-    addNodeView() {
-        return VueNodeViewRenderer(MentionItem)
-    },
+
 });
 
 function updateMouseClickPosition(event) {
@@ -318,4 +318,4 @@ button:disabled {
 .ProseMirror:focus {
     outline: none;
 }
-</style>
+</style>./MentionItemSimpleText.vue
