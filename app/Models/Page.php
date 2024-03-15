@@ -123,4 +123,11 @@ class Page extends Model implements HasMedia
         //     $query->whereRaw("LOWER(universe_name) LIKE CONCAT('%', LOWER(?), '%')", [$search]);
         // });
     }
+
+    public function scopeIncludedElements($query, $elementIdList)
+    {
+        $query->whereHas('elements', function ($query) use ($elementIdList) {
+            $query->whereIn('elements.element_id', $elementIdList);
+        });
+    }
 }

@@ -146,4 +146,11 @@ class Chapter extends Model implements HasMedia
             $query->whereRaw("LOWER(chapter_title) LIKE CONCAT('%', LOWER(?), '%')", [$search]);
         });
     }
+
+    public function scopeIncludedElements($query, $elementIdList)
+    {
+        $query->whereHas('elements', function ($query) use ($elementIdList) {
+            $query->whereIn('elements.element_id', $elementIdList);
+        });
+    }
 }

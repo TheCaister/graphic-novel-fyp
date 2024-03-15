@@ -230,7 +230,13 @@ class SearchController extends Controller
     private function searchContent()
     {
 
+
+        // dd(request()->all());
         $user = auth('sanctum')->user();
+
+        $includedElements = isset(request('advanced')['includedElements'])
+            ? array_map('intval', request('advanced')['includedElements'])
+            : [];
 
         $resultsList = [];
 
@@ -245,19 +251,28 @@ class SearchController extends Controller
 
         $types = ['Universes', 'Series', 'Chapters', 'Pages'];
 
-        // concat user moderatableuniverses, moderatableseries, moderatablechapters while also filtering
-        $tempList = $tempList->concat($user->moderatableUniverses()->filter(request(['search']))->limit(request()->limit)->get());
+        // // concat user moderatableuniverses, moderatableseries, moderatablechapters while also filtering
+        // $tempList = $tempList->concat($user->moderatableUniverses()->filter(request(['search']))->limit(request()->limit)->get());
 
-        $tempList = $tempList->concat($user->moderatableSeries()->filter(request(['search']))->limit(request()->limit)->get());
+        // $tempList = $tempList->concat($user->moderatableSeries()->filter(request(['search']))->limit(request()->limit)->get());
 
-        $tempList = $tempList->concat($user->moderatableChapters()->filter(request(['search']))->limit(request()->limit)->get());
+        // $tempList = $tempList->concat($user->moderatableChapters()->filter(request(['search']))->limit(request()->limit)->get());
 
         foreach ($types as $type) {
             // if (request('include' . $type) != false) {
             if (true) {
+
+                $moderatableMethod = 'moderatable' . $type;
+
+                if ($type !== 'Pages') {
+                    $tempList = $tempList->concat($user->$moderatableMethod()->filter(request(['search']))->limit(request()->limit)->get());
+                }
+
                 $method = lcfirst($type);
 
-                $tempList = $tempList->concat($user->$method()->filter(request(['search']))->limit(request()->limit)->get());
+                $tempList = $tempList->concat($user->$method()->filter(request(['search']))
+                ->includedElements($includedElements)
+                ->limit(request()->limit)->get());
             }
         }
 

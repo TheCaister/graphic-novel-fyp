@@ -115,6 +115,8 @@ const AdvancedFiltersComponent = computed(() => {
 
 function search() {
 
+    // console.log(form.advanced)
+
     form.get(route('search'), {
         onFinish: () => {
             console.log('success')
@@ -138,14 +140,14 @@ function test() {
     console.log(form)
 }
 
-function updateAdvancedSearch({ name, value }) {
-    if (value === null) {
-        delete form.advanced[name];
-    } else {
-        form.advanced[name] = value;
-    }
-    console.log(form.advanced);
-}
+// function updateAdvancedSearch({ name, value }) {
+//     if (value === null) {
+//         delete form.advanced[name];
+//     } else {
+//         form.advanced[name] = value;
+//     }
+//     console.log(form.advanced);
+// }
 
 onMounted(() => {
     form.search = props.searchParams.search;

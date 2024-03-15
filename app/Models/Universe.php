@@ -125,10 +125,16 @@ class Universe extends Model implements HasMedia
         $query->where('owner_id', $user->id);
     }
 
-    public function scopeIncludedElements($query, $elementType)
+    public function scopeIncludedElements($query, $elementIdList)
     {
-        $query->whereHas('elements', function ($query) use ($elementType) {
-            $query->where('derived_element_type', $elementType);
+        // dd($elementIdList);
+        $query->whereHas('elements', function ($query) use ($elementIdList) {
+            $query->whereIn('elements.element_id', $elementIdList);
         });
     }
+    // {
+    //     // $query->whereHas('elements', function ($query) use ($elementType) {
+    //     //     $query->where('derived_element_type', $elementType);
+    //     // });
+    // }
 }
