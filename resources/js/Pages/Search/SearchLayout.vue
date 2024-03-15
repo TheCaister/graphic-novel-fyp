@@ -1,4 +1,5 @@
 <template>
+
     <Head title="Search" />
 
     <div class="text-white text-lg bg-gray-500 flex flex-col">
@@ -54,22 +55,21 @@ import AdvancedElementFilters from './AdvancedElementFilters.vue';
 import AdvancedUserFilters from './AdvancedUserFilters.vue';
 
 const props = defineProps({
-    searchType: {
-        type: String,
-        default: 'users'
-    },
     initResultsList: {
         type: Array,
         default: []
+    },
+    searchParams: {
+        type: Object,
+        default: {}
     }
 })
 
 const resultsList = ref(props.initResultsList)
-// const searchType = ref(props.searchType)
 
 const form = useForm({
     search: '',
-    searchType: props.searchType,
+    searchType: '',
     // In advanced, it's a bunch of 
     // key : something like boolean to toggle that search option
     advanced: {},
@@ -80,7 +80,7 @@ const ResultsViewComponent = computed(() => {
     // return SearchUsersResults
 
     // Switch statement to return the correct dashboard view
-    switch (props.searchType) {
+    switch (form.searchType) {
         case 'content':
             return SearchContentResults
         case 'elements':
@@ -88,7 +88,7 @@ const ResultsViewComponent = computed(() => {
         case 'users':
             return SearchUsersResults
         default:
-            return SearchUsersResults
+        // return SearchUsersResults
     }
 })
 
@@ -102,7 +102,7 @@ const AdvancedFiltersComponent = computed(() => {
         case 'users':
             return AdvancedUserFilters
         default:
-            return AdvancedUserFilters
+        // return AdvancedUserFilters
     }
 })
 
@@ -111,17 +111,17 @@ const AdvancedFiltersComponent = computed(() => {
 function search() {
 
     form.get(route('search'), {
-            onFinish: () => {
-                console.log('success')
-                form.search = ''
-            }
-        })
+        onFinish: () => {
+            console.log('success')
+            form.search = ''
+        }
+    })
     // if (form.search !== '') {
     //     // router.get(route('search'), {
     //     //     search: form.search,
     //     // });
 
-       
+
     // }
 }
 
@@ -141,4 +141,12 @@ function updateAdvancedSearch({ name, value }) {
     }
     console.log(form.advanced);
 }
+
+onMounted(() => {
+    form.search = props.searchParams.search;
+    form.searchType = props.searchParams.searchType;
+    const { search, searchType, ...rest } = props.searchParams;
+    form.advanced = rest;
+
+})
 </script>

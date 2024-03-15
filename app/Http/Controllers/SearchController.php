@@ -41,6 +41,7 @@ class SearchController extends Controller
         return Inertia::render('Search/SearchLayout', [
             'searchType' => request()->searchType,
             'initResultsList' => $resultsList,
+            'searchParams' => request()->all(),
         ]);
     }
 
