@@ -74,7 +74,6 @@ function getParentContentType() {
         default:
             return ''
     }
-
 }
 </script>
 

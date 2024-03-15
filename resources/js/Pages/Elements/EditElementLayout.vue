@@ -4,7 +4,7 @@ import EditSimpleText from './SimpleText/EditSimpleText.vue';
 import EditMindMap from './Mindmap/EditMindMap.vue';
 import EditPanelPlanner from './PanelPlanner/EditPanelPlanner.vue';
 import ElementThumbnailModal from './ElementThumbnailModal.vue';
-import { onMounted, computed, ref, watch } from 'vue'
+import { onMounted, computed, ref, watch, provide } from 'vue'
 import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -54,6 +54,9 @@ const form = useForm({
     content_id: '',
     preSelectedElements: [],
 });
+
+provide('contentType', form.contentType)
+provide('contentId', form.content_id)
 
 const elementThumbnailImage = computed(() => {
     return form.element.element_thumbnail ? form.element.element_thumbnail : '/assets/black_page.jpg';
@@ -108,7 +111,7 @@ onMounted(() => {
         form.element.content = JSON.parse(form.element.content)
     }
 
-    console.log(form.element)
+    // console.log(form.element)
 
     // if form,element,content is null, set it to empty object
     // if (form.element.content === null) {

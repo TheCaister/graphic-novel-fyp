@@ -83,7 +83,7 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount, ref, watch, defineProps, defineEmits } from 'vue'
+import { onMounted, onBeforeUnmount, ref, watch, defineProps, defineEmits, inject } from 'vue'
 import Mention from '@tiptap/extension-mention'
 import StarterKit from '@tiptap/starter-kit'
 import { Editor, EditorContent, VueNodeViewRenderer } from '@tiptap/vue-3'
@@ -110,6 +110,9 @@ const editor = ref(null)
 const mouseClickX = ref(0)
 const mouseClickY = ref(0)
 
+const contentType = inject('contentType')
+const contentId = inject('contentId')
+
 const removePfromList = () => {
     const newHTML = editor.value.getHTML().replaceAll(/<li><p>(.*?)<\/p><(\/?)(ol|li|ul)>/gi, "<li>$1<$2$3>")
     editor.value.commands.setContent(newHTML, false)
@@ -123,11 +126,18 @@ const CustomMention = Mention.extend({
         return {
             suggestion: {
                 items: async ({ query }) => {
-                    console.log(mouseClickX.value)
-                    const url = new URL(window.location.href)
-                    const contentType = url.searchParams.get("contentType")
-                    const contentId = url.searchParams.get("content_id")
-                    return APICalls.searchMention(query, 5, 'elements', contentType, contentId)
+                    // const url = new URL(window.location.href)
+                    // const contentType = url.searchParams.get("contentType")
+                    // const contentId = url.searchParams.get("content_id")
+
+                    const mentionItems = await APICalls.searchMention(query, 5, 'elements', contentType, contentId)
+
+                    const mentionList = mentionItems.data.map(item => ({
+                        label: item.element_name,
+                        id: item.element_id
+                    }))
+
+                    return mentionList
                 },
                 command: ({ editor, range, props }) => {
                     const nodeAfter = editor.view.state.selection.$to.nodeAfter

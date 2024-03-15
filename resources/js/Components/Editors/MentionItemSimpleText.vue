@@ -2,7 +2,7 @@
     <node-view-wrapper class="inline-block text-pink-500">
         <button id="editorHolder" @click="isGridMenuOpen = true;">
 
-            {{ node.attrs.id.element_name }}
+            {{ node.attrs.id.label }}
 
             <Teleport to="#editorHolder">
                 <Transition name="fade">
@@ -25,13 +25,10 @@ const isGridMenuOpen = ref(false)
 
 function setElementName(element_id) {
     APICalls.getElement(element_id).then(response => {
-        console.log('returning')
-        // return response.data.element_name
-        console.log(response.data.element_name)
         props.updateAttributes({
             id: {
-                ...props.node.attrs.id,
-                element_name: response.data.element_name
+                label: response.data.element_name,
+                id: response.data.element_id,
             }
         })
     }).catch(error => console.log(error))
@@ -66,7 +63,7 @@ function handleMenuItemClicked(event, grid) {
     // switch statement for event
     switch (event) {
         case 'visit':
-            router.visit(route('elements.edit', props.node.attrs.id.element_id))
+            router.visit(route('elements.edit', props.node.attrs.id.id))
             break
         default:
             console.log('default')
@@ -76,9 +73,7 @@ function handleMenuItemClicked(event, grid) {
 }
 
 onMounted(() => {
-    // console.log('mounted')
-    // console.log(props.node.attrs.id)
-    setElementName(props.node.attrs.id.element_id)
+    setElementName(props.node.attrs.id.id)
 })
 </script>
 
