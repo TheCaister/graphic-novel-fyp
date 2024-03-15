@@ -15,14 +15,14 @@
             <!-- input with label -->
             <div>
                 <label for="" class="block">Authors</label>
-                <input type="text" class="w-full text-black"/>
+                <input type="text" class="w-full text-black" />
             </div>
 
             <div>
                 <!-- <label for="" class="block">Included elements</label>
                 <input type="text" class="w-full text-black"/> -->
 
-                <IncludedElementsEditor class="w-64" />
+                <IncludedElementsEditor class="w-64" @addMentionItem="addElement" @removeMentionItem="removeElement" />
             </div>
         </div>
 
@@ -45,12 +45,32 @@ import { defineEmits } from 'vue';
 
 const emits = defineEmits(['updateAdvancedSearch'])
 
+const model = defineModel()
+
 function updateFilter(filterName, value) {
     emits('updateAdvancedSearch',
         {
             name: filterName,
             value: value
         })
+}
+
+function addElement(event) {
+    console.log('adding')
+    if (!model.value.includedElements) {
+        model.value.includedElements = [];
+    }
+    model.value.includedElements.push(event)
+    console.log(model.value)
+}
+
+function removeElement(event) {
+    console.log('removing')
+
+    model.value.includedElements = model.value.includedElements.filter((element) => element !== event)
+
+    console.log(model.value)
+
 }
 
 </script>

@@ -28,8 +28,13 @@
 
         <!-- Advanced search -->
         <div>
+            <!-- <KeepAlive>
+                <component :is="AdvancedFiltersComponent" @update-advanced-search="updateAdvancedSearch" v-model="form.advanced" />
+            </KeepAlive> -->
+
             <KeepAlive>
-                <component :is="AdvancedFiltersComponent" @update-advanced-search="updateAdvancedSearch" />
+                <component :is="AdvancedFiltersComponent" 
+                v-model="form.advanced" />
             </KeepAlive>
         </div>
 
@@ -94,7 +99,7 @@ const ResultsViewComponent = computed(() => {
 
 const AdvancedFiltersComponent = computed(() => {
     // Switch statement to return the correct dashboard view
-    switch (props.searchType) {
+    switch (form.searchType) {
         case 'content':
             return AdvancedContentFilters
         case 'elements':

@@ -37,6 +37,7 @@ onMounted(() => {
 })
 
 function removeElement() {
+    // console.log(props.editor.contentComponent)
     props.editor.contentComponent.emit('removeMentionItem', props.node.attrs.id.id)
     props.deleteNode()
 }

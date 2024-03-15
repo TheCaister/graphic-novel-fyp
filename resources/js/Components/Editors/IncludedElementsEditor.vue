@@ -1,6 +1,6 @@
 <template>
     <div class="bg-black text-white">
-        <editor-content class="p-4 editor-field border-4 border-white" :editor="editor" @itemSelected="itemSelected" />
+        <editor-content class="p-4 editor-field border-4 border-white" :editor="editor" @itemSelected="itemSelected" @removeMentionItem="removeMentionItem" />
     </div>
 </template>
 
@@ -26,7 +26,10 @@ const props = defineProps({
     },
 })
 
-const emits = defineEmits(['update:modelValue', 'addAdmin'])
+// const emits = defineEmits(['update:modelValue', 'addElement', 'removeElement'])
+const emits = defineEmits(['addMentionItem', 'removeMentionItem'])
+
+
 
 const editor = ref(null)
 
@@ -60,8 +63,6 @@ const CustomMention = Mention.extend({
                     if (overrideSpace) {
                         range.to += 1
                     }
-
-                    console.log('inserting admin...')
 
                     editor
                         .chain()
@@ -181,8 +182,12 @@ watch(() => props.modelValue, (value) => {
 }, { deep: true })
 
 function itemSelected(props) {
-    emits('addAdmin', props.id)
+    emits('addMentionItem', props.id.id)
     // editor.value.commands.setContent('', false)
+}
+
+function removeMentionItem(id) {
+    emits('removeMentionItem', id)
 }
 
 onMounted(() => {
@@ -201,7 +206,7 @@ onMounted(() => {
         ],
         content: props.modelValue,
         onUpdate: () => {
-            emits('update:modelValue', JSON.parse(JSON.stringify(editor.value.getJSON())))
+            // emits('update:modelValue', JSON.parse(JSON.stringify(editor.value.getJSON())))
         },
     })
 })
