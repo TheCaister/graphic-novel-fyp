@@ -2,10 +2,10 @@
 <template>
   <div class="items" id="mention-list">
 
-    <template v-if="this.items.data && this.items.data.length > 0">
+    <template v-if="(this.items && this.items.length > 0)">
       <button class="item" id="mention-list" :class="{ 'is-selected': index === selectedIndex }"
-        v-for="(item, index) in items.data" :key="index" @click="selectItem(index)" @mouseover="selectedIndex = index">
-        {{ item.name }}
+        v-for="(item, index) in items" :key="index" @click="selectItem(index)" @mouseover="selectedIndex = index">
+        {{ item.label }}
       </button>
     </template>
     <div class="item" v-else>
@@ -38,6 +38,7 @@ export default {
 
   watch: {
     items() {
+      console.log(this.items)
       this.selectedIndex = 0
     },
   },
