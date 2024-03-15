@@ -1,7 +1,7 @@
 <template>
     <node-view-wrapper class="inline-block text-white">
         <div class="p-2 rounded-lg bg-green-500">
-            {{ node.attrs.id.element_name }}
+            {{ node.attrs.id.label }}
             <button class=" inline-block text-white" @click="removeElement">X</button>
         </div>
     </node-view-wrapper>
@@ -9,12 +9,9 @@
 
 <script setup>
 import { NodeViewWrapper } from '@tiptap/vue-3'
-import APICalls from '@/Utilities/APICalls';
-import DashboardDropdownMenu from '../../Pages/Dashboard/DashboardDropdownMenu.vue';
 import { defineEmits, ref, onMounted } from 'vue'
-import { router } from '@inertiajs/vue3';
 
-const emits = defineEmits(['deleteNode'])
+const emits = defineEmits(['removeMentionItem'])
 
 const props = defineProps(
     {
@@ -22,7 +19,7 @@ const props = defineProps(
             type: Object,
             required: true,
         },
-        deleteNode: {
+        updateAttributes: {
             type: Function,
             required: true,
         },
@@ -33,7 +30,14 @@ const props = defineProps(
     }
 )
 
+onMounted(() => {
+    // console.log(props.editor.contentComponent)
+    // props.editor.contentComponent.emit('hi')
+    // console.log(props.node)
+})
+
 function removeElement() {
+    props.editor.contentComponent.emit('removeMentionItem', props.node.attrs.id.id)
     props.deleteNode()
 }
 </script>

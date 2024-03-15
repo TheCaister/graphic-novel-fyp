@@ -1,6 +1,6 @@
 <template>
     <div class="bg-black text-white">
-        <editor-content class="p-4 editor-field border-4 border-white" :editor="editor" @itemSelected="itemSelected"/>
+        <editor-content class="p-4 editor-field border-4 border-white" :editor="editor" @itemSelected="itemSelected" />
     </div>
 </template>
 
@@ -38,135 +38,126 @@ const CustomMention = Mention.extend({
         return {
             suggestion: {
                 items: async ({ query }) => {
-        // This is the list of items that will be passed to the MentionList component
-        // we can do all this, or we can simply call the api here
-        // return APICalls.searchElements(query, 5, 'users')
-
-      
-
-        return APICalls.searchMention(query, 5, 'users')
-
-
-
-    },
-    command: ({ editor, range, props }) => {
-        // increase range.to by one when the next node is of type "text"
-        // and starts with a space character
-        const nodeAfter = editor.view.state.selection.$to.nodeAfter
-        const overrideSpace = nodeAfter?.text?.startsWith(' ')
-
-        if (overrideSpace) {
-            range.to += 1
-        }
-
-        console.log('inserting admin...')
-
-        editor
-            .chain()
-            .focus()
-            .insertContentAt(range, [
-                {
-                    type: 'mention',
-                    attrs: props,
+                    const mentionItems = await APICalls.searchMention(query, 5, 'users')
+                    const mentionList = mentionItems.data.map(item => ({
+                        label: item.username,
+                        id: item.id
+                    }))
+                    return mentionList
                 },
-                {
-                    type: 'text',
-                    text: ' ',
+                command: ({ editor, range, props }) => {
+                    // increase range.to by one when the next node is of type "text"
+                    // and starts with a space character
+                    const nodeAfter = editor.view.state.selection.$to.nodeAfter
+                    const overrideSpace = nodeAfter?.text?.startsWith(' ')
+
+                    if (overrideSpace) {
+                        range.to += 1
+                    }
+
+                    console.log('inserting admin...')
+
+                    editor
+                        .chain()
+                        .focus()
+                        .insertContentAt(range, [
+                            {
+                                type: 'mention',
+                                attrs: props,
+                            },
+                            {
+                                type: 'text',
+                                text: ' ',
+                            },
+                        ])
+                        .run()
+
+                    editor.contentComponent.emit('itemSelected', props)
+
+                    window.getSelection()?.collapseToEnd()
                 },
-            ])
-            .run()
 
-        editor.contentComponent.emit('itemSelected', props)
+                render: () => {
+                    // Initialize the VueRenderer with the MentionList component
+                    let component
+                    let popup
 
-        window.getSelection()?.collapseToEnd()
-    },
+                    return {
 
-    render: () => {
-        // Initialize the VueRenderer with the MentionList component
-        let component
-        let popup
+                        onStart: props => {
+                            // We prepare a new VueRenderer instance with the MentionList component,
+                            // and mount it to a DOM element. We also pass the editor instance and
+                            // the props from the `suggest` method to the component.
+                            // We need to set the editor because we want to call commands like
+                            // `chain` or `insertContent` from the component.
+                            component = new VueRenderer(MentionList, {
+                                // using vue 2:
+                                // parent: this,
+                                // propsData: props,
+                                // using vue 3:
+                                props,
+                                editor: props.editor,
+                            })
 
-        return {
+                            // console.log(props)
 
-            onStart: props => {
-                // We prepare a new VueRenderer instance with the MentionList component,
-                // and mount it to a DOM element. We also pass the editor instance and
-                // the props from the `suggest` method to the component.
-                // We need to set the editor because we want to call commands like
-                // `chain` or `insertContent` from the component.
-                component = new VueRenderer(MentionList, {
-                    // using vue 2:
-                    // parent: this,
-                    // propsData: props,
-                    // using vue 3:
-                    props,
-                    editor: props.editor,
-                })
+                            // clientRect is the position of the caret
+                            if (!props.clientRect) {
+                                return
+                            }
 
-                // console.log(props)
+                            popup = tippy('body', {
+                                getReferenceClientRect: props.clientRect,
+                                appendTo: () => document.body,
+                                content: component.element,
+                                showOnCreate: true,
+                                interactive: true,
+                                //   determines the events that cause the tippy to show.
+                                // With manual, the tippy must be triggered programmatically.
+                                trigger: 'manual',
+                                placement: 'bottom-start',
+                            })
+                        },
 
-                // clientRect is the position of the caret
-                if (!props.clientRect) {
-                    return
-                }
+                        //   Updating the props
+                        onUpdate(props) {
+                            component.updateProps(props)
 
-                popup = tippy('body', {
-                    getReferenceClientRect: props.clientRect,
-                    appendTo: () => document.body,
-                    content: component.element,
-                    showOnCreate: true,
-                    interactive: true,
-                    //   determines the events that cause the tippy to show.
-                    // With manual, the tippy must be triggered programmatically.
-                    trigger: 'manual',
-                    placement: 'bottom-start',
-                })
-            },
+                            if (!props.clientRect) {
+                                return
+                            }
 
-            //   Updating the props
-            onUpdate(props) {
-                component.updateProps(props)
+                            popup[0].setProps({
+                                getReferenceClientRect: props.clientRect,
+                            })
+                        },
 
-                if (!props.clientRect) {
-                    return
-                }
+                        //   If the escape key is pressed, we hide the suggester.
+                        // Otherwise we call the `onKeyDown` method of the VueRenderer instance.
+                        onKeyDown(props) {
+                            if (props.event.key === 'Escape') {
+                                popup[0].hide()
 
-                popup[0].setProps({
-                    getReferenceClientRect: props.clientRect,
-                })
-            },
+                                return true
+                            }
 
-            //   If the escape key is pressed, we hide the suggester.
-            // Otherwise we call the `onKeyDown` method of the VueRenderer instance.
-            onKeyDown(props) {
-                if (props.event.key === 'Escape') {
-                    popup[0].hide()
+                            return component.ref?.onKeyDown(props)
+                        },
 
-                    return true
-                }
+                        //   When exiting the suggester, we destroy the VueRenderer instance.
+                        onExit() {
+                            if (popup) {
+                                popup[0].destroy()
+                            }
+                            if (component) {
+                                component.destroy()
+                            }
 
-                return component.ref?.onKeyDown(props)
-            },
-
-            //   When exiting the suggester, we destroy the VueRenderer instance.
-            onExit() {
-                // console.log('exit')
-                // console.log(popup)
-                // popup[0].destroy()
-                // component.destroy()
-
-                if (popup) {
-                    popup[0].destroy()
-                }
-                if (component) {
-                    component.destroy()
-                }
-
-                popup = null
-                component = null
-            },
-        }
-    },
+                            popup = null
+                            component = null
+                        },
+                    }
+                },
             }
         }
     },
@@ -214,7 +205,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style>
-
 .not-active {
     background-color: #fff;
     color: #000;

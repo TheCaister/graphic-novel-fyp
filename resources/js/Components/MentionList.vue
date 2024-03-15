@@ -2,7 +2,7 @@
 <template>
   <div class="items" id="mention-list">
 
-    <template v-if="(this.items && this.items.length > 0)">
+    <template v-if="(props.items && props.items.length > 0)">
       <button class="item" id="mention-list" :class="{ 'is-selected': index === selectedIndex }"
         v-for="(item, index) in items" :key="index" @click="selectItem(index)" @mouseover="selectedIndex = index">
         {{ item.label }}
@@ -14,90 +14,85 @@
   </div>
 </template>
 
-<script>
-export default {
-  emits: ['selectItem'],
-  props: {
-    // The list of items to display
-    items: {
-      type: Object,
-      required: true,
-    },
+<script setup>
+import { ref, watch, onMounted, defineExpose } from 'vue'
 
-    command: {
-      type: Function,
-      required: true,
-    },
+defineExpose({
+  selectItem,
+  onKeyDown,
+
+})
+
+// Props are declared with defineProps
+const props = defineProps({
+  items: {
+    type: Object,
+    required: true,
   },
-
-  data() {
-    return {
-      selectedIndex: 0,
-    }
+  command: {
+    type: Function,
+    required: true,
   },
+})
 
-  watch: {
-    items() {
-      console.log(this.items)
-      this.selectedIndex = 0
-    },
-  },
+// Refs are used for reactive variables
+const selectedIndex = ref(0)
 
-  methods: {
-    // Handling navigation with the keyboard
-    onKeyDown({ event }) {
-      // console.log(event)
-      if (event.key === 'ArrowUp') {
-        this.upHandler()
-        return true
-      }
+// Watchers are set up with the watch function
+watch(() => props.items, (newValue, oldValue) => {
+  console.log(newValue)
+  selectedIndex.value = 0
+}, { deep: true })
 
-      if (event.key === 'ArrowDown') {
-        this.downHandler()
-        return true
-      }
+// Methods are just regular functions inside <script setup>
+function onKeyDown(event) {
+  if (event.event.key === 'ArrowUp') {
+    upHandler()
+    return true
+  }
 
-      if (event.key === 'Enter') {
-        this.enterHandler()
-        return true
-      }
+  if (event.event.key === 'ArrowDown') {
+    downHandler()
+    return true
+  }
 
-      return false
-    },
+  if (event.event.key === 'Enter') {
+    enterHandler()
+    return true
+  }
 
-    upHandler() {
-      this.selectedIndex = ((this.selectedIndex + this.items.data.length) - 1) % this.items.data.length
-      // this.selectedIndex = ((this.selectedIndex + this.items.length) - 1) % this.items.length
-
-    },
-
-    downHandler() {
-      this.selectedIndex = (this.selectedIndex + 1) % this.items.data.length
-      // this.selectedIndex = (this.selectedIndex + 1) % this.items.length
-
-    },
-
-    enterHandler() {
-      this.selectItem(this.selectedIndex)
-    },
-
-    //   Gets the item at the given index and calls the command
-    selectItem(index) {
-      // console.log(this.items.data[index])
-
-      const item = this.items.data[index]
-
-
-
-      // const item = this.items[index]
-
-      if (item) {
-        this.command({ id: item })
-      }
-    },
-  },
+  return false
 }
+
+function upHandler() {
+  selectedIndex.value = ((selectedIndex.value + props.items.length) - 1) % props.items.length
+}
+
+function downHandler() {
+  selectedIndex.value = (selectedIndex.value + 1) % props.items.length
+}
+
+function enterHandler() {
+  selectItem(selectedIndex.value)
+}
+
+function selectItem(index) {
+  const item = props.items[index]
+  if (item) {
+    props.command({ id: item })
+  }
+}
+
+// If you need to use lifecycle hooks, import them from 'vue'
+// For example, to use onMounted:
+/*
+onMounted(() => {
+  console.log('Component is mounted')
+})
+*/
+
 </script>
+
 
 <style>
 .items {

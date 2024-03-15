@@ -12,7 +12,7 @@ import { Editor, EditorContent, VueNodeViewRenderer } from '@tiptap/vue-3'
 import Document from '@tiptap/extension-document'
 import Text from '@tiptap/extension-text'
 import { defineProps, defineEmits } from 'vue'
-import MentionItemIncludedElements from './MentionItemIncludedElements.vue'
+import MentionItemDeletable from './MentionItemDeletable.vue'
 
 import { VueRenderer } from '@tiptap/vue-3'
 import tippy from 'tippy.js'
@@ -32,7 +32,7 @@ const editor = ref(null)
 
 const CustomMention = Mention.extend({
     addNodeView() {
-        return VueNodeViewRenderer(MentionItemIncludedElements)
+        return VueNodeViewRenderer(MentionItemDeletable)
     },
     addOptions() {
         return {
@@ -104,8 +104,6 @@ const CustomMention = Mention.extend({
                                 props,
                                 editor: props.editor,
                             })
-
-                            // console.log(props)
 
                             // clientRect is the position of the caret
                             if (!props.clientRect) {
