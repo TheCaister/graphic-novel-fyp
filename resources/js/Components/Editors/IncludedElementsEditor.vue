@@ -1,6 +1,7 @@
 <template>
     <div class="bg-black text-white">
-        <editor-content class="p-4 editor-field border-4 border-white" :editor="editor" @itemSelected="itemSelected" @removeMentionItem="removeMentionItem" />
+        <editor-content class="p-4 editor-field border-4 border-white" :editor="editor" @itemSelected="itemSelected"
+            @removeMentionItem="removeMentionItem" />
     </div>
 </template>
 
@@ -21,9 +22,13 @@ import MentionList from '@/Components/MentionList.vue'
 import APICalls from '@/Utilities/APICalls'
 
 const props = defineProps({
-    modelValue: {
-        type: Object,
-    },
+    // modelValue: {
+    //     type: Object,
+    // },
+    includedElements: {
+        type: Array,
+        default: []
+    }
 })
 
 // const emits = defineEmits(['update:modelValue', 'addElement', 'removeElement'])
@@ -51,7 +56,7 @@ const CustomMention = Mention.extend({
                         label: item.element_name,
                         id: item.element_id
                     }))
-                    
+
                     return mentionList
                 },
                 command: ({ editor, range, props }) => {
@@ -182,7 +187,7 @@ watch(() => props.modelValue, (value) => {
 }, { deep: true })
 
 function itemSelected(props) {
-    emits('addMentionItem', props.id.id)
+    emits('addMentionItem', props.id)
     // editor.value.commands.setContent('', false)
 }
 
@@ -204,11 +209,44 @@ onMounted(() => {
                 },
             }),
         ],
-        content: props.modelValue,
+        // content: props.modelValue,
         onUpdate: () => {
             // emits('update:modelValue', JSON.parse(JSON.stringify(editor.value.getJSON())))
         },
     })
+
+    editor.value.commands.insertContent([
+        {
+            type: 'mention',
+            attrs: {
+                id: {
+                    id: 1,
+                    label: 'hi guys'
+                }
+            }
+        }
+    ])
+
+    // for loop over props.includedElements and add them to the editor
+    // props.includedElements.forEach((element) => {
+    //     console.log('inserting!!')
+    //     editor.value.commands.insertContentAt(editor.value.state.selection.$to, [
+    //         // {
+    //         //     type: 'mention',
+    //         //     attrs: {
+    //         //         id: {
+    //         //             id: element.id,
+    //         //             label: element.label
+    //         //         }
+    //         //     }
+    //         // },
+    //         // {
+    //         //     type: 'text',
+    //         //     text: ' ',
+    //         // },
+    //         {}
+    //     ])
+    // })
 })
 
 onBeforeUnmount(() => {

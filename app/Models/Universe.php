@@ -127,7 +127,6 @@ class Universe extends Model implements HasMedia
 
     public function scopeIncludedElements($query, $elementIdList)
     {
-        // dd($elementIdList);
         $query->whereHas('elements', function ($query) use ($elementIdList) {
             $query->whereIn('elements.element_id', $elementIdList);
         });

@@ -152,8 +152,6 @@ function test() {
 onMounted(() => {
     form.search = props.searchParams.search;
     form.searchType = props.searchParams.searchType;
-    const { search, searchType, ...rest } = props.searchParams;
-    form.advanced = rest;
-
+    form.advanced = props.searchParams?.advanced || {};
 })
 </script>

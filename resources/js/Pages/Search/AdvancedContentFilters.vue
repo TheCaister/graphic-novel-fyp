@@ -22,7 +22,7 @@
                 <!-- <label for="" class="block">Included elements</label>
                 <input type="text" class="w-full text-black"/> -->
 
-                <IncludedElementsEditor class="w-64" @addMentionItem="addElement" @removeMentionItem="removeElement" />
+                <IncludedElementsEditor class="w-64" @addMentionItem="addElement" @removeMentionItem="removeElement" :includedElements="model?.value?.includedElements || []" :key="model?.value?.includedElements"/>
             </div>
         </div>
 
@@ -48,15 +48,15 @@ const emits = defineEmits(['updateAdvancedSearch'])
 const model = defineModel()
 
 function updateFilter(filterName, value) {
-    emits('updateAdvancedSearch',
-        {
-            name: filterName,
-            value: value
-        })
+    // emits('updateAdvancedSearch',
+    //     {
+    //         name: filterName,
+    //         value: value
+    //     })
 }
 
 function addElement(event) {
-    console.log('adding')
+    console.log(event)
     if (!model.value.includedElements) {
         model.value.includedElements = [];
     }
@@ -67,9 +67,7 @@ function addElement(event) {
 function removeElement(event) {
     console.log('removing')
 
-    model.value.includedElements = model.value.includedElements.filter((element) => element !== event)
-
-    console.log(model.value)
+    model.value.includedElements = model.value.includedElements.filter((element) => element.id !== event)
 
 }
 
