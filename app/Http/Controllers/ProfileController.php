@@ -82,6 +82,9 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+
+        // dd($request->bio);
+
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
@@ -101,6 +104,9 @@ class ProfileController extends Controller
 
             $tempThumbnail->delete();
         }
+
+        // update bio
+        $request->user()->bio = $request->bio;
 
         $request->user()->save();
 
