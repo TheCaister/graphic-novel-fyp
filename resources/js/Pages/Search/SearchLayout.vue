@@ -67,6 +67,15 @@ const props = defineProps({
     searchParams: {
         type: Object,
         default: {}
+    },
+    errors: {
+        type: Object,
+    },
+    auth: {
+        type: Object,
+    },
+    ziggy: {
+        type: Object,
     }
 })
 
@@ -133,7 +142,7 @@ function search() {
     ), {
         onFinish: () => {
             console.log('success')
-            form.search = ''
+            // form.search = ''
         }
     })
     // if (form.search !== '') {
@@ -151,7 +160,7 @@ function back() {
 
 function test() {
     console.log(resultsList.value)
-    console.log(props.initResultsList)
+    console.log(props.searchParams)
     // console.log(form)
 }
 

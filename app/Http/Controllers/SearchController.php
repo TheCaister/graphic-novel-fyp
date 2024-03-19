@@ -41,7 +41,7 @@ class SearchController extends Controller
         // dd($resultsList);
 
         return Inertia::render('Search/SearchLayout', [
-            'searchType' => request()->searchType,
+            // 'searchType' => request()->searchType,
             'initResultsList' => $resultsList,
             'searchParams' => request()->all(),
         ]);
@@ -167,35 +167,28 @@ class SearchController extends Controller
         // Get all universes and moderatableUniverses of the user, then get all the elements of those universes
         $elementsWithSearch = function ($query) {
             $query->filter(request(['search']));
-            // ->elementType(request('elementType'));
 
             if (request()->advanced) {
-
-
                 if (array_key_exists('derivedElementTypes', request()->advanced)) {
                     $tempList = [];
                     foreach (request()->advanced['derivedElementTypes'] as $derivedElementType) {
                         $tempList[] = [
                             'element_type' => $this->getElementTypeName($derivedElementType['derivedElementType']),
-                            'include' => true
+                            'include' => $derivedElementType['include'],
                         ];
                     }
 
-                    // $query->elementType($tempList);
+                    $query->elementType($tempList);
                 }
-
-                // dd($tempList);
             }
-
-            // ->elementType($this->getElementTypeName('PanelPlannerElement'));
-
         };
 
         // Using eager loading
         if ($contentType === null) {
             $resultsList = $user->universes()->with(['elements' => $elementsWithSearch])
                 ->get()
-                ->concat($user->moderatableUniverses()->with(['elements' => $elementsWithSearch])->get())
+                ->concat($user->moderatableUniverses()->with(['elements' => $elementsWithSearch])
+                ->get())
                 ->pluck('elements')
                 ->flatten();
         } else {

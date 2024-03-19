@@ -147,15 +147,25 @@ class Element extends Model implements HasMedia
 
     public function scopeElementType($query, $elementTypes)
     {
-        // dd($include);
         
-        // go through each type in elementTypes. if the 'include' key is true, include it. if false, exclude it. Chain the query as orWhere
+        // go through each type in elementTypes. if the 'include' key is true, include it. if false, exclude it.
+        $includeTypes = [];
+        $excludeTypes = [];
+    
         foreach ($elementTypes as $type) {
             if ($type['include']) {
-                $query->orWhere('derived_element_type', '=', $type['element_type']);
+                $includeTypes[] = $type['element_type'];
             } else {
-                $query->orWhere('derived_element_type', '!=', $type['element_type']);
+                $excludeTypes[] = $type['element_type'];
             }
+        }
+    
+        if (!empty($includeTypes)) {
+            $query->whereIn('derived_element_type', $includeTypes);
+        }
+    
+        if (!empty($excludeTypes)) {
+            $query->whereNotIn('derived_element_type', $excludeTypes);
         }
     }
 
