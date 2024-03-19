@@ -31,7 +31,7 @@
                     <!-- <PrimaryButton class="mr-4">Projects</PrimaryButton> -->
                     <DropdownSubtle :options="universes" @option-selected="goToUniverse" />
                     <Link :href="route('about-us')">
-                        <PrimaryButton class="mr-4">About Us</PrimaryButton>
+                    <PrimaryButton class="mr-4">About Us</PrimaryButton>
                     </Link>
                 </div>
 
@@ -56,8 +56,8 @@
                     <!-- </form> -->
 
                     <!-- Settings button with gear icon -->
-                    <Link  :href="route('profile.edit') " >
-                        <span class="material-symbols-outlined dark">settings</span>
+                    <Link :href="route('profile.edit')">
+                    <span class="material-symbols-outlined dark">settings</span>
                     </Link>
 
                     <Link :href="route('logout')" method="post" as="button"
@@ -65,7 +65,7 @@
                     Log Out</Link>
 
                     <Avatar :src='page.props.auth.user.profile_picture'
-                    :link="route('profile.show', page.props.auth.user.id)"/>
+                        :link="route('profile.show', page.props.auth.user.id)" />
 
                 </div>
 
@@ -111,7 +111,11 @@ function search() {
 
     if (form.search !== '') {
 
-        form.post(route('search'), {
+        form.post(route('search',
+            {
+                'searchType': form.searchType,
+                'search': form.search
+            }), {
             onFinish: () => {
                 console.log('success')
                 form.search = ''
@@ -121,16 +125,16 @@ function search() {
 }
 
 APICalls.getUniversesByUserId(page.props.auth.user.id, false).then(response => {
-        universes.value = response.data.map(item => ({
-            name: item.universe_name,
-            id: item.universe_id
-        }));
+    universes.value = response.data.map(item => ({
+        name: item.universe_name,
+        id: item.universe_id
+    }));
 
-        //console.log('Universes')
-        // console.log(universes.value)
-    }).catch(error => console.log(error))
+    //console.log('Universes')
+    // console.log(universes.value)
+}).catch(error => console.log(error))
 
-function goToUniverse(option){
+function goToUniverse(option) {
     console.log(option)
     router.visit(route('universes.show', option.id))
 }
@@ -164,4 +168,3 @@ export default {
     },
 }
 </script>
-

@@ -33,8 +33,8 @@
             </KeepAlive> -->
 
             <KeepAlive>
-                <component :is="AdvancedFiltersComponent" 
-                v-model="form.advanced" @update-advanced-search="updateAdvancedSearch"  />
+                <component :is="AdvancedFiltersComponent" v-model="form.advanced"
+                    @update-advanced-search="updateAdvancedSearch" />
             </KeepAlive>
         </div>
 
@@ -125,7 +125,12 @@ function search() {
     // })
 
 
-    form.post(route('search'), {
+    form.post(route('search',
+        {
+            'searchType': form.searchType,
+            'search': form.search
+        }
+    ), {
         onFinish: () => {
             console.log('success')
             form.search = ''
