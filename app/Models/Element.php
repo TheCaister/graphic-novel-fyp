@@ -134,14 +134,28 @@ class Element extends Model implements HasMedia
         });
     }
 
-    public function scopeElementType($query, $elementType, $include)
+    // public function scopeElementType($query, $elementType, $include)
+    // {
+    //     // dd($include);
+
+    //     if ($include) {
+    //         $query->where('derived_element_type', '=', $elementType);
+    //     } else {
+    //         $query->where('derived_element_type', '!=', $elementType);
+    //     }
+    // }
+
+    public function scopeElementType($query, $elementTypes)
     {
         // dd($include);
-
-        if ($include) {
-            $query->where('derived_element_type', '=', $elementType);
-        } else {
-            $query->where('derived_element_type', '!=', $elementType);
+        
+        // go through each type in elementTypes. if the 'include' key is true, include it. if false, exclude it. Chain the query as orWhere
+        foreach ($elementTypes as $type) {
+            if ($type['include']) {
+                $query->orWhere('derived_element_type', '=', $type['element_type']);
+            } else {
+                $query->orWhere('derived_element_type', '!=', $type['element_type']);
+            }
         }
     }
 

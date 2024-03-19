@@ -1,6 +1,9 @@
 <template>
 
     <div class="flex space-x-8 p-8 flex-wrap">
+        <button @click="console.log(props.resultsList)">
+                Print form
+            </button>
         <div v-for="element in props.resultsList" :key="element.element_id" class="shadow-lg w-96">
             <!-- <Link :href="route('elements.show', result.element_id)">
                 <div>

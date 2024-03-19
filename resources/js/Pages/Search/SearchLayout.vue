@@ -50,7 +50,7 @@
 
 <script setup>
 import { Head, router } from '@inertiajs/vue3';
-import { onMounted, computed, inject, ref, watch } from 'vue'
+import { onMounted, computed, inject, ref, watch, onUpdated } from 'vue'
 import { useForm } from '@inertiajs/vue3';
 import SearchContentResults from './SearchContentResults.vue';
 import SearchElementsResults from './SearchElementsResults.vue';
@@ -145,7 +145,9 @@ function back() {
 }
 
 function test() {
-    console.log(form)
+    console.log(resultsList.value)
+    console.log(props.initResultsList)
+    // console.log(form)
 }
 
 function updateAdvancedSearch({ name, value }) {
@@ -158,8 +160,14 @@ function updateAdvancedSearch({ name, value }) {
 }
 
 onMounted(() => {
+    console.log('mounting')
     form.search = props.searchParams.search;
     form.searchType = props.searchParams.searchType;
     form.advanced = props.searchParams?.advanced || {};
+    resultsList.value = props.initResultsList;
+})
+
+onUpdated(() => {
+    resultsList.value = props.initResultsList;
 })
 </script>

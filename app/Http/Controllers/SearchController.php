@@ -19,7 +19,7 @@ class SearchController extends Controller
     public function search()
     {
 
-        dd(request()->all());
+        // dd(request()->all());
         $resultsList = [];
 
         // do a switch on the search type
@@ -163,6 +163,7 @@ class SearchController extends Controller
         $user = auth('sanctum')->user();
 
 
+
         // Get all universes and moderatableUniverses of the user, then get all the elements of those universes
         $elementsWithSearch = function ($query) {
             $query->filter(request(['search']));
@@ -170,10 +171,20 @@ class SearchController extends Controller
 
             if (request()->advanced) {
 
-                if (array_key_exists('derivedElementType', request()->advanced)) {
-                    // dd('hi');
-                    $query->elementType($this->getElementTypeName(request()->advanced['derivedElementType']['derivedElementType']), request()->advanced['derivedElementType']['include'] === 'true');
+
+                if (array_key_exists('derivedElementTypes', request()->advanced)) {
+                    $tempList = [];
+                    foreach (request()->advanced['derivedElementTypes'] as $derivedElementType) {
+                        $tempList[] = [
+                            'element_type' => $this->getElementTypeName($derivedElementType['derivedElementType']),
+                            'include' => true
+                        ];
+                    }
+
+                    // $query->elementType($tempList);
                 }
+
+                // dd($tempList);
             }
 
             // ->elementType($this->getElementTypeName('PanelPlannerElement'));
@@ -273,8 +284,8 @@ class SearchController extends Controller
                 $method = lcfirst($type);
 
                 $tempList = $tempList->concat($user->$method()->filter(request(['search']))
-                ->includedElements($includedElements)
-                ->limit(request()->limit)->get());
+                    ->includedElements($includedElements)
+                    ->limit(request()->limit)->get());
             }
         }
 
