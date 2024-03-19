@@ -14,8 +14,9 @@
         <div class="flex w-full">
             <!-- input with label -->
             <div>
-                <label for="" class="block">Authors</label>
-                <input type="text" class="w-full text-black" />
+                <!-- <label for="" class="block">Authors</label>
+                <input type="text" class="w-full text-black" /> -->
+                Authors to be updated!
             </div>
 
             <div>
@@ -27,8 +28,9 @@
         </div>
 
         <div class="flex w-full">
-            <TriCheckbox label="Include query in parent" @checked="updateFilter('includeUniverses', $event)" />
-            <TriCheckbox label="Include query in children" @checked="updateFilter('includeSeries', $event)" />
+            Query in parent and children to be updated!
+            <!-- <TriCheckbox label="Include query in parent" @checked="updateFilter('includeUniverses', $event)" />
+            <TriCheckbox label="Include query in children" @checked="updateFilter('includeSeries', $event)" /> -->
         </div>
 
 

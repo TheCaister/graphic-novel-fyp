@@ -5,8 +5,10 @@
         </div>
 
         <div class="flex w-full">
-            <TriCheckbox label="Owns a universe" class="w-1/2" @checked="updateOwnsUniverse"/>
-            <TriCheckbox label="Assigned to existing content" class="w-1/2" @checked="updateAssignedToExisting"/>
+            <!-- <TriCheckbox label="Owns a universe" class="w-1/2" @checked="updateOwnsUniverse"/>
+            <TriCheckbox label="Assigned to existing content" class="w-1/2" @checked="updateAssignedToExisting"/> -->
+
+            To be updated!
         </div>
 
 
