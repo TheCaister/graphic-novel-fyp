@@ -111,7 +111,7 @@ function search() {
 
     if (form.search !== '') {
 
-        form.get(route('search'), {
+        form.post(route('search'), {
             onFinish: () => {
                 console.log('success')
                 form.search = ''

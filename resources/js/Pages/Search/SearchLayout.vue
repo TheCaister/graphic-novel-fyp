@@ -34,7 +34,7 @@
 
             <KeepAlive>
                 <component :is="AdvancedFiltersComponent" 
-                v-model="form.advanced" />
+                v-model="form.advanced" @update-advanced-search="updateAdvancedSearch"  />
             </KeepAlive>
         </div>
 
@@ -117,7 +117,15 @@ function search() {
 
     // console.log(form.advanced)
 
-    form.get(route('search'), {
+    // form.get(route('search'), {
+    //     onFinish: () => {
+    //         console.log('success')
+    //         form.search = ''
+    //     }
+    // })
+
+
+    form.post(route('search'), {
         onFinish: () => {
             console.log('success')
             form.search = ''
@@ -140,14 +148,14 @@ function test() {
     console.log(form)
 }
 
-// function updateAdvancedSearch({ name, value }) {
-//     if (value === null) {
-//         delete form.advanced[name];
-//     } else {
-//         form.advanced[name] = value;
-//     }
-//     console.log(form.advanced);
-// }
+function updateAdvancedSearch({ name, value }) {
+    if (value === null) {
+        delete form.advanced[name];
+    } else {
+        form.advanced[name] = value;
+    }
+    console.log(form.advanced);
+}
 
 onMounted(() => {
     form.search = props.searchParams.search;

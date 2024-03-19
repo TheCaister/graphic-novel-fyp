@@ -233,7 +233,9 @@ Route::middleware('auth')->group(function () {
     // http://localhost/upload?media=series_thumbnail 
 
     ////////////////////////// SEARCH ROUTES ////////////////////////
-    Route::get('/search', [SearchController::class, 'search'])->name('search');
+    // Route::get('/search', [SearchController::class, 'search'])->name('search');
+    Route::post('/search', [SearchController::class, 'search'])->name('search');
+
 });
 
 require __DIR__ . '/auth.php';

@@ -50,11 +50,11 @@ const emits = defineEmits(['updateAdvancedSearch'])
 const model = defineModel()
 
 function updateFilter(filterName, value) {
-    // emits('updateAdvancedSearch',
-    //     {
-    //         name: filterName,
-    //         value: value
-    //     })
+    emits('updateAdvancedSearch',
+        {
+            name: filterName,
+            value: value
+        })
 }
 
 function addElement(event) {
