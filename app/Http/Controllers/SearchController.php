@@ -241,9 +241,12 @@ class SearchController extends Controller
         $user = auth('sanctum')->user();
 
         $includedElements = isset(request('advanced')['includedElements'])
-            ? array_map('intval', request('advanced')['includedElements'])
+            ? array_map(function ($element) {
+                return $element['id'];
+            }, request('advanced')['includedElements'])
             : [];
 
+        // dd($includedElements);
 
         $includeTypes = [];
         $excludeTypes = [];
@@ -294,10 +297,9 @@ class SearchController extends Controller
             $method = lcfirst($type);
 
             $tempList = $tempList->concat($user->$method()->filter(request(['search']))
-                // ->includedElements($includedElements)
+                ->includedElements($includedElements)
                 ->limit(request()->limit)->get());
         }
-
 
 
         $tempList = $tempList->sortByDesc('updated_at')

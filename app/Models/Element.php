@@ -184,7 +184,9 @@ class Element extends Model implements HasMedia
     public function scopeIncludedElements($query, $includedElements)
     {
         $query->whereHas('elementType', function ($query) use ($includedElements) {
-            $query->whereIn('element_name', $includedElements);
+            // $query->whereIn('element_name', $includedElements);
+            $query->whereIn('element_id', $includedElements);
+
         });
     }
 
