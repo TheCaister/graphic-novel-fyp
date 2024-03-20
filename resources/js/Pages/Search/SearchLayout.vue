@@ -159,9 +159,9 @@ function back() {
 }
 
 function test() {
-    console.log(resultsList.value)
-    console.log(props.searchParams)
-    // console.log(form)
+    // console.log(resultsList.value)
+    // console.log(props.searchParams)
+    console.log(form.advanced)
 }
 
 function updateAdvancedSearch({ name, value }) {

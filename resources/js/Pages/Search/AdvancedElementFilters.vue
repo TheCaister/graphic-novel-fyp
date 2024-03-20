@@ -60,8 +60,6 @@ const emits = defineEmits(['updateAdvancedSearch'])
 let derivedElementTypes = []
 
 function updateFilter(filterName, value) {
-
-
     switch (filterName) {
         case 'includeSimpleText':
 
@@ -103,8 +101,6 @@ function updateFilter(filterName, value) {
             break;
     }
 
-    console.log('what the...')
-
     emits('updateAdvancedSearch',
         {
             name: filterName,
@@ -118,8 +114,6 @@ function updateDerivedElementTypes(value) {
     if (value.include === null) {
         derivedElementTypes = derivedElementTypes.filter((element) => element.derivedElementType !== value.derivedElementType)
     } else {
-        // console.log('pushing...')
-        // derivedElementTypes.push(value)
 
         // if the value is already in the array, set it to the new value
         let index = derivedElementTypes.findIndex((element) => element.derivedElementType === value.derivedElementType)
@@ -129,8 +123,6 @@ function updateDerivedElementTypes(value) {
             derivedElementTypes.push(value)
         }
     }
-
-    console.log(derivedElementTypes)
 }
 
 </script>

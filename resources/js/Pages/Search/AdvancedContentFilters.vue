@@ -23,7 +23,8 @@
                 <!-- <label for="" class="block">Included elements</label>
                 <input type="text" class="w-full text-black"/> -->
 
-                <IncludedElementsEditor class="w-64" @addMentionItem="addElement" @removeMentionItem="removeElement" :includedElements="model?.value?.includedElements || []" :key="model?.value?.includedElements"/>
+                <IncludedElementsEditor class="w-64" @addMentionItem="addElement" @removeMentionItem="removeElement"
+                    :includedElements="model?.value?.includedElements || []" :key="model?.value?.includedElements" />
             </div>
         </div>
 
@@ -49,7 +50,62 @@ const emits = defineEmits(['updateAdvancedSearch'])
 
 const model = defineModel()
 
+let contentTypes = []
+
 function updateFilter(filterName, value) {
+    switch (filterName) {
+        case 'includeUniverses':
+
+            updateContentTypes({
+                contentType: 'Universes',
+                include: value
+            })
+
+            emits('updateAdvancedSearch', {
+                name: 'contentTypes',
+                value: contentTypes
+            })
+            return;
+        case 'includeSeries':
+
+            updateContentTypes({
+                contentType: 'Series',
+                include: value
+            })
+
+            emits('updateAdvancedSearch', {
+                name: 'contentTypes',
+                value: contentTypes
+            })
+            return;
+        case 'includeChapters':
+
+            updateContentTypes({
+                contentType: 'Chapters',
+                include: value
+            })
+
+            emits('updateAdvancedSearch', {
+                name: 'contentTypes',
+                value: contentTypes
+            })
+            return;
+        case 'includePages':
+
+            updateContentTypes({
+                contentType: 'Pages',
+                include: value
+            })
+
+            emits('updateAdvancedSearch', {
+                name: 'contentTypes',
+                value: contentTypes
+            })
+            return;
+        default:
+            break;
+    }
+
     emits('updateAdvancedSearch',
         {
             name: filterName,
@@ -71,6 +127,21 @@ function removeElement(event) {
 
     model.value.includedElements = model.value.includedElements.filter((element) => element.id !== event)
 
+}
+
+function updateContentTypes(value) {
+    if (value.include === null) {
+        contentTypes = contentTypes.filter((content) => content.contentType !== value.contentType)
+    } else {
+
+        // if the value is already in the array, set it to the new value
+        let index = contentTypes.findIndex((content) => content.contentType === value.contentType)
+        if (index !== -1) {
+            contentTypes[index] = value
+        } else {
+            contentTypes.push(value)
+        }
+    }
 }
 
 </script>

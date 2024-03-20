@@ -188,7 +188,7 @@ class SearchController extends Controller
             $resultsList = $user->universes()->with(['elements' => $elementsWithSearch])
                 ->get()
                 ->concat($user->moderatableUniverses()->with(['elements' => $elementsWithSearch])
-                ->get())
+                    ->get())
                 ->pluck('elements')
                 ->flatten();
         } else {
@@ -244,6 +244,22 @@ class SearchController extends Controller
             ? array_map('intval', request('advanced')['includedElements'])
             : [];
 
+
+        $includeTypes = [];
+        $excludeTypes = [];
+
+        if (isset(request('advanced')['contentTypes'])) {
+            foreach (request('advanced')['contentTypes'] as $type) {
+                if ($type['include']) {
+                    $includeTypes[] = $type['contentType'];
+                } else {
+                    $excludeTypes[] = $type['contentType'];
+                }
+            }
+        }
+
+        // dd($includeTypes, $excludeTypes);
+
         $resultsList = [];
 
 
@@ -257,29 +273,29 @@ class SearchController extends Controller
 
         $types = ['Universes', 'Series', 'Chapters', 'Pages'];
 
-        // // concat user moderatableuniverses, moderatableseries, moderatablechapters while also filtering
-        // $tempList = $tempList->concat($user->moderatableUniverses()->filter(request(['search']))->limit(request()->limit)->get());
 
-        // $tempList = $tempList->concat($user->moderatableSeries()->filter(request(['search']))->limit(request()->limit)->get());
-
-        // $tempList = $tempList->concat($user->moderatableChapters()->filter(request(['search']))->limit(request()->limit)->get());
 
         foreach ($types as $type) {
-            // if (request('include' . $type) != false) {
-            if (true) {
-
-                $moderatableMethod = 'moderatable' . $type;
-
-                if ($type !== 'Pages') {
-                    $tempList = $tempList->concat($user->$moderatableMethod()->filter(request(['search']))->limit(request()->limit)->get());
-                }
-
-                $method = lcfirst($type);
-
-                $tempList = $tempList->concat($user->$method()->filter(request(['search']))
-                    ->includedElements($includedElements)
-                    ->limit(request()->limit)->get());
+            if (!empty($includeTypes) && !in_array($type, $includeTypes)) {
+                continue;
             }
+
+            if (!empty($excludeTypes) && in_array($type, $excludeTypes)) {
+                continue;
+            }
+
+            // // concat user moderatableuniverses, moderatableseries, moderatablechapters while also filtering
+            $moderatableMethod = 'moderatable' . $type;
+
+            if ($type !== 'Pages') {
+                $tempList = $tempList->concat($user->$moderatableMethod()->filter(request(['search']))->limit(request()->limit)->get());
+            }
+
+            $method = lcfirst($type);
+
+            $tempList = $tempList->concat($user->$method()->filter(request(['search']))
+                // ->includedElements($includedElements)
+                ->limit(request()->limit)->get());
         }
 
 
