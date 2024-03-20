@@ -89,6 +89,9 @@ const props = defineProps({
     },
 })
 
+const emits = defineEmits(['updateMouseClickPosition'])
+
+
 const pages = ref([]);
 const selectedPage = ref({});
 

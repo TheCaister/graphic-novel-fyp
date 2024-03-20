@@ -3,15 +3,15 @@
         <div v-for="element in elements" :key="element.element_id" class=" w-96 mx-8 mb-4">
 
             <content-card-detailed :content="{
-                content_id: element.element_id,
-                content_name: element.element_name,
-                subheading: getElementTypeText(element.derived_element_type),
-                thumbnail: element.element_thumbnail,
-            }"
-                :link='route("elements.edit", { element: element.element_id, contentType: getParentContentType(), content_id: parentContentId })'
-                :selected="element.element_id === selectedElement.element_id" :drop-down-menu-options="dropDownMenuOptions"
-                :show-description="false"
-                @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked" />
+        content_id: element.element_id,
+        content_name: element.element_name,
+        subheading: getElementTypeText(element.derived_element_type),
+        thumbnail: element.element_thumbnail,
+    }" :link='route("elements.edit", { element: element.element_id, contentType: getParentContentType(), content_id: parentContentId })'
+                :selected="element.element_id === selectedElement.element_id"
+                :drop-down-menu-options="dropDownMenuOptions" :show-description="false"
+                @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked"
+                @click="emits('updateMouseClickPosition', $event)" />
         </div>
 
         <add-button @click="isCreateModalOpen = true" label="Create Element" class="w-96" />
@@ -30,10 +30,11 @@
         </Transition>
 
         <Transition name="modal" class="z-50">
-            <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()" :content="{
-                content_id: selectedElement.element_id,
-                content_name: selectedElement.element_name,
-            }" type="elements" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+            <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()"
+                :content="{
+        content_id: selectedElement.element_id,
+        content_name: selectedElement.element_name,
+    }" type="elements" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
     </Teleport>
@@ -69,7 +70,7 @@ const dropDownMenuOptions = [
     { id: 4, text: "Assign Element", eventName: "assignElement" },
     { id: 5, text: "Delete", eventName: "delete" },]
 
-const emits = defineEmits(['updateSize'])
+const emits = defineEmits(['updateSize', 'updateMouseClickPosition'])
 
 onActivated(async () => {
     updateContentList()
@@ -89,8 +90,8 @@ function updateContentList() {
     }).catch(error => console.log(error))
 }
 
-function getElementTypeText(text){
-    switch(text){
+function getElementTypeText(text) {
+    switch (text) {
         case 'App\\Models\\SimpleTextElement':
             return 'Simple Text'
         case 'App\\Models\\MindmapElement':
@@ -121,7 +122,7 @@ function handleMenuItemClicked(eventName) {
     // switch
     switch (eventName) {
         case "edit":
-            
+
             console.log('going to edit...')
             router.visit(route("elements.edit", { element: selectedElement.value.element_id, contentype: getParentContentType(), content_id: parentContentId }))
             break;

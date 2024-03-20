@@ -20,7 +20,19 @@ const props = defineProps({
         type: Number,
         default: 0,
     },
+    errors: {
+        type: Object,
+    },
+    auth: {
+        type: Object,
+    },
+    ziggy: {
+        type: Object,
+    }
 });
+
+const mouseClickX = ref(0)
+const mouseClickY = ref(0)
 
 const dashboardView = ref(props.dashboardViewType)
 const parentContentIdNumber = ref(props.parentContentId)
@@ -50,11 +62,22 @@ onMounted(async () => {
     updateSiblingContentDropdown()
 })
 
-function updateDashboard(dashboardViewString, parentContentId) {
-    updateSiblingContentDropdown()
+// function updateDashboard(dashboardViewString, parentContentId) {
+//     updateSiblingContentDropdown()
 
-    parentContentIdNumber.value = parentContentId
-    dashboardView.value = dashboardViewString
+//     parentContentIdNumber.value = parentContentId
+//     dashboardView.value = dashboardViewString
+// }
+
+function updateMouseClickPosition(event) {
+
+    console.log('updating mouse click position')
+
+    mouseClickX.value = event.clientX;
+    mouseClickY.value = event.clientY;
+
+    console.log(mouseClickX.value)
+    console.log(mouseClickY.value)
 }
 
 function updateSiblingContentDropdown() {
@@ -152,6 +175,10 @@ function updateSize(event) {
             </div>
         </div>
 
+        <!-- For teleporting menus -->
+        <div id="dashboardMenuPosition" :style="{ position: 'fixed', top: mouseClickY + 'px', left: mouseClickX + 'px' }"
+            class=" z-10"></div>
+
         <!-- <div>
             <span class="material-symbols-outlined dark">
                 list
@@ -175,7 +202,7 @@ function updateSize(event) {
 
 
 
-                    <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber" />
+                    <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber" @update-mouse-click-position="updateMouseClickPosition($event)"/>
 
                 </KeepAlive>
 
@@ -186,7 +213,8 @@ function updateSize(event) {
             <Tab v-if="dashboardView != 'UniverseView'" title="Elements" listSize="-1" @updateSize="updateSize"
                 v-slot="{ update }">
                 <KeepAlive>
-                    <ElementView @updateSize="update" />
+                    <ElementView @updateSize="update"
+                    @update-mouse-click-position="updateMouseClickPosition($event)" />
                 </KeepAlive>
             </Tab>
 

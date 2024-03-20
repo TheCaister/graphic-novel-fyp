@@ -10,7 +10,8 @@
             }" :link="route('universes.show', universe.universe_id)"
                 :selected="universe.universe_id === selectedUniverse.universe_id" :drop-down-menu-options="dropDownMenuOptions.filter(option =>
                     !option.needsAdmin || (option.needsAdmin && universe.can_edit)
-                )" @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked" />
+                )" @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked"
+                @click="emits('updateMouseClickPosition', $event)" />
         </div>
 
         <add-button @click="isCreateModalOpen = true" label="Create Universe" class="w-96" />
@@ -49,7 +50,7 @@
 import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
 import { usePage } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 
 import CreateUniverseModal from './CreateUniverseModal.vue';
 import EditUniverseModal from './EditUniverseModal.vue';
@@ -65,6 +66,7 @@ const isCreateModalOpen = ref(false)
 const isEditModalOpen = ref(false)
 const isDeleteModalOpen = ref(false)
 
+const emits = defineEmits(['updateMouseClickPosition'])
 
 const universeLoaded = ref(false)
 

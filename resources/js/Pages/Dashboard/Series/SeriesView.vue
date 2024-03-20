@@ -11,7 +11,8 @@
             }" :link="route('series.show', series.series_id)" :selected="series.series_id === selectedSeries.series_id"
                 :drop-down-menu-options="dropDownMenuOptions.filter(option =>
                     !option.needsAdmin || (option.needsAdmin && series.can_edit)
-                )" @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked" />
+                )" @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked"
+                @click="emits('updateMouseClickPosition', $event)"  />
         </div>
 
         <add-button @click="isCreateModalOpen = true" label="Create Series" class="w-96" />
@@ -74,6 +75,8 @@ const dropDownMenuOptions = [
     { id: 3, text: "Assign Elements", eventName: "assignElements", needsAdmin: true },
     { id: 3, text: "Delete", eventName: "delete", needsAdmin: true },
 ]
+
+const emits = defineEmits(['updateMouseClickPosition'])
 
 const seriesLoaded = ref(false)
 

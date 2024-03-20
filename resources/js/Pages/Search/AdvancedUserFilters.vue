@@ -19,8 +19,6 @@
 <script setup>
 import TriCheckbox from './TriCheckbox.vue';
 
-import {defineEmits} from 'vue';
-
 const emits = defineEmits(['updateAdvancedSearch'])
 
 

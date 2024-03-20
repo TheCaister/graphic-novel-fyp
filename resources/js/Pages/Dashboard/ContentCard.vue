@@ -15,11 +15,13 @@
                     class="material-symbols-outlined text-pink-300 drop-shadow-[-2px_2px_0_rgba(0,0,0,1)]">
                     pending
                 </span>
-                <Transition name="fade">
-                    <DashboardDropdownMenu v-if="selected && isCardMenuOpen" class="absolute z-50"
-                        :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked"
-                        @closeMenu="isCardMenuOpen = false" />
-                </Transition>
+                <Teleport to="#dashboardMenuPosition">
+                    <Transition name="fade">
+                        <DashboardDropdownMenu v-if="selected && isCardMenuOpen" class="absolute z-50"
+                            :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked"
+                            @closeMenu="isCardMenuOpen = false" />
+                    </Transition>
+                </Teleport>
             </button>
         </div>
         <div class="text-white p-4 flex items-center">{{ content.content_name }}</div>

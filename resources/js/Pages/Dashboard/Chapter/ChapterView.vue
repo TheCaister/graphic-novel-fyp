@@ -11,7 +11,8 @@
                 thumbnail: chapter.chapter_thumbnail,
             }" :link="route('chapters.show', chapter.chapter_id)"
                 :selected="chapter.chapter_id === selectedChapter.chapter_id" :drop-down-menu-options="dropDownMenuOptions"
-                @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked" />
+                @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked"
+                @click="emits('updateMouseClickPosition', $event)"  />
         </div>
 
         <add-button @click="isCreateModalOpen = true" label="Create Chapter" class="w-96" />
@@ -66,6 +67,8 @@ const isEditModalOpen = ref(false)
 const isDeleteModalOpen = ref(false)
 
 const chaptersLoaded = ref(false)
+
+const emits = defineEmits(['updateMouseClickPosition'])
 
 const selectedChapter = ref({
     chapter_id: null,
