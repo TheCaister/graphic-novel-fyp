@@ -152,7 +152,7 @@ function updateSize(event) {
             </div>
         </div>
 
-        <div>
+        <!-- <div>
             <span class="material-symbols-outlined dark">
                 list
             </span>
@@ -164,7 +164,7 @@ function updateSize(event) {
             <PrimaryButton>
                 Dropdown for view type
             </PrimaryButton>
-        </div>
+        </div> -->
     </div>
 
     <div class="flex">

@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount, onUpdated } from 'vue'
 import Mention from '@tiptap/extension-mention'
 import Paragraph from '@tiptap/extension-paragraph'
 import { Editor, EditorContent, VueNodeViewRenderer } from '@tiptap/vue-3'
@@ -195,7 +195,14 @@ function removeMentionItem(id) {
     emits('removeMentionItem', id)
 }
 
+// onUpdated(() => {
+//     console.log('included elements...')
+//     console.log(props.includedElements)
+// })
+
 onMounted(() => {
+    // console.log('included elements...')
+    // console.log(props.includedElements)
 
 
     editor.value = new Editor({
@@ -215,17 +222,17 @@ onMounted(() => {
         },
     })
 
-    editor.value.commands.insertContent([
-        {
-            type: 'mention',
-            attrs: {
-                id: {
-                    id: 1,
-                    label: 'hi guys'
-                }
-            }
-        }
-    ])
+    // editor.value.commands.insertContent([
+    //     {
+    //         type: 'mention',
+    //         attrs: {
+    //             id: {
+    //                 id: 1,
+    //                 label: 'hi guys'
+    //             }
+    //         }
+    //     }
+    // ])
 
     // for loop over props.includedElements and add them to the editor
     // props.includedElements.forEach((element) => {
@@ -292,4 +299,4 @@ button:disabled {
 .ProseMirror:focus {
     outline: none;
 }
-</style>./MentionItemAdmin.vue
+</style>

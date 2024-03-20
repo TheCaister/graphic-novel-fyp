@@ -2,7 +2,7 @@
     <!-- Loop through the universes and display them in cards -->
     <div v-if="universeLoaded" class="w-full flex flex-wrap justify-center">
 
-        <div v-for="universe in universes" :key="universe.universe_id" class=" w-96 mx-8 mb-4">
+        <div v-for="universe in universes" :key="universe.universe_id" class=" w-96 mx-8 mb-4 ">
             <ContentCard :content="{
                 content_id: universe.universe_id,
                 content_name: universe.universe_name,

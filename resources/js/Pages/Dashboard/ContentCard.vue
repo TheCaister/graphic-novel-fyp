@@ -1,6 +1,7 @@
 <template>
     <Link Link :href='props.link'>
-    <div class="rounded-lg shadow-lg hover:shadow-white transition-all duration-200">
+    <!-- <div class="rounded-lg shadow-lg hover:shadow-white transition-all duration-200"> -->
+    <div class="rounded-lg card">
         <div class="relative rounded-lg ">
             <div class="flex items-center">
                 <div class="h-64 w-full bg-pink-300 flex justify-center rounded-lg">
@@ -91,7 +92,13 @@ function handleMenuItemClicked(event) {
     font-size: 42px;
 }
 
-.submenu {
-    z-index: 1000;
+.card {
+    transition: box-shadow 100ms ease-in-out,
+        transform 200ms ease-in-out;
+}
+
+.card:hover {
+    /* box-shadow: -8px 8px 0px rgb(255, 255, 255); */
+    transform: scale(1.02);
 }
 </style>

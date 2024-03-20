@@ -1,11 +1,11 @@
 <template>
     <div class="p-4 text-white flex flex-col items-center">
-        <div class="mb-4">Recents</div>
+        <div class="mb-4 text-gray-400">Recents</div>
 
         <!-- Loop through resultsList. Each result has title, thumbnail and link -->
         <div class="flex flex-col space-y-4 w-full">
             <Link v-for="result in recentsList" :href="result.link" :key="result.id"
-                class="shadow-lg rounded-lg flex items-center hover:scale-105 hover:shadow-pink-500 transition-all duration-200">
+                class="shadow-lg rounded-lg flex items-center hover:scale-105 transition-all duration-200">
                 <!-- Your existing code here -->
                 <img v-if="result.thumbnail" class="w-16 h-16 rounded-lg mr-2" :src="result.thumbnail" :alt="result.title" />
                 <!-- Display the first letter of the title -->
