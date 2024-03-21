@@ -110,17 +110,34 @@ function updateSiblingContentDropdown() {
 
 }
 
+const parentContentTypeFromDashboardView = computed(() => {
+    console.log(dashboardView.value)
+    switch (dashboardView.value) {
+        case 'UniverseView':
+            return
+        case 'SeriesView':
+            return 'Universes'
+        case 'ChapterView':
+            return 'Series'
+        case 'PageView':
+            return 'Chapters'
+        default:
+            return
+    }
+
+})
+
 
 
 function goBack() {
     router.visit(route('content.get-parent', { type: dashboardView.value, id: parentContentIdNumber.value }))
 }
 
-function goToContent(option){
+function goToContent(option) {
 
     let id = option.id
 
-    switch(props.dashboardViewType){
+    switch (props.dashboardViewType) {
         case 'SeriesView':
             router.visit(route('universes.show', id))
             break
@@ -142,11 +159,12 @@ function updateSize(event) {
 </script>
 
 <template>
+
     <Head title="Dashboard" />
 
     <div class="flex justify-between mb-8">
 
-        <div>
+        <div class="flex">
             <div v-if="dashboardView != 'UniverseView'">
                 <PrimaryButton @click="goBack()">
                     Go back
@@ -171,13 +189,15 @@ function updateSize(event) {
                     Universe 1
                 </PrimaryButton> -->
 
-                <DropdownSubtle :options="siblingContentList" @option-selected="goToContent"/>
+                <!-- Would convert from something like SeriesView to Series, ChapterView to chapters, etc. -->
+                <DropdownSubtle :options="siblingContentList" @option-selected="goToContent"
+                    :label="parentContentTypeFromDashboardView" />
             </div>
         </div>
 
         <!-- For teleporting menus -->
-        <div id="dashboardMenuPosition" :style="{ position: 'fixed', top: mouseClickY + 'px', left: mouseClickX + 'px' }"
-            class=" z-10"></div>
+        <div id="dashboardMenuPosition"
+            :style="{ position: 'fixed', top: mouseClickY + 'px', left: mouseClickX + 'px' }" class=" z-10"></div>
 
         <!-- <div>
             <span class="material-symbols-outlined dark">
@@ -202,7 +222,8 @@ function updateSize(event) {
 
 
 
-                    <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber" @update-mouse-click-position="updateMouseClickPosition($event)"/>
+                    <component :is="DashboardViewComponent" :parentContentId="parentContentIdNumber"
+                        @update-mouse-click-position="updateMouseClickPosition($event)" />
 
                 </KeepAlive>
 
@@ -213,8 +234,7 @@ function updateSize(event) {
             <Tab v-if="dashboardView != 'UniverseView'" title="Elements" listSize="-1" @updateSize="updateSize"
                 v-slot="{ update }">
                 <KeepAlive>
-                    <ElementView @updateSize="update"
-                    @update-mouse-click-position="updateMouseClickPosition($event)" />
+                    <ElementView @updateSize="update" @update-mouse-click-position="updateMouseClickPosition($event)" />
                 </KeepAlive>
             </Tab>
 

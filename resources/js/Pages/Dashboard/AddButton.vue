@@ -1,5 +1,5 @@
 <template>
-    <div class="mx-8">
+    <div class="mx-8 flex items-center justify-center">
         <div class="w-full h-64 flex items-center justify-center rounded-lg">
 
             <button>

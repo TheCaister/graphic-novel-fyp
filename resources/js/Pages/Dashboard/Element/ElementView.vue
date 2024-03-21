@@ -1,6 +1,6 @@
 <template>
     <div v-if="elementsLoaded" class="w-full flex flex-wrap  justify-center">
-        <div v-for="element in elements" :key="element.element_id" class=" w-96 mx-8 mb-4">
+        <div v-for="element in elements" :key="element.element_id" class=" w-96 mx-2 mb-4">
 
             <content-card-detailed :content="{
         content_id: element.element_id,

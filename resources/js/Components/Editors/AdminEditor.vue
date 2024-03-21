@@ -1,5 +1,8 @@
 <template>
     <div class="bg-black text-white">
+        <p>
+            Type '@' to start adding admins
+        </p>
         <editor-content class="p-4 editor-field border-4 border-white" :editor="editor" @itemSelected="itemSelected" />
     </div>
 </template>

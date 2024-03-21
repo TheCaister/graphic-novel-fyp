@@ -1,7 +1,7 @@
 <template>
     <!-- Loop through the universes and display them in cards -->
     <div v-if="seriesLoaded" class="w-full flex flex-wrap justify-center">
-        <div v-for="series in series" :key="series.series_id" class=" w-96 mx-8 mb-4">
+        <div v-for="series in series" :key="series.series_id" class=" w-96 mx-2 mb-4">
             <content-card-detailed :content="{
                 content_id: series.series_id,
                 content_name: series.series_title,

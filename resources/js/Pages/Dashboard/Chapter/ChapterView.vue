@@ -2,7 +2,7 @@
     <!-- Loop through the universes and display them in cards -->
     <div v-if="chaptersLoaded" class="w-full flex flex-wrap  justify-center">
 
-        <div v-for="chapter in chapters" :key="chapter.chapter_id" class="w-96 mx-8 mb-4">
+        <div v-for="chapter in chapters" :key="chapter.chapter_id" class="w-96 mx-2 mb-4">
             <content-card-detailed :content="{
                 content_id: chapter.chapter_id,
                 content_name: chapter.chapter_title,
