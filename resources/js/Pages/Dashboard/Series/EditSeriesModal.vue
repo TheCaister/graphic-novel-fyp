@@ -179,7 +179,7 @@ function handleFilePondThumbnailRemove(error, file) {
 
                             <div>
                                 <InputLabel for="series_genre" value="Genre:" />
-                                <select v-model="form.series_genre" class="border-2 border-black rounded-md p-2 w-full"
+                                <select v-model="form.series_genre" class="rounded-md p-2 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                     required>
                                     <option disabled value="">Please select a genre</option>
                                     <option v-for="genre in genres" :key="genre" :value="genre">
@@ -191,8 +191,8 @@ function handleFilePondThumbnailRemove(error, file) {
 
                             <div>
                                 <InputLabel for="series_summary" value="Description:" />
-                                <textarea id="series_summary" class="mt-1 block w-full" v-model="form.series_summary"
-                                    autofocus></textarea>
+
+                                    <TextAreaInput id="series_summary" class="mt-1 block w-full" v-model="form.series_summary" required autocomplete="series_summary"></TextAreaInput>
                                 <InputError class="mt-2" message="" />
                             </div>
 

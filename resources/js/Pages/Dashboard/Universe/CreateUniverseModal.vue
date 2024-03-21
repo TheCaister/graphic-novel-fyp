@@ -87,9 +87,6 @@ if (form.upload) {
             <h2 class="text-4xl font-bold text-white ">Create Universe</h2>
             <form @submit.prevent="submit">
                 <div class="flex">
-                    <button class="w-64 h-64 text-white" @click="console.log(form.moderators)">
-                        Check admins
-                    </button>
                     <div class="w-1/2">
                         
 
