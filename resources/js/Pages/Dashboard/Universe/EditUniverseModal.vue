@@ -162,7 +162,7 @@ const files = computed(() => {
                             }" />
                     </div>
                     <div class="flex flex-col justify-between w-1/2 ml-8">
-                        <div>
+                        <div class="flex flex-col gap-4">
                             <div>
                                 <InputLabel for="universe_name" value="Universe name:" />
                                 <TextInput id="universe_name" type="text" class="mt-1 block w-full"
@@ -177,13 +177,13 @@ const files = computed(() => {
                         <div class="flex justify-end">
                             <!-- Button to cancel and button to create -->
                             <button @click="close" type="button"
-                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                class="text-white font-bold py-2 px-4 rounded">
                                 Cancel
                             </button>
-                            <PrimaryButton type="submit"
-                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            <button type="submit"
+                                class="bg-pink-500 text-white font-bold py-2 px-4 rounded-full">
                                 Save
-                            </PrimaryButton>
+                            </button>
                         </div>
                     </div>
 

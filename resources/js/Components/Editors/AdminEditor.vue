@@ -1,9 +1,9 @@
 <template>
     <div class="bg-black text-white">
-        <p>
+        <p class="block font-medium text-sm text-gray-700 dark:text-gray-300">
             Type '@' to start adding admins
         </p>
-        <editor-content class="p-4 editor-field border-4 border-white" :editor="editor" @itemSelected="itemSelected" />
+        <editor-content class="p-4 border border-gray-700 rounded-md" :editor="editor" @itemSelected="itemSelected" />
     </div>
 </template>
 
@@ -212,7 +212,7 @@ onBeforeUnmount(() => {
     background-color: #fff;
     color: #000;
 
-    /* Add border with radius */
+    
     border: 1px solid #000;
     border-radius: 5px;
 
@@ -223,8 +223,8 @@ onBeforeUnmount(() => {
     background-color: #000;
     color: #fff;
 
-    /* Add border with radius */
-    border: 1px solid #000;
+    
+    border: 5px solid #ff4b4b;
     border-radius: 5px;
 
     padding: 5px 10px;
@@ -233,7 +233,7 @@ onBeforeUnmount(() => {
 button:disabled {
     color: #a1a1a1;
 
-    /* Add border with radius */
+    
     border: 1px solid #a1a1a1;
     border-radius: 5px;
 
@@ -243,4 +243,4 @@ button:disabled {
 .ProseMirror:focus {
     outline: none;
 }
-</style>./MentionItemAdmin.vue
+</style>

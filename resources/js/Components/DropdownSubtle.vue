@@ -32,7 +32,7 @@ const isDropDownVisible = ref(false)
 const props = defineProps({
     label: {
         type: String,
-        required: true,
+        required: false,
         default: 'Projects'
     },
     options: {

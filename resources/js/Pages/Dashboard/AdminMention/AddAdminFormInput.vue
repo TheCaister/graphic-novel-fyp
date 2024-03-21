@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white">
+    <div>
         <AdminEditor @add-admin="addAdmin" />
     </div>
 </template>
