@@ -33,7 +33,7 @@ onClickOutside(cardMenu, () => {
 })
 
 function menuItemClick(eventName) {
-    console.log(eventName)
+    // console.log(eventName)
     emits('menuItemClick', eventName)
     // emits('closeMenu')
 }

@@ -148,7 +148,7 @@ function updateContentList() {
 }
 
 function switchSelectedContent(contentId) {
-    console.log(pages.value)
+    // console.log(pages.value)
     selectedPage.value = pages.value.find(page => page.page_id == contentId)
     
 }

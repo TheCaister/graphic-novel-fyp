@@ -20,7 +20,6 @@ const emits = defineEmits(['updateSize'])
 
 const selectedTitle = inject('selectedTitle')
 function update(event) {
-    console.log('the tab has been updated')
     emits('updateSize', event)
 }
 </script>

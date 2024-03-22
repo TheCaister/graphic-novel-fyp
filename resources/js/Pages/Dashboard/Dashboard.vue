@@ -101,7 +101,6 @@ function updateSiblingContentDropdown() {
     }
 
     if (dashboardView.value !== 'UniverseView') {
-        console.log('getting sibling...')
         APICalls.getSiblingContent(type, props.parentContentId).then(response => {
             siblingContentList.value = response.data
             // console.log(response)
@@ -111,7 +110,6 @@ function updateSiblingContentDropdown() {
 }
 
 const parentContentTypeFromDashboardView = computed(() => {
-    console.log(dashboardView.value)
     switch (dashboardView.value) {
         case 'UniverseView':
             return
@@ -153,7 +151,6 @@ function goToContent(option) {
 }
 
 function updateSize(event) {
-    console.log('successfully updated element list size')
     size.value = event
 }
 </script>
