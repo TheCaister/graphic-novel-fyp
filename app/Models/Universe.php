@@ -131,9 +131,4 @@ class Universe extends Model implements HasMedia
             $query->whereIn('elements.element_id', $elementIdList);
         });
     }
-    // {
-    //     // $query->whereHas('elements', function ($query) use ($elementType) {
-    //     //     $query->where('derived_element_type', $elementType);
-    //     // });
-    // }
 }

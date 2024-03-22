@@ -38,7 +38,7 @@ class SearchController extends Controller
                 break;
         }
 
-        // dd($resultsList);
+        // dd(request()->all( ));
 
         return Inertia::render('Search/SearchLayout', [
             // 'searchType' => request()->searchType,
@@ -296,9 +296,17 @@ class SearchController extends Controller
 
             $method = lcfirst($type);
 
-            $tempList = $tempList->concat($user->$method()->filter(request(['search']))
-                ->includedElements($includedElements)
-                ->limit(request()->limit)->get());
+            // $tempList = $tempList->concat($user->$method()->filter(request(['search']))
+            //     ->includedElements($includedElements)
+            //     ->limit(request()->limit)->get());
+
+            $query = $user->$method()->filter(request(['search']));
+
+            if (!empty($includedElements)) {
+                $query = $query->includedElements($includedElements);
+            }
+
+            $tempList = $tempList->concat($query->limit(request()->limit)->get());
         }
 
 
@@ -309,6 +317,7 @@ class SearchController extends Controller
         foreach ($tempList as $result) {
             $resultsList[] = $result->getSearchFormattedEntry();
         }
+
         // dd($resultsList);
         // We do limiting here
 

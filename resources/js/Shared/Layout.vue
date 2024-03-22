@@ -38,7 +38,7 @@
                 <div class="flex items-center space-x-3">
                     <!-- Search bar -->
                     <!-- <form action=""> -->
-                    <div class="relative text-gray-600  h-10 flex items-center text-white">
+                    <form @submit.prevent="search" class="relative text-gray-600  h-10 flex items-center text-white">
                         <div class="relative">
                             <select v-model="form.searchType" class="h-10 bg-gray-500 rounded-l-lg border-r-2 border-gray-600">
                                 <option value="users" selected>Users</option>
@@ -61,7 +61,7 @@
                                 search
                             </span>
                         </button>
-                    </div>
+                    </form>
                     <!-- </form> -->
 
                     <!-- Settings button with gear icon -->

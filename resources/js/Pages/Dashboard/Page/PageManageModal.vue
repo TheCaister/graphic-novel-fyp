@@ -167,8 +167,9 @@ function handleCreateElementButtonClicked() {
             <div class="flex h-full gap-8">
 
                 <!-- Page image here -->
-                <div class="w-full h-full">
-                    <file-pond name="upload" label-idle="Page Image" accepted-file-types="image/jpeg, image/png"
+                <div class="w-full ">
+                    <file-pond style="{
+                    }" name="upload" label-idle="Page Image" accepted-file-types="image/jpeg, image/png"
                         :files="files" @processfile="handleFilePondThumbnailProcess"
                         @removefile="handleFilePondThumbnailRemove" :server="{
                             process: {
@@ -249,5 +250,10 @@ function handleCreateElementButtonClicked() {
 .modal-leave-to {
     opacity: 0;
     transform: scale(1.1);
+}
+
+.filepond--panel-root {
+    background-color: transparent;
+    border: 20px solid #0059ff;
 }
 </style>

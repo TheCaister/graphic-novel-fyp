@@ -68,6 +68,10 @@ const props = defineProps({
         type: Object,
         default: {}
     },
+    // searchType: {
+    //     type: String,
+    //     default: 'users'
+    // },
     errors: {
         type: Object,
     },
@@ -182,6 +186,8 @@ onMounted(() => {
 })
 
 onUpdated(() => {
+    form.searchType = props.searchParams.searchType;
+
     resultsList.value = props.initResultsList;
 })
 </script>
