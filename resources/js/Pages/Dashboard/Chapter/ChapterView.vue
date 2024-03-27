@@ -4,15 +4,15 @@
 
         <div v-for="chapter in chapters" :key="chapter.chapter_id" class="w-96 mx-2 mb-4">
             <content-card-detailed :content="{
-                content_id: chapter.chapter_id,
-                content_name: chapter.chapter_title,
-                subheading: 'Chapter ' + chapter.chapter_number,
-                description: chapter.chapter_notes,
-                thumbnail: chapter.chapter_thumbnail,
-            }" :link="route('chapters.show', chapter.chapter_id)"
-                :selected="chapter.chapter_id === selectedChapter.chapter_id" :drop-down-menu-options="dropDownMenuOptions"
-                @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked"
-                @click="emits('updateMouseClickPosition', $event)"  />
+        content_id: chapter.chapter_id,
+        content_name: chapter.chapter_title,
+        subheading: 'Chapter ' + chapter.chapter_number,
+        description: chapter.chapter_notes,
+        thumbnail: chapter.chapter_thumbnail,
+    }" :link="route('chapters.show', chapter.chapter_id)"
+                :selected="chapter.chapter_id === selectedChapter.chapter_id"
+                :drop-down-menu-options="dropDownMenuOptions" @switch-selected-content="switchSelectedContent"
+                @menu-item-click="handleMenuItemClicked" @click="emits('updateMouseClickPosition', $event)" />
         </div>
 
         <add-button @click="isCreateModalOpen = true" label="Create Chapter" class="w-96" />
@@ -33,14 +33,16 @@
 
         <Transition name="modal" class="z-50">
             <edit-chapter-modal v-if="isEditModalOpen" @closeModal="isEditModalOpen = false; updateContentList()"
-                :chapter="selectedChapter" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+                :chapter="selectedChapter"
+                class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
         <Transition name="modal" class="z-50">
-            <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()" :content="{
-                content_id: selectedChapter.chapter_id,
-                content_name: selectedChapter.chapter_title,
-            }" type="chapters" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+            <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()"
+                :content="{
+        content_id: selectedChapter.chapter_id,
+        content_name: selectedChapter.chapter_title,
+    }" type="chapters" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
     </Teleport>
@@ -50,13 +52,14 @@
 
 import { onActivated, onMounted } from 'vue';
 import APICalls from '@/Utilities/APICalls';
-import { usePage } from '@inertiajs/vue3';
+import { usePage, router } from '@inertiajs/vue3';
 import { ref, defineProps } from 'vue';
 import CreateChapterModal from './CreateChapterModal.vue';
 import EditChapterModal from './EditChapterModal.vue';
 import DeleteModal from '../DeleteModal.vue';
 import ContentCardDetailed from '../ContentCardDetailed.vue';
 import AddButton from '../AddButton.vue'
+
 
 const page = usePage();
 
@@ -79,8 +82,8 @@ const selectedChapter = ref({
 
 const dropDownMenuOptions = [
     { id: 1, text: "Edit", eventName: "edit" },
-    { id: 2, text: "View Elements", eventName: "viewElements" },
-    { id: 3, text: "Assign Elements", eventName: "assignElements" },
+    // { id: 2, text: "View Elements", eventName: "viewElements" },
+    { id: 2, text: "Assign Elements", eventName: "assignElements" },
     { id: 3, text: "Delete", eventName: "delete" },
 ]
 
@@ -117,6 +120,11 @@ function handleMenuItemClicked(eventName) {
         case "viewElements":
             break;
         case "assignElements":
+            // <Link :href="route('elements.assign', { contentType: content.type, content_id: content.content_id })" v-if="content.type !== 'Page'">
+            //     >>
+            // </Link>
+            // console.log(selectedChapter.chapter_id)
+            router.visit(route('elements.assign', { contentType: 'Chapter', content_id: selectedChapter.value.chapter_id }))
             break;
         case "delete":
             isDeleteModalOpen.value = true

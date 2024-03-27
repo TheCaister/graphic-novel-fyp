@@ -71,8 +71,8 @@ const isDeleteModalOpen = ref(false)
 
 const dropDownMenuOptions = [
     { id: 1, text: "Edit", eventName: "edit", needsAdmin: true },
-    { id: 2, text: "View Elements", eventName: "viewElements", needsAdmin: false },
-    { id: 3, text: "Assign Elements", eventName: "assignElements", needsAdmin: true },
+    // { id: 2, text: "View Elements", eventName: "viewElements", needsAdmin: false },
+    { id: 2, text: "Assign Elements", eventName: "assignElements", needsAdmin: true },
     { id: 3, text: "Delete", eventName: "delete", needsAdmin: true },
 ]
 

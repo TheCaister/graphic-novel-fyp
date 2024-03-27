@@ -74,8 +74,8 @@ const selectedUniverse = ref({ universe_id: 0, universe_name: "" })
 
 const dropDownMenuOptions = [
     { id: 1, text: "Edit", eventName: "edit", needsAdmin: true },
-    { id: 2, text: "View Elements", eventName: "viewElements", needsAdmin: false },
-    { id: 3, text: "Delete", eventName: "delete", needsAdmin: true },
+    // { id: 2, text: "View Elements", eventName: "viewElements", needsAdmin: false },
+    { id: 2, text: "Delete", eventName: "delete", needsAdmin: true },
 ]
 
 const props = defineProps({
