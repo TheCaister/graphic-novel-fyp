@@ -62,10 +62,11 @@
         </Transition>
 
         <Transition name="modal" class="z-50">
-            <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()" :content="{
-                content_id: selectedPage.page_id,
-                content_name: 'Page ' + selectedPage.page_number,
-            }" type="pages" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+            <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()"
+                :content="{
+        content_id: selectedPage.page_id,
+        content_name: 'Page ' + selectedPage.page_number,
+    }" type="pages" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
     </Teleport>
 </template>
@@ -81,6 +82,7 @@ import CreatePageModal from './CreatePageModal.vue'
 import DashboardDropdownMenu from '../DashboardDropdownMenu.vue'
 import DeleteModal from '../DeleteModal.vue'
 import CreateElementModal from '../Element/CreateElementModal.vue'
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
     parentContentId: {
@@ -121,6 +123,9 @@ function handleMenuItemClicked(eventName) {
             break;
         case "viewElements":
             break;
+        case "assignElements":
+            router.visit(route('elements.assign.get-parent', { type: 'Page', content_id: selectedPage.value.page_id }))
+            break;
         case "delete":
             isDeleteModalOpen.value = true
             break;
@@ -150,7 +155,7 @@ function updateContentList() {
 function switchSelectedContent(contentId) {
     // console.log(pages.value)
     selectedPage.value = pages.value.find(page => page.page_id == contentId)
-    
+
 }
 </script>
 

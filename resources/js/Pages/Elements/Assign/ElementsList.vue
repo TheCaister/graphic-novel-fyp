@@ -7,8 +7,8 @@
         Check
     </button> -->
 
-    <div class="overflow-auto mt-8">
-        <TransitionGroup name="list" tag="ul">
+    <div class=" mt-8 h-96 overflow-auto">
+        <TransitionGroup name="list" tag="ul" class="flex flex-col gap-4">
             <div v-for="element in elements" :key="element.element_id">
                 <TriCheckbox :label="element.element_name" :image="element.element_thumbnail" v-model="element.checked" />
             </div>

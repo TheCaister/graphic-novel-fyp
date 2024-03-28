@@ -23,8 +23,6 @@
             <div class="flex justify-around  h-4/5 ">
                 <div class="flex flex-col w-2/5 ">
                     <!-- <SearchBar /> -->
-                    <!-- <ContentList :subContentList="subContentList"
-                        @content-checked="(event) => updateSelectedContentList(event)"/> -->
                     <ContentList v-model="content" />
                     <!-- empty div that fills up flex -->
                     <div class="flex-grow"></div>

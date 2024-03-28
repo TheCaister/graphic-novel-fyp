@@ -1,8 +1,4 @@
 <template>
-    <!-- <h1>
-        CONTENT
-    </h1> -->
-
     <div class="overflow-auto mt-8">
 
         <div v-for="content in contentModel" :key="content.content_id" class="flex relative items-center">

@@ -120,11 +120,7 @@ function handleMenuItemClicked(eventName) {
         case "viewElements":
             break;
         case "assignElements":
-            // <Link :href="route('elements.assign', { contentType: content.type, content_id: content.content_id })" v-if="content.type !== 'Page'">
-            //     >>
-            // </Link>
-            // console.log(selectedChapter.chapter_id)
-            router.visit(route('elements.assign', { contentType: 'Chapter', content_id: selectedChapter.value.chapter_id }))
+            router.visit(route('elements.assign.get-parent', { type: 'Chapter', content_id: selectedChapter.value.chapter_id }))
             break;
         case "delete":
             isDeleteModalOpen.value = true
