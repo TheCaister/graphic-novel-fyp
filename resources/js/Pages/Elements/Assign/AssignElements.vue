@@ -108,6 +108,7 @@ function submit() {
     form.post(route('elements.assign.store'), {
         onFinish: () => {
             form.reset()
+            updatePreSelectedElementList()
             console.log('form reset')
         },
     });

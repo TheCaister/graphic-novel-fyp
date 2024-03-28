@@ -25,10 +25,12 @@
             </span>
         </button>
 
-        <div class="absolute top-2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-400 text-black px-3 py-1 rounded-full text-sm"
-            v-if="alreadyAttached === true">
-            Already Attached
-        </div>
+        <Transition name="fade">
+            <div class="absolute top-2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-400 text-black px-3 py-1 rounded-full text-sm"
+                v-if="alreadyAttached === true">
+                Already Attached
+            </div>
+        </Transition>
     </div>
 </template>
 
@@ -71,5 +73,15 @@ function toggleChecked() {
     color: white;
     /* set font size */
     font-size: 2.5rem;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .2s;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
 }
 </style>
