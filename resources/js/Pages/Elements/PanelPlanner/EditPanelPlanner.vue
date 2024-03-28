@@ -1,6 +1,6 @@
 <template>
-    <div class="flex justify-center text-white ">
-        <div class="text-white">
+    <div class="flex justify-center text-white bg-black" style="height: 80vh;">
+        <div v-if="showElementList === true" class="text-white">
             <div v-for="item in layout" class="rounded-lg relative border-4 border-pink-500 p-4">
                 <div>
                     <!-- Do something like Panel + item.i -->
@@ -18,81 +18,74 @@
 
 
 
-        <div class="w-2/3 min-h-10 relative">
-            <div>
-                <button @click="isMirrored = !isMirrored; console.log(isMirrored)">
-                    Flip layout
-                </button>
-                <button @click="console.log(props.element)">
-                    Check element
-                </button>
-            </div>
-
-            <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout" :col-num="12"
-                :row-height="30" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored"
-                :vertical-compact="false" :margin="[10, 10]" :restore-on-drag="true" :use-css-transforms="true"
-                class="border-4 border-pink-500 rounded-lg  touch-none" @click="addGridItem"
-                @mousemove="updateMousePosition" @mouseleave="showAddElementHint = false" :key="isMirrored">
-
-                <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
-                    :key="item.i" class="rounded-lg border-4 border-pink-500 text-white p-4 bg-black z-0"
-                    @mousemove.stop="showAddElementHint = false; console.log('hi'); isDragging = true; stopIsDraggingAfterDelay(50)"
-                    @mouseup="stopIsDraggingAfterDelay(10)" 
-                    @click.stop="console.log(selectedGridId); selectedGridId = item.i; handleClick(); updateMouseClickPosition($event)">
-
-                    {{ item.i }}
-                    <span class="absolute top-0 right-0 cursor-pointer mt-2 mr-2"
-                        @click="removeGridItem(item.i)">X</span>
-
-                    <Teleport to="#gridHolder">
-                        <Transition name="fade">
-                            <DashboardDropdownMenu v-if="selectedGridId == item.i && isGridMenuOpen"
-                                :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked($event, item)"
-                                @closeMenu="isGridMenuOpen = false" />
-                        </Transition>
-                    </Teleport>
-
-                </grid-item>
-
-
-
-                <!-- Make an empty div with a border with the aspect ratio of a page to be overlayed on top of the grid -->
-
-                <div class="border-4 border-blue-500 rounded-lg " :style="{
-                aspectRatio: pageStyleAspectRatio
-            }"></div>
-
-            </GridLayout>
-
-            <!-- <div class="flex justify-center">
-                <button>
-                    &lt;- </button>
+        <div class="flex flex-col items-center">
+            <div class="relative border-2 flex flex-col">
                 <div>
-                    12/29
+                    <button @click="console.log(props.element)">
+                        Check element
+                    </button>
+                    <button @click="showElementList = !showElementList">
+                        Toggle elements
+                    </button>
+                    <button @click="showPanelDescriptionList = !showPanelDescriptionList">
+                        Toggle panel descriptions
+                    </button>
                 </div>
-                <button>
-                    ->
-                </button>
-            </div> -->
+                <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout" :col-num="12"
+                    :row-height="30" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored"
+                    :vertical-compact="false" :margin="[10, 10]" :restore-on-drag="true" :use-css-transforms="true"
+                    class="border-4 border-pink-500 rounded-lg touch-none" @click="addGridItem"
+                    @mousemove="updateMousePosition" @mouseleave="showAddElementHint = false" :key="isMirrored" :style="{
+            height: '60vh',
+            aspectRatio: pageStyleAspectRatio
+        }">
+                    <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
+                        :key="item.i" class="rounded-lg border-4 border-pink-500 text-white p-4 bg-black z-0"
+                        @mousemove.stop="showAddElementHint = false; isDragging = true; stopIsDraggingAfterDelay(50)"
+                        @mouseup="stopIsDraggingAfterDelay(10)"
+                        @click.stop="console.log(selectedGridId); selectedGridId = item.i; handleClick(); updateMouseClickPosition($event)">
+                        {{ item.i }}
+                        <span class="absolute top-0 right-0 cursor-pointer mt-2 mr-2"
+                            @click="removeGridItem(item.i)">X</span>
+                        <Teleport to="#gridHolder">
+                            <Transition name="fade">
+                                <DashboardDropdownMenu v-if="selectedGridId == item.i && isGridMenuOpen"
+                                    :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked($event, item)"
+                                    @closeMenu="isGridMenuOpen = false" />
+                            </Transition>
+                        </Teleport>
+                    </grid-item>
+                </GridLayout>
+                <!-- <div class="flex justify-center">
+                    <button>
+                        &lt;- </button>
+                    <div>
+                        12/29
+                    </div>
+                    <button>
+                        ->
+                    </button>
+                </div> -->
+            </div>
+            <div class="flex flex-col">
+                <select name="pageType" id="pageType" class="bg-gray-500 rounded-lg border-2 border-gray-300"
+                    v-model="pageStyle">
+                    <option value="standard_american">Standard American</option>
+                    <option value="double_standard_american">Double Standard American</option>
+                    <option value="a5">Single A5</option>
+                    <option value="double_a5">Double A5</option>
+                </select>
+                <!-- select tag for left-to-right and right-to-left -->
+                <select name="pageDirection" id="pageDirection" class="bg-gray-500 rounded-lg border-2 border-gray-300"
+                    v-model="isMirrored">
+                    <option :value="false">Left to Right</option>
+                    <option :value="true">Right to Left</option>
+                </select>
+            </div>
         </div>
 
-        <div class="flex flex-col">
-            <select name="pageType" id="pageType" class="bg-gray-500 rounded-lg border-2 border-gray-300"
-                v-model="pageStyle">
-                <option value="standard_american">Standard American</option>
-                <option value="double_standard_american">Double Standard American</option>
-                <option value="a5">Single A5</option>
-                <option value="double_a5">Double A5</option>
-            </select>
-
-            <!-- select tag for left-to-right and right-to-left -->
-            <select name="pageDirection" id="pageDirection" class="bg-gray-500 rounded-lg border-2 border-gray-300"
-                v-model="isMirrored">
-                <option :value="false">Left to Right</option>
-                <option :value="true">Right to Left</option>
-            </select>
-        </div>
-        <div>
+        <!-- Panel descriptions list -->
+        <div v-if="showPanelDescriptionList === true">
             <div v-for="item in layout" class="rounded-lg border-4 border-pink-500 p-4">
                 <div>
                     {{ 'Panel ' + item.i }}
@@ -103,6 +96,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- Container for buttons that pop in and out of existence -->
@@ -141,7 +135,7 @@ const showAddElementHint = ref(false)
 const mouseX = ref(0)
 const mouseY = ref(0)
 // const pageStyle = ref('a5')
-const pageStyle = ref('double_standard_american')
+const pageStyle = ref('a5')
 const isGridMenuOpen = ref(false)
 const mouseClickX = ref(0)
 const mouseClickY = ref(0)
@@ -150,6 +144,8 @@ const colNum = 12
 
 const isMirrored = ref(false)
 const isDragging = ref(false)
+const showElementList = ref(true)
+const showPanelDescriptionList = ref(true)
 
 const element = defineModel()
 
@@ -271,7 +267,7 @@ function updateMousePosition(event) {
     showAddElementHint.value = true
 }
 
-function stopIsDraggingAfterDelay(delay){
+function stopIsDraggingAfterDelay(delay) {
     setTimeout(() => {
         isDragging.value = false
     }, delay)
