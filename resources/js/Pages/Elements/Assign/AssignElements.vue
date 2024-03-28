@@ -1,7 +1,7 @@
 <template>
     <div class="p-12 text-white" style="height: 110vh;">
         <div class="border-4 border-white rounded-lg p-8">
-            <button @click="console.log(props.preSelectedContent)">
+            <button @click="console.log(content)">
                 Test
             </button>
             <!-- Content title here, with option  to go back... -->
@@ -9,9 +9,9 @@
                 <Link
                     :href="route('elements.assign.get-parent', { type: parentContent.type, content_id: parentContent.content_id })"
                     v-if="parentContent.type !== 'Universe'">
-                    <span class="material-symbols-outlined dark">
-                        chevron_left
-                    </span>
+                <span class="material-symbols-outlined dark">
+                    chevron_left
+                </span>
                 </Link>
                 <div>
                     {{ parentContent.content_name }}
@@ -25,7 +25,7 @@
                     <!-- <SearchBar /> -->
                     <!-- <ContentList :subContentList="subContentList"
                         @content-checked="(event) => updateSelectedContentList(event)"/> -->
-                        <ContentList v-model="content"/>
+                    <ContentList v-model="content" />
                     <!-- empty div that fills up flex -->
                     <div class="flex-grow"></div>
                     <PrimaryButton @click="goBack" class="mt-8">Back</PrimaryButton>
@@ -37,7 +37,7 @@
                     <!-- <button @click="toggleAll">
                         Toggle all
                     </button> -->
-            
+
                     <ElementsList v-model="elements" />
                     <div class="flex-grow"></div>
                     <!-- <button @click="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -56,7 +56,7 @@ import ElementsList from './ElementsList.vue';
 import ContentList from './ContentList.vue';
 import SearchBar from './SearchBar.vue';
 import APICalls from '@/Utilities/APICalls'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 
 const props = defineProps({
@@ -89,8 +89,12 @@ const content = ref(props.subContentList)
 const form = useForm({
     contentType: props.parentContent.type,
     content_id: props.parentContent.content_id,
-    selectedContentList: [],
+    selectedContentList: content.value,
     selectedElementList: [],
+})
+
+watch(content.value, () => {
+    updatePreSelectedElementList()
 })
 
 // During submit, I'll remove any element with checked null
@@ -98,6 +102,9 @@ function submit() {
 
     // Remove any element  with checked null in elements and set it to form.selectedElementList
     form.selectedElementList = elements.value.filter(element => element.checked !== null)
+
+    // in form.selectedContentlist, filter out any content with checked === false
+    form.selectedContentList = content.value.filter(content => content.checked === true)
 
 
     form.post(route('elements.assign.store'), {
@@ -110,13 +117,17 @@ function submit() {
 
 function updatePreSelectedElementList() {
 
+
+    let contentList = content.value.filter(content => content.checked === true)
+    let contentIdList = []
+
     // if form.selectedContentList is empty, return
-    if (form.selectedContentList.length === 0) {
+    if (
+        contentList.length === 0) {
         return
     }
 
     let type = ''
-    let contentIdList = []
 
     switch (props.parentContent.type) {
         case 'Universe':
@@ -133,7 +144,7 @@ function updatePreSelectedElementList() {
     let assignedElementsList = []
 
     // from form.selectedContentList, get the content_id of each content and add it to the contentIdList
-    form.selectedContentList.forEach(content => {
+    contentList.forEach(content => {
         contentIdList.push(content.content_id)
     })
 
@@ -152,27 +163,6 @@ function updatePreSelectedElementList() {
         })
 
     }).catch(error => console.log(error))
-}
-
-function updateSelectedContentList(event) {
-    console.log(event)
-    // First, check if the content is already in the selectedContentList by comparing the contentId. If it is, remove it from the list. If it isn't, add it to the list.
-
-    const selectedContent = form.selectedContentList.find(content => content.type === event.type && content.content_id === event.content_id)
-
-    if (selectedContent) {
-        // Remove the content from the list
-        form.selectedContentList = form.selectedContentList.filter(content => content.content_id !== event.content_id)
-    } else {
-        // Add the content to the list
-        form.selectedContentList.push({
-            content_id: event.content_id,
-            type: event.type,
-            checked: event.checked
-        })
-    }
-
-    updatePreSelectedElementList()
 }
 
 function goBack() {
@@ -222,14 +212,14 @@ onMounted(() => {
         }
     })
 
-    if (props.subContentList.length > 0) {
-        props.preSelectedContent.forEach(content => {
-            updateSelectedContentList({
-                content_id: content,
-                type: props.subContentList[0].type,
-                checked: true
-            })
-        })   
-    }
+    // foreach in props.subcontentlist, check if the content is in preSelectedContent. If it is, set the checked value to true.
+    content.value.forEach(content => {
+
+        const preSelectedContent = props.preSelectedContent.find(preSelectedContent => preSelectedContent === content.content_id)
+
+        if (preSelectedContent) {
+            content.checked = true
+        }
+    })
 })
 </script>

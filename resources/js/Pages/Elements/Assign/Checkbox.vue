@@ -24,7 +24,9 @@
 import { Link } from '@inertiajs/vue3'
 import { defineProps, ref, defineEmits } from 'vue'
 
-const emits = defineEmits(['checked'])
+const checked = defineModel()
+
+// const emits = defineEmits(['checked'])
 
 const props = defineProps({
     content:
@@ -34,12 +36,12 @@ const props = defineProps({
     }
 })
 
-const checked = ref(false)
+// const checked = ref(false)
 
 function toggleChecked() {
-    console.log(props.content)
+    // console.log(props.content)
     checked.value = !checked.value
-    emits('checked', checked.value)
+    // emits('checked', checked.value)
 }
 
 </script>
