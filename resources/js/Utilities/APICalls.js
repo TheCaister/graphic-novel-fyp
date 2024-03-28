@@ -21,7 +21,7 @@ export default {
     getChaptersBySeriesId(seriesId) {
         return axios.get('/api/series/' + seriesId + '/chapters')
     },
-  
+
     getSeriesByGenre(genre) {
         return axios.get('/api/series/genres', {
             params: {
@@ -35,7 +35,7 @@ export default {
     deleteSeriesThumbnail(serverId) {
         return axios.delete('/api/series/' + serverId + '/thumbnail')
     },
-    getElements(type, id){
+    getElements(type, id) {
         return axios.get('/api/elements', {
             params: {
                 type: type,
@@ -43,7 +43,7 @@ export default {
             }
         })
     },
-    getParentContent(type, id){
+    getParentContent(type, id) {
         return axios.get('/api/content/get-parent', {
             params: {
                 type: type,
@@ -51,7 +51,7 @@ export default {
             }
         })
     },
-    getSiblingContent(type, id){
+    getSiblingContent(type, id) {
         return axios.get('/api/content/get-siblings', {
             params: {
                 type: type,
@@ -59,9 +59,9 @@ export default {
             }
         })
     },
-    getContent(type, id){
+    getContent(type, id) {
         // Switch
-        switch(type){
+        switch (type) {
             case 'page':
                 return this.getPage(id)
             case 'chapter':
@@ -72,25 +72,25 @@ export default {
                 return this.getUniverse(id)
         }
     },
-    getPage(pageId){
+    getPage(pageId) {
         return axios.get('/api/pages/' + pageId)
     },
-    getChapter(chapterId){
+    getChapter(chapterId) {
         return axios.get('/api/chapters/' + chapterId)
     },
-    getSeries(seriesId){
+    getSeries(seriesId) {
         return axios.get('/api/series/' + seriesId)
     },
-    getUniverse(universeId){
+    getUniverse(universeId) {
         return axios.get('/api/universes/' + universeId)
     },
-    getElement(elementId){
+    getElement(elementId) {
         return axios.get('/api/elements/' + elementId)
     },
-    getUniverseThumbnail(universeId){
+    getUniverseThumbnail(universeId) {
         return axios.get('/api/universes/' + universeId + '/thumbnail')
     },
-    searchElements(query, limit, searchType='elements'){
+    searchElements(query, limit, searchType = 'elements') {
         return axios.get('/api/search', {
             params: {
                 searchType: searchType,
@@ -100,7 +100,7 @@ export default {
             }
         })
     },
-    searchMention(query, limit, searchType='elements', contentType=null, contentId=null){
+    searchMention(query, limit, searchType = 'elements', contentType = null, contentId = null) {
         return axios.get('/api/search/mention', {
             params: {
                 searchType: searchType,
@@ -112,26 +112,24 @@ export default {
             }
         })
     },
-    getRecents(limit){
+    getRecents(limit) {
         return axios.get('/api/recents', {
             params: {
                 limit: limit,
             }
         })
     },
-    getFilepondPages(chapterId){
+    getFilepondPages(chapterId) {
         return axios.get('/api/chapters/' + chapterId + '/filepond-pages')
     },
-    getLatestChapterNumber(seriesId){
+    getLatestChapterNumber(seriesId) {
         return axios.get('/api/series/' + seriesId + '/latest-number')
     },
     // This will take in a content type, list of content ids, and return a list of assigned elements
-    getAssignedElements(type, contentIdList){
-        return axios.get('/api/elements/assigned/', {
-            params: {
-                type: type,
-                contentIdList: contentIdList,
-            }
+    getAssignedElements(type, contentIdList) {
+        return axios.post('/api/elements/assigned/', {
+            type: type,
+            contentIdList: contentIdList,
         })
     }
 }

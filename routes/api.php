@@ -56,7 +56,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/genres', [SeriesController::class, 'getGenres'])->name('series.get-genres');
 
-    Route::get('/elements/assigned', [SearchController::class, 'getAssignedElements'])->name('elements.get-assigned-elements');
+    Route::post('/elements/assigned', [SearchController::class, 'getAssignedElements'])->name('elements.get-assigned-elements');
 
     // Get element by id
     Route::get('/elements/{element}', [ElementController::class, 'getElementById'])->name('elements.get-element');

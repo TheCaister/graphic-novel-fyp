@@ -1,6 +1,7 @@
 <template>
-    <div class="flex h-24 items-center">
-        <button @click="toggleChecked" :class="['flex', 'flex-grow', 'items-center', 'border-2', 'p-4', 'rounded-md', 'justify-between', 'border-pink-500', {'bg-pink-500': checked === true}]">
+    <div class="flex h-24 items-center relative">
+        <button @click="toggleChecked"
+            :class="['flex', 'flex-grow', 'items-center', 'border-2', 'p-4', 'rounded-md', 'justify-between', 'border-pink-500', { 'bg-pink-500': checked === true }]">
 
             <div class="flex items-center">
                 <!-- <img src="https://cc-prod.scene7.com/is/image/CCProdAuthor/What-is-Stock-Photography_P1_mobile?$pjpeg$&jpegSize=200&wid=720"
@@ -8,9 +9,9 @@
                 
                 -->
 
-                <img :src="props.image ? props.image : '/assets/black_page.jpg'"
-                    alt="" class="rounded-full w-12 h-12 mr-4">
-                <div class="text-2xl" :class="{'text-black': checked === true}">
+                <img :src="props.image ? props.image : '/assets/black_page.jpg'" alt=""
+                    class="rounded-full w-12 h-12 mr-4">
+                <div class="text-2xl" :class="{ 'text-black': checked === true }">
                     {{ label }}
                 </div>
             </div>
@@ -23,11 +24,17 @@
                 remove
             </span>
         </button>
+
+        <div class="absolute top-2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-400 text-black px-3 py-1 rounded-full text-sm"
+            v-if="alreadyAttached === true">
+            Already Attached
+        </div>
     </div>
 </template>
 
 <script setup>
-const checked = defineModel()
+const checked = defineModel('checked')
+const alreadyAttached = defineModel('alreadyAttached')
 
 const props = defineProps({
     image: {
@@ -65,5 +72,4 @@ function toggleChecked() {
     /* set font size */
     font-size: 2.5rem;
 }
-
 </style>

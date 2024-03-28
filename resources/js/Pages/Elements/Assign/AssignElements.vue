@@ -120,8 +120,10 @@ function updatePreSelectedElementList() {
     let contentIdList = []
 
     // if form.selectedContentList is empty, return
-    if (
-        contentList.length === 0) {
+    if (contentList.length === 0) {
+
+        elements.value.forEach(element => element.alreadyAttached = false)
+
         return
     }
 
@@ -148,7 +150,6 @@ function updatePreSelectedElementList() {
 
     APICalls.getAssignedElements(type, contentIdList).then(response => {
         assignedElementsList = response.data[0]
-        form.selectedElementList = []
 
         // Loop through assignedElementsList and update the preSelectedElements list
         elements.value.forEach(element => {
@@ -156,7 +157,10 @@ function updatePreSelectedElementList() {
             const assignedElement = assignedElementsList.find(assignedElement => assignedElement.element_id === element.element_id)
 
             if (assignedElement) {
-                element.checked = true
+                element.alreadyAttached = true
+            }
+            else{
+                element.alreadyAttached = false
             }
         })
 
