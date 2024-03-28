@@ -138,10 +138,6 @@ onMounted(() => {
     <!-- <div :style="{ height: '3000px' }" class="h-screen"> -->
     <div style="height: 80vh;">
 
-        <button class="text-3xl text-white" @click="console.log(nodesEdges)">
-            Show element
-        </button>
-
         <Teleport to="body">
             <Transition name="modal" class="z-50">
                 <search-element-modal v-if="isSearchElementModalOpen"
