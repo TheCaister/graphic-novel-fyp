@@ -1,5 +1,5 @@
 <template>
-    <div v-if="editor" class="flex flex-wrap space-x-2">
+    <div v-if="editor" class="flex flex-wrap space-x-2 bg-black py-4 px-8 border-t-4 border-b-4 border-pink-400">
         <button @click="editor.chain().focus().toggleBold().run()"
             :disabled="!editor.can().chain().focus().toggleBold().run()"
             :class="[editor.isActive('bold') ? 'is-active' : '', 'not-active']">

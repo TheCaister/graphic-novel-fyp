@@ -118,7 +118,7 @@ onMounted(() => {
     //     form.element.content = {}
     // }
 
-   
+
 })
 
 function back() {
@@ -172,19 +172,24 @@ function back() {
                     <div class="flex items-center gap-8">
                         <button @click="isEditThumbnailModalOpen = true">
                             <img class="w-32 h-32 shadow-2xl rounded-lg hover:scale-105 transition-transform duration-300"
-                                :src="elementThumbnailImage"
-                                alt="" srcset="">
+                                :src="elementThumbnailImage" alt="" srcset="">
                         </button>
                         <div>
                             <input id="element_name" type="text"
-                                class="mt-1 block w-full bg-transparent border-none rounded-lg shadow-xl text-white"
+                                class="mt-1 block w-full bg-transparent border-none rounded-lg shadow-xl text-white text-2xl hover:scale-105 transition-transform duration-300"
                                 v-model="form.element.element_name" required autofocus />
                         </div>
                     </div>
                 </div>
 
+                <KeepAlive>
+
+                    <component :is="DashboardViewComponent" v-model="form.element"
+                        @updateChildrenElementIDs="updateChildrenElements" />
+                </KeepAlive>
+
                 <button @click="isHeaderOpen = !isHeaderOpen"
-                    class="bg-black p-2 text-white rounded-lg absolute -translate-y-1/2 left-1/2 -translate-x-1/2 z-50">Toggle
+                    class="bg-black p-2 text-white rounded-lg absolute top-[-60px] left-1/2 -translate-x-1/2 z-50">Toggle
                     Header</button>
             </div>
 
@@ -193,11 +198,7 @@ function back() {
                 @updateElement="updateForm"
                     @updateChildrenElementIDs="updateChildrenElements" /> -->
 
-            <KeepAlive>
 
-                <component :is="DashboardViewComponent" v-model="form.element" 
-                    @updateChildrenElementIDs="updateChildrenElements" />
-            </KeepAlive>
         </div>
 
 
