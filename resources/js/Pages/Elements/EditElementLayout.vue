@@ -189,7 +189,7 @@ function back() {
                 </KeepAlive>
 
                 <button @click="isHeaderOpen = !isHeaderOpen"
-                    class="bg-black p-2 text-white rounded-lg absolute top-[-60px] left-1/2 -translate-x-1/2 z-50">Toggle
+                    class="bg-black p-2 text-white text-xl rounded-lg absolute top-[-60px] left-1/2 -translate-x-1/2 z-50">Toggle
                     Header</button>
             </div>
 

@@ -17,8 +17,6 @@ import { Controls } from '@vue-flow/controls'
 import { MiniMap } from '@vue-flow/minimap'
 import { VueFlow, useVueFlow } from '@vue-flow/core'
 import CustomNode from './CustomNode.vue'
-import CustomEdge from './CustomEdge.vue'
-import CustomConnectionLine from './CustomConnectionLine.vue'
 import RelationEdge from './RelationEdge.vue'
 import ElementNode from './ElementNode.vue'
 import SearchElementModal from '../SearchElementModal.vue'
@@ -33,27 +31,27 @@ const paneY = ref(0)
 
 const element = defineModel()
 
-// const element = ref(null)
-
-
-// const props = defineProps({
-//     element: {
-//         type: Object,
-//         required: true
-//     }
-// })
-
 const emit = defineEmits(['updateElement'])
 
 const nodesEdges = ref([])
 
+let updateTimeout = null;
+
 
 watch(nodesEdges, (list) => {
-    console.log('map changed')
+      
+    // Clear the previous timeout if it exists
+    if (updateTimeout) {
+        clearTimeout(updateTimeout);
+    }
 
-    element.value.content = JSON.parse(JSON.stringify(list))
-
-    console.log(element.value.content)
+    // Set a new timeout
+    updateTimeout = setTimeout(() => {
+        console.log('updated')
+        element.value.content = JSON.parse(JSON.stringify(list));
+    }, 200); // Delay of 500ms
+}, {
+    deep: true
 })
 
 // https://vueflow.dev/typedocs/interfaces/Actions.html#addedges
@@ -115,7 +113,7 @@ function onCloseElementSearchModal(event) {
 }
 
 onMounted(() => {
-    console.log(element.value.content)
+    // console.log(element.value.content)
 
     // if (element.value.content === null || element.value.content === undefined) {
     //     element.value.content = []
@@ -131,24 +129,32 @@ onMounted(() => {
         item.dragging = item.dragging === '1' ? true : false
         item.selected = item.selected === '0' ? true : false
     })
-    
+
 })
 
 </script>
 
 <template>
     <!-- <div :style="{ height: '3000px' }" class="h-screen"> -->
-        <div class="h-screen">
+    <div style="height: 80vh;">
+
+        <button class="text-3xl text-white" @click="console.log(nodesEdges)">
+            Show element
+        </button>
 
         <Teleport to="body">
             <Transition name="modal" class="z-50">
-                <search-element-modal v-if="isSearchElementModalOpen" @closeElementSearchModal="onCloseElementSearchModal"
+                <search-element-modal v-if="isSearchElementModalOpen"
+                    @closeElementSearchModal="onCloseElementSearchModal"
                     class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
             </Transition>
         </Teleport>
 
-        <VueFlow v-model="nodesEdges" fit-view-on-init class=" vue-flow-basic-example"
-            :default-zoom="1.5" :min-zoom="0.2" :max-zoom="4" auto-connect>
+        <VueFlow v-model="nodesEdges" fit-view-on-init class=" vue-flow-basic-example" :default-zoom="1.5"
+            :min-zoom="0.2" :max-zoom="4" auto-connect>
+
+            <!-- <VueFlow v-model="element.value.content" fit-view-on-init class=" vue-flow-basic-example"
+            :default-zoom="1.5" :min-zoom="0.2" :max-zoom="4" auto-connect> -->
 
 
             <Background pattern-color="#aaa" :gap="8" />
