@@ -228,6 +228,13 @@ class ElementController extends Controller
         $selectedContent = null;
         $subContentList = null;
 
+        // for everything in request preSelectedContent, convert to integer
+        $preSelectedContent = [];
+        
+        if (request()->preSelectedContent) {
+            $preSelectedContent = array_map('intval', request()->preSelectedContent);
+        }
+
         // Pages are a special case, they don't have subcontent
         if (request()->contentType === 'Page') {
             $page = Page::find(request()->content_id);
@@ -247,6 +254,7 @@ class ElementController extends Controller
         return Inertia::render('Elements/Assign/AssignElements', [
             'parentContent' => $selectedContent,
             'subContentList' => $subContentList,
+            'preSelectedContent' => $preSelectedContent ? $preSelectedContent : [],
             'preSelectedElements' => request()->preSelectedElements ? request()->preSelectedElements : [],
             'elementList' => $this->getUniverse(request()->contentType, request()->content_id)->elements->unique(),
         ]);
@@ -255,8 +263,15 @@ class ElementController extends Controller
     // Going up a level in the assigning page
     public function assignGetParent()
     {
+
+        // dd('Parent', request()->all());
+        
+
         $contentType = request()->type;
         $content_id = request()->content_id;
+        // $content_id = intval(request()->content_id);
+
+        // dd([$content_id]);
 
         $parentContent = $this->getClassName($contentType)::find($content_id)->getParentContent();
 
@@ -264,6 +279,7 @@ class ElementController extends Controller
         return redirect()->route('elements.assign', [
             'contentType' => $parentContent['content_type'],
             'content_id' => $parentContent['content_id'],
+            'preSelectedContent' => [$content_id],
             'preSelectedElements' => []
         ]);
     }

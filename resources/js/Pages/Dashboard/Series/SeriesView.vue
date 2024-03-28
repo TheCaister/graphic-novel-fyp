@@ -56,6 +56,7 @@ import AddButton from '../AddButton.vue'
 import ContentCardDetailed from '../ContentCardDetailed.vue';
 import DeleteModal from '../DeleteModal.vue'
 import EditSeriesModal from './EditSeriesModal.vue';
+import { router } from '@inertiajs/vue3';
 
 const series = ref([]);
 
@@ -110,6 +111,7 @@ function handleMenuItemClicked(eventName) {
         case "viewElements":
             break;
         case "assignElements":
+            router.visit(route('elements.assign.get-parent', { type: 'Series', content_id: selectedSeries.value.series_id }))
             break;
         case "delete":
             isDeleteModalOpen.value = true

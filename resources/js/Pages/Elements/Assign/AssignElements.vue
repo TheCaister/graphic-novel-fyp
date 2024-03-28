@@ -1,56 +1,50 @@
 <template>
-    <div class="p-8 border-4 m-12 border-white rounded-lg text-white" style="height: 100vh;">
-        <!-- Content title here, with option  to go back... -->
-        <div class="flex text-4xl">
-            <Link
-                :href="route('elements.assign.get-parent', { type: parentContent.type, content_id: parentContent.content_id })"
-                v-if="parentContent.type !== 'Universe'">
-                <span class="material-symbols-outlined dark">
-                    chevron_left
-                </span>
-            </Link>
-            <div>
-                {{ parentContent.content_name }}
-            </div>
-            <div class="flex-grow"></div>
-
-            <PrimaryButton @click="toggleAll">Toggle all elements</PrimaryButton>
-        </div>
-
-        <!-- Two lists, one for content, one for elements -->
-        <div class="flex justify-around  h-4/5 ">
-            <div class="flex flex-col w-2/5 ">
-                <!-- <SearchBar /> -->
-                <ContentList :subContentList="subContentList"
-                    @content-checked="(event) => updateSelectedContentList(event)"/>
-
-                <!-- empty div that fills up flex -->
+    <div class="p-12 text-white" style="height: 110vh;">
+        <div class="border-4 border-white rounded-lg p-8">
+            <button @click="console.log(props.preSelectedContent)">
+                Test
+            </button>
+            <!-- Content title here, with option  to go back... -->
+            <div class="flex text-4xl">
+                <Link
+                    :href="route('elements.assign.get-parent', { type: parentContent.type, content_id: parentContent.content_id })"
+                    v-if="parentContent.type !== 'Universe'">
+                    <span class="material-symbols-outlined dark">
+                        chevron_left
+                    </span>
+                </Link>
+                <div>
+                    {{ parentContent.content_name }}
+                </div>
                 <div class="flex-grow"></div>
-
-                <PrimaryButton @click="goBack" class="mt-8">Back</PrimaryButton>
+                <PrimaryButton @click="toggleAll">Toggle all elements</PrimaryButton>
             </div>
-
-            <!-- A dotted vertical grey line -->
-            <div class="border-2 border-dashed border-gray-700"></div>
-
-            <div class="flex flex-col w-2/5">
-                <!-- <SearchBar /> -->
-
-                <!-- <button @click="toggleAll">
-                    Toggle all
-                </button> -->
-
-              
-
-                <ElementsList v-model="elements" />
-
-                <div class="flex-grow"></div>
-
-                <!-- <button @click="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Save
-                </button> -->
-
-                <PrimaryButton @click="submit" class="mt-8">Save</PrimaryButton>
+            <!-- Two lists, one for content, one for elements -->
+            <div class="flex justify-around  h-4/5 ">
+                <div class="flex flex-col w-2/5 ">
+                    <!-- <SearchBar /> -->
+                    <!-- <ContentList :subContentList="subContentList"
+                        @content-checked="(event) => updateSelectedContentList(event)"/> -->
+                        <ContentList v-model="content"/>
+                    <!-- empty div that fills up flex -->
+                    <div class="flex-grow"></div>
+                    <PrimaryButton @click="goBack" class="mt-8">Back</PrimaryButton>
+                </div>
+                <!-- A dotted vertical grey line -->
+                <div class="border-2 border-dashed border-gray-700"></div>
+                <div class="flex flex-col w-2/5">
+                    <!-- <SearchBar /> -->
+                    <!-- <button @click="toggleAll">
+                        Toggle all
+                    </button> -->
+            
+                    <ElementsList v-model="elements" />
+                    <div class="flex-grow"></div>
+                    <!-- <button @click="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Save
+                    </button> -->
+                    <PrimaryButton @click="submit" class="mt-8">Save</PrimaryButton>
+                </div>
             </div>
         </div>
     </div>
@@ -79,6 +73,10 @@ const props = defineProps({
         type: Array,
         required: true
     },
+    preSelectedContent: {
+        type: Array,
+        required: true
+    },
     preSelectedElements: {
         type: Array,
         required: true
@@ -86,6 +84,7 @@ const props = defineProps({
 })
 
 const elements = ref(props.elementList)
+const content = ref(props.subContentList)
 
 const form = useForm({
     contentType: props.parentContent.type,
@@ -156,7 +155,9 @@ function updatePreSelectedElementList() {
 }
 
 function updateSelectedContentList(event) {
+    console.log(event)
     // First, check if the content is already in the selectedContentList by comparing the contentId. If it is, remove it from the list. If it isn't, add it to the list.
+
     const selectedContent = form.selectedContentList.find(content => content.type === event.type && content.content_id === event.content_id)
 
     if (selectedContent) {
@@ -220,5 +221,15 @@ onMounted(() => {
             element.checked = null
         }
     })
+
+    if (props.subContentList.length > 0) {
+        props.preSelectedContent.forEach(content => {
+            updateSelectedContentList({
+                content_id: content,
+                type: props.subContentList[0].type,
+                checked: true
+            })
+        })   
+    }
 })
 </script>
