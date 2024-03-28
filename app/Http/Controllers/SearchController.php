@@ -8,6 +8,7 @@ use App\Models\Universe;
 use App\Models\Series;
 use App\Models\Chapter;
 use App\Models\Page;
+use Illuminate\Support\Benchmark;
 use Inertia\Inertia;
 
 class SearchController extends Controller
@@ -326,17 +327,34 @@ class SearchController extends Controller
 
     public function getAssignedElements()
     {
-        $resultsList = [];
+        
+        $resultsList = [];     
 
-        // I have request()->type and request()->contentIdList
-        // I will get a list of content based on the type and id
+        $contentList = $this->getClassName(request()->type)::find(request()->contentIdList); // "0.004 seconds"
 
-        $contentList = $this->getClassName(request()->type)::find(request()->contentIdList);
+        // Initialize a hash table to store the count of each element
+        $elementCounts = [];
 
-        // From contentlist, append to the resultsList the elements and keep it unique
-        $resultsList = $contentList->map(function ($content) {
-            return $content->elements;
-        })->unique('element_id')->values()->toArray();
+        // Iterate over each content item
+        foreach ($contentList as $content) {
+            // Iterate over each element in the current content item
+            foreach ($content->elements as $element) {
+                // If the element is not already in the hash table, add it with a count of 1
+                // If it is already in the hash table, increment its count
+                $elementCounts[$element->element_id] = ($elementCounts[$element->element_id] ?? 0) + 1;
+            }
+        }
+
+        // Filter the hash table to only include elements that appear in all content items
+        $resultsList = array_filter($elementCounts, function ($count) use ($contentList) {
+            return $count === count($contentList);
+        });
+
+        // Get the keys of the filtered hash table (these are the element IDs)
+        $resultsList = array_keys($resultsList);
+
+        // Fetch the elements based on their IDs
+        $resultsList = Element::findMany($resultsList);
 
         return $resultsList;
     }

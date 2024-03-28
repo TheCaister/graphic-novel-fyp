@@ -149,7 +149,7 @@ function updatePreSelectedElementList() {
     })
 
     APICalls.getAssignedElements(type, contentIdList).then(response => {
-        assignedElementsList = response.data[0]
+        assignedElementsList = response.data
 
         // Loop through assignedElementsList and update the preSelectedElements list
         elements.value.forEach(element => {
