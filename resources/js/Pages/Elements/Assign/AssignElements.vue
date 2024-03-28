@@ -1,10 +1,7 @@
 <template>
-    <div class="p-8 border border-white rounded-lg text-white">
+    <div class="p-8 border-4 m-12 border-white rounded-lg text-white" style="height: 100vh;">
         <!-- Content title here, with option  to go back... -->
-        <div class="flex">
-            <button @click="console.log('hi')">
-                Refresh
-            </button>
+        <div class="flex text-4xl">
             <Link
                 :href="route('elements.assign.get-parent', { type: parentContent.type, content_id: parentContent.content_id })"
                 v-if="parentContent.type !== 'Universe'">
@@ -12,39 +9,48 @@
                     chevron_left
                 </span>
             </Link>
-
-
             <div>
-                <!-- Content Title -->
                 {{ parentContent.content_name }}
             </div>
+            <div class="flex-grow"></div>
+
+            <PrimaryButton @click="toggleAll">Toggle all elements</PrimaryButton>
         </div>
 
         <!-- Two lists, one for content, one for elements -->
-        <div class="flex justify-around">
-            <div class="flex flex-col items-center">
-                <SearchBar />
+        <div class="flex justify-around  h-4/5 ">
+            <div class="flex flex-col w-2/5 ">
+                <!-- <SearchBar /> -->
                 <ContentList :subContentList="subContentList"
-                    @content-checked="(event) => updateSelectedContentList(event)" />
+                    @content-checked="(event) => updateSelectedContentList(event)"/>
 
+                <!-- empty div that fills up flex -->
+                <div class="flex-grow"></div>
 
-
-                <button @click="goBack" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                    Back
-                </button>
+                <PrimaryButton @click="goBack" class="mt-8">Back</PrimaryButton>
             </div>
-            <div class="flex flex-col items-center">
-                <SearchBar />
 
-                <button @click="toggleAll">
+            <!-- A dotted vertical grey line -->
+            <div class="border-2 border-dashed border-gray-700"></div>
+
+            <div class="flex flex-col w-2/5">
+                <!-- <SearchBar /> -->
+
+                <!-- <button @click="toggleAll">
                     Toggle all
-                </button>
+                </button> -->
+
+              
 
                 <ElementsList v-model="elements" />
 
-                <button @click="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <div class="flex-grow"></div>
+
+                <!-- <button @click="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Save
-                </button>
+                </button> -->
+
+                <PrimaryButton @click="submit" class="mt-8">Save</PrimaryButton>
             </div>
         </div>
     </div>

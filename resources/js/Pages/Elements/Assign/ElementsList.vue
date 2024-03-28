@@ -1,13 +1,13 @@
 <template>
     <h1>
-        Here is a list of all the elements:
+        ELEMENTS
     </h1>
 
-    <button @click="console.log(elements)">
+    <!-- <button @click="console.log(elements)">
         Check
-    </button>
+    </button> -->
 
-    <div class="h-96 overflow-auto">
+    <div class="overflow-auto mt-8">
         <TransitionGroup name="list" tag="ul">
             <div v-for="element in elements" :key="element.element_id">
                 <TriCheckbox :label="element.element_name" :image="element.element_thumbnail" v-model="element.checked" />

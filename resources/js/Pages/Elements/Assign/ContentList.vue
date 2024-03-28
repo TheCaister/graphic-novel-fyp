@@ -1,17 +1,21 @@
 <template>
     <h1>
-        Here is a list of all the content:
+        CONTENT
     </h1>
 
-    <button @click="console.log(props.subContentList)">
+    <!-- <button @click="console.log(props.subContentList)">
         Check
-    </button>
+    </button> -->
 
-    <div class="h-96 overflow-auto">
-     
-            <div v-for="content in subContentList" :key="content.content_id">
-                <Checkbox :content="content" @checked="(event) => check(content.content_id, event)" />
-            </div>
+    <div class="overflow-auto mt-8">
+
+        <div v-for="content in subContentList" :key="content.content_id" class="flex relative items-center">
+            <Checkbox class="flex-grow" :content="content" @checked="(event) => check(content.content_id, event)" />
+            <Link :href="route('elements.assign', { contentType: content.type, content_id: content.content_id })"
+                v-if="content.type !== 'Page'" class="absolute right-16 text-2xl">
+                         >>
+            </Link>
+        </div>
 
     </div>
 </template>
@@ -45,4 +49,3 @@ function check(contentId, event) {
     })
 }
 </script>
-
