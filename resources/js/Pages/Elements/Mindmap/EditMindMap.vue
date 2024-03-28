@@ -149,10 +149,6 @@ onMounted(() => {
         <VueFlow v-model="nodesEdges" fit-view-on-init class=" vue-flow-basic-example" :default-zoom="1.5"
             :min-zoom="0.2" :max-zoom="4" auto-connect>
 
-            <!-- <VueFlow v-model="element.value.content" fit-view-on-init class=" vue-flow-basic-example"
-            :default-zoom="1.5" :min-zoom="0.2" :max-zoom="4" auto-connect> -->
-
-
             <Background pattern-color="#aaa" :gap="8" />
 
             <MiniMap />

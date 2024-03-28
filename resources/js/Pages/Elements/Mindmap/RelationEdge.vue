@@ -14,6 +14,12 @@ if (edge.edge.data && Object.keys(edge.edge.data).length === 0) {
 }
 
 const path = computed(() => getBezierPath(props))
+
+const textAreaRows = computed(() => {
+    const rows = edge.edge.data ? edge.edge.data.split('\n').length : 0
+    console.log(rows)
+    return rows > 1 ? rows : 1
+})
 </script>
 
 <script lang="ts">
@@ -39,7 +45,7 @@ export default {
             <!-- Provide an area to edit text -->
 
             <div>
-                <input type="text" v-model="edge.edge.data" class=" bg-white rounded-lg" placeholder="Type here" />
+                <textarea :rows="textAreaRows" type="text" v-model="edge.edge.data" class=" bg-white rounded-lg" placeholder="Type here" @mousedown.stop @wheel.stop/>
                 <!-- <button @click="console.log(edge)" class="text-white">Check props</button> -->
 
             </div>
