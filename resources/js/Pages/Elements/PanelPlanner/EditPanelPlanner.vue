@@ -31,14 +31,25 @@
                         Toggle panel descriptions
                     </button>
                 </div>
-                <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout" :col-num="12"
-                    :row-height="30" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored"
-                    :vertical-compact="false" :margin="[10, 10]" :restore-on-drag="true" :use-css-transforms="true"
-                    class="border-4 border-pink-500 rounded-lg touch-none" @click="addGridItem"
-                    @mousemove="updateMousePosition" @mouseleave="showAddElementHint = false" :key="isMirrored" :style="{
+                <!-- <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout" :cols="{ lg: 12, md: 12, sm: 12, xs: 12, xxs: 6 }"
+                    :row-height="30" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored" :prevent-collision="false" :is-bounded="true"
+                     :margin="[10, 10]" :restore-on-drag="true"  :vertical-compact="false"
+                    class="border-4 border-pink-500 rounded-lg touch-none grid" 
+                    @mousemove="updateMousePosition" @mouseleave="showAddElementHint = false"
+                     :key="isMirrored" :style="{
             height: '60vh',
             aspectRatio: pageStyleAspectRatio
-        }">
+        }"> -->
+        <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout" :cols="{ lg: colNum, md: colNum, sm: colNum, xs: colNum, xxs: 6 }"
+                    :row-height="30" :max-rows="rowNum" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored" :prevent-collision="false" :is-bounded="true"
+                     :margin="[10, 10]" :restore-on-drag="true"  :vertical-compact="false"
+                    class="border-4 border-pink-500 rounded-lg touch-none grid" 
+                     :key="isMirrored" :style="{
+            height: '60vh',
+            aspectRatio: pageStyleAspectRatio
+         
+        }"
+        @breakpoint-changed="breakpointChangedEvent">
                     <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
                         :key="item.i" class="rounded-lg border-4 border-pink-500 text-white p-4 bg-black z-0"
                         @mousemove.stop="showAddElementHint = false; isDragging = true; stopIsDraggingAfterDelay(50)"
@@ -81,6 +92,9 @@
                     <option :value="false">Left to Right</option>
                     <option :value="true">Right to Left</option>
                 </select>
+                <button @click="addGridItem">
+                    Add grid
+                </button>
             </div>
         </div>
 
@@ -140,7 +154,8 @@ const isGridMenuOpen = ref(false)
 const mouseClickX = ref(0)
 const mouseClickY = ref(0)
 
-const colNum = 12
+const colNum = ref(12)
+const rowNum = 12
 
 const isMirrored = ref(false)
 const isDragging = ref(false)
@@ -162,7 +177,7 @@ const layout = ref([])
 const selectedGridId = ref(0)
 
 const dropDownMenuOptions = [
-    { id: 1, text: "Fix Position", eventName: "fixPosition" },
+    // { id: 1, text: "Fix Position", eventName: "fixPosition" },
     { id: 2, text: "Add Element", eventName: "addElements" },
 ]
 
@@ -267,6 +282,22 @@ function updateMousePosition(event) {
     showAddElementHint.value = true
 }
 
+function breakpointChangedEvent(newBreakpoint, newLayout) {    
+    console.log(newBreakpoint)
+    console.log(newLayout)
+
+    switch (newBreakpoint) {
+        case 'xxs':
+            colNum.value = 6
+            break;
+    
+        default:
+            colNum.value = 12
+            break;
+    }
+    
+}
+
 function stopIsDraggingAfterDelay(delay) {
     setTimeout(() => {
         isDragging.value = false
@@ -332,19 +363,57 @@ function removeElement(grid, element) {
     layout.value[index].elements.splice(elementIndex, 1);
 }
 
+// function addGridItem() {
+//     layout.value.push({
+//         // 12 is the number of columns or colNum
+//         "x": (layout.value.length * 2) % (colNum || 12),
+//         "y": layout.value.length + (colNum || 12),
+//         "w": 2,
+//         "h": 2,
+//         "i": layout.value.length.toString(),
+//         "text": "",
+//         "elements": [],
+//     })
+// }
+
 function addGridItem() {
-    layout.value.push({
-        // 12 is the number of columns or colNum
-        "x": (layout.value.length * 2) % 12,
-        "y": layout.value.length + 12,
-        // "x": (layout.value.length * 2) % (colNum || 12),
-        // "y": layout.value.length + (colNum || 12),
-        "w": 2,
-        "h": 2,
-        "i": layout.value.length.toString(),
-        "text": "",
-        "elements": [],
-    })
+    // Create a 2D array to represent the grid
+    let grid = new Array(rowNum).fill().map(() => new Array(colNum.value).fill(false));
+
+    // Mark the occupied spaces in the grid
+    for (let item of layout.value) {
+    for (let dx = 0; dx < item.w; dx++) {
+        for (let dy = 0; dy < item.h; dy++) {
+            if (item.y + dy < rowNum && item.x + dx < colNum.value) {
+                grid[item.y + dy][item.x + dx] = true;
+            }
+        }
+    }
+}
+
+    console.log(grid)
+
+    // Find a free space in the grid
+    for (let y = 0; y < rowNum; y++) {
+        for (let x = 0; x < colNum.value; x++) {
+            if (!grid[y][x]) {
+                // Free space found, add the new grid item here
+                layout.value.push({
+                    "x": x,
+                    "y": y,
+                    "w": 1,
+                    "h": 1,
+                    "i": layout.value.length.toString(),
+                    "text": "",
+                    "elements": [],
+                });
+                return;
+            }
+        }
+    }
+
+    // No free space found, do not add a new grid item
+    console.log("No free space available in the grid.");
 }
 
 function removeGridItem(val) {
@@ -402,5 +471,21 @@ function removeGridItem(val) {
 .modal-leave-to {
     opacity: 0;
     transform: scale(1.1);
+}
+
+.grid::before {
+    content: '';
+    background-size: calc(calc(100% - 5px) / 12) 40px;
+    background-image: linear-gradient(
+            to right,
+            lightgrey 1px,
+            transparent 1px
+    ),
+    linear-gradient(to bottom, lightgrey 1px, transparent 1px);
+    height: calc(100% - 5px);
+    width: calc(100% - 5px);
+    position: absolute;
+    background-repeat: repeat;
+    margin:5px;
 }
 </style>
