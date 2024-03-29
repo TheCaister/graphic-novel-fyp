@@ -378,7 +378,7 @@ function removeElement(grid, element) {
 
 function addGridItem() {
     // Create a 2D array to represent the grid
-    let grid = new Array(rowNum).fill().map(() => new Array(colNum.value).fill(false));
+    let grid = new Array(rowNum).fill(null).map(() => new Array(colNum.value).fill(false));
 
     // Mark the occupied spaces in the grid
     for (let item of layout.value) {
