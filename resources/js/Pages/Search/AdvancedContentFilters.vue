@@ -19,8 +19,8 @@
                 Authors to be updated!
             </div> -->
 
-            <div>
-                <IncludedElementsEditor class="w-64" @addMentionItem="addElement" @removeMentionItem="removeElement"
+            <div class="w-full">
+                <IncludedElementsEditor  addMentionItem="addElement" @removeMentionItem="removeElement"
                     :includedElements="model?.value?.includedElements || []" :key="model?.value?.includedElements" />
             </div>
         </div>
