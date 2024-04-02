@@ -1,5 +1,5 @@
 <template>
-    <div class="border-2 border-gray-200">
+    <div>
         <div>
             Advanced Search
         </div>

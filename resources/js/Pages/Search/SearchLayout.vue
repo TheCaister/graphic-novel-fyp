@@ -2,7 +2,7 @@
 
     <Head title="Search" />
 
-    <div class="text-white text-lg bg-gray-500 flex flex-col">
+    <div class="text-white text-lg flex flex-col p-8 items-center">
         <!-- Search bar with buttons for users, content and elements -->
         <div>
 
@@ -12,7 +12,7 @@
                 <option value="elements">Elements</option>
             </select>
             <!-- input, with dropdown on the right for 3 options -->
-            <input type="text" class="bg-gray-500 border-4 border-gray-300" v-model="form.search" />
+            <input type="text" class="bg-gray-500" v-model="form.search" />
             <button @click="search">
                 Search
             </button>
@@ -27,11 +27,7 @@
         </div>
 
         <!-- Advanced search -->
-        <div>
-            <!-- <KeepAlive>
-                <component :is="AdvancedFiltersComponent" @update-advanced-search="updateAdvancedSearch" v-model="form.advanced" />
-            </KeepAlive> -->
-
+        <div class="w-3/4">
             <KeepAlive>
                 <component :is="AdvancedFiltersComponent" v-model="form.advanced"
                     @update-advanced-search="updateAdvancedSearch" />

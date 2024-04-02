@@ -1,15 +1,19 @@
 <template>
     <div class="flex h-24 items-center">
-        <button @click="toggleChecked" class="flex items-center border border-pink-500 rounded-md justify-between w-full">
+        <button @click="toggleChecked"
+            :class="[
+                'flex',
+                'items-center',
+                'rounded-md',
+                'justify-between',
+                'w-full',
+                'p-3',
+                'border-2',
+                checked === true ? 'border-green-500' : checked === false ? 'border-red-500' : 'border-gray-500'
+            ]">
 
             <div class="flex items-center">
-                <!-- image -->
-                <img src="https://cc-prod.scene7.com/is/image/CCProdAuthor/What-is-Stock-Photography_P1_mobile?$pjpeg$&jpegSize=200&wid=720"
-                    alt="" class="rounded-full w-16 h-16">
-                <!-- label -->
-                <div>
-                    {{ label }}
-                </div>
+                {{ label }}
             </div>
 
             <span v-if="checked === true" class="material-symbols-outlined dark">
@@ -49,11 +53,11 @@ function toggleChecked() {
 
     console.log(checked.value)
 
-    if(checked.value === null) {
+    if (checked.value === null) {
         checked.value = true
-    } else if(checked.value === true) {
+    } else if (checked.value === true) {
         checked.value = false
-    } else if(checked.value === false) {
+    } else if (checked.value === false) {
         checked.value = null
     }
     emits('checked', checked.value)

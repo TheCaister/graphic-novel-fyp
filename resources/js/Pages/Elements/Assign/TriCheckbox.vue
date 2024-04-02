@@ -9,7 +9,7 @@
                 
                 -->
 
-                <img :src="props.image ? props.image : '/assets/black_page.jpg'" alt=""
+                <img v-if="props.includeImage" :src="props.image ? props.image : '/assets/black_page.jpg'" alt=""
                     class="rounded-full w-12 h-12 mr-4">
                 <div class="text-2xl" :class="{ 'text-black': checked === true }">
                     {{ label }}
@@ -41,10 +41,15 @@ const alreadyAttached = defineModel('alreadyAttached')
 const props = defineProps({
     image: {
         type: String,
+        default: null
     },
     label: {
         type: String,
         required: true
+    },
+    includeImage:{
+        type: Boolean,
+        default: true
     }
 })
 

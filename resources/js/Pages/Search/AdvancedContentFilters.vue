@@ -1,38 +1,35 @@
 <template>
-    <div class="border-2 border-gray-200">
-        <div>
+    <div class="border-2 border-gray-500 rounded-lg p-6">
+        <div class="text-3xl">
             Advanced Search
         </div>
 
-        <div class="flex w-full">
-            <TriCheckbox label="Include universes" @checked="updateFilter('includeUniverses', $event)" />
-            <TriCheckbox label="Include series" @checked="updateFilter('includeSeries', $event)" />
-            <TriCheckbox label="Include chapters" @checked="updateFilter('includeChapters', $event)" />
-            <TriCheckbox label="Include pages" @checked="updateFilter('includePages', $event)" />
+        <div class="flex w-full gap-8">
+            <TriCheckbox label="Include universes" @checked="updateFilter('includeUniverses', $event)" class="w-1/4"/>
+            <TriCheckbox label="Include series" @checked="updateFilter('includeSeries', $event)" class="w-1/4"/>
+            <TriCheckbox label="Include chapters" @checked="updateFilter('includeChapters', $event)" class="w-1/4"/>
+            <TriCheckbox label="Include pages" @checked="updateFilter('includePages', $event)" class="w-1/4"/>
+
         </div>
 
         <div class="flex w-full">
-            <!-- input with label -->
-            <div>
-                <!-- <label for="" class="block">Authors</label>
-                <input type="text" class="w-full text-black" /> -->
+            <!-- <div>
+                <label for="" class="block">Authors</label>
+                <input type="text" class="w-full text-black" />
                 Authors to be updated!
-            </div>
+            </div> -->
 
             <div>
-                <!-- <label for="" class="block">Included elements</label>
-                <input type="text" class="w-full text-black"/> -->
-
                 <IncludedElementsEditor class="w-64" @addMentionItem="addElement" @removeMentionItem="removeElement"
                     :includedElements="model?.value?.includedElements || []" :key="model?.value?.includedElements" />
             </div>
         </div>
 
-        <div class="flex w-full">
+        <!-- <div class="flex w-full">
             Query in parent and children to be updated!
-            <!-- <TriCheckbox label="Include query in parent" @checked="updateFilter('includeUniverses', $event)" />
-            <TriCheckbox label="Include query in children" @checked="updateFilter('includeSeries', $event)" /> -->
-        </div>
+            <TriCheckbox label="Include query in parent" @checked="updateFilter('includeUniverses', $event)" />
+            <TriCheckbox label="Include query in children" @checked="updateFilter('includeSeries', $event)" />
+        </div> -->
 
 
         <div class="w-full flex justify-center">^</div>
@@ -43,7 +40,6 @@
 import TriCheckbox from './TriCheckbox.vue';
 import IncludedElementsEditor from '../../Components/Editors/IncludedElementsEditor.vue'
 // import Checkbox from './Checkbox.vue';
-
 import { defineEmits } from 'vue';
 
 const emits = defineEmits(['updateAdvancedSearch'])

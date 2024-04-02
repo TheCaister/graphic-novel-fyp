@@ -1,8 +1,7 @@
 <template>
-    Results of content...
-    <button @click="console.log(props.resultsList)">
+    <!-- <button @click="console.log(props.resultsList)">
         Show List
-    </button>
+    </button> -->
 
     <!-- <div class="flex">
         <div v-for="result in props.resultsList" :key="result.id" class="shadow-lg ring-2 ring-blue-500">
