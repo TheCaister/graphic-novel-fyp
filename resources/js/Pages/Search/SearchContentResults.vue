@@ -13,7 +13,7 @@
         </div>
     </div> -->
 
-    <div class="flex space-x-8 p-8 flex-wrap">
+    <div class="flex gap-6 p-8 flex-wrap justify-center">
         <div v-for="content in props.resultsList" :key="content.id" class="shadow-lg w-96">
             <search-card :content="{
             content_id: content.id,
