@@ -1,19 +1,17 @@
 <template>
-    <div class="border-2 border-gray-200">
+    <div class="border-2 border-gray-500 rounded-lg p-6">
         <div>
             Advanced Search
         </div>
 
-        <div class="flex w-full">
-            <TriCheckbox label="Include simple text elements" @checked="updateFilter('includeSimpleText', $event)" />
-            <TriCheckbox label="Include mindmap elements" @checked="updateFilter('includeMindmap', $event)" />
+        <div class="flex w-full  gap-8">
+            <TriCheckbox label="Include simple text elements" @checked="updateFilter('includeSimpleText', $event)"  class="w-1/3"/>
+            <TriCheckbox label="Include mindmap elements" @checked="updateFilter('includeMindmap', $event)" class="w-1/3"/>
             <TriCheckbox label="Include panel planner elements"
-                @checked="updateFilter('includePanelPlanner', $event)" />
+                @checked="updateFilter('includePanelPlanner', $event)" class="w-1/3"/>
         </div>
 
         <div class="flex w-full">
-            <!-- input with label -->
-            Authors and included elements to be updated!
 
             <!-- <div>
                 <label for="" class="block">Authors</label>
@@ -39,7 +37,6 @@
         </div> -->
 
         <div class="flex w-full">
-            Include parent and children to be updated!
             <!-- <TriCheckbox label="Include query in parent" @checked="updateFilter('includeUniverses', $event)" />
             <TriCheckbox label="Include query in children" @checked="updateFilter('includeSeries', $event)" /> -->
         </div>

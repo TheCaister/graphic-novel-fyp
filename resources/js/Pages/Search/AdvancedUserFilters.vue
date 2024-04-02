@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div>
+    <div class="border-2 border-gray-500 rounded-lg p-6">
+        <div class="text-3xl">
             Advanced Search
         </div>
 

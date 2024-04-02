@@ -4,27 +4,26 @@
 
     <div class="text-white text-lg flex flex-col p-8 items-center">
         <!-- Search bar with buttons for users, content and elements -->
-        <div>
+        <div class="flex items-center mb-8 h-10 w-1/2">
 
-            <select v-model="form.searchType" class="bg-gray-500">
+            <select v-model="form.searchType" class="bg-black rounded-l-lg border-r-2 border-gray-600 ">
                 <option value="users">Users</option>
                 <option value="content">Content</option>
                 <option value="elements">Elements</option>
             </select>
             <!-- input, with dropdown on the right for 3 options -->
-            <input type="text" class="bg-gray-500" v-model="form.search" />
-            <button @click="search">
-                Search
-            </button>
+            <input type="text" class=" flex-grow h-full border-gray-600 text-sm focus:outline-none bg-transparent placeholder-gray-300 rounded-r-lg" v-model="form.search" />
+
+            <PrimaryButton @click="search" class="ml-8">Search</PrimaryButton>
 
         </div>
 
         <!-- big button -->
-        <div>
+        <!-- <div>
             <button @click="test">
                 Print form
             </button>
-        </div>
+        </div> -->
 
         <!-- Advanced search -->
         <div class="w-3/4">
