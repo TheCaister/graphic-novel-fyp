@@ -5,7 +5,7 @@
 
         <div class="flex flex-col items-center">
             <div class="relative flex flex-col">
-                <button @click="console.log(props.element)">
+                <button @click="console.log(layout)">
                     Check element
                 </button>
 
@@ -20,13 +20,14 @@
 
                 }" @breakpoint-changed="breakpointChangedEvent">
                     <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
-                        :key="item.i" class="rounded-lg border-4 border-pink-500 text-white p-4 bg-black z-0"
+                        :key="item.i"
+                        class="rounded-lg border-4 border-pink-500 text-white p-4 bg-black z-0 overflow-auto"
                         @mousemove.stop="showAddElementHint = false; isDragging = true; stopIsDraggingAfterDelay(50)"
                         @mouseup="stopIsDraggingAfterDelay(10)"
                         @click.stop="console.log(selectedGridId); selectedGridId = item.i; handleClick(); updateMouseClickPosition($event)">
-                        {{ item.i }}
-                        <span class="absolute top-0 right-0 cursor-pointer mt-2 mr-2"
-                            @click="removeGridItem(item.i)">X</span>
+                        <img v-if="item.elements && item.elements.length > 0" :src="item.elements[0].element_thumbnail"
+                            class="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm" />
+                        <div class="absolute text-xl">{{ item.text }}</div>
                         <Teleport to="#gridHolder">
                             <Transition name="fade">
                                 <DashboardDropdownMenu v-if="selectedGridId == item.i && isGridMenuOpen"
@@ -70,12 +71,11 @@
 
         <div class="absolute flex justify-between w-full">
 
-            <button v-if="showElementList === false" @click="toggleShowElementList"
-                class="absolute left-0">
+            <button v-if="showElementList === false" @click="toggleShowElementList" class="absolute left-0">
                 Toggle elements
             </button>
-            <button v-if="showPanelDescriptionList === false"
-                @click="toggleShowPanelDescriptionList" class="absolute right-0">
+            <button v-if="showPanelDescriptionList === false" @click="toggleShowPanelDescriptionList"
+                class="absolute right-0">
                 Toggle panel descriptions
             </button>
 
@@ -83,12 +83,13 @@
         </div>
 
         <Transition name="slide">
-            <PanelDescriptionList v-if="showPanelDescriptionList === true" v-model="layout" @toggle-visibility="toggleShowPanelDescriptionList" class="w-1/2 mr-8"/>
+            <PanelDescriptionList v-if="showPanelDescriptionList === true" v-model="layout"
+                @toggle-visibility="toggleShowPanelDescriptionList" class="w-1/3 mr-8" />
         </Transition>
 
         <Transition name="slide-reverse">
             <PanelElementList v-if="showElementList === true" v-model="layout"
-                @toggle-visibility="toggleShowElementList" @remove-element="removeElement" class="w-1/2 ml-8" />
+                @toggle-visibility="toggleShowElementList" @remove-element="removeElement" class="w-1/3 ml-8" />
         </Transition>
     </div>
 
@@ -140,8 +141,8 @@ const rowNum = 12
 
 const isMirrored = ref(false)
 const isDragging = ref(false)
-const showElementList = ref(false)
-const showPanelDescriptionList = ref(false)
+const showElementList = ref(true)
+const showPanelDescriptionList = ref(true)
 
 const element = defineModel()
 
@@ -160,6 +161,7 @@ const selectedGridId = ref(0)
 const dropDownMenuOptions = [
     // { id: 1, text: "Fix Position", eventName: "fixPosition" },
     { id: 2, text: "Add Element", eventName: "addElements" },
+    { id: 3, text: "Remove Panel", eventName: "removePanel" }
 ]
 
 watch(layout, (newVal) => {
@@ -294,18 +296,18 @@ function toggleShowElementList() {
     showElementList.value = !showElementList.value
 
     // If showElementList.value is true, showPanelDescriptionList.value should be false
-    if (showElementList.value === true) {
-        showPanelDescriptionList.value = false
-    }
+    // if (showElementList.value === true) {
+    //     showPanelDescriptionList.value = false
+    // }
 }
 
 function toggleShowPanelDescriptionList() {
     showPanelDescriptionList.value = !showPanelDescriptionList.value
 
     // If showPanelDescriptionList.value is true, showElementList.value should be false
-    if (showPanelDescriptionList.value === true) {
-        showElementList.value = false
-    }
+    // if (showPanelDescriptionList.value === true) {
+    //     showElementList.value = false
+    // }
 }
 
 function handleClick() {
@@ -318,6 +320,8 @@ function handleClick() {
 
 function handleMenuItemClicked(event, grid) {
 
+    console.log(grid)
+
 
     // switch statement for event
     switch (event) {
@@ -328,6 +332,9 @@ function handleMenuItemClicked(event, grid) {
             console.log('add elements')
             isSearchElementModalOpen.value = true
 
+            break
+        case 'removePanel':
+            removeGridItem(grid.i)
             break
         default:
             console.log('default')
@@ -420,8 +427,11 @@ function addGridItem() {
 }
 
 function removeGridItem(val) {
-    const index = this.layout.map(item => item.i).indexOf(val);
-    this.layout.splice(index, 1);
+    // const index = this.layout.map(item => item.i).indexOf(val);
+    // this.layout.splice(index, 1);
+
+    const index = layout.value.map(item => item.i).indexOf(val);
+    layout.value.splice(index, 1);
 
 }
 
@@ -490,23 +500,50 @@ function removeGridItem(val) {
     margin: 5px;
 }
 
-.slide-enter-active, .slide-leave-active {
-  transition: all 0.3s ease;
-}
-.slide-enter-from, .slide-leave-to {
-  transform: translateX(100%);
-}
-.slide-enter-to, .slide-leave-from {
-  transform: translateX(0);
+.slide-enter-active,
+.slide-leave-active {
+    transition: all 0.3s ease;
 }
 
-.slide-reverse-enter-active, .slide-reverse-leave-active {
-  transition: all 0.3s ease;
+.slide-enter-from,
+.slide-leave-to {
+    transform: translateX(100%);
 }
-.slide-reverse-enter-from, .slide-reverse-leave-to {
-  transform: translateX(-100%);
+
+.slide-enter-to,
+.slide-leave-from {
+    transform: translateX(0);
 }
-.slide-reverse-enter-to, .slide-reverse-leave-from {
-  transform: translateX(0);
+
+.slide-reverse-enter-active,
+.slide-reverse-leave-active {
+    transition: all 0.3s ease;
+}
+
+.slide-reverse-enter-from,
+.slide-reverse-leave-to {
+    transform: translateX(-100%);
+}
+
+.slide-reverse-enter-to,
+.slide-reverse-leave-from {
+    transform: translateX(0);
+}
+
+.bg-overlay::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    /* Adjust the 0.5 value to change the overlay transparency */
+    z-index: 1;
+}
+
+.bg-overlay {
+    position: relative;
 }
 </style>
