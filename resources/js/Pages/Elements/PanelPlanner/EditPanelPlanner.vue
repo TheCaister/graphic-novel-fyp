@@ -70,12 +70,12 @@
 
         <div class="absolute flex justify-between w-full">
 
-            <button v-if="showElementList === false" @click="showElementList = !showElementList"
+            <button v-if="showElementList === false" @click="toggleShowElementList"
                 class="absolute left-0">
                 Toggle elements
             </button>
             <button v-if="showPanelDescriptionList === false"
-                @click="showPanelDescriptionList = !showPanelDescriptionList" class="absolute right-0">
+                @click="toggleShowPanelDescriptionList" class="absolute right-0">
                 Toggle panel descriptions
             </button>
 
@@ -83,12 +83,12 @@
         </div>
 
         <Transition name="slide">
-            <PanelDescriptionList v-if="showPanelDescriptionList === true" v-model="layout" @toggle-visibility="showPanelDescriptionList = !showPanelDescriptionList" class="w-1/2 mr-8"/>
+            <PanelDescriptionList v-if="showPanelDescriptionList === true" v-model="layout" @toggle-visibility="toggleShowPanelDescriptionList" class="w-1/2 mr-8"/>
         </Transition>
 
         <Transition name="slide-reverse">
             <PanelElementList v-if="showElementList === true" v-model="layout"
-                @toggle-visibility="showElementList = !showElementList" @remove-element="removeElement" />
+                @toggle-visibility="toggleShowElementList" @remove-element="removeElement" class="w-1/2 ml-8" />
         </Transition>
     </div>
 
@@ -140,8 +140,8 @@ const rowNum = 12
 
 const isMirrored = ref(false)
 const isDragging = ref(false)
-const showElementList = ref(true)
-const showPanelDescriptionList = ref(true)
+const showElementList = ref(false)
+const showPanelDescriptionList = ref(false)
 
 const element = defineModel()
 
@@ -287,6 +287,25 @@ function stopIsDraggingAfterDelay(delay) {
         isDragging.value = false
     }, delay)
 
+}
+
+function toggleShowElementList() {
+    console.log('toggling...')
+    showElementList.value = !showElementList.value
+
+    // If showElementList.value is true, showPanelDescriptionList.value should be false
+    if (showElementList.value === true) {
+        showPanelDescriptionList.value = false
+    }
+}
+
+function toggleShowPanelDescriptionList() {
+    showPanelDescriptionList.value = !showPanelDescriptionList.value
+
+    // If showPanelDescriptionList.value is true, showElementList.value should be false
+    if (showPanelDescriptionList.value === true) {
+        showElementList.value = false
+    }
 }
 
 function handleClick() {

@@ -1,9 +1,13 @@
 <template>
-    <div class="text-white absolute left-0 top-0">
-        <button @click="emits('toggleVisibility')">
-            x
-        </button>
-        <div v-for="item in layout" class="rounded-lg relative border-4 border-pink-500 p-4">
+    <div class="text-white absolute left-0 top-0 flex flex-col gap-4 overflow-auto" style="height: 70vh;">
+        <PrimaryButton @click="emits('toggleVisibility')">
+                Close
+            </PrimaryButton>
+
+            <PrimaryButton @click="console.log(layout)">
+                Check
+            </PrimaryButton>
+        <div v-for="item in layout" class="rounded-lg relative border-4 border-pink-500 p-4 bg-black">
             <div>
                 <!-- Do something like Panel + item.i -->
                 {{ 'Panel ' + item.i }}
