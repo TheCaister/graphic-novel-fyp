@@ -1,6 +1,37 @@
 <template>
     <div class="flex justify-center text-white bg-black" style="height: 80vh;">
-        <div v-if="showElementList === true" class="text-white">
+   
+        <div class="absolute flex justify-between w-full">
+          
+            <button v-if="showElementList === false" @click="showElementList = !showElementList" class="absolute left-0">
+                Toggle elements
+            </button>
+            <button v-if="showPanelDescriptionList === false" @click="showPanelDescriptionList = !showPanelDescriptionList" class="absolute right-0">
+                Toggle panel descriptions
+            </button>
+
+            
+        </div>
+                <!-- Panel descriptions list -->
+        <div v-if="showPanelDescriptionList === true" class="absolute right-0 top-0 text-white">
+            <button @click="showPanelDescriptionList = !showPanelDescriptionList">
+                x
+            </button>
+            <div v-for="item in layout" class="rounded-lg border-4 border-pink-500 p-4">
+                <div>
+                    {{ 'Panel ' + item.i }}
+                </div>
+                <div>
+                    <input type="text" v-model="item.text" class="text-black" placeholder="Type here" />
+
+                </div>
+            </div>
+        </div>
+
+        <div v-if="showElementList === true" class="text-white absolute left-0 top-0">
+            <button @click="showElementList = !showElementList">
+                x
+            </button>
             <div v-for="item in layout" class="rounded-lg relative border-4 border-pink-500 p-4">
                 <div>
                     <!-- Do something like Panel + item.i -->
@@ -16,31 +47,22 @@
             </div>
         </div>
 
-
-
         <div class="flex flex-col items-center">
-            <div class="relative border-2 flex flex-col">
-                <div>
-                    <button @click="console.log(props.element)">
-                        Check element
-                    </button>
-                    <button @click="showElementList = !showElementList">
-                        Toggle elements
-                    </button>
-                    <button @click="showPanelDescriptionList = !showPanelDescriptionList">
-                        Toggle panel descriptions
-                    </button>
-                </div>
-        <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout" :cols="{ lg: colNum, md: colNum, sm: colNum, xs: colNum, xxs: 6 }"
-                    :row-height="30" :max-rows="rowNum" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored" :prevent-collision="false" :is-bounded="true"
-                     :margin="[10, 10]" :restore-on-drag="true"  :vertical-compact="false"
-                    class="border-4 border-pink-500 rounded-lg touch-none grid" 
-                     :key="isMirrored" :style="{
+            <div class="relative flex flex-col">
+                <button @click="console.log(props.element)">
+                Check element
+            </button>
+
+                <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout"
+                    :cols="{ lg: colNum, md: colNum, sm: colNum, xs: colNum, xxs: 6 }" :row-height="30"
+                    :max-rows="rowNum" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored"
+                    :prevent-collision="false" :is-bounded="true" :margin="[10, 10]" :restore-on-drag="true"
+                    :vertical-compact="false" class="border-4 border-pink-500 rounded-lg touch-none grid"
+                    :key="isMirrored" :style="{
             height: '60vh',
             aspectRatio: pageStyleAspectRatio
-         
-        }"
-        @breakpoint-changed="breakpointChangedEvent">
+
+        }" @breakpoint-changed="breakpointChangedEvent">
                     <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
                         :key="item.i" class="rounded-lg border-4 border-pink-500 text-white p-4 bg-black z-0"
                         @mousemove.stop="showAddElementHint = false; isDragging = true; stopIsDraggingAfterDelay(50)"
@@ -89,18 +111,7 @@
             </div>
         </div>
 
-        <!-- Panel descriptions list -->
-        <div v-if="showPanelDescriptionList === true">
-            <div v-for="item in layout" class="rounded-lg border-4 border-pink-500 p-4">
-                <div>
-                    {{ 'Panel ' + item.i }}
-                </div>
-                <div>
-                    <input type="text" v-model="item.text" class="text-black" placeholder="Type here" />
-
-                </div>
-            </div>
-        </div>
+    
 
     </div>
 
@@ -273,7 +284,7 @@ function updateMousePosition(event) {
     showAddElementHint.value = true
 }
 
-function breakpointChangedEvent(newBreakpoint, newLayout) {    
+function breakpointChangedEvent(newBreakpoint, newLayout) {
     console.log(newBreakpoint)
     console.log(newLayout)
 
@@ -281,12 +292,12 @@ function breakpointChangedEvent(newBreakpoint, newLayout) {
         case 'xxs':
             colNum.value = 6
             break;
-    
+
         default:
             colNum.value = 12
             break;
     }
-    
+
 }
 
 function stopIsDraggingAfterDelay(delay) {
@@ -373,14 +384,14 @@ function addGridItem() {
 
     // Mark the occupied spaces in the grid
     for (let item of layout.value) {
-    for (let dx = 0; dx < item.w; dx++) {
-        for (let dy = 0; dy < item.h; dy++) {
-            if (item.y + dy < rowNum && item.x + dx < colNum.value) {
-                grid[item.y + dy][item.x + dx] = true;
+        for (let dx = 0; dx < item.w; dx++) {
+            for (let dy = 0; dy < item.h; dy++) {
+                if (item.y + dy < rowNum && item.x + dx < colNum.value) {
+                    grid[item.y + dy][item.x + dx] = true;
+                }
             }
         }
     }
-}
 
     console.log(grid)
 
@@ -467,16 +478,14 @@ function removeGridItem(val) {
 .grid::before {
     content: '';
     background-size: calc(calc(100% - 5px) / 12) 40px;
-    background-image: linear-gradient(
-            to right,
-            lightgrey 1px,
-            transparent 1px
-    ),
-    linear-gradient(to bottom, lightgrey 1px, transparent 1px);
+    background-image: linear-gradient(to right,
+            rgb(85, 85, 85) 1px,
+            transparent 1px),
+        linear-gradient(to bottom, rgb(85, 85, 85) 1px, transparent 1px);
     height: calc(100% - 5px);
     width: calc(100% - 5px);
     position: absolute;
     background-repeat: repeat;
-    margin:5px;
+    margin: 5px;
 }
 </style>
