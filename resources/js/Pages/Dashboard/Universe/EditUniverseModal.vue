@@ -116,7 +116,12 @@ const files = computed(() => {
     if (props.universe.thumbnail !== '') {
         return [
             {
-                source: props.universe.thumbnail.replace('http://localhost', ''),
+                // source: props.universe.thumbnail.replace('http://localhost', ''),
+                // options: {
+                //     type: 'local',
+                // },
+
+                source: props.universe.thumbnail.replace(/^(http|https):\/\/[^/]+/, ''),
                 options: {
                     type: 'local',
                 },
