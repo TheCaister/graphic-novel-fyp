@@ -361,13 +361,23 @@ class SearchController extends Controller
     {
         $resultsList = [];
 
+        $user = auth('sanctum')->user();
+
         // Aggregate universes, series, chapters and elements. Order by updated_at and limit to the request limit
-        // Eventualy, I want to use $contentTypeList here as well. Also, it only gets the latest, not the ones owned by the user.
-        $tempList = Universe::latest()
-            ->limit(request()->limit)->get()
-            ->concat(Series::latest()->limit(request()->limit)->get())
-            ->concat(Chapter::latest()->limit(request()->limit)->get())
-            ->concat(Element::latest()->limit(request()->limit)->get())
+
+        
+            $tempList = Universe::whereHas('owner', function ($query) use ($user) {
+                $query->where('id', $user->id);
+            })->latest()->limit(request()->limit)->get()
+            ->concat(Series::whereHas('owner', function ($query) use ($user) {
+                $query->where('id', $user->id);
+            })->latest()->limit(request()->limit)->get())
+            ->concat(Chapter::whereHas('owner', function ($query) use ($user) {
+                $query->where('id', $user->id);
+            })->latest()->limit(request()->limit)->get())
+            ->concat(Element::whereHas('universes.owner', function ($query) use ($user) {
+                $query->where('id', $user->id);
+            })->latest()->limit(request()->limit)->get())
             ->sortByDesc('updated_at')
             ->take(request()->limit);
 
