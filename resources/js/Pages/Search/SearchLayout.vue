@@ -6,7 +6,7 @@
         <!-- Search bar with buttons for users, content and elements -->
         <form @submit.prevent="search" class="flex items-center mb-8 h-10 w-1/2">
 
-            <select v-model="form.searchType" class="bg-black rounded-l-lg border-r-2 border-gray-600 ">
+            <select v-model="form.searchType" @change="testing" class="bg-black rounded-l-lg border-r-2 border-gray-600 ">
                 <option value="users">Users</option>
                 <option value="content">Content</option>
                 <option value="elements">Elements</option>
@@ -15,16 +15,16 @@
             <input type="text" class=" flex-grow h-full border-gray-600 text-sm focus:outline-none bg-transparent placeholder-gray-300 rounded-r-lg" v-model="form.search" />
 
             <!-- <PrimaryButton @click="search" class="ml-8">Search</PrimaryButton> -->
-            <PrimaryButton class="ml-8">Search</PrimaryButton>
+            <PrimaryButton  class="ml-8">Search</PrimaryButton>
 
         </form>
 
         <!-- big button -->
-        <!-- <div>
-            <button @click="test">
+        <div class="text-white">
+            <button @click="console.log(resultsList)">
                 Print form
             </button>
-        </div> -->
+        </div>
 
         <!-- Advanced search -->
         <div class="w-3/4">
@@ -46,7 +46,7 @@
 
 <script setup>
 import { Head, router } from '@inertiajs/vue3';
-import { onMounted, computed, inject, ref, watch, onUpdated } from 'vue'
+import { onMounted, computed, ref, onUpdated } from 'vue'
 import { useForm } from '@inertiajs/vue3';
 import SearchContentResults from './SearchContentResults.vue';
 import SearchElementsResults from './SearchElementsResults.vue';
@@ -64,10 +64,6 @@ const props = defineProps({
         type: Object,
         default: {}
     },
-    // searchType: {
-    //     type: String,
-    //     default: 'users'
-    // },
     errors: {
         type: Object,
     },
@@ -80,6 +76,7 @@ const props = defineProps({
 })
 
 const resultsList = ref(props.initResultsList)
+const currentSearchType = ref(props.searchParams.searchType)
 
 const form = useForm({
     search: '',
@@ -94,7 +91,18 @@ const ResultsViewComponent = computed(() => {
     // return SearchUsersResults
 
     // Switch statement to return the correct dashboard view
-    switch (form.searchType) {
+    // switch (form.searchType) {
+    //     case 'content':
+    //         return SearchContentResults
+    //     case 'elements':
+    //         return SearchElementsResults
+    //     case 'users':
+    //         return SearchUsersResults
+    //     default:
+    //     // return SearchUsersResults
+    // }
+
+    switch (currentSearchType.value) {
         case 'content':
             return SearchContentResults
         case 'elements':
@@ -120,11 +128,20 @@ const AdvancedFiltersComponent = computed(() => {
     }
 })
 
+function testing(event){
+    // console.log(event)
+   // The value of the selected option
+   let selectedOption = event.target.value;
+
+// Do something with selectedOption
+console.log(selectedOption);
+}
+
 
 
 function search() {
 
-    // console.log(form.advanced)
+    console.log(form.advanced)
 
     // form.get(route('search'), {
     //     onFinish: () => {
@@ -141,6 +158,8 @@ function search() {
         }
     ), {
         onFinish: () => {
+            resultsList.value = []
+            currentSearchType.value = form.searchType
             console.log('success')
             // form.search = ''
         }
@@ -152,6 +171,9 @@ function search() {
 
 
     // }
+
+    // clear the advanced search filters
+    form.advanced = {};
 }
 
 function back() {
@@ -182,7 +204,7 @@ onMounted(() => {
 })
 
 onUpdated(() => {
-    form.searchType = props.searchParams.searchType;
+    currentSearchType.value = props.searchParams.searchType;
 
     resultsList.value = props.initResultsList;
 })

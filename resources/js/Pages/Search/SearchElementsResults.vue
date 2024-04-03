@@ -1,5 +1,5 @@
 <template>
-    <div class="flex space-x-8 p-8 flex-wrap">
+    <div class="flex gap-6 p-8 flex-wrap justify-center">
         <div v-for="element in props.resultsList" :key="element.element_id" class="shadow-lg w-96">
             <search-card :content="{
             content_id: element.element_id,
