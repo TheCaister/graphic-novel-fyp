@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-center text-white bg-black" style="height: 80vh;">
+    <div class="relative flex justify-center text-white bg-black" style="height: 80vh;">
    
         <div class="absolute flex justify-between w-full">
           
@@ -12,40 +12,11 @@
 
             
         </div>
-                <!-- Panel descriptions list -->
-        <div v-if="showPanelDescriptionList === true" class="absolute right-0 top-0 text-white">
-            <button @click="showPanelDescriptionList = !showPanelDescriptionList">
-                x
-            </button>
-            <div v-for="item in layout" class="rounded-lg border-4 border-pink-500 p-4">
-                <div>
-                    {{ 'Panel ' + item.i }}
-                </div>
-                <div>
-                    <input type="text" v-model="item.text" class="text-black" placeholder="Type here" />
 
-                </div>
-            </div>
-        </div>
+        <PanelDescriptionList v-if="showPanelDescriptionList === true" v-model="layout"/>
 
-        <div v-if="showElementList === true" class="text-white absolute left-0 top-0">
-            <button @click="showElementList = !showElementList">
-                x
-            </button>
-            <div v-for="item in layout" class="rounded-lg relative border-4 border-pink-500 p-4">
-                <div>
-                    <!-- Do something like Panel + item.i -->
-                    {{ 'Panel ' + item.i }}
-                </div>
-                <div v-for="element in item.elements">
-                    {{ element.element_name }}
-
-                    <button @click="removeElement(item, element)">
-                        X
-                    </button>
-                </div>
-            </div>
-        </div>
+        <PanelElementList v-if="showElementList === true" v-model="layout" @toggle-visibility="showElementList = !showElementList"
+        @remove-element="removeElement"/>
 
         <div class="flex flex-col items-center">
             <div class="relative flex flex-col">
@@ -142,6 +113,8 @@ import { ref, computed, onMounted } from 'vue';
 import { GridLayout, GridItem } from 'vue3-grid-layout-next';
 import DashboardDropdownMenu from '../../Dashboard/DashboardDropdownMenu.vue';
 import SearchElementModal from '../SearchElementModal.vue'
+import PanelElementList from './PanelElementList.vue'
+import PanelDescriptionList from './PanelDescriptionList.vue'
 
 const responsive = ref(true)
 
@@ -200,6 +173,9 @@ watch(layout, (newVal) => {
         }
         return a.y - b.y
     })
+},
+{
+    deep: true
 })
 
 watch(pageStyle, (newVal) => {
