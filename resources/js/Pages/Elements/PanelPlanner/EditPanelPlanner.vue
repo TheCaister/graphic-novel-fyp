@@ -1,39 +1,24 @@
 <template>
     <div class="relative flex justify-center text-white bg-black" style="height: 80vh;">
-   
-        <div class="absolute flex justify-between w-full">
-          
-            <button v-if="showElementList === false" @click="showElementList = !showElementList" class="absolute left-0">
-                Toggle elements
-            </button>
-            <button v-if="showPanelDescriptionList === false" @click="showPanelDescriptionList = !showPanelDescriptionList" class="absolute right-0">
-                Toggle panel descriptions
-            </button>
 
-            
-        </div>
 
-        <PanelDescriptionList v-if="showPanelDescriptionList === true" v-model="layout"/>
-
-        <PanelElementList v-if="showElementList === true" v-model="layout" @toggle-visibility="showElementList = !showElementList"
-        @remove-element="removeElement"/>
 
         <div class="flex flex-col items-center">
             <div class="relative flex flex-col">
                 <button @click="console.log(props.element)">
-                Check element
-            </button>
+                    Check element
+                </button>
 
                 <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout"
                     :cols="{ lg: colNum, md: colNum, sm: colNum, xs: colNum, xxs: 6 }" :row-height="30"
                     :max-rows="rowNum" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored"
-                    :prevent-collision="false" :is-bounded="true" :margin="[10, 10]" :restore-on-drag="true"
+                    :prevent-collision="true" :is-bounded="true" :margin="[10, 10]" :restore-on-drag="true"
                     :vertical-compact="false" class="border-4 border-pink-500 rounded-lg touch-none grid"
                     :key="isMirrored" :style="{
-            height: '60vh',
-            aspectRatio: pageStyleAspectRatio
+                    height: '60vh',
+                    aspectRatio: pageStyleAspectRatio
 
-        }" @breakpoint-changed="breakpointChangedEvent">
+                }" @breakpoint-changed="breakpointChangedEvent">
                     <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
                         :key="item.i" class="rounded-lg border-4 border-pink-500 text-white p-4 bg-black z-0"
                         @mousemove.stop="showAddElementHint = false; isDragging = true; stopIsDraggingAfterDelay(50)"
@@ -82,8 +67,29 @@
             </div>
         </div>
 
-    
 
+        <div class="absolute flex justify-between w-full">
+
+            <button v-if="showElementList === false" @click="showElementList = !showElementList"
+                class="absolute left-0">
+                Toggle elements
+            </button>
+            <button v-if="showPanelDescriptionList === false"
+                @click="showPanelDescriptionList = !showPanelDescriptionList" class="absolute right-0">
+                Toggle panel descriptions
+            </button>
+
+
+        </div>
+
+        <Transition name="slide">
+            <PanelDescriptionList v-if="showPanelDescriptionList === true" v-model="layout" @toggle-visibility="showPanelDescriptionList = !showPanelDescriptionList" class="w-1/2 mr-8"/>
+        </Transition>
+
+        <Transition name="slide-reverse">
+            <PanelElementList v-if="showElementList === true" v-model="layout"
+                @toggle-visibility="showElementList = !showElementList" @remove-element="removeElement" />
+        </Transition>
     </div>
 
     <!-- Container for buttons that pop in and out of existence -->
@@ -174,9 +180,9 @@ watch(layout, (newVal) => {
         return a.y - b.y
     })
 },
-{
-    deep: true
-})
+    {
+        deep: true
+    })
 
 watch(pageStyle, (newVal) => {
     element.value.content.pageStyle = newVal
@@ -463,5 +469,25 @@ function removeGridItem(val) {
     position: absolute;
     background-repeat: repeat;
     margin: 5px;
+}
+
+.slide-enter-active, .slide-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-enter-from, .slide-leave-to {
+  transform: translateX(100%);
+}
+.slide-enter-to, .slide-leave-from {
+  transform: translateX(0);
+}
+
+.slide-reverse-enter-active, .slide-reverse-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-reverse-enter-from, .slide-reverse-leave-to {
+  transform: translateX(-100%);
+}
+.slide-reverse-enter-to, .slide-reverse-leave-from {
+  transform: translateX(0);
 }
 </style>

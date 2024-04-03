@@ -167,20 +167,20 @@ function back() {
 
         <div>
             <div class="absolute z-10 w-full">
-                <div v-if="isHeaderOpen" class=" h-64 flex items-center p-6"
-                    :style="'background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url(' + elementThumbnailImage + ')'">
-                    <div class="flex items-center gap-8">
-                        <button @click="isEditThumbnailModalOpen = true">
-                            <img class="w-32 h-32 shadow-2xl rounded-lg hover:scale-105 transition-transform duration-300"
-                                :src="elementThumbnailImage" alt="" srcset="">
-                        </button>
-                        <div>
-                            <input id="element_name" type="text"
-                                class="mt-1 block w-full bg-transparent border-none rounded-lg shadow-xl text-white text-2xl hover:scale-105 transition-transform duration-300"
-                                v-model="form.element.element_name" required autofocus />
+                    <div v-if="isHeaderOpen" class=" h-64 flex items-center p-6"
+                        :style="'background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url(' + elementThumbnailImage + ')'">
+                        <div class="flex items-center gap-8">
+                            <button @click="isEditThumbnailModalOpen = true">
+                                <img class="w-32 h-32 shadow-2xl rounded-lg hover:scale-105 transition-transform duration-300"
+                                    :src="elementThumbnailImage" alt="" srcset="">
+                            </button>
+                            <div>
+                                <input id="element_name" type="text"
+                                    class="mt-1 block w-full bg-transparent border-none rounded-lg shadow-xl text-white text-2xl hover:scale-105 transition-transform duration-300"
+                                    v-model="form.element.element_name" required autofocus />
+                            </div>
                         </div>
                     </div>
-                </div>
 
                 <KeepAlive>
 
