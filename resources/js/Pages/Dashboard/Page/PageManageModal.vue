@@ -119,7 +119,7 @@ const files = computed(() => {
     if (props.page.page_image !== '' && props.page.page_image) {
         return [
             {
-                source: props.page.page_image.replace('http://localhost', ''),
+                source: props.page.page_image.replace(/^(http|https):\/\/[^/]+/, ''),
                 options: {
                     type: 'local',
                 },

@@ -58,7 +58,7 @@ const files = computed(() => {
 
         return [
             {
-                source: props.chapter.chapter_thumbnail.replace('http://localhost', ''),
+                source: props.chapter.chapter_thumbnail.replace(/^(http|https):\/\/[^/]+/, ''),
                 options: {
                     type: 'local',
                 },
