@@ -185,8 +185,7 @@ class ChapterController extends Controller
         foreach ($pagesInOrder as $page) {
             $filePath = $page->getFirstMediaUrl('page_image');
 
-            $filePath = str_replace('http://localhost', '', $filePath);
-
+            $filePath = preg_replace('/^(http|https):\/\/[^\/]+/', '', $filePath);            
             // Add the page to the array
             $chapterPagesToReturn[] = [
                 'source' => $filePath,
@@ -304,8 +303,8 @@ class ChapterController extends Controller
         foreach ($pagesInOrder as $page) {
             $filePath = $page->getFirstMediaUrl('page_image');
 
-            $filePath = str_replace('http://localhost', '', $filePath);
-
+            $filePath = preg_replace('/^(http|https):\/\/[^\/]+/', '', $filePath);  
+                        
             // Add the page to the array
             $chapterPagesToReturn[] = [
                 'source' => $filePath,
