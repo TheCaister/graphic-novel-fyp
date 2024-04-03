@@ -83,7 +83,7 @@ const files = computed(() => {
     if (user.profile_picture !== '' && user.profile_picture) {
         return [
             {
-                source: user.profile_picture.replace('http://localhost', ''),
+                source: user.profile_picture.replace(/^(http|https):\/\/[^/]+/, ''),
                 options: {
                     type: 'local',
                 },

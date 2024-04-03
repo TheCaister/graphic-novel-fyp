@@ -89,7 +89,7 @@ const files = computed(() => {
     if (props.element.element_thumbnail !== '' && props.element.element_thumbnail) {
         return [
             {
-                source: props.element.element_thumbnail.replace('http://localhost', ''),
+                source: props.element.element_thumbnail.replacereplace(/^(http|https):\/\/[^/]+/, ''),
                 options: {
                     type: 'local',
                 },
