@@ -7,8 +7,6 @@ use App\Models\User;
 use App\Models\Universe;
 use App\Models\Series;
 use App\Models\Chapter;
-use App\Models\Page;
-use Illuminate\Support\Benchmark;
 use Inertia\Inertia;
 
 class SearchController extends Controller

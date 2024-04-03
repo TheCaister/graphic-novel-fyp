@@ -1,5 +1,5 @@
 <template>
-    <div class="overflow-auto mt-8">
+    <div class="overflow-auto h-96 mt-8">
 
         <div v-for="content in contentModel" :key="content.content_id" class="flex relative items-center">
             <Checkbox class="flex-grow" :content="content" v-model="content.checked" />

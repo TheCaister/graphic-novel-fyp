@@ -1,5 +1,5 @@
 <template>
-    <div class="flex gap-6 p-8 flex-wrap justify-center">
+    <div v-if="resultsList.length > 0" class="flex gap-6 p-8 flex-wrap justify-center">
         <div v-for="element in props.resultsList" :key="element.element_id" class="shadow-lg w-96">
             <search-card :content="{
             content_id: element.element_id,
@@ -9,6 +9,10 @@
         }" :link="route('elements.show', element.element_id)"
         :selected="false" :show-description="false" />
         </div>
+    </div>
+
+    <div v-else  class="p-8">
+        No elements found
     </div>
 </template>
 

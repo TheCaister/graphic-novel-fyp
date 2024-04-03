@@ -13,7 +13,7 @@
         </div>
     </div> -->
 
-    <div class="flex gap-6 p-8 flex-wrap justify-center">
+    <div v-if="resultsList.length > 0" class="flex gap-6 p-8 flex-wrap justify-center">
         <div v-for="content in props.resultsList" :key="content.id" class="shadow-lg w-96">
             <search-card :content="{
             content_id: content.id,
@@ -23,6 +23,10 @@
         }" :link="content.link"
         :selected="false" :show-description="false"/>
         </div>
+    </div>
+
+    <div v-else  class="p-8">
+        No content found
     </div>
 </template>
 

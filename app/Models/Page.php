@@ -119,9 +119,9 @@ class Page extends Model implements HasMedia
     public function scopeFilter($query, array $filters)
     {
         // dd($query);
-        // $query->when($filters['search'] ?? null, function ($query, $search) {
-        //     $query->whereRaw("LOWER(universe_name) LIKE CONCAT('%', LOWER(?), '%')", [$search]);
-        // });
+        $query->when($filters['search'] ?? null, function ($query, $search) {
+            $query->whereRaw("LOWER(page_id) LIKE CONCAT('%', LOWER(?), '%')", [$search]);
+        });
     }
 
     public function scopeIncludedElements($query, $elementIdList)
