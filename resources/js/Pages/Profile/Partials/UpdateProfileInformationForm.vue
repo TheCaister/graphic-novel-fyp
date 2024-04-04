@@ -178,9 +178,7 @@ const files = computed(() => {
             <div>
                 <InputLabel for="bio" value="Bio" />
 
-                <!-- <textarea id="bio" class="mt-1 block w-full" v-model="form.bio" required autocomplete="bio"></textarea> -->
-
-                <TextAreaInput id="bio" class="mt-1 block w-full" v-model="form.bio" required autocomplete="bio"></TextAreaInput>
+                <TextAreaInput id="bio" class="mt-1 block w-full" v-model="form.bio" autocomplete="bio"></TextAreaInput>
 
                 <InputError class="mt-2" :message="form.errors.bio" />
             </div>

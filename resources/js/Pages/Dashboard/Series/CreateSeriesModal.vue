@@ -153,8 +153,8 @@ function handleFilePondThumbnailRemove(error, file) {
 
                             <div>
                                 <InputLabel for="series_summary" value="Description:" />
-                                <textarea id="series_summary" class="mt-1 block w-full" v-model="form.series_summary"
-                                    autofocus></textarea>
+                                <TextAreaInput id="series_summary" class="mt-1 block w-full" v-model="form.series_summary"
+                                    autofocus></TextAreaInput>
                                 <InputError class="mt-2" message="" />
                             </div>
 

@@ -308,7 +308,7 @@ onMounted(() => {
                             <div>
                                 <InputLabel for="chapter_notes" value="Description:" />
 
-                                    <TextAreaInput id="chapter_notes" class="mt-1 block w-full" v-model="form.chapter_notes" required autocomplete="chapter_notes"></TextAreaInput>
+                                    <TextAreaInput id="chapter_notes" class="mt-1 block w-full" v-model="form.chapter_notes"  autocomplete="chapter_notes"></TextAreaInput>
                                 <InputError class="mt-2" message="" />
                             </div>
 

@@ -207,8 +207,8 @@ onMounted(() => {
 
                             <div>
                                 <InputLabel for="chapter_notes" value="Description:" />
-                                <textarea id="chapter_notes" class="mt-1 block w-full" v-model="form.chapter_notes"
-                                    autofocus></textarea>
+                                <TextAreaInput id="chapter_notes" class="mt-1 block w-full" v-model="form.chapter_notes"
+                                    autofocus></TextAreaInput>
                                 <InputError class="mt-2" message="" />
                             </div>
 
