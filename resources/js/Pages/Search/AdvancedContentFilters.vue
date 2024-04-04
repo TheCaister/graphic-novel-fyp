@@ -40,7 +40,6 @@
 <script setup>
 import TriCheckbox from './TriCheckbox.vue';
 import IncludedElementsEditor from '../../Components/Editors/IncludedElementsEditor.vue'
-// import Checkbox from './Checkbox.vue';
 import { defineEmits } from 'vue';
 
 const emits = defineEmits(['updateAdvancedSearch'])

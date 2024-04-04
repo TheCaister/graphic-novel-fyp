@@ -127,9 +127,13 @@ function handleMenuItemClicked(eventName) {
             router.visit(route("elements.edit", { element: selectedElement.value.element_id, contentype: getParentContentType(), content_id: parentContentId }))
             break;
         case "viewAssignedContent":
+            router.post(route('search',
+            {
+                'searchType': 'content',
+            }))
             break;
-        case "relatedElements":
-            break;
+        // case "relatedElements":
+        //     break;
         case "assignElement":
             break;
         case "delete":

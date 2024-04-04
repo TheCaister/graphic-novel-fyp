@@ -161,7 +161,7 @@ function updateSize(event) {
 
     <div class="flex justify-between mb-8">
 
-        <div class="flex">
+        <div class="flex px-6">
             <div v-if="dashboardView != 'UniverseView'">
                 <PrimaryButton @click="goBack()">
                     Go back

@@ -12,7 +12,7 @@
                 <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout"
                     :cols="{ lg: colNum, md: colNum, sm: colNum, xs: colNum, xxs: 6 }" :row-height="30"
                     :max-rows="rowNum" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored"
-                    :prevent-collision="true" :is-bounded="true" :margin="[10, 10]" :restore-on-drag="true"
+                    :prevent-collision="false" :is-bounded="true" :margin="[10, 10]" :restore-on-drag="true"
                     :vertical-compact="false" class="border-4 border-pink-500 rounded-lg touch-none grid"
                     :key="isMirrored" :style="{
                     height: '60vh',
