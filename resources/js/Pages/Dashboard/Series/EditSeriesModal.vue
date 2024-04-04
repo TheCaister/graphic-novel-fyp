@@ -170,6 +170,7 @@ function handleFilePondThumbnailRemove(error, file) {
                     </div>
                     <div class="flex flex-col justify-between w-1/2 ml-8">
                         <div>
+                            <PrimaryButton @click.prevent="console.log(props.series)">Check</PrimaryButton>
                             <div>
                                 <InputLabel for="series_title" value="Series title:" />
                                 <TextInput id="series_title" type="text" class="mt-1 block w-full"

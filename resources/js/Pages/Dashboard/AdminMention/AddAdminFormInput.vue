@@ -1,11 +1,13 @@
 <template>
     <div>
-        <AdminEditor @add-admin="addAdmin" />
+        <PrimaryButton @click.prevent="console.log(model)">Test</PrimaryButton>
+        <AdminEditor @add-admin="addAdmin" :admin-list="model" />
     </div>
 </template>
 
 <script setup>
 import AdminEditor from '@/Components/Editors/AdminEditor.vue';
+import { onMounted } from 'vue'
 
 const model = defineModel({
     default: [],

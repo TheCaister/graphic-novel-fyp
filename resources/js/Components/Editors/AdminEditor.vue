@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount, onUpdated } from 'vue'
 import Mention from '@tiptap/extension-mention'
 import Paragraph from '@tiptap/extension-paragraph'
 import { Editor, EditorContent, VueNodeViewRenderer } from '@tiptap/vue-3'
@@ -27,6 +27,10 @@ const props = defineProps({
     modelValue: {
         type: Object,
     },
+    adminList: {
+        type: Array,
+        default: []
+    }
 })
 
 const emits = defineEmits(['update:modelValue', 'addAdmin'])
@@ -198,6 +202,25 @@ onMounted(() => {
             emits('update:modelValue', JSON.parse(JSON.stringify(editor.value.getJSON())))
         },
     })
+
+})
+
+onUpdated(() => {
+
+    console.log(props.adminList)
+
+    props.adminList.forEach(admin => {
+        console.log(admin.id, admin.username)
+        editor.value.commands.insertContent({
+            type: 'mention',
+            attrs: {
+                id: {
+                    id: admin.id,
+                    label: admin.username,
+                }
+            },
+        })
+    })
 })
 
 onBeforeUnmount(() => {
@@ -212,7 +235,7 @@ onBeforeUnmount(() => {
     background-color: #fff;
     color: #000;
 
-    
+
     border: 1px solid #000;
     border-radius: 5px;
 
@@ -223,7 +246,7 @@ onBeforeUnmount(() => {
     background-color: #000;
     color: #fff;
 
-    
+
     border: 5px solid #ff4b4b;
     border-radius: 5px;
 
@@ -233,7 +256,7 @@ onBeforeUnmount(() => {
 button:disabled {
     color: #a1a1a1;
 
-    
+
     border: 1px solid #a1a1a1;
     border-radius: 5px;
 

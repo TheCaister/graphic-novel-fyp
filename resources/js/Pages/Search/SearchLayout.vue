@@ -21,7 +21,7 @@
 
         <!-- big button -->
         <div class="text-white">
-            <button @click="console.log(resultsList)">
+            <button @click="console.log(form.advanced)">
                 Print form
             </button>
         </div>
@@ -173,17 +173,11 @@ function search() {
     // }
 
     // clear the advanced search filters
-    form.advanced = {};
+    // form.advanced = {};
 }
 
 function back() {
     router.back();
-}
-
-function test() {
-    // console.log(resultsList.value)
-    // console.log(props.searchParams)
-    console.log(form.advanced)
 }
 
 function updateAdvancedSearch({ name, value }) {

@@ -21,6 +21,7 @@
 
             <div class="w-full">
                 <IncludedElementsEditor  addMentionItem="addElement" @removeMentionItem="removeElement"
+                @addMentionItem="addElement"
                     :includedElements="model?.value?.includedElements || []" :key="model?.value?.includedElements" />
             </div>
         </div>

@@ -332,7 +332,10 @@ onMounted(() => {
                                 </button>
 
                                 <file-pond ref="filepondPages" id="pagepond" name="upload" label-idle="Pages" allow-multiple="true"
-                                    allow-reorder="true" :files="form.pages" @processfile="handleFilePondPagesProcess"
+                                    allow-reorder="true" :files="form.pages"
+                                    allow-image-preview="false"
+                                    image-preview-max-file-size="50KB"
+                                    @processfile="handleFilePondPagesProcess"
                                     @reorderfiles="handleFilePondPagesReorderFiles"
                                     accepted-file-types="image/jpeg, image/png" :server="{
                                         process: {

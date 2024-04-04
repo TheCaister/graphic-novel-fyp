@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount, onUpdated } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import Mention from '@tiptap/extension-mention'
 import Paragraph from '@tiptap/extension-paragraph'
 import { Editor, EditorContent, VueNodeViewRenderer } from '@tiptap/vue-3'
@@ -241,20 +241,15 @@ onMounted(() => {
     // props.includedElements.forEach((element) => {
     //     console.log('inserting!!')
     //     editor.value.commands.insertContentAt(editor.value.state.selection.$to, [
-    //         // {
-    //         //     type: 'mention',
-    //         //     attrs: {
-    //         //         id: {
-    //         //             id: element.id,
-    //         //             label: element.label
-    //         //         }
-    //         //     }
-    //         // },
-    //         // {
-    //         //     type: 'text',
-    //         //     text: ' ',
-    //         // },
-    //         {}
+    //         {
+    //             type: 'mention',
+    //             attrs: {
+    //                 id: {
+    //                     id: element.id,
+    //                     label: element.label
+    //                 }
+    //             }
+    //         },
     //     ])
     // })
 })
