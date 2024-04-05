@@ -68,6 +68,13 @@ class Universe extends Model implements HasMedia
         return $this->morphToMany(User::class, 'moderatable', 'approved_moderators', 'moderatable_id', 'moderator_id', 'universe_id');
     }
 
+    public function getParentContent(){
+        return [
+            'content_type' => 'Universe',
+            'content_id' => $this->universe_id
+        ];
+    }
+
     public function getRecentsFormattedEntry(){
         return [
             'title' => $this->universe_name,

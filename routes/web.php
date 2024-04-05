@@ -220,7 +220,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/elements/assign/getParent', [ElementController::class, 'assignGetParent'])->name('elements.assign.get-parent');
 
+    Route::post('/elements/assign/getParent', [ElementController::class, 'assignGetParent'])->name('elements.assign.get-parent.post');
+
+
     Route::get('/elements/assign', [ElementController::class, 'assign'])->name('elements.assign');
+
+    Route::post('/elements/assign', [ElementController::class, 'assign'])->name('elements.assign.post');
 
     Route::post('/elements/assign', [ElementController::class, 'assignStore'])->name('elements.assign.store');
 

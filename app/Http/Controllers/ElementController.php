@@ -116,7 +116,7 @@ class ElementController extends Controller
     public function edit(Element $element)
     {
         // convert $element->content to object
-       
+
 
         $element->content = json_decode($element->content);
 
@@ -230,7 +230,7 @@ class ElementController extends Controller
 
         // for everything in request preSelectedContent, convert to integer
         $preSelectedContent = [];
-        
+
         if (request()->preSelectedContent) {
             $preSelectedContent = array_map('intval', request()->preSelectedContent);
         }
@@ -265,7 +265,7 @@ class ElementController extends Controller
     {
 
         // dd('Parent', request()->all());
-        
+
 
         $contentType = request()->type;
         $content_id = request()->content_id;
@@ -280,7 +280,7 @@ class ElementController extends Controller
             'contentType' => $parentContent['content_type'],
             'content_id' => $parentContent['content_id'],
             'preSelectedContent' => [$content_id],
-            'preSelectedElements' => []
+            'preSelectedElements' => request()->preSelectedElements ? request()->preSelectedElements : [],
         ]);
     }
 
@@ -444,6 +444,9 @@ class ElementController extends Controller
      */
     private function getClassName($contentType)
     {
-        return 'App\\Models\\' . $contentType;
+        if (strpos($contentType, 'App\\Models\\') !== 0) {
+            $contentType = 'App\\Models\\' . $contentType;
+        }
+        return $contentType;
     }
 }

@@ -202,17 +202,24 @@ function toggleAll() {
 }
 
 onMounted(() => {
+    console.log(props.preSelectedElements)
 
     // Go through all elements in elements and see if an element is in preSelectedElements. If it is, set the checked value to true. If it isn't, set the checked value to null.
     elements.value.forEach(element => {
 
         const preSelectedElement = props.preSelectedElements.find(preSelectedElement => Number(preSelectedElement.element_id) === element.element_id)
 
-        if (preSelectedElement && preSelectedElement.checked === '1') {
+        if(preSelectedElement){
             element.checked = true
-        } else {
-            element.checked = null
+            console.log('mitsuketta!!')
+            console.log(preSelectedElement.checked)
         }
+
+        // if (preSelectedElement && preSelectedElement.checked === '1') {
+        //     element.checked = true
+        // } else {
+        //     element.checked = null
+        // }
     })
 
     // foreach in props.subcontentlist, check if the content is in preSelectedContent. If it is, set the checked value to true.

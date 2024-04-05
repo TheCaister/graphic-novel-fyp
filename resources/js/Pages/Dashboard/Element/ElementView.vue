@@ -3,11 +3,11 @@
         <div v-for="element in elements" :key="element.element_id" class=" w-96 mx-2 mb-4">
 
             <content-card-detailed :content="{
-        content_id: element.element_id,
-        content_name: element.element_name,
-        subheading: getElementTypeText(element.derived_element_type),
-        thumbnail: element.element_thumbnail,
-    }" :link='route("elements.edit", { element: element.element_id, contentType: getParentContentType(), content_id: parentContentId })'
+                content_id: element.element_id,
+                content_name: element.element_name,
+                subheading: getElementTypeText(element.derived_element_type),
+                thumbnail: element.element_thumbnail,
+            }" :link='route("elements.edit", { element: element.element_id, contentType: getParentContentType(), content_id: parentContentId })'
                 :selected="element.element_id === selectedElement.element_id"
                 :drop-down-menu-options="dropDownMenuOptions" :show-description="false"
                 @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked"
@@ -32,9 +32,9 @@
         <Transition name="modal" class="z-50">
             <delete-modal v-if="isDeleteModalOpen" @closeModal="isDeleteModalOpen = false; updateContentList()"
                 :content="{
-        content_id: selectedElement.element_id,
-        content_name: selectedElement.element_name,
-    }" type="elements" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+                    content_id: selectedElement.element_id,
+                    content_name: selectedElement.element_name,
+                }" type="elements" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
 
     </Teleport>
@@ -66,9 +66,10 @@ const selectedElement = ref({ element_id: 0, element_name: "" })
 const dropDownMenuOptions = [
     { id: 1, text: "Edit", eventName: "edit" },
     { id: 2, text: "View Assigned Content", eventName: "viewAssignedContent" },
-    { id: 3, text: "Related Elements", eventName: "relatedElements" },
+    // { id: 3, text: "Related Elements", eventName: "relatedElements" },
     { id: 4, text: "Assign Element", eventName: "assignElement" },
-    { id: 5, text: "Delete", eventName: "delete" },]
+    { id: 5, text: "Delete", eventName: "delete" },
+]
 
 const emits = defineEmits(['updateSize', 'updateMouseClickPosition'])
 
@@ -127,14 +128,30 @@ function handleMenuItemClicked(eventName) {
             router.visit(route("elements.edit", { element: selectedElement.value.element_id, contentype: getParentContentType(), content_id: parentContentId }))
             break;
         case "viewAssignedContent":
-            router.post(route('search',
-            {
+            router.post(route('search', {
                 'searchType': 'content',
-            }))
+            }), {
+                'advanced': {
+                    'includedElements': [
+                        {
+                            // 'label': 'Cool Mindmap',
+                            'id': selectedElement.value.element_id
+                        }
+                    ]
+                },
+                'limit': 10
+            });
             break;
         // case "relatedElements":
         //     break;
         case "assignElement":
+            console.log(selectedElement.value)
+            router.post(route('elements.assign.get-parent.post', {
+                type: selectedElement.value.pivot.elementable_type,
+                content_id: selectedElement.value.pivot.elementable_id
+            }), {
+                preSelectedElements: [selectedElement.value]
+            });
             break;
         case "delete":
             isDeleteModalOpen.value = true

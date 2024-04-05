@@ -18,7 +18,7 @@ class SearchController extends Controller
     public function search()
     {
 
-        dd(request()->all());
+        // dd(request()->all());
         $resultsList = [];
 
         // do a switch on the search type
