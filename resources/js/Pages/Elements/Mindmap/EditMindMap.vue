@@ -47,9 +47,8 @@ watch(nodesEdges, (list) => {
 
     // Set a new timeout
     updateTimeout = setTimeout(() => {
-        console.log('updated')
         element.value.content = JSON.parse(JSON.stringify(list));
-    }, 200); // Delay of 500ms
+    }, 200);
 }, {
     deep: true
 })

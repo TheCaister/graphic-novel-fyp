@@ -249,6 +249,8 @@ onMounted(() => {
         content: props.modelValue,
         onUpdate: () => {
             emits('update:modelValue', JSON.parse(JSON.stringify(editor.value.getJSON())))
+            // emits('update:modelValue', editor.value.getJSON())
+
         },
     })
 })

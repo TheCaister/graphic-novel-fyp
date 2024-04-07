@@ -163,6 +163,9 @@ onMounted(() => {
                 <div class="flex">
 
                     <div class="w-1/2">
+                        <!-- <PrimaryButton @click="console.log(form)">
+                            Check form
+                        </PrimaryButton> -->
 
                         <Label>Chapter Thumbnail</Label>
                         <!-- <ImageLabel /> -->

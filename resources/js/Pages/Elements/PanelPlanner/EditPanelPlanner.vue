@@ -17,7 +17,6 @@
                     :key="isMirrored" :style="{
                     height: '60vh',
                     aspectRatio: pageStyleAspectRatio
-
                 }" @breakpoint-changed="breakpointChangedEvent">
                     <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
                         :key="item.i"

@@ -22,6 +22,8 @@
                             @closeMenu="isCardMenuOpen = false" />
                     </Transition>
                 </Teleport>
+
+           
             </button>
         </div>
         <div class="text-white p-4 flex items-center">{{ content.content_name }}</div>

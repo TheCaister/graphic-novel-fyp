@@ -12,6 +12,7 @@ class UploadController extends Controller
     public function store(Request $request)
     {
 
+
         // Check if $request->media is set. If not, return an empty string
         $media = $request->media ?? '';
 
@@ -83,21 +84,13 @@ class UploadController extends Controller
 
     private function clearMediaCollection($contentType, $contentId, $deletePage = true)
     {
-
-
-
-
         $content = $this->getClassName($contentType)::find($contentId);
-
         $content->clearMediaCollection($this->getClassName($contentType)::getThumbnailCollectionName());
 
-        // 
         if ($contentType == 'Page' && $deletePage) {
             $content->delete();
         } else {
             $content->clearThumbnail();
-
-
             $content->save();
         }
     }
