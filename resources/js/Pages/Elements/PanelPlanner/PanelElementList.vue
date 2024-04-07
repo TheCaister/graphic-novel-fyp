@@ -3,7 +3,7 @@
         <PrimaryButton @click="emits('toggleVisibility')">
             Close
         </PrimaryButton>
-        <div v-if="layout.length > 0">
+        <div v-if="layout.length > 0" class="flex flex-col gap-4">
             <div v-for="item in layout" class="rounded-lg relative border-4 border-pink-500 p-4 bg-black">
                 <div>
                     <!-- Do something like Panel + item.i -->
