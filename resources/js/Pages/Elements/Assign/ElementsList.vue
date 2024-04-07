@@ -3,9 +3,9 @@
         ELEMENTS
     </h1> -->
 
-    <!-- <button @click="console.log(elements)">
+    <button @click="console.log(elements)">
         Check
-    </button> -->
+    </button>
 
     <div class=" mt-8 h-96 overflow-auto">
         <TransitionGroup name="list" tag="ul" class="flex flex-col gap-4">

@@ -1,9 +1,9 @@
 <template>
     <div class="p-12 text-white" style="height: 110vh;">
         <div class="border-4 border-white rounded-lg p-8">
-            <button @click="console.log(content)">
+            <!-- <button @click="console.log(content)">
                 Test
-            </button>
+            </button> -->
             <!-- Content title here, with option  to go back... -->
             <div class="flex text-4xl">
                 <Link
@@ -213,6 +213,9 @@ onMounted(() => {
             element.checked = true
             console.log('mitsuketta!!')
             console.log(preSelectedElement.checked)
+        }
+        else{
+            element.checked = null
         }
 
         // if (preSelectedElement && preSelectedElement.checked === '1') {
