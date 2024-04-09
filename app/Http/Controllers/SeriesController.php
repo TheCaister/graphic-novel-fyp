@@ -108,6 +108,8 @@ class SeriesController extends Controller
     // Update the series
     public function update(Request $request, Series $series)
     {
+        // dd($request->all());
+
         // Validate the request
         $formFields = $request->validate([
             // 'universe_id' => 'required',

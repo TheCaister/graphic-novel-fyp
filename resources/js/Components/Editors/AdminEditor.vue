@@ -3,7 +3,7 @@
         <p class="block font-medium text-sm text-gray-700 dark:text-gray-300">
             Type '@' to start adding admins
         </p>
-        <editor-content class="p-4 border border-gray-700 rounded-md" :editor="editor" @itemSelected="itemSelected" />
+        <editor-content class="p-4 border border-gray-700 rounded-md" :editor="editor" @itemSelected="itemSelected" @removeMentionItem="emits('removeAdmin', $event)" />
     </div>
 </template>
 
@@ -24,16 +24,17 @@ import MentionList from '@/Components/MentionList.vue'
 import APICalls from '@/Utilities/APICalls'
 
 const props = defineProps({
-    modelValue: {
-        type: Object,
-    },
     adminList: {
         type: Array,
         default: []
     }
 })
 
-const emits = defineEmits(['update:modelValue', 'addAdmin'])
+const adminList = defineModel({
+    default: [],
+})
+
+const emits = defineEmits(['addAdmin', 'removeAdmin'])
 
 const editor = ref(null)
 
@@ -64,7 +65,8 @@ const CustomMention = Mention.extend({
 
                     console.log('inserting admin...')
 
-                    editor
+                    if(!adminList.value.some(admin => admin.id === props.id.id)){
+                        editor
                         .chain()
                         .focus()
                         .insertContentAt(range, [
@@ -79,7 +81,10 @@ const CustomMention = Mention.extend({
                         ])
                         .run()
 
-                    editor.contentComponent.emit('itemSelected', props)
+                        editor.contentComponent.emit('itemSelected', props)
+                    }
+
+                  
 
                     window.getSelection()?.collapseToEnd()
                 },
@@ -170,14 +175,6 @@ const CustomMention = Mention.extend({
     },
 })
 
-watch(() => props.modelValue, (value) => {
-    const isSame = JSON.stringify(editor.value.getJSON()) === JSON.stringify(value)
-
-    if (!isSame) {
-        editor.value.commands.setContent(value, false)
-    }
-}, { deep: true })
-
 function itemSelected(props) {
     emits('addAdmin', props.id)
     // editor.value.commands.setContent('', false)
@@ -192,31 +189,27 @@ onMounted(() => {
             Text,
             Paragraph,
             CustomMention.configure({
-                renderLabel() {
-                    return 'hi guys'
-                },
+                renderLabel(){
+                    return ''
+                }
             }),
         ],
-        content: props.modelValue,
-        onUpdate: () => {
-            emits('update:modelValue', JSON.parse(JSON.stringify(editor.value.getJSON())))
-        },
     })
 
 })
 
 onUpdated(() => {
 
-    console.log(props.adminList)
+    editor.value.commands.setContent('', false)
 
-    props.adminList.forEach(admin => {
+    adminList.value.forEach(admin => {
         console.log(admin.id, admin.username)
         editor.value.commands.insertContent({
             type: 'mention',
             attrs: {
                 id: {
                     id: admin.id,
-                    label: admin.username,
+                    label: admin.username || admin.label,
                 }
             },
         })

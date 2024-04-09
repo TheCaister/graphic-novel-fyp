@@ -96,7 +96,7 @@ function updateContentList() {
 
     APICalls.getSeriesByUniverseId(props.parentContentId).then(response => {
         series.value = response.data
-        console.log(series.value)
+        // console.log(series.value)
         seriesLoaded.value = true
     }).catch(error => console.log(error))
 }

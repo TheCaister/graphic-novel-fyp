@@ -39,7 +39,7 @@ const modal = ref(null)
 const form = useForm({
     series_id: '',
     chapter_title: '',
-    chapter_number: '',
+    chapter_number: 0,
     chapter_notes: '',
     // scheduled_publish: '',
     pages: [],
@@ -79,6 +79,8 @@ function setFormToLatestChapterNumber() {
     APICalls.getLatestChapterNumber(props.parentContentIdNumber).then(
         response => {
             form.chapter_number = Number(response.data) + 1
+            // form.chapter_number = response.data + 1
+
 
             // console.log(Number(response.data))
         }
@@ -195,7 +197,7 @@ onMounted(() => {
 
                                 <div>
                                     <InputLabel for="chapter_number" value="Chapter number:" class="hidden" />
-                                    <TextInput id="chapter_number" type="number" class="mt-1 block w-20"
+                                        <input id="chapter_number" type="number" class="mt-1 block w-20 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                         v-model="form.chapter_number" required autofocus />
                                     <InputError class="mt-2" message="" />
                                 </div>
