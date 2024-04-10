@@ -140,27 +140,27 @@ function back() {
 
     <div class="relative">
         <!-- Buttons for saving, going back -->
-        <div class="flex mb-8 w-full">
+        <div class="flex mb-8 w-full px-12">
             <div class="flex justify-between w-full">
-                <button @click="back" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                <button @click="back" class="w-32 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Back
                 </button>
-                <div>
+                <div class="flex gap-8">
                     <button @click="saveElement()"
-                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        class="w-32 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                         Save
                     </button>
                     <button @click="saveElement(true)"
-                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                        Save and Assign
+                        class="w-32 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Assign
                     </button>
                 </div>
             </div>
-            <div>
+            <!-- <div>
                 <button class="text-white" @click="console.log(form)">
                     check form
                 </button>
-            </div>
+            </div> -->
         </div>
 
         <!-- Thumbnail with option to edit name -->

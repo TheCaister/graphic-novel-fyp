@@ -61,9 +61,9 @@
                     <option :value="false">Left to Right</option>
                     <option :value="true">Right to Left</option>
                 </select>
-                <button @click="addGridItem">
+                <PrimaryButton @click="addGridItem">
                     Add grid
-                </button>
+                </PrimaryButton>
             </div>
         </div>
 
