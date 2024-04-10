@@ -7,7 +7,7 @@
         <div class="p-4 text-white">
             <p>Username: {{ user.username }}</p>
             <p>Bio: {{ user.bio }}</p>
-            <p>Number of series: {{ user.series_count }}</p>
+            <!-- <p>Number of series: {{ user.series_count }}</p> -->
         </div>
     </div>
 </template>

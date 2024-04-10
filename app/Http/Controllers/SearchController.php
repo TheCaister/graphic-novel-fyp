@@ -236,7 +236,7 @@ class SearchController extends Controller
     {
 
 
-        // dd(request()->all());
+        //  dd(request()->all());
         $user = auth('sanctum')->user();
 
         $includedElements = isset(request('advanced')['includedElements'])

@@ -23,12 +23,12 @@ import tippy from 'tippy.js'
 import MentionList from '@/Components/MentionList.vue'
 import APICalls from '@/Utilities/APICalls'
 
-const props = defineProps({
-    adminList: {
-        type: Array,
-        default: []
-    }
-})
+// const props = defineProps({
+//     adminList: {
+//         type: Array,
+//         default: []
+//     }
+// })
 
 const adminList = defineModel({
     default: [],

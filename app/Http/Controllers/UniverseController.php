@@ -138,7 +138,7 @@ class UniverseController extends Controller
     }
 
     // Return universes in JSON format
-    public function getUniverses(Request $request)
+    public function getUniverses()
     {
         $user = auth('sanctum')->user();
 

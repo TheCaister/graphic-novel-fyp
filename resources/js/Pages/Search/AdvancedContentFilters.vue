@@ -4,6 +4,12 @@
             Advanced Search
         </div>
 
+        <div class="text-white">
+            <button @click="console.log(model)">
+                Print model
+            </button>
+        </div>
+
         <div class="flex w-full gap-8">
             <TriCheckbox label="Include universes" @checked="updateFilter('includeUniverses', $event)" class="w-1/4"/>
             <TriCheckbox label="Include series" @checked="updateFilter('includeSeries', $event)" class="w-1/4"/>
@@ -20,9 +26,14 @@
             </div> -->
 
             <div class="w-full">
-                <IncludedElementsEditor  addMentionItem="addElement" @removeMentionItem="removeElement"
+                <!-- <IncludedElementsEditor  addMentionItem="addElement" @removeMentionItem="removeElement"
                 @addMentionItem="addElement"
-                    :includedElements="model?.value?.includedElements || []" :key="model?.value?.includedElements" />
+                    :includedElements="model?.value?.includedElements || []" :key="model?.value?.includedElements" /> -->
+
+                    <IncludedElementsEditor  addMentionItem="addElement" @removeMentionItem="removeElement"
+                @addMentionItem="addElement"
+                    v-model="elementList"
+                    :key="model?.value?.includedElements" />
             </div>
         </div>
 
@@ -40,11 +51,13 @@
 <script setup>
 import TriCheckbox from './TriCheckbox.vue';
 import IncludedElementsEditor from '../../Components/Editors/IncludedElementsEditor.vue'
-import { defineEmits } from 'vue';
+import { defineEmits, ref } from 'vue';
 
 const emits = defineEmits(['updateAdvancedSearch'])
 
 const model = defineModel()
+
+const elementList = ref(model?.value?.includedElements || [])
 
 let contentTypes = []
 

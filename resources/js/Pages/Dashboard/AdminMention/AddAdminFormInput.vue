@@ -1,6 +1,6 @@
 <template>
     <div>
-        <PrimaryButton @click.prevent="console.log(model)">Test</PrimaryButton>
+        <!-- <PrimaryButton @click.prevent="console.log(model)">Test</PrimaryButton> -->
         <!-- <AdminEditor @add-admin="addAdmin" :admin-list="model" @removeAdmin="removeAdmin"/> -->
 
         <AdminEditor @add-admin="addAdmin" v-model="model" @removeAdmin="removeAdmin" />

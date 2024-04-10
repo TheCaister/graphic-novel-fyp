@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount, onUpdated } from 'vue'
 import Mention from '@tiptap/extension-mention'
 import Paragraph from '@tiptap/extension-paragraph'
 import { Editor, EditorContent, VueNodeViewRenderer } from '@tiptap/vue-3'
@@ -32,6 +32,10 @@ const props = defineProps({
         type: Array,
         default: []
     }
+})
+
+const elementList = defineModel({
+    default: [],
 })
 
 // const emits = defineEmits(['update:modelValue', 'addElement', 'removeElement'])
@@ -72,7 +76,10 @@ const CustomMention = Mention.extend({
                         range.to += 1
                     }
 
-                    editor
+                    console.log('inserting element...')
+
+                    if(!elementList.value.some(element => element.id === props.id.id)){
+                        editor
                         .chain()
                         .focus()
                         .insertContentAt(range, [
@@ -87,7 +94,8 @@ const CustomMention = Mention.extend({
                         ])
                         .run()
 
-                    editor.contentComponent.emit('itemSelected', props)
+                        editor.contentComponent.emit('itemSelected', props)
+                    }
 
                     window.getSelection()?.collapseToEnd()
                 },
@@ -181,13 +189,13 @@ const CustomMention = Mention.extend({
     },
 })
 
-watch(() => props.modelValue, (value) => {
-    const isSame = JSON.stringify(editor.value.getJSON()) === JSON.stringify(value)
-
-    if (!isSame) {
-        editor.value.commands.setContent(value, false)
-    }
-}, { deep: true })
+//watch(() => props.modelValue, (value) => {
+  //  const isSame = JSON.stringify(editor.value.getJSON()) === JSON.stringify(value)
+//
+    //if (!isSame) {
+      //  editor.value.commands.setContent(value, false)
+  //  }
+//}, { deep: true })
 
 function itemSelected(props) {
     emits('addMentionItem', props.id)
@@ -198,15 +206,7 @@ function removeMentionItem(id) {
     emits('removeMentionItem', id)
 }
 
-// onUpdated(() => {
-//     console.log('included elements...')
-//     console.log(props.includedElements)
-// })
-
 onMounted(() => {
-    // console.log('included elements...')
-    // console.log(props.includedElements)
-
 
     editor.value = new Editor({
         extensions: [
@@ -225,18 +225,6 @@ onMounted(() => {
         },
     })
 
-    // editor.value.commands.insertContent([
-    //     {
-    //         type: 'mention',
-    //         attrs: {
-    //             id: {
-    //                 id: 1,
-    //                 label: 'hi guys'
-    //             }
-    //         }
-    //     }
-    // ])
-
     // for loop over props.includedElements and add them to the editor
     // props.includedElements.forEach((element) => {
     //     console.log('inserting!!')
@@ -252,6 +240,26 @@ onMounted(() => {
     //         },
     //     ])
     // })
+})
+
+onUpdated(() => {
+
+editor.value.commands.setContent('', false)
+
+elementList.value.forEach(element => {
+    console.log(element.id)
+    editor.value.commands.insertContent({
+        type: 'mention',
+        attrs: {
+            id: {
+                id: element.id,
+                // label: element.username || admin.label,
+                label: element.label,
+
+            }
+        },
+    })
+})
 })
 
 onBeforeUnmount(() => {

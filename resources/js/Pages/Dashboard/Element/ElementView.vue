@@ -134,7 +134,7 @@ function handleMenuItemClicked(eventName) {
                 'advanced': {
                     'includedElements': [
                         {
-                            // 'label': 'Cool Mindmap',
+                            'label': selectedElement.value.element_name,
                             'id': selectedElement.value.element_id
                         }
                     ]

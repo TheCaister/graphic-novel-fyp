@@ -69,7 +69,7 @@
                     <span class="material-symbols-outlined dark">settings</span>
                     </Link>
 
-                    <Avatar :src='page.props.auth.user.profile_picture'
+                    <Avatar :src='page.props.auth.user.profile_picture ? page.props.auth.user.profile_picture : "/assets/black_page.jpg"'
                         :link="route('profile.show', page.props.auth.user.id)" />
 
                 </div>

@@ -1,6 +1,13 @@
 <template>
     <!-- Loop through the universes and display them in cards -->
     <div v-if="universeLoaded" class="w-full flex flex-wrap justify-center">
+        <!-- <PrimaryButton @click="console.log($page.props.auth.user.id)">
+            Test
+        </PrimaryButton>
+
+        <PrimaryButton @click="console.log(universes)">
+            Universes
+        </PrimaryButton> -->
 
         <div v-for="universe in universes" :key="universe.universe_id" class=" w-96 mx-2 mb-4 ">
             <ContentCard :content="{
@@ -11,7 +18,11 @@
                 :selected="universe.universe_id === selectedUniverse.universe_id" :drop-down-menu-options="dropDownMenuOptions.filter(option =>
                     !option.needsAdmin || (option.needsAdmin && universe.can_edit)
                 )" @switch-selected-content="switchSelectedContent" @menu-item-click="handleMenuItemClicked"
-                @click="emits('updateMouseClickPosition', $event)" />
+                @click="emits('updateMouseClickPosition', $event)" class="relative" >
+            <div v-if="$page.props.auth.user.id !== universe.owner_id" class="absolute top-0 left-0 rounded-full bg-black p-2 mt-4 ml-4">
+                Moderating
+            </div>
+            </ContentCard>
         </div>
 
         <add-button @click="isCreateModalOpen = true" label="Create Universe" class="w-96" />
