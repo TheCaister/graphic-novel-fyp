@@ -98,7 +98,7 @@ function updateContentList() {
     APICalls.getUniversesByUserId(page.props.auth.user.id, false).then(response => {
         universes.value = response.data
         universeLoaded.value = true
-        // console.log(universes.value)
+        console.log(universes.value)
     }).catch(error => console.log(error))
 }
 

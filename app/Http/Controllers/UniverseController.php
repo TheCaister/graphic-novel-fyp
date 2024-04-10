@@ -91,11 +91,14 @@ class UniverseController extends Controller
     public function update(Request $request, Universe $universe)
     {
         //
+        // dd($request->all());
         $formFields = $request->validate([
             'universe_name' => 'required',
         ]);
 
-        $universe->moderators()->sync($request->moderators);
+        $universe->moderators()->sync(request()->moderators);
+
+        // dd($universe->moderators()->get());
 
         $tempThumbnail = TemporaryFile::where('folder', $request->upload)->first();
 
@@ -171,7 +174,7 @@ class UniverseController extends Controller
             $universe->thumbnail = $universe->getFirstMediaUrl('universe_thumbnail');
 
             // Get universe moderators
-            // $universe->moderators = $universe->moderators()->get();
+            $universe->moderators = $universe->moderators()->get();
 
             $universe->moderators_avatars = $universe->moderators()->get()->map(function ($moderator) {
                 return $moderator->getFirstMediaUrl('profile_picture');
