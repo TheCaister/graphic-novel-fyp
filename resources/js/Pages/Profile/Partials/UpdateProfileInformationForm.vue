@@ -166,14 +166,14 @@ const files = computed(() => {
             </div>
 
 
-            <div>
+            <!-- <div>
                 <InputLabel for="email" value="Email" />
 
                 <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required
                     autocomplete="username" />
 
                 <InputError class="mt-2" :message="form.errors.email" />
-            </div>
+            </div> -->
 
             <div>
                 <InputLabel for="bio" value="Bio" />
