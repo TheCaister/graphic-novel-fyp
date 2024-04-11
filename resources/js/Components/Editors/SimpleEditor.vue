@@ -126,11 +126,14 @@ const CustomMention = Mention.extend({
         return {
             suggestion: {
                 items: async ({ query }) => {
-                    // const url = new URL(window.location.href)
-                    // const contentType = url.searchParams.get("contentType")
-                    // const contentId = url.searchParams.get("content_id")
 
-                    const mentionItems = await APICalls.searchMention(query, 5, 'elements', contentType, contentId)
+                    const mentionItems = await APICalls.searchMention({
+                        query: query,
+                        limit: 5,
+                        searchType: 'elements',
+                        contentType: contentType,
+                        contentId: contentId
+                    })
 
                     const mentionList = mentionItems.data.map(item => ({
                         label: item.element_name,

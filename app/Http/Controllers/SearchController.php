@@ -229,6 +229,18 @@ class SearchController extends Controller
             ->limit(request()->limit)
             ->get();
 
+
+        // dd(request()->all());
+
+            // Whether to include the current user in the search results
+        if (request()->includeCurrentUser === 'false') {
+            $resultsList = $resultsList->filter(function ($resultUser) use ($user) {
+                return $resultUser->id !== $user->id;
+            });
+        }
+
+        // dd($resultsList);
+
         return $resultsList;
     }
 
@@ -325,8 +337,8 @@ class SearchController extends Controller
 
     public function getAssignedElements()
     {
-        
-        $resultsList = [];     
+
+        $resultsList = [];
 
         $contentList = $this->getClassName(request()->type)::find(request()->contentIdList); // "0.004 seconds"
 
@@ -365,10 +377,10 @@ class SearchController extends Controller
 
         // Aggregate universes, series, chapters and elements. Order by updated_at and limit to the request limit
 
-        
-            $tempList = Universe::whereHas('owner', function ($query) use ($user) {
-                $query->where('id', $user->id);
-            })->latest()->limit(request()->limit)->get()
+
+        $tempList = Universe::whereHas('owner', function ($query) use ($user) {
+            $query->where('id', $user->id);
+        })->latest()->limit(request()->limit)->get()
             ->concat(Series::whereHas('owner', function ($query) use ($user) {
                 $query->where('id', $user->id);
             })->latest()->limit(request()->limit)->get())

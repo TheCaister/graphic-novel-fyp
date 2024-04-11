@@ -3,7 +3,8 @@
         <p class="block font-medium text-sm text-gray-700 dark:text-gray-300">
             Type '@' to start adding admins
         </p>
-        <editor-content class="p-4 border border-gray-700 rounded-md" :editor="editor" @itemSelected="itemSelected" @removeMentionItem="emits('removeAdmin', $event)" />
+        <editor-content class="p-4 border border-gray-700 rounded-md" :editor="editor" @itemSelected="itemSelected"
+            @removeMentionItem="emits('removeAdmin', $event)" />
     </div>
 </template>
 
@@ -46,8 +47,14 @@ const CustomMention = Mention.extend({
         return {
             suggestion: {
                 items: async ({ query }) => {
-                    const mentionItems = await APICalls.searchMention(query, 5, 'users')
-                    const mentionList = mentionItems.data.map(item => ({
+                    const mentionItems = await APICalls.searchMention({
+                        query: query,
+                        limit: 5,
+                        searchType: 'users',
+                        includeCurrentUser: false
+                    })
+                    // console.log(mentionItems.data)
+                    const mentionList = Object.values(mentionItems.data).map(item => ({
                         label: item.username,
                         id: item.id
                     }))
@@ -65,26 +72,26 @@ const CustomMention = Mention.extend({
 
                     console.log('inserting admin...')
 
-                    if(!adminList.value.some(admin => admin.id === props.id.id)){
+                    if (!adminList.value.some(admin => admin.id === props.id.id)) {
                         editor
-                        .chain()
-                        .focus()
-                        .insertContentAt(range, [
-                            {
-                                type: 'mention',
-                                attrs: props,
-                            },
-                            {
-                                type: 'text',
-                                text: ' ',
-                            },
-                        ])
-                        .run()
+                            .chain()
+                            .focus()
+                            .insertContentAt(range, [
+                                {
+                                    type: 'mention',
+                                    attrs: props,
+                                },
+                                {
+                                    type: 'text',
+                                    text: ' ',
+                                },
+                            ])
+                            .run()
 
                         editor.contentComponent.emit('itemSelected', props)
                     }
 
-                  
+
 
                     window.getSelection()?.collapseToEnd()
                 },
@@ -189,7 +196,7 @@ onMounted(() => {
             Text,
             Paragraph,
             CustomMention.configure({
-                renderLabel(){
+                renderLabel() {
                     return ''
                 }
             }),

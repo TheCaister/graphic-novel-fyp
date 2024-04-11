@@ -100,7 +100,7 @@ export default {
             }
         })
     },
-    searchMention(query, limit, searchType = 'elements', contentType = null, contentId = null) {
+    searchMention({query, limit, searchType = 'elements', contentType = null, contentId = null, includeCurrentUser = true}) {
         return axios.get('/api/search/mention', {
             params: {
                 searchType: searchType,
@@ -109,6 +109,7 @@ export default {
                 limit: limit,
                 contentType: contentType,
                 contentId: contentId,
+                includeCurrentUser: includeCurrentUser
             }
         })
     },

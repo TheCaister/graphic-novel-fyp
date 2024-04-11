@@ -57,7 +57,11 @@ const CustomMention = Mention.extend({
                     // we can do all this, or we can simply call the api here
                     // return APICalls.searchElements(query, 5, 'users')
 
-                    const mentionItems = await APICalls.searchMention(query, 5, 'elements')
+                    const mentionItems = await APICalls.searchMention({
+                        query: query,
+                        limit: 5,
+                        searchType: 'elements'
+                    })
                     // console.log(mentionItems)
                     const mentionList = mentionItems.data.map(item => ({
                         label: item.element_name,
@@ -78,21 +82,21 @@ const CustomMention = Mention.extend({
 
                     console.log('inserting element...')
 
-                    if(!elementList.value.some(element => element.id === props.id.id)){
+                    if (!elementList.value.some(element => element.id === props.id.id)) {
                         editor
-                        .chain()
-                        .focus()
-                        .insertContentAt(range, [
-                            {
-                                type: 'mention',
-                                attrs: props,
-                            },
-                            {
-                                type: 'text',
-                                text: ' ',
-                            },
-                        ])
-                        .run()
+                            .chain()
+                            .focus()
+                            .insertContentAt(range, [
+                                {
+                                    type: 'mention',
+                                    attrs: props,
+                                },
+                                {
+                                    type: 'text',
+                                    text: ' ',
+                                },
+                            ])
+                            .run()
 
                         editor.contentComponent.emit('itemSelected', props)
                     }
@@ -190,11 +194,11 @@ const CustomMention = Mention.extend({
 })
 
 //watch(() => props.modelValue, (value) => {
-  //  const isSame = JSON.stringify(editor.value.getJSON()) === JSON.stringify(value)
+//  const isSame = JSON.stringify(editor.value.getJSON()) === JSON.stringify(value)
 //
-    //if (!isSame) {
-      //  editor.value.commands.setContent(value, false)
-  //  }
+//if (!isSame) {
+//  editor.value.commands.setContent(value, false)
+//  }
 //}, { deep: true })
 
 function itemSelected(props) {
@@ -244,22 +248,22 @@ onMounted(() => {
 
 onUpdated(() => {
 
-editor.value.commands.setContent('', false)
+    editor.value.commands.setContent('', false)
 
-elementList.value.forEach(element => {
-    console.log(element.id)
-    editor.value.commands.insertContent({
-        type: 'mention',
-        attrs: {
-            id: {
-                id: element.id,
-                // label: element.username || admin.label,
-                label: element.label,
+    elementList.value.forEach(element => {
+        console.log(element.id)
+        editor.value.commands.insertContent({
+            type: 'mention',
+            attrs: {
+                id: {
+                    id: element.id,
+                    // label: element.username || admin.label,
+                    label: element.label,
 
-            }
-        },
+                }
+            },
+        })
     })
-})
 })
 
 onBeforeUnmount(() => {

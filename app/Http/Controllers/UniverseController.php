@@ -170,6 +170,7 @@ class UniverseController extends Controller
         
         // $universes = Universe::where('owner_id', $user->id)->get();
 
+        // Setting up thumbnails
         foreach ($universes as $universe) {
             $universe->thumbnail = $universe->getFirstMediaUrl('universe_thumbnail');
 
