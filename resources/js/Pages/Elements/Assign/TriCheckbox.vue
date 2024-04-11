@@ -9,7 +9,7 @@
                 
                 -->
 
-                <img v-if="props.includeImage" :src="props.image ? props.image : '/assets/black_page.jpg'" alt=""
+                <img v-if="props.includeImage" :src="props.image ? props.image : '/assets/black_pixel.png'" alt=""
                     class="rounded-full w-12 h-12 mr-4">
                 <div class="text-2xl" :class="{ 'text-black': checked === true }">
                     {{ label }}

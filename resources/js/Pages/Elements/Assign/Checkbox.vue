@@ -4,7 +4,7 @@
 
             <div class="flex items-center">
 
-                <img :src="content.content_thumbnail ? content.content_thumbnail : '/assets/black_page.jpg'"
+                <img :src="content.content_thumbnail ? content.content_thumbnail : '/assets/black_pixel.png'"
                     alt="" class="rounded-full w-12 h-12 mr-4">
                 <!-- label -->
                 <div>

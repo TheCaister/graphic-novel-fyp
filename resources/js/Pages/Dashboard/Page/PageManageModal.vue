@@ -206,7 +206,7 @@ function handleCreateElementButtonClicked() {
                             class="flex flex-col relative">
                         <!-- image, then text -->
                         <div>
-                            <img :src="element.element_thumbnail ? element.element_thumbnail : '/assets/black_page.jpg'"
+                            <img :src="element.element_thumbnail ? element.element_thumbnail : '/assets/black_pixel.png'"
                                 alt="element image" class="w-24 h-24 rounded-lg" />
                         </div>
                         <div class="w-1/2">

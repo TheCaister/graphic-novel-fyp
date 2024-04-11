@@ -11,7 +11,7 @@
                 </div>
                 <div v-for="element in item.elements" class="mt-4 flex items-center justify-between px-4">
                     <div class="flex items-center">
-                        <img :src="element.element_thumbnail ? element.element_thumbnail : '/assets/black_page.jpg'"
+                        <img :src="element.element_thumbnail ? element.element_thumbnail : '/assets/black_pixel.png'"
                             alt="" class="rounded-full w-12 h-12 mr-4">
                         <div class="text-2xl" :class="{ 'text-black': checked === true }">
                             {{ element.element_name }}

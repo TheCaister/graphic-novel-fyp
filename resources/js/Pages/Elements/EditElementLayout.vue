@@ -59,7 +59,7 @@ provide('contentType', form.contentType)
 provide('contentId', form.content_id)
 
 const elementThumbnailImage = computed(() => {
-    return form.element.element_thumbnail ? form.element.element_thumbnail : '/assets/black_page.jpg';
+    return form.element.element_thumbnail ? form.element.element_thumbnail : '/assets/black_pixel.png';
 })
 
 function updateChildrenElements(elements) {
@@ -171,7 +171,7 @@ function back() {
                         :style="'background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url(' + elementThumbnailImage + ')'">
                         <div class="flex items-center gap-8">
                             <button @click="isEditThumbnailModalOpen = true">
-                                <img class="w-32 h-32 shadow-2xl rounded-lg hover:scale-105 transition-transform duration-300"
+                                <img class="w-32 h-32 shadow-2xl rounded-lg hover:scale-105 transition-transform duration-300 border-4"
                                     :src="elementThumbnailImage" alt="" srcset="">
                             </button>
                             <div>
