@@ -15,12 +15,12 @@ import vueFilePond from 'vue-filepond';
 
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import FilePondPluginFilePoster from 'filepond-plugin-file-poster';
+// import FilePondPluginFilePoster from 'filepond-plugin-file-poster';
 
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 // Import the plugin styles
-import 'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css';
+// import 'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css';
 
 
 let csrfToken = document.querySelector('meta[name="csrf-token"]').content
@@ -35,7 +35,7 @@ function close() {
 const FilePond = vueFilePond(
     FilePondPluginFileValidateType,
     FilePondPluginImagePreview,
-    FilePondPluginFilePoster,
+    // FilePondPluginFilePoster,
 );
 
 const modal = ref(null)
@@ -252,6 +252,7 @@ onMounted(() => {
 
     APICalls.getFilepondPages(props.chapter.chapter_id).then(response => {
         form.pages = response.data
+        console.log(form.pages)
     }).catch(error => console.log(error))
 }
 )
@@ -292,10 +293,8 @@ onMounted(() => {
                             }" />
                     </div>
                     <div class="flex flex-col justify-between w-1/2 ml-8 overflow-y-auto h-[32rem]">
-                        <div>
-                            <PrimaryButton @click.prevent="addEmptyPage">
-                                Add Empty Page
-                            </PrimaryButton>
+                        <div class="flex flex-col gap-4">
+                         
                             <InputLabel for="chapter_title" value="Chapter title:" />
                             <div class="flex">
 
@@ -327,20 +326,10 @@ onMounted(() => {
                             </div>
 
                             <div>
-
-                                <!-- <button @click="handleFilePondPagesRevert('testing')" class="text-white">
-                                    test
-                                </button> -->
-
-                                <!-- <button @click="FilePond.addFile('/assets/black_page.jpg')" class="text-white">
-                                    test
-                                </button> -->
-
-                                <button type="button" @click=" console.log('Adding empty page...');
-    $refs.filepondPages.addFile('/assets/black_page.jpg');" class="text-white">
-                                    test
-                                </button>
-                          <!-- allow-image-preview="false" -->
+                                
+                          <PrimaryButton @click.prevent="addEmptyPage">
+                                Add Empty Page
+                            </PrimaryButton>
                                 <file-pond ref="filepondPages" id="pagepond" name="upload" label-idle="Pages" allow-multiple="true"
                                     allow-reorder="true" :files="form.pages"
                                     image-preview-markup-show="false"

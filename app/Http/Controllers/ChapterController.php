@@ -185,7 +185,13 @@ class ChapterController extends Controller
         foreach ($pagesInOrder as $page) {
             $filePath = $page->getFirstMediaUrl('page_image');
 
-            $filePath = preg_replace('/^(http|https):\/\/[^\/]+/', '', $filePath);            
+            if ($filePath) {
+                $filePath = preg_replace('/^(http|https):\/\/[^\/]+/', '', $filePath);
+            }
+            else{
+                $filePath = '/assets/black_pixel.png';
+            }
+                    
             // Add the page to the array
             $chapterPagesToReturn[] = [
                 'source' => $filePath,
@@ -193,7 +199,6 @@ class ChapterController extends Controller
                     'type' => 'local',
                     'metadata' => [
                         'pageId' => $page->page_id,
-                        // 'poster' => '/assets/black_page.jpg',
                     ]
                 ],
             ];
