@@ -270,7 +270,7 @@ onMounted(() => {
 
                         <Label>Chapter Thumbnail</Label>
 
-                        <file-pond name="upload" label-idle="Chapter Thumbnail" accepted-file-types="image/jpeg, image/png"
+                        <file-pond stylePanelAspectRatio="1" id="thumbnailpond" name="upload" label-idle="Chapter Thumbnail" accepted-file-types="image/jpeg, image/png"
                             :files="files" @processfile="handleFilePondThumbnailProcess"
                             @removefile="handleFilePondThumbnailRemove" :server="{
                                 process: {
@@ -383,4 +383,17 @@ onMounted(() => {
 #pagepond .filepond--item {
     width: calc(33% - 0.5em);
 }
+
+#thumbnailpond .filepond--root {
+    /* minimum height */
+    /* min-height: 200px; */
+    height: 500px;
+    border: 1px solid #e53e3e;
+}
+
+/* #thumbnailpond .filepond--item  {
+    background-color: #ffffff;
+    height: 70%;
+    border: 1px solid #e53e3e;
+} */
 </style>

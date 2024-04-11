@@ -103,16 +103,16 @@ const files = computed(() => {
 
 <template>
     <div>
-        <div ref="modal" class="text-lg bg-black shadow-lg rounded-lg p-8">
+        <div ref="modal" class="text-lg bg-black shadow-lg rounded-lg p-8 w-1/2">
             <h2 class="text-4xl font-bold text-white ">Edit Thumbnail</h2>
             <!-- <form @submit.prevent="submit"> -->
                 <form>
                 <div class="flex flex-col items-center">
 
-                    <div class="w-1/2">
+                    <div class="w-full">
                         <Label>Element Thumbnail</Label>
 
-                        <file-pond name="upload" label-idle="Element Thumbnail" accepted-file-types="image/jpeg, image/png"
+                        <file-pond stylePanelAspectRatio="0.6" name="upload" label-idle="Element Thumbnail" accepted-file-types="image/jpeg, image/png"
                             :files="files" @processfile="handleFilePondThumbnailProcess"
                             @removefile="handleFilePondThumbnailRemove" :server="{
                                 process: {

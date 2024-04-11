@@ -115,7 +115,7 @@ function handleFilePondThumbnailRemove(error, file) {
                     <div class="w-1/2">
                         <Label>Series Thumbnail</Label>
 
-                        <file-pond name="upload" label-idle="Series Thumbnail" accepted-file-types="image/jpeg, image/png"
+                        <file-pond stylePanelAspectRatio="1" name="upload" label-idle="Series Thumbnail" accepted-file-types="image/jpeg, image/png"
                             @processfile="handleFilePondThumbnailProcess" @removefile="handleFilePondThumbnailRemove"
                           
                             :server="{

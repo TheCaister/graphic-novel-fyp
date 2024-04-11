@@ -168,8 +168,7 @@ function handleCreateElementButtonClicked() {
 
                 <!-- Page image here -->
                 <div class="w-full ">
-                    <file-pond style="{
-                    }" name="upload" label-idle="Page Image" accepted-file-types="image/jpeg, image/png"
+                    <file-pond stylePanelAspectRatio="0.5" name="upload" label-idle="Page Image" accepted-file-types="image/jpeg, image/png"
                         :files="files" @processfile="handleFilePondThumbnailProcess"
                         @removefile="handleFilePondThumbnailRemove" :server="{
                             process: {

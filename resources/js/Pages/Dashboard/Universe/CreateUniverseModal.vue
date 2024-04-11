@@ -92,7 +92,7 @@ if (form.upload) {
 
                         <Label>Universe Thumbnail</Label>
 
-                        <file-pond name="upload" label-idle="Universe Thumbnail" accepted-file-types="image/jpeg, image/png"
+                        <file-pond stylePanelAspectRatio="1" name="upload" label-idle="Universe Thumbnail" accepted-file-types="image/jpeg, image/png"
                             @processfile="handleFilePondThumbnailProcess" @removefile="handleFilePondThumbnailRemove"
                             :server="{
                                 process: {
