@@ -193,6 +193,7 @@ class ChapterController extends Controller
                     'type' => 'local',
                     'metadata' => [
                         'pageId' => $page->page_id,
+                        // 'poster' => '/assets/black_page.jpg',
                     ]
                 ],
             ];

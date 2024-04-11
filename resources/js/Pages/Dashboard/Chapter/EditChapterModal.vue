@@ -15,9 +15,12 @@ import vueFilePond from 'vue-filepond';
 
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import FilePondPluginFilePoster from 'filepond-plugin-file-poster';
 
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+// Import the plugin styles
+import 'filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css';
 
 
 let csrfToken = document.querySelector('meta[name="csrf-token"]').content
@@ -32,6 +35,7 @@ function close() {
 const FilePond = vueFilePond(
     FilePondPluginFileValidateType,
     FilePondPluginImagePreview,
+    FilePondPluginFilePoster,
 );
 
 const modal = ref(null)
@@ -234,7 +238,9 @@ function handleFilePondPagesReorderFiles(files) {
 
 function addEmptyPage(){
     console.log('Adding empty page...')
-    $refs.filepondPages.addFile('/assets/black_page.jpg')
+    filepondPages.value.addFile('/assets/black_pixel.png')
+    // filepondPages.value.addFile()
+
 }
 
 onMounted(() => {
@@ -287,6 +293,9 @@ onMounted(() => {
                     </div>
                     <div class="flex flex-col justify-between w-1/2 ml-8 overflow-y-auto h-[32rem]">
                         <div>
+                            <PrimaryButton @click.prevent="addEmptyPage">
+                                Add Empty Page
+                            </PrimaryButton>
                             <InputLabel for="chapter_title" value="Chapter title:" />
                             <div class="flex">
 
@@ -334,8 +343,7 @@ onMounted(() => {
                           <!-- allow-image-preview="false" -->
                                 <file-pond ref="filepondPages" id="pagepond" name="upload" label-idle="Pages" allow-multiple="true"
                                     allow-reorder="true" :files="form.pages"
-
-                                    image-preview-max-file-size="50KB"
+                                    image-preview-markup-show="false"
                                     @processfile="handleFilePondPagesProcess"
                                     @reorderfiles="handleFilePondPagesReorderFiles"
                                     accepted-file-types="image/jpeg, image/png" :server="{
