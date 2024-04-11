@@ -179,6 +179,7 @@ function deleteExistingPage(source, load) {
         isTemp: "false",
         contentType: "Page",
         contentId: pageId,
+        deletePage: true
     })).catch(error => {
         console.log(error);
     });
@@ -330,10 +331,10 @@ onMounted(() => {
     $refs.filepondPages.addFile('/assets/black_page.jpg');" class="text-white">
                                     test
                                 </button>
-
+                          <!-- allow-image-preview="false" -->
                                 <file-pond ref="filepondPages" id="pagepond" name="upload" label-idle="Pages" allow-multiple="true"
                                     allow-reorder="true" :files="form.pages"
-                                    allow-image-preview="false"
+
                                     image-preview-max-file-size="50KB"
                                     @processfile="handleFilePondPagesProcess"
                                     @reorderfiles="handleFilePondPagesReorderFiles"

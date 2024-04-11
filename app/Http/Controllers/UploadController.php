@@ -60,6 +60,7 @@ class UploadController extends Controller
     {
         if (request()->isTemp == 'false') {
             $this->clearMediaCollection(request()->contentType, request()->contentId, request()->deletePage);
+
         } else {
             $temporaryFile = TemporaryFile::where('folder', request()->serverId)->first();
 
