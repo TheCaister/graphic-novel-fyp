@@ -103,14 +103,6 @@ function handleFilePondPagesProcess(error, file) {
 }
 
 function handleFilePondPagesRemoveFile(serverId) {
-    // console.log(form.pages)
-    // form.pages = form.pages.filter((item) => item !== e);
-
-    // axios.delete(`/api/pages/${e}`).catch(error => {
-    //     console.log(error);
-    // });
-
-    // console.log(form.pages)
 
     // in form.pages, remove the page with same serverId as serverId
     const index = form.pages.findIndex((item) => item.serverId === serverId);

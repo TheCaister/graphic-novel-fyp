@@ -23,7 +23,7 @@
             <div class="flex justify-around  h-4/5 ">
                 <div class="flex flex-col w-2/5 ">
                     <!-- <SearchBar /> -->
-                    <ContentList v-model="content" />
+                    <ContentList v-model="content" class="px-4"/>
                     <!-- empty div that fills up flex -->
                     <div class="flex-grow"></div>
                     <PrimaryButton @click="goBack" class="mt-8">Back</PrimaryButton>
@@ -36,7 +36,7 @@
                         Toggle all
                     </button> -->
 
-                    <ElementsList v-model="elements" />
+                    <ElementsList v-model="elements"  class="px-4"/>
                     <div class="flex-grow"></div>
                     <!-- <button @click="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Save

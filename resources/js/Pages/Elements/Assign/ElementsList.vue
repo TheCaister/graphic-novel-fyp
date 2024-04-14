@@ -1,11 +1,6 @@
 <template>
-    <!-- <h1>
-        ELEMENTS
-    </h1> -->
 
-    <button @click="console.log(elements)">
-        Check
-    </button>
+    
 
     <div class=" mt-8 h-96 overflow-auto">
         <TransitionGroup name="list" tag="ul" class="flex flex-col gap-4">
@@ -15,6 +10,10 @@
         </TransitionGroup>
     </div>
 </template>
+
+<!-- <button @click="console.log(elements)">
+    Check
+</button> -->
 
 <script setup>
 import { defineEmits, watch } from 'vue'
