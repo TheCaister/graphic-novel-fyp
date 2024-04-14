@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { Handle, Position, useVueFlow } from '@vue-flow/core'
 import { useNode, NodeProps } from '@vue-flow/core'
+import { router } from '@inertiajs/vue3';
+
 
 // `useNode` returns us the node object straight from the state
 // since the node obj is reactive, we can mutate it to update our nodes' data
@@ -18,7 +20,7 @@ export default {
 </script>
 
 <template>
-    <div>
+    <button @click="router.visit(route('elements.edit', node.data.element_id))">
         <Handle type="target" :position="Position.Top" :x="50" />
         <Handle type="target" :position="Position.Right" />
         <Handle type="target" :position="Position.Left" />
@@ -31,13 +33,13 @@ export default {
                     class="w-16 h-16 rounded-lg shadow-lg hover:scale-105 transition-transform duration-300">
             </div>
 
-            <button @click="removeNodes(id)"
+            <button @click.stop="removeNodes(id)"
                 class="absolute top-0 right-0 bg-red-400 h-6 w-6 flex items-center justify-center rounded-full">
                 x
             </button>
 
         </div>
-    </div>
+    </button>
     <div class="text-white">
         {{ node.data.element_name }}
     </div>
