@@ -15,7 +15,7 @@ const element = defineModel()
 const emit = defineEmits(['updateElement', 'updateChildrenElementIDs'])
 
 onMounted(() => {
-    console.log('mounting da edit')
+    // console.log('mounting da edit')
 
 
     updateChildrenElementIDs()

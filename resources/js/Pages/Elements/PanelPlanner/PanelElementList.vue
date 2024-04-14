@@ -9,18 +9,18 @@
                     <!-- Do something like Panel + item.i -->
                     {{ 'Panel ' + item.i }}
                 </div>
-                <div v-for="element in item.elements" class="mt-4 flex items-center justify-between px-4">
+                <button @click="router.visit(route('elements.edit', element.element_id))" v-for="element in item.elements" class="mt-4 flex items-center justify-between px-4 w-full">
                     <div class="flex items-center">
                         <img :src="element.element_thumbnail ? element.element_thumbnail : '/assets/black_pixel.png'"
                             alt="" class="rounded-full w-12 h-12 mr-4">
-                        <div class="text-2xl" :class="{ 'text-black': checked === true }">
+                        <div class="text-2xl" >
                             {{ element.element_name }}
                         </div>
                     </div>
-                    <button @click="emits('removeElement', item, element)">
+                    <button @click.stop="emits('removeElement', item, element)">
                         X
                     </button>
-                </div>
+                </button>
             </div>
         </div>
         <div v-else>
@@ -33,7 +33,11 @@
 
 <script setup>
 
+import { router } from '@inertiajs/vue3';
+
 const layout = defineModel()
+
+
 
 const emits = defineEmits(['removeElement', 'toggleVisibility'])
 
