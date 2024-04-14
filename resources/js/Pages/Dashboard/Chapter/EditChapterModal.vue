@@ -230,6 +230,7 @@ function handleFilePondPagesProcess(error, file) {
 }
 
 function handleFilePondPagesReorderFiles(files) {
+    console.log(form.pages)
     // // Clear form.pages
     form.pages = files;
 

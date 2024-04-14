@@ -98,18 +98,43 @@ function handleFilePondThumbnailRemove(error, file) {
 
 function handleFilePondPagesProcess(error, file) {
     // Update the form with the file ids
+    // console.log(file)
     form.pages.push(file.serverId);
 }
 
-function handleFilePondPagesRemoveFile(e) {
-    console.log(form.pages)
-    form.pages = form.pages.filter((item) => item !== e);
+function handleFilePondPagesRemoveFile(serverId) {
+    // console.log(form.pages)
+    // form.pages = form.pages.filter((item) => item !== e);
 
-    axios.delete(`/api/pages/${e}`).catch(error => {
+    // axios.delete(`/api/pages/${e}`).catch(error => {
+    //     console.log(error);
+    // });
+
+    // console.log(form.pages)
+
+    // in form.pages, remove the page with same serverId as serverId
+    const index = form.pages.findIndex((item) => item.serverId === serverId);
+    if (index !== -1) {
+        form.pages.splice(index, 1);
+    }
+
+
+    axios.delete(route('delete-thumbnail', {
+        isTemp: "true",
+        contentType: "Page",
+        serverId: serverId,
+    })).catch(error => {
         console.log(error);
     });
+}
 
-    console.log(form.pages)
+function handleFilePondPagesReorderFiles(files) {
+    // console.log(form.pages)
+
+    // // Clear form.pages
+    form.pages = files.map(file => file.serverId);
+
+    // console.log(files.map(file => file.serverId));
 }
 
 function deleteTempThumbnail() {
@@ -172,23 +197,23 @@ onMounted(() => {
                         <Label>Chapter Thumbnail</Label>
                         <!-- <ImageLabel /> -->
 
-                        <file-pond stylePanelAspectRatio="1" name="upload" label-idle="Chapter Thumbnail" accepted-file-types="image/jpeg, image/png"
-                            @processfile="handleFilePondThumbnailProcess" @removefile="handleFilePondThumbnailRemove"
-                            :server="{
-                                process: {
-                                    url: '/upload?media=chapter_thumbnail',
-                                },
-                                // revert: {
-                                //     url: '/api/chapter/' + form.upload + '/thumbnail',
-                                // },
+                        <file-pond stylePanelAspectRatio="1" name="upload" label-idle="Chapter Thumbnail"
+                            accepted-file-types="image/jpeg, image/png" @processfile="handleFilePondThumbnailProcess"
+                            @removefile="handleFilePondThumbnailRemove" :server="{
+                process: {
+                    url: '/upload?media=chapter_thumbnail',
+                },
+                // revert: {
+                //     url: '/api/chapter/' + form.upload + '/thumbnail',
+                // },
 
-                                revert: {
-                                    url: '/api/thumbnail?contentType=Chapter&serverId=' + form.upload + '&isTemp=true',
-                                },
-                                headers: {
-                                    'X-CSRF-TOKEN': csrfToken
-                                }
-                            }" />
+                revert: {
+                    url: '/api/thumbnail?contentType=Chapter&serverId=' + form.upload + '&isTemp=true',
+                },
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            }" />
                     </div>
                     <div class="flex flex-col justify-between w-1/2 ml-8 overflow-y-auto h-[32rem]">
                         <div>
@@ -197,7 +222,8 @@ onMounted(() => {
 
                                 <div>
                                     <InputLabel for="chapter_number" value="Chapter number:" class="hidden" />
-                                        <input id="chapter_number" type="number" class="mt-1 block w-20 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                                    <input id="chapter_number" type="number"
+                                        class="mt-1 block w-20 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                         v-model="form.chapter_number" required autofocus />
                                     <InputError class="mt-2" message="" />
                                 </div>
@@ -218,26 +244,30 @@ onMounted(() => {
                             </div>
 
                             <div>
-                                <AddAdminFormInput v-model="form.moderators"/>
+                                <AddAdminFormInput v-model="form.moderators" />
                             </div>
 
                             <div>
                                 <InputLabel for="admins" value="Pages:" />
                                 <file-pond id="test" name="upload" label-idle="Pages" allow-multiple="true"
-                                    allow-reorder="true" @processfile="handleFilePondPagesProcess"
-                                    accepted-file-types="image/jpeg, image/png" :server="{
-                                        url: '/upload?media=pages',
-                                        revert: (uniqueFileId, load, error) => {
-                                            handleFilePondPagesRemoveFile(uniqueFileId)
+                                    allow-reorder="true"
+                                    @processfile="handleFilePondPagesProcess"
+                                    @reorderfiles="handleFilePondPagesReorderFiles"
+                                    accepted-file-types="image/jpeg, image/png"
+                                    
+                                    :server="{
+                url: '/upload?media=pages',
+                revert: (uniqueFileId, load, error) => {
+                    handleFilePondPagesRemoveFile(uniqueFileId)
 
-                                            // Should call the load method when done, no parameters required
-                                            load();
-                                            // error('oh my goodness');
-                                        },
-                                        headers: {
-                                            'X-CSRF-TOKEN': csrfToken,
-                                        }
-                                    }" styleItemPanelAspectRatio="1.414" />
+                    // Should call the load method when done, no parameters required
+                    load();
+                    // error('oh my goodness');
+                },
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                }
+            }" styleItemPanelAspectRatio="1.414" />
                             </div>
                         </div>
                         <div class="flex justify-end">
@@ -261,7 +291,7 @@ onMounted(() => {
 
 <!-- <style> -->
 
-<style >
+<style>
 #test .filepond--item {
     width: calc(33% - 0.5em);
 }
