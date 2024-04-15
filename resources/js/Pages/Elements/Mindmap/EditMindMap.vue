@@ -19,6 +19,7 @@ import { VueFlow, useVueFlow } from '@vue-flow/core'
 import CustomNode from './CustomNode.vue'
 import RelationEdge from './RelationEdge.vue'
 import ElementNode from './ElementNode.vue'
+import TextNode from './TextNode.vue'
 import SearchElementModal from '../SearchElementModal.vue'
 import DashboardDropdownMenu from '@/Pages/Dashboard/DashboardDropdownMenu.vue'
 import { watch, onMounted } from 'vue'
@@ -69,6 +70,7 @@ const { onConnect, addEdges, removeNodes, addNodes, onPaneClick, } = useVueFlow(
 // sourceHandle: Position.Bottom, // or Top, Left, Right,
 
 onPaneClick((params) => {
+    console.log('pane clicked')
     clickedMouseX.value = params.clientX
     clickedMouseY.value = params.clientY
     paneX.value = params.offsetX
@@ -88,14 +90,25 @@ onConnect((params) => {
     addEdges([params])
 })
 
-function insertNode(data) {
+function insertElementNode(data) {
     addNodes([{
         id: getNextNodeId(),
-        label: data.element_name,
+        // label: data.element_name,
         position: { x: paneX.value, y: paneY.value },
         type: 'element',
 
         data: data
+    }])
+}
+
+function insertTextNode(data) {
+    addNodes([{
+        id: getNextNodeId(),
+        // label: data.text,
+        position: { x: paneX.value, y: paneY.value },
+        type: 'text',
+
+        data: ""
     }])
 }
 
@@ -105,8 +118,11 @@ function handleMenuItemClicked(eventName) {
             onAddElementButtonClicked()
             break
         case 'addText':
+            insertTextNode()
             break
     }
+
+    showAddElementButton.value = false
 }
 
 function getNextNodeId() {
@@ -123,7 +139,7 @@ function onCloseElementSearchModal(event) {
     isSearchElementModalOpen.value = false
 
     if (event) {
-        insertNode(event)
+        insertElementNode(event)
     }
 }
 
@@ -179,6 +195,10 @@ onMounted(() => {
                 <ElementNode v-bind="nodeProps" />
             </template>
 
+            <template #node-text="nodeProps">
+                <TextNode v-bind="nodeProps" />
+            </template>
+
             <!-- <template #edge-custom="edgeProps">
                 <CustomEdge v-bind="edgeProps" />
             </template> -->
@@ -206,9 +226,6 @@ onMounted(() => {
                     @closeMenu="isCardMenuOpen = false" />
             </Transition>
         </VueFlow>
-
-        <!-- <div id="mindmapHolder" :style="{ position: 'fixed', top: clickedMouseY + 'px', left: clickedMouseX + 'px' }"
-            class=" z-10"></div> -->
 
 
     </div>
