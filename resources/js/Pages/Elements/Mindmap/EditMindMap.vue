@@ -20,6 +20,7 @@ import CustomNode from './CustomNode.vue'
 import RelationEdge from './RelationEdge.vue'
 import ElementNode from './ElementNode.vue'
 import SearchElementModal from '../SearchElementModal.vue'
+import DashboardDropdownMenu from '@/Pages/Dashboard/DashboardDropdownMenu.vue'
 import { watch, onMounted } from 'vue'
 
 const showAddElementButton = ref(false)
@@ -39,7 +40,7 @@ let updateTimeout = null;
 
 
 watch(nodesEdges, (list) => {
-      
+
     // Clear the previous timeout if it exists
     if (updateTimeout) {
         clearTimeout(updateTimeout);
@@ -52,6 +53,11 @@ watch(nodesEdges, (list) => {
 }, {
     deep: true
 })
+
+const dropDownMenuOptions = [
+    { id: 1, text: "Add Element", eventName: "addElement" },
+    { id: 2, text: "Add Text", eventName: "addText" },
+]
 
 // https://vueflow.dev/typedocs/interfaces/Actions.html#addedges
 // Actions that can be listened to
@@ -91,6 +97,16 @@ function insertNode(data) {
 
         data: data
     }])
+}
+
+function handleMenuItemClicked(eventName) {
+    switch (eventName) {
+        case 'addElement':
+            onAddElementButtonClicked()
+            break
+        case 'addText':
+            break
+    }
 }
 
 function getNextNodeId() {
@@ -177,14 +193,27 @@ onMounted(() => {
                 <CustomConnectionLine :source-x="sourceX" :source-y="sourceY" :target-x="targetX" :target-y="targetY" />
             </template> -->
 
-            <button @click="onAddElementButtonClicked" v-if="showAddElementButton"
+            <!-- <button @click="onAddElementButtonClicked" v-if="showAddElementButton"
                 :style="{ position: 'fixed', top: clickedMouseY + 'px', left: clickedMouseX + 'px' }"
                 class="bg-pink-500 p-8 z-10 rounded-lg border-4 border-black">
                 Add Element
-            </button>
+            </button> -->
+
+            <Transition name="fade">
+                <DashboardDropdownMenu v-if="showAddElementButton" class="absolute z-40"
+                    :style="{ position: 'fixed', top: clickedMouseY + 'px', left: clickedMouseX + 'px' }"
+                    :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked"
+                    @closeMenu="isCardMenuOpen = false" />
+            </Transition>
         </VueFlow>
 
+        <!-- <div id="mindmapHolder" :style="{ position: 'fixed', top: clickedMouseY + 'px', left: clickedMouseX + 'px' }"
+            class=" z-10"></div> -->
+
+
     </div>
+
+
 </template>
 
 <style scoped>
@@ -197,5 +226,25 @@ onMounted(() => {
 .modal-leave-to {
     opacity: 0;
     transform: scale(1.1);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.fade-enter-from {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.fade-leave-to {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.fade-enter-to {
+    opacity: 1;
+    transform: translateY(0);
 }
 </style>

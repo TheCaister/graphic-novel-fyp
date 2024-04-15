@@ -1,5 +1,6 @@
 <template>
     <div v-if="elementsLoaded" class="w-full flex flex-wrap gap-4 justify-center">
+        <add-button @click="isCreateModalOpen = true" label="Create Element" class="w-96" />
         <div v-for="element in elements" :key="element.element_id" class="w-96 mb-4">
 
             <content-card-detailed :content="{
@@ -14,7 +15,7 @@
                 @click="emits('updateMouseClickPosition', $event)" />
         </div>
 
-        <add-button @click="isCreateModalOpen = true" label="Create Element" class="w-96" />
+
 
     </div>
     <div v-else>
