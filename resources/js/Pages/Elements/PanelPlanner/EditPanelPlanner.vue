@@ -20,14 +20,16 @@
                     Check element
                 </button> -->
 
-
+<!-- :key="isMirrored" -->
 
                 <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout"
                     :cols="{ lg: colNum, md: colNum, sm: colNum, xs: colNum, xxs: 6 }" :row-height="rowHeight"
                     :max-rows="rowNum" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored"
                     :prevent-collision="false" :is-bounded="true" :margin="[gridMargin, gridMargin]"
+                   :key="isMirrored"
                     :restore-on-drag="true" :vertical-compact="false"
-                    class="border-2 border-pink-500 rounded-lg touch-none grid" :key="isMirrored" :style="{
+                    
+                    class="border-2 border-pink-500 rounded-lg touch-none grid" :style="{
                         height: `${rowNum * rowHeight - 10}px`,
                         aspectRatio: pageStyleAspectRatio
                     }" @breakpoint-changed="breakpointChangedEvent">
@@ -200,10 +202,12 @@ watch(layout, (newVal) => {
 
 watch(pageStyle, (newVal) => {
     element.value.content.pageStyle = newVal
+    // console.log(element.value.content.pageStyle)
 })
 
 watch(isMirrored, (newVal) => {
     element.value.content.isMirrored = newVal
+    // console.log(element.value.content.isMirrored)
 })
 
 onMounted(() => {
@@ -221,7 +225,7 @@ onMounted(() => {
             console.log('setting layout...')
 
             layout.value = element.value.content.layout;
-            console.log(layout.value)
+            // console.log(layout.value)
 
             layout.value = layout.value.map(item => {
                 return {
@@ -244,7 +248,7 @@ onMounted(() => {
 
         // do something similar for isMirrored
         if (element.value.content.isMirrored) {
-            isMirrored.value = parseFloat(element.value.content.isMirrored) === 1 ? true : false
+            isMirrored.value = element.value.content.isMirrored
         }
     }
 })
@@ -330,7 +334,6 @@ function toggleShowPanelDescriptionList() {
 function handleClick() {
     if (!isDragging.value) {
         // Show your menu here
-        console.log('clicked')
         isGridMenuOpen.value = !isGridMenuOpen.value
     }
 }
@@ -343,7 +346,6 @@ function handleMenuItemClicked(event, grid) {
             grid.static = !grid.static
             break
         case 'addElements':
-            console.log('add elements')
             isSearchElementModalOpen.value = true
 
             break
@@ -351,7 +353,6 @@ function handleMenuItemClicked(event, grid) {
             removeGridItem(grid.i)
             break
         default:
-            console.log('default')
     }
 
     isGridMenuOpen.value = false
@@ -399,8 +400,6 @@ function addGridItem() {
             }
         }
     }
-
-    // console.log(grid)
 
     // Find a free space in the grid
     for (let y = 0; y < rowNum; y++) {
