@@ -1,11 +1,11 @@
 <template>
-    <div class="p-12 text-white" style="height: 110vh;">
-        <div class="border-4 border-white rounded-lg p-8">
+    <div class="p-12 text-white" style="height: 90vh;">
+        <div class="border-4 border-white rounded-lg p-8 h-full">
             <!-- <button @click="console.log(content)">
                 Test
             </button> -->
             <!-- Content title here, with option  to go back... -->
-            <div class="flex text-4xl">
+            <div class="flex text-4xl" >
                 <Link
                     :href="route('elements.assign.get-parent', { type: parentContent.type, content_id: parentContent.content_id })"
                     v-if="parentContent.type !== 'Universe'">
@@ -20,10 +20,10 @@
                 <PrimaryButton @click="toggleAll">Toggle all elements</PrimaryButton>
             </div>
             <!-- Two lists, one for content, one for elements -->
-            <div class="flex justify-around  h-4/5 ">
+            <div class="flex justify-around h-4/5">
                 <div class="flex flex-col w-2/5 ">
                     <!-- <SearchBar /> -->
-                    <ContentList v-model="content" class="px-4"/>
+                    <ContentList v-model="content" class="px-4 h-full"/>
                     <!-- empty div that fills up flex -->
                     <div class="flex-grow"></div>
                     <PrimaryButton @click="goBack" class="mt-8">Back</PrimaryButton>
@@ -36,7 +36,7 @@
                         Toggle all
                     </button> -->
 
-                    <ElementsList v-model="elements"  class="px-4"/>
+                    <ElementsList v-model="elements"  class="px-4 h-full"/>
                     <div class="flex-grow"></div>
                     <!-- <button @click="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Save

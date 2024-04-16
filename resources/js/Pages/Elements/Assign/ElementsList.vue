@@ -2,7 +2,7 @@
 
     
 
-    <div class=" mt-8 h-96 overflow-auto">
+    <div class=" mt-8 overflow-auto">
         <TransitionGroup name="list" tag="ul" class="flex flex-col gap-4">
             <div v-for="element in elements" :key="element.element_id">
                 <TriCheckbox :label="element.element_name" :image="element.element_thumbnail" v-model:checked="element.checked" v-model:alreadyAttached="element.alreadyAttached"/>

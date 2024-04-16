@@ -4,10 +4,10 @@
             :class="['w-full',
             'min-h-64', 'border-2', 'p-2', 'relative', 'rounded-md', 'border-pink-500', { 'bg-pink-500': checked === true }]">
 
-            <div class="flex flex-col gap-2 justify-center">
+            <div class="flex flex-col gap-2 justify-center ">
 
                 <img :src="content.content_thumbnail ? content.content_thumbnail : '/assets/black_pixel.png'" alt=""
-                    class="rounded-md h-64">
+                    class=" h-64 object-contain">
 
                 <div>
                     {{ content.content_name }}
