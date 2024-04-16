@@ -20,6 +20,14 @@ const textAreaRows = computed(() => {
     console.log(rows)
     return rows > 1 ? rows : 1
 })
+
+function toggleVisibility() {
+    if (!edge.edge.hasOwnProperty('textHidden')) {
+        edge.edge.textHidden = false
+    } else {
+        edge.edge.textHidden = !edge.edge.textHidden
+    }
+}
 </script>
 
 <script lang="ts">
@@ -40,14 +48,15 @@ export default {
             position: 'absolute',
             transform: `translate(-50%, -50%) translate(${path[1]}px,${path[2]}px)`,
         }">
-            <button class="text-white" @click="console.log(edge)">Testing</button>
-
-            <button class="edgebutton text-white" @click="removeEdges(id)">×</button>
+            <div class="flex justify-between bg-gray-900 p-2 rounded-lg gap-6 border-2 border-pink-200">
+                <button class="text-white" @click="toggleVisibility">Toggle text</button>
+                <button class="edgebutton text-white" @click="removeEdges(id)">×</button>
+            </div>
 
             <!-- Provide an area to edit text -->
 
             <div>
-                <textarea :rows="textAreaRows" type="text" v-model="edge.edge.data" class=" bg-white rounded-lg" placeholder="Type here" @mousedown.stop @wheel.stop/>
+                <textarea  v-if="!edge.edge.textHidden" :rows="textAreaRows" type="text" v-model="edge.edge.data" class=" bg-white rounded-lg" placeholder="Type here" @mousedown.stop @wheel.stop/>
 
             </div>
         </div>

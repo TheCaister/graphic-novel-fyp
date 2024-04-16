@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, defineEmits } from 'vue'
+import { defineProps } from 'vue'
 
 const checked = defineModel()
 
