@@ -6,13 +6,13 @@
         <!-- Search bar with buttons for users, content and elements -->
         <form @submit.prevent="search" class="flex items-center mb-8 h-10 w-1/2">
 
-            <select v-model="form.searchType" @change="testing" class="bg-gray-600 rounded-l-lg border-r-2 border-gray-600 ">
+            <select v-model="form.searchType" @change="testing" class="bg-gray-900 rounded-l-lg border-r-2 border-gray-600 ">
                 <option value="users">Users</option>
                 <option value="content">Content</option>
                 <option value="elements">Elements</option>
             </select>
             <!-- input, with dropdown on the right for 3 options -->
-            <input type="text" class=" flex-grow h-full border-gray-600 text-sm focus:outline-none bg-transparent placeholder-gray-300 rounded-r-lg" v-model="form.search" />
+            <input type="search" class=" flex-grow h-full border-gray-600 text-sm focus:outline-none bg-transparent placeholder-gray-300 rounded-r-lg" v-model="form.search" />
 
             <!-- <PrimaryButton @click="search" class="ml-8">Search</PrimaryButton> -->
             <PrimaryButton  class="ml-8">Search</PrimaryButton>
