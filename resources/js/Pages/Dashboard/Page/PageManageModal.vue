@@ -197,30 +197,35 @@ function handleCreateElementButtonClicked() {
                         <div class="mb-4">
                             Elements
                         </div>
-                        <Link :href="route('elements.edit', {
-                                element: element.element_id,
-                                contentType: 'Page',
-                                content_id: props.page.page_id
-                            })" v-for="element in props.page.elements" :key="element.element_id"
-                            class="flex flex-col relative">
-                        <!-- image, then text -->
-                        <div>
-                            <img :src="element.element_thumbnail ? element.element_thumbnail : '/assets/black_pixel.png'"
-                                alt="element image" class="w-24 h-24 rounded-lg" />
+                        <div v-if="props.page.elements && props.page.elements.length > 0">
+                            <Link :href="route('elements.edit', {
+                                    element: element.element_id,
+                                    contentType: 'Page',
+                                    content_id: props.page.page_id
+                                })" v-for="element in props.page.elements" :key="element.element_id"
+                                class="flex flex-col relative">
+                                <!-- image, then text -->
+                                <div>
+                                    <img :src="element.element_thumbnail ? element.element_thumbnail : '/assets/black_pixel.png'"
+                                        alt="element image" class="w-24 h-24 rounded-lg" />
+                                </div>
+                                <div class="w-1/2">
+                                    <p>{{ element.element_name }}</p>
+                                </div>
+                                <!-- Button for deletion -->
+                                <div class="absolute top-0 right-0 p-1">
+                                    <button @click.prevent="selectedElement = element; isDeleteModalOpen = true;"
+                                        class="bg-red-500 text-white rounded-full w-6 h-6">X</button>
+                                </div>
+                            </Link>
                         </div>
-                        <div class="w-1/2">
-                            <p>{{ element.element_name }}</p>
-                        </div>
-                        <!-- Button for deletion -->
-                        <div class="absolute top-0 right-0 p-1">
-                            <button @click.prevent="selectedElement = element; isDeleteModalOpen = true;"
-                                class="bg-red-500 text-white rounded-full w-6 h-6">X</button>
-                        </div>
-                        </Link>
+                        <div v-else>
+                            <p class="text-gray-500">None.</p>
+                            </div>
                     </div>
-                    <button @click="handleCreateElementButtonClicked" class="bg-pink-500 rounded-full h-24">
+                    <PrimaryButton @click="handleCreateElementButtonClicked" >
                         Add element
-                    </button>
+                    </PrimaryButton>
                 </div>
             </div>
         </div>

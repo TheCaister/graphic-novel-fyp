@@ -169,7 +169,7 @@ onMounted(() => {
 <template>
     <!-- <div :style="{ height: '3000px' }" class="h-screen"> -->
     <div class="p-8">
-        <div style="height: 80vh;" class="border-pink-400 border-2 rounded-lg">
+        <div style="height: 90vh;" class="border-pink-400 border-2 rounded-lg">
             <Teleport to="body">
                 <Transition name="modal" class="z-50">
                     <search-element-modal v-if="isSearchElementModalOpen"

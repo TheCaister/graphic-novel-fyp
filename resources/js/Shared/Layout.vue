@@ -65,7 +65,7 @@
 
                     <Avatar
                         :src='page.props.auth.user.profile_picture ? page.props.auth.user.profile_picture : "/assets/black_pixel.png"'
-                        :link="route('profile.show', page.props.auth.user.id)" class="border-4 rounded-full" />
+                        :link="route('profile.show', page.props.auth.user.id)" class="border-2 rounded-full" />
 
                 </div>
 
