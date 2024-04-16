@@ -1,5 +1,5 @@
 <template>
-    <div class="relative flex justify-center text-white bg-black" style="height: 80vh;">
+    <div class="relative flex justify-center text-white bg-gray-900" style="height: 80vh;">
 
 
 
@@ -10,12 +10,12 @@
                 </button>
 
                 <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout"
-                    :cols="{ lg: colNum, md: colNum, sm: colNum, xs: colNum, xxs: 6 }" :row-height="30"
+                    :cols="{ lg: colNum, md: colNum, sm: colNum, xs: colNum, xxs: 6 }" :row-height="60"
                     :max-rows="rowNum" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored"
                     :prevent-collision="false" :is-bounded="true" :margin="[10, 10]" :restore-on-drag="true"
-                    :vertical-compact="false" class="border-4 border-pink-500 rounded-lg touch-none grid"
+                    :vertical-compact="true" class="border-2 border-pink-500 rounded-lg touch-none grid"
                     :key="isMirrored" :style="{
-                    height: '60vh',
+                    height: '70vh',
                     aspectRatio: pageStyleAspectRatio
                 }" @breakpoint-changed="breakpointChangedEvent">
                     <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
@@ -25,7 +25,7 @@
                         @mouseup="stopIsDraggingAfterDelay(10)"
                         @click.stop="console.log(selectedGridId); selectedGridId = item.i; handleClick(); updateMouseClickPosition($event)">
                         <img v-if="item.elements && item.elements.length > 0" :src="item.elements[0].element_thumbnail"
-                            class="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm" />
+                            class="absolute inset-0 w-full h-full object-cover opacity-40 blur-sm" />
                         <div class="absolute text-xl">{{ item.text }}</div>
                         <Teleport to="#gridHolder">
                             <Transition name="fade">

@@ -168,67 +168,53 @@ onMounted(() => {
 
 <template>
     <!-- <div :style="{ height: '3000px' }" class="h-screen"> -->
-    <div style="height: 80vh;">
-
-        <Teleport to="body">
-            <Transition name="modal" class="z-50">
-                <search-element-modal v-if="isSearchElementModalOpen"
-                    @closeElementSearchModal="onCloseElementSearchModal"
-                    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
-            </Transition>
-        </Teleport>
-
-        <VueFlow v-model="nodesEdges" fit-view-on-init class=" vue-flow-basic-example" :default-zoom="1.5"
-            :min-zoom="0.2" :max-zoom="4" auto-connect>
-
-            <Background pattern-color="#aaa" :gap="8" />
-
-            <MiniMap />
-
-            <Controls />
-
-            <!-- Render this in the custom slot -->
-            <template #node-custom="nodeProps">
-                <CustomNode v-bind="nodeProps" />
-            </template>
-
-            <template #node-element="nodeProps">
-                <ElementNode v-bind="nodeProps" />
-            </template>
-
-            <template #node-text="nodeProps">
-                <TextNode v-bind="nodeProps" />
-            </template>
-
-            <!-- <template #edge-custom="edgeProps">
-                <CustomEdge v-bind="edgeProps" />
-            </template> -->
-
-            <template #edge-relation="edgeProps">
-                <RelationEdge v-bind="edgeProps" />
-            </template>
-
-
-            <!-- This is for when you want the connection line to be different when dragging them out -->
-            <!-- <template #connection-line="{ sourceX, sourceY, targetX, targetY }">
-                <CustomConnectionLine :source-x="sourceX" :source-y="sourceY" :target-x="targetX" :target-y="targetY" />
-            </template> -->
-
-            <!-- <button @click="onAddElementButtonClicked" v-if="showAddElementButton"
-                :style="{ position: 'fixed', top: clickedMouseY + 'px', left: clickedMouseX + 'px' }"
-                class="bg-pink-500 p-8 z-10 rounded-lg border-4 border-black">
-                Add Element
-            </button> -->
-
-            <Transition name="fade">
-                <DashboardDropdownMenu v-if="showAddElementButton" class="absolute z-40"
+    <div class="p-8">
+        <div style="height: 80vh;" class="border-pink-400 border-2 rounded-lg">
+            <Teleport to="body">
+                <Transition name="modal" class="z-50">
+                    <search-element-modal v-if="isSearchElementModalOpen"
+                        @closeElementSearchModal="onCloseElementSearchModal"
+                        class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
+                </Transition>
+            </Teleport>
+            <VueFlow v-model="nodesEdges" fit-view-on-init class=" vue-flow-basic-example" :default-zoom="1.5"
+                :min-zoom="0.2" :max-zoom="4" auto-connect >
+                <Background pattern-color="#aaa" :gap="8" />
+                <MiniMap />
+                <Controls />
+                <!-- Render this in the custom slot -->
+                <template #node-custom="nodeProps">
+                    <CustomNode v-bind="nodeProps" />
+                </template>
+                <template #node-element="nodeProps">
+                    <ElementNode v-bind="nodeProps" />
+                </template>
+                <template #node-text="nodeProps">
+                    <TextNode v-bind="nodeProps" />
+                </template>
+                <!-- <template #edge-custom="edgeProps">
+                    <CustomEdge v-bind="edgeProps" />
+                </template> -->
+                <template #edge-relation="edgeProps">
+                    <RelationEdge v-bind="edgeProps" />
+                </template>
+                <!-- This is for when you want the connection line to be different when dragging them out -->
+                <!-- <template #connection-line="{ sourceX, sourceY, targetX, targetY }">
+                    <CustomConnectionLine :source-x="sourceX" :source-y="sourceY" :target-x="targetX" :target-y="targetY" />
+                </template> -->
+                <!-- <button @click="onAddElementButtonClicked" v-if="showAddElementButton"
                     :style="{ position: 'fixed', top: clickedMouseY + 'px', left: clickedMouseX + 'px' }"
-                    :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked"
-                    @closeMenu="isCardMenuOpen = false" />
-            </Transition>
-        </VueFlow>
-
-
+                    class="bg-pink-500 p-8 z-10 rounded-lg border-4 border-black">
+                    Add Element
+                </button> -->
+                <Transition name="fade">
+                    <DashboardDropdownMenu v-if="showAddElementButton" class="absolute z-40"
+                        :style="{ position: 'fixed', top: clickedMouseY + 'px', left: clickedMouseX + 'px' }"
+                        :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked"
+                        @closeMenu="isCardMenuOpen = false" />
+                </Transition>
+            </VueFlow>
+        </div>
     </div>
 
 
