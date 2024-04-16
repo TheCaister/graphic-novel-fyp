@@ -3,6 +3,10 @@
     <Head title="Search" />
 
     <div class="text-white text-lg flex flex-col p-8 items-center">
+
+       <div id="searchPosition" :style="{ position: 'fixed', top: mouseClickY + 'px', left: mouseClickX + 'px' }"
+            class=" z-10"></div>
+        
         <!-- Search bar with buttons for users, content and elements -->
         <form @submit.prevent="search" class="flex items-center mb-8 h-10 w-1/2">
 
@@ -28,17 +32,21 @@
 
         <!-- Advanced search -->
         <div class="w-3/4">
-            <KeepAlive>
-                <component :is="AdvancedFiltersComponent" v-model="form.advanced"
-                    @update-advanced-search="updateAdvancedSearch" />
-            </KeepAlive>
+            <div class="w-full">
+                <KeepAlive>
+                    <component :is="AdvancedFiltersComponent" v-model="form.advanced"
+                        @update-advanced-search="updateAdvancedSearch" />
+                </KeepAlive>
+            </div>
+            <div>
+                <KeepAlive>
+                    <component :is="ResultsViewComponent" :resultsList="resultsList"
+                    @update-mouse-click-position="updateMouseClickPosition($event)" />
+                </KeepAlive>
+            </div>
         </div>
 
-        <div>
-            <KeepAlive>
-                <component :is="ResultsViewComponent" :resultsList="resultsList" />
-            </KeepAlive>
-        </div>
+
 
 
     </div>
@@ -77,6 +85,11 @@ const props = defineProps({
 
 const resultsList = ref(props.initResultsList)
 const currentSearchType = ref(props.searchParams.searchType)
+
+const mouseClickX = ref(0)
+const mouseClickY = ref(0)
+
+
 
 const form = useForm({
     search: '',
@@ -128,17 +141,6 @@ const AdvancedFiltersComponent = computed(() => {
     }
 })
 
-function testing(event){
-    // console.log(event)
-   // The value of the selected option
-   let selectedOption = event.target.value;
-
-// Do something with selectedOption
-console.log(selectedOption);
-}
-
-
-
 function search() {
 
     console.log(form.advanced)
@@ -174,6 +176,12 @@ function search() {
 
     // clear the advanced search filters
     // form.advanced = {};
+}
+
+function updateMouseClickPosition(event) {
+
+mouseClickX.value = event.clientX;
+mouseClickY.value = event.clientY;
 }
 
 function back() {
