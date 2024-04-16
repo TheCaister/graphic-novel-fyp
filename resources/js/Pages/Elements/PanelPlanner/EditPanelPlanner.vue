@@ -1,23 +1,24 @@
 <template>
-    <div class="relative flex justify-center text-white bg-gray-900" style="height: 80vh;">
+    <div class="relative flex justify-center text-white bg-gray-900 mt-24 pb-24" >
 
 
 
-        <div class="flex flex-col items-center">
+        <div class="flex  items-center">
             <div class="relative flex flex-col">
-                <button @click="console.log(layout)">
+                <!-- <button @click="console.log(layout)">
                     Check element
-                </button>
+                </button> -->
 
                 <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout"
-                    :cols="{ lg: colNum, md: colNum, sm: colNum, xs: colNum, xxs: 6 }" :row-height="60"
+                    :cols="{ lg: colNum, md: colNum, sm: colNum, xs: colNum, xxs: 6 }" :row-height="rowHeight"
                     :max-rows="rowNum" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored"
-                    :prevent-collision="false" :is-bounded="true" :margin="[10, 10]" :restore-on-drag="true"
-                    :vertical-compact="true" class="border-2 border-pink-500 rounded-lg touch-none grid"
+                    :prevent-collision="false" :is-bounded="true" :margin="[gridMargin, gridMargin]" :restore-on-drag="true"
+                    :vertical-compact="false" class="border-2 border-pink-500 rounded-lg touch-none grid"
                     :key="isMirrored" :style="{
-                    height: '70vh',
+                    height: `${rowNum * rowHeight - 10}px`,
                     aspectRatio: pageStyleAspectRatio
                 }" @breakpoint-changed="breakpointChangedEvent">
+                
                     <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
                         :key="item.i"
                         class="rounded-lg border-4 border-pink-500 text-white p-4 bg-black z-0 overflow-auto"
@@ -137,6 +138,8 @@ const mouseClickY = ref(0)
 
 const colNum = ref(12)
 const rowNum = 12
+const rowHeight = 60
+const gridMargin = 10
 
 const isMirrored = ref(false)
 const isDragging = ref(false)
@@ -194,6 +197,10 @@ watch(isMirrored, (newVal) => {
 })
 
 onMounted(() => {
+    let rootStyle = document.documentElement.style;
+    rootStyle.setProperty('--grid-margin', gridMargin + 'px');
+    rootStyle.setProperty('--col-num', colNum.value.toString());
+    rootStyle.setProperty('--row-height', rowHeight + 'px');
     // console.log(props.element)
 
     // SETTING LAYOUT, MIRRORED AND ASPECT RATIO
@@ -268,8 +275,8 @@ function updateMousePosition(event) {
 }
 
 function breakpointChangedEvent(newBreakpoint, newLayout) {
-    console.log(newBreakpoint)
-    console.log(newLayout)
+    // console.log(newBreakpoint)
+    // console.log(newLayout)
 
     switch (newBreakpoint) {
         case 'xxs':
@@ -281,6 +288,9 @@ function breakpointChangedEvent(newBreakpoint, newLayout) {
             break;
     }
 
+    let rootStyle = document.documentElement.style;
+    rootStyle.setProperty('--col-num', colNum.value.toString());
+
 }
 
 function stopIsDraggingAfterDelay(delay) {
@@ -291,7 +301,6 @@ function stopIsDraggingAfterDelay(delay) {
 }
 
 function toggleShowElementList() {
-    console.log('toggling...')
     showElementList.value = !showElementList.value
 
     // If showElementList.value is true, showPanelDescriptionList.value should be false
@@ -319,9 +328,6 @@ function handleClick() {
 
 function handleMenuItemClicked(event, grid) {
 
-    console.log(grid)
-
-
     // switch statement for event
     switch (event) {
         case 'fixPosition':
@@ -340,8 +346,6 @@ function handleMenuItemClicked(event, grid) {
     }
 
     isGridMenuOpen.value = false
-
-    // find the grid in 
 }
 
 function onCloseElementSearchModal(event) {
@@ -371,19 +375,6 @@ function removeElement(grid, element) {
     const elementIndex = layout.value[index].elements.map(item => item.element_id).indexOf(element.element_id);
     layout.value[index].elements.splice(elementIndex, 1);
 }
-
-// function addGridItem() {
-//     layout.value.push({
-//         // 12 is the number of columns or colNum
-//         "x": (layout.value.length * 2) % (colNum || 12),
-//         "y": layout.value.length + (colNum || 12),
-//         "w": 2,
-//         "h": 2,
-//         "i": layout.value.length.toString(),
-//         "text": "",
-//         "elements": [],
-//     })
-// }
 
 function addGridItem() {
     // Create a 2D array to represent the grid
@@ -437,14 +428,12 @@ function removeGridItem(val) {
 </script>
 
 <style scoped>
-/* .no-aspect-ratio {
-    object-fit: fill;
-    width: 100%;
-    height: 100%;
-} */
-</style>
 
-<style scoped>
+:root{
+    --grid-margin: 10px;
+    --col-num: 12;
+    --row-height: 60px;
+}
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 0.2s, transform 0.2s;
@@ -487,16 +476,16 @@ function removeGridItem(val) {
 
 .grid::before {
     content: '';
-    background-size: calc(calc(100% - 5px) / 12) 40px;
+    background-size: calc(calc(100% - calc(var(--grid-margin) / 2)) / var(--col-num)) calc(var(--row-height) + var(--grid-margin));
     background-image: linear-gradient(to right,
             rgb(85, 85, 85) 1px,
             transparent 1px),
         linear-gradient(to bottom, rgb(85, 85, 85) 1px, transparent 1px);
-    height: calc(100% - 5px);
-    width: calc(100% - 5px);
+    height: calc(100% - calc(var(--grid-margin) / 2));
+    width: calc(100% - calc(var(--grid-margin) / 2));
     position: absolute;
     background-repeat: repeat;
-    margin: 5px;
+    margin: calc(var(--grid-margin) / 2);
 }
 
 .slide-enter-active,
