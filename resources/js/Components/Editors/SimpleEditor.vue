@@ -74,8 +74,10 @@
         </button>
     </div>
 
-    <div class="bg-black text-white m-8 rounded-lg border-pink-400 border-2">
-        <editor-content class="p-4 editor-field" :editor="editor" @click="updateMouseClickPosition($event)" />
+    <div class="p-8">
+        <div class="bg-black text-white  rounded-lg border-pink-400 border-2">
+            <editor-content class="p-4 editor-field" :editor="editor" @click="updateMouseClickPosition($event)" />
+        </div>
     </div>
 
     <div id="editorHolder" :style="{ position: 'fixed', top: mouseClickY + 'px', left: mouseClickX + 'px' }"

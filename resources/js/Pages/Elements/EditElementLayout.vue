@@ -184,8 +184,10 @@ function back() {
 
                 <KeepAlive>
 
-                    <component :is="DashboardViewComponent" v-model="form.element"
-                        @updateChildrenElementIDs="updateChildrenElements" />
+                    <div class="bg-gray-900 ">
+                        <component :is="DashboardViewComponent" v-model="form.element"
+                            @updateChildrenElementIDs="updateChildrenElements" />
+                    </div>
                 </KeepAlive>
 
                 <button @click="isHeaderOpen = !isHeaderOpen"
