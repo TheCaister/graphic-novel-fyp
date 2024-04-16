@@ -1,30 +1,57 @@
 <template>
-    <div class="relative flex justify-center text-white bg-gray-900 mt-24 pb-24" >
+    <div class="relative flex flex-col justify-center items-center text-white bg-gray-900 mt-16 pb-16 ">
+        <div class=" flex justify-between w-full px-24 mb-12">
+
+            <PrimaryButton @click="toggleShowElementList" class="">
+                Toggle elements
+            </PrimaryButton>
+            <PrimaryButton @click="toggleShowPanelDescriptionList" class="">
+                Toggle panel descriptions
+            </PrimaryButton>
 
 
+        </div>
 
-        <div class="flex  items-center">
+
+        <div class="flex gap-8 items-center overflow-auto mx-8">
+
             <div class="relative flex flex-col">
                 <!-- <button @click="console.log(layout)">
                     Check element
                 </button> -->
 
+
+
                 <GridLayout v-model:layout="layout" :responsive="responsive" :layout.sync="layout"
                     :cols="{ lg: colNum, md: colNum, sm: colNum, xs: colNum, xxs: 6 }" :row-height="rowHeight"
                     :max-rows="rowNum" :is-draggable="true" :is-resizable="true" :is-mirrored="isMirrored"
-                    :prevent-collision="false" :is-bounded="true" :margin="[gridMargin, gridMargin]" :restore-on-drag="true"
-                    :vertical-compact="false" class="border-2 border-pink-500 rounded-lg touch-none grid"
-                    :key="isMirrored" :style="{
-                    height: `${rowNum * rowHeight - 10}px`,
-                    aspectRatio: pageStyleAspectRatio
-                }" @breakpoint-changed="breakpointChangedEvent">
-                
-                    <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
+                    :prevent-collision="false" :is-bounded="true" :margin="[gridMargin, gridMargin]"
+                    :restore-on-drag="true" :vertical-compact="false"
+                    class="border-2 border-pink-500 rounded-lg touch-none grid" :key="isMirrored" :style="{
+                        height: `${rowNum * rowHeight - 10}px`,
+                        aspectRatio: pageStyleAspectRatio
+                    }" @breakpoint-changed="breakpointChangedEvent">
+
+                    <!-- <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
                         :key="item.i"
                         class="rounded-lg border-4 border-pink-500 text-white p-4 bg-black z-0 overflow-auto"
                         @mousemove.stop="showAddElementHint = false; isDragging = true; stopIsDraggingAfterDelay(50)"
                         @mouseup="stopIsDraggingAfterDelay(10)"
-                        @click.stop="console.log(selectedGridId); selectedGridId = item.i; handleClick(); updateMouseClickPosition($event)">
+                        @click.stop="console.log(selectedGridId); selectedGridId = item.i; handleClick(); updateMouseClickPosition($event)"> -->
+
+                        <!-- 
+                            I only want the menu to appear when the grid item is not being dragged around.
+                            When the grid item is stationary, the menu should appear when the grid item is clicked.
+                            When the grid item is being dragged around, the menu should not appear.
+                         -->
+
+                    <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
+                        :key="item.i"
+                        class="rounded-lg border-4 border-pink-500 text-white p-4 bg-black z-0 overflow-auto"
+                        @mousemove.stop="isDragging = true"
+                        @mousedown.left="isDragging = false"
+                        @mouseup="stopIsDraggingAfterDelay()"
+                        @click.stop="selectedGridId = item.i; handleClick(); updateMouseClickPosition($event)">
                         <img v-if="item.elements && item.elements.length > 0" :src="item.elements[0].element_thumbnail"
                             class="absolute inset-0 w-full h-full object-cover opacity-40 blur-sm" />
                         <div class="absolute text-xl">{{ item.text }}</div>
@@ -32,7 +59,7 @@
                             <Transition name="fade">
                                 <DashboardDropdownMenu v-if="selectedGridId == item.i && isGridMenuOpen"
                                     :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked($event, item)"
-                                    @closeMenu="isGridMenuOpen = false" />
+                                    @closeMenu="isGridMenuOpen = false; isDragging = true; stopIsDraggingAfterDelay()" />
                             </Transition>
                         </Teleport>
                     </grid-item>
@@ -48,16 +75,16 @@
                     </button>
                 </div> -->
             </div>
-            <div class="flex flex-col">
-                <select name="pageType" id="pageType" class="bg-gray-500 rounded-lg border-2 border-gray-300"
+            <div class="flex flex-col gap-4">
+                <select name="pageType" id="pageType" class="bg-gray-900 rounded-lg border-2 border-gray-300"
                     v-model="pageStyle">
                     <option value="standard_american">Standard American</option>
-                    <option value="double_standard_american">Double Standard American</option>
+                    <!-- <option value="double_standard_american">Double Standard American</option> -->
                     <option value="a5">Single A5</option>
                     <option value="double_a5">Double A5</option>
                 </select>
                 <!-- select tag for left-to-right and right-to-left -->
-                <select name="pageDirection" id="pageDirection" class="bg-gray-500 rounded-lg border-2 border-gray-300"
+                <select name="pageDirection" id="pageDirection" class="bg-gray-900 rounded-lg border-2 border-gray-300"
                     v-model="isMirrored">
                     <option :value="false">Left to Right</option>
                     <option :value="true">Right to Left</option>
@@ -69,18 +96,6 @@
         </div>
 
 
-        <div class="absolute flex justify-between w-full">
-
-            <button v-if="showElementList === false" @click="toggleShowElementList" class="absolute left-0">
-                Toggle elements
-            </button>
-            <button v-if="showPanelDescriptionList === false" @click="toggleShowPanelDescriptionList"
-                class="absolute right-0">
-                Toggle panel descriptions
-            </button>
-
-
-        </div>
 
         <Transition name="slide">
             <PanelDescriptionList v-if="showPanelDescriptionList === true" v-model="layout"
@@ -91,6 +106,7 @@
             <PanelElementList v-if="showElementList === true" v-model="layout"
                 @toggle-visibility="toggleShowElementList" @remove-element="removeElement" class="w-1/3 ml-8" />
         </Transition>
+
     </div>
 
     <!-- Container for buttons that pop in and out of existence -->
@@ -99,10 +115,10 @@
         <div id="gridHolder" :style="{ position: 'fixed', top: mouseClickY + 'px', left: mouseClickX + 'px' }"
             class=" z-10"></div>
 
-        <div v-if="showAddElementHint" :style="{ position: 'fixed', top: mouseY + 'px', left: mouseX + 'px' }"
+        <!-- <div v-if="showAddElementHint" :style="{ position: 'fixed', top: mouseY + 'px', left: mouseX + 'px' }"
             class="bg-pink-500 p-8 z-10 rounded-lg border-4 border-black">
             Click to add panel
-        </div>
+        </div> -->
     </div>
 
     <Teleport to="body">
@@ -125,11 +141,12 @@ import PanelDescriptionList from './PanelDescriptionList.vue'
 
 const responsive = ref(true)
 
-const showAddElementButton = ref(false)
+// const showAddElementButton = ref(false)
 const isSearchElementModalOpen = ref(false)
-const showAddElementHint = ref(false)
+// const showAddElementHint = ref(false)
 const mouseX = ref(0)
 const mouseY = ref(0)
+const mouseDown = ref(false)
 // const pageStyle = ref('a5')
 const pageStyle = ref('a5')
 const isGridMenuOpen = ref(false)
@@ -253,11 +270,11 @@ const pageStyleAspectRatio = computed(() => {
             aspectRatio = '1/0.71'
             break
         case 'standard_american':
-            aspectRatio = '1/0.67'
+            aspectRatio = '1/1.5'
             break
-        case 'double_standard_american':
-            aspectRatio = '1/0.33'
-            break
+        // case 'double_standard_american':
+        //     aspectRatio = '1/0.33'
+        //     break
         default:
             aspectRatio = '1/1.42'
     }
@@ -271,12 +288,10 @@ function updateMousePosition(event) {
     mouseX.value = event.clientX
     mouseY.value = event.clientY
 
-    showAddElementHint.value = true
+    // showAddElementHint.value = true
 }
 
 function breakpointChangedEvent(newBreakpoint, newLayout) {
-    // console.log(newBreakpoint)
-    // console.log(newLayout)
 
     switch (newBreakpoint) {
         case 'xxs':
@@ -293,10 +308,11 @@ function breakpointChangedEvent(newBreakpoint, newLayout) {
 
 }
 
-function stopIsDraggingAfterDelay(delay) {
+function stopIsDraggingAfterDelay() {
     setTimeout(() => {
         isDragging.value = false
-    }, delay)
+        // console.log('stopped dragging')
+    }, 200)
 
 }
 
@@ -322,7 +338,7 @@ function handleClick() {
     if (!isDragging.value) {
         // Show your menu here
         console.log('clicked')
-        isGridMenuOpen.value = true
+        isGridMenuOpen.value = !isGridMenuOpen.value
     }
 }
 
@@ -428,12 +444,12 @@ function removeGridItem(val) {
 </script>
 
 <style scoped>
-
-:root{
+:root {
     --grid-margin: 10px;
     --col-num: 12;
     --row-height: 60px;
 }
+
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 0.2s, transform 0.2s;
