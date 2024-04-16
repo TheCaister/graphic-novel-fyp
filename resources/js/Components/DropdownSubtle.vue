@@ -1,6 +1,6 @@
 <template>
 
-    <div class="text-gray-400  px-4">
+    <div class="text-gray-400  px-4" ref="dropdown">
         <!-- Selected option here + Prompt -->
 
         <div @click="isDropDownVisible = !isDropDownVisible" class="hover:cursor-pointer flex items-center">
@@ -13,9 +13,9 @@
         </div>
         <!-- All available options -->
         <Transition name="slide-fade">
-            <div class="flex flex-col items-center absolute z-50" v-if="isDropDownVisible">
+            <div class="flex flex-col gap-2 absolute z-50 mt-2" v-if="isDropDownVisible">
                 <div v-for="option in options" :key="option.id" @click="toggleOptionSelect(option)"
-                    class="hover:cursor-pointer">
+                    class="hover:cursor-pointer bg-gray-900 p-2 rounded-lg border-gray-500 border-2 hover:border-pink-500">
                     {{ option.name }}
                 </div>
             </div>
@@ -26,6 +26,14 @@
 
 <script setup>
 import { ref } from 'vue';
+import { onClickOutside } from '@vueuse/core'
+
+const dropdown = ref(null)
+
+onClickOutside(dropdown, () => {
+    // emits('closeMenu')
+    isDropDownVisible.value = false
+})
 
 const isDropDownVisible = ref(false)
 
@@ -52,18 +60,22 @@ function toggleOptionSelect(option) {
 </script>
 
 <style scoped>
-/* Create a slide-fade transition for the select options */
-.slide-fade-enter,
-.slide-fade-leave-to,
-.slide-fade-enter-active {
-    /* transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-    opacity: 0;
-    transform: translateY(-10px); */
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+    transition: all 0.2s ease-in-out;
 }
 
-.slide-fade-leave-active {
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+.slide-fade-enter-from,
+.slide-fade-leave-to {
     opacity: 0;
     transform: translateY(-10px);
 }
+
+.slide-fade-enter-to,
+.slide-fade-leave-from {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 </style>

@@ -126,7 +126,7 @@ function back() {
 }
 </script>
 
-<template>
+<template >
 
     <Head title="Element" />
 
@@ -189,14 +189,9 @@ function back() {
                 </KeepAlive>
 
                 <button @click="isHeaderOpen = !isHeaderOpen"
-                    class="bg-black p-2 text-white text-xl rounded-lg absolute top-[-60px] left-1/2 -translate-x-1/2 z-50">Toggle
+                    class="bg-black p-2 text-white text-xl rounded-lg absolute top-[-60px] left-1/2 -translate-x-1/2 z-50 transition-transform duration-100 hover:scale-105">Toggle
                     Header</button>
             </div>
-
-
-            <!-- <component :is="DashboardViewComponent" v-model="form.element" :element="form.element" 
-                @updateElement="updateForm"
-                    @updateChildrenElementIDs="updateChildrenElements" /> -->
 
 
         </div>
