@@ -2,10 +2,10 @@
     <div class="relative flex flex-col justify-center items-center text-white bg-gray-900 mt-16 pb-16 ">
         <div class=" flex justify-between w-full px-24 mb-12">
 
-            <PrimaryButton @click="toggleShowElementList" class="">
+            <PrimaryButton :style="{ visibility: !showElementList ? 'visible' : 'hidden' }" @click="toggleShowElementList" class="">
                 Toggle elements
             </PrimaryButton>
-            <PrimaryButton @click="toggleShowPanelDescriptionList" class="">
+            <PrimaryButton :style="{ visibility: !showPanelDescriptionList ? 'visible' : 'hidden' }" @click="toggleShowPanelDescriptionList" class="">
                 Toggle panel descriptions
             </PrimaryButton>
 
@@ -31,13 +31,6 @@
                         height: `${rowNum * rowHeight - 10}px`,
                         aspectRatio: pageStyleAspectRatio
                     }" @breakpoint-changed="breakpointChangedEvent">
-
-                    <!-- <grid-item v-for="item in layout" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i"
-                        :key="item.i"
-                        class="rounded-lg border-4 border-pink-500 text-white p-4 bg-black z-0 overflow-auto"
-                        @mousemove.stop="showAddElementHint = false; isDragging = true; stopIsDraggingAfterDelay(50)"
-                        @mouseup="stopIsDraggingAfterDelay(10)"
-                        @click.stop="console.log(selectedGridId); selectedGridId = item.i; handleClick(); updateMouseClickPosition($event)"> -->
 
                         <!-- 
                             I only want the menu to appear when the grid item is not being dragged around.
@@ -99,12 +92,12 @@
 
         <Transition name="slide">
             <PanelDescriptionList v-if="showPanelDescriptionList === true" v-model="layout"
-                @toggle-visibility="toggleShowPanelDescriptionList" class="w-1/3 mr-8" />
+                @toggle-visibility="toggleShowPanelDescriptionList" class="w-1/4 mr-8" />
         </Transition>
 
         <Transition name="slide-reverse">
             <PanelElementList v-if="showElementList === true" v-model="layout"
-                @toggle-visibility="toggleShowElementList" @remove-element="removeElement" class="w-1/3 ml-8" />
+                @toggle-visibility="toggleShowElementList" @remove-element="removeElement" class="w-1/4 ml-8" />
         </Transition>
 
     </div>
@@ -407,7 +400,7 @@ function addGridItem() {
         }
     }
 
-    console.log(grid)
+    // console.log(grid)
 
     // Find a free space in the grid
     for (let y = 0; y < rowNum; y++) {

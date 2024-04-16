@@ -1,5 +1,5 @@
 <template>
-    <div class="absolute right-0 top-0 text-white flex flex-col gap-4 overflow-auto" style="height: 70vh;">
+    <div class="absolute right-0 top-0 text-white flex flex-col gap-4 overflow-auto  border-4 rounded-lg p-4 border-pink-500 bg-gray-900" style="height: 70vh;">
         <PrimaryButton @click="emits('toggleVisibility')">
             Close
         </PrimaryButton>
