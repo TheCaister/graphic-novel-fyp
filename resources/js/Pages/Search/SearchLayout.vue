@@ -6,7 +6,7 @@
         <!-- Search bar with buttons for users, content and elements -->
         <form @submit.prevent="search" class="flex items-center mb-8 h-10 w-1/2">
 
-            <select v-model="form.searchType" @change="testing" class="bg-black rounded-l-lg border-r-2 border-gray-600 ">
+            <select v-model="form.searchType" @change="testing" class="bg-gray-600 rounded-l-lg border-r-2 border-gray-600 ">
                 <option value="users">Users</option>
                 <option value="content">Content</option>
                 <option value="elements">Elements</option>
@@ -20,11 +20,11 @@
         </form>
 
         <!-- big button -->
-        <div class="text-white">
+        <!-- <div class="text-white">
             <button @click="console.log(form.advanced)">
                 Print form
             </button>
-        </div>
+        </div> -->
 
         <!-- Advanced search -->
         <div class="w-3/4">

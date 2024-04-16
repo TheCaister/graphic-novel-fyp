@@ -87,6 +87,7 @@ onPaneClick((params) => {
 onConnect((params) => {
     // console.log(params)
     params.type = 'relation';
+    params.hidden = false;
     addEdges([params])
 })
 

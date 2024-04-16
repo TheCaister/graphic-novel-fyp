@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-black text-white">
+    <div class=" text-white">
         <p class="block font-medium text-sm text-gray-700 dark:text-gray-300">
             Included elements:
         </p>

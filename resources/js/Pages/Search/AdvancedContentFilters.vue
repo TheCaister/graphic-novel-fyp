@@ -4,11 +4,11 @@
             Advanced Search
         </div>
 
-        <div class="text-white">
+        <!-- <div class="text-white">
             <button @click="console.log(model)">
                 Print model
             </button>
-        </div>
+        </div> -->
 
         <div class="flex w-full gap-8">
             <TriCheckbox label="Include universes" @checked="updateFilter('includeUniverses', $event)" class="w-1/4"/>

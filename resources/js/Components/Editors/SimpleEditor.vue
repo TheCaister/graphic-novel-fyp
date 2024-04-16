@@ -1,5 +1,5 @@
 <template>
-    <div v-if="editor" class="flex flex-wrap space-x-2 bg-black py-4 px-8 border-t-4 border-b-4 border-pink-400">
+    <div v-if="editor" class="flex flex-wrap space-x-2  py-4 px-8 border-t-2 border-b-2 border-pink-400">
         <button @click="editor.chain().focus().toggleBold().run()"
             :disabled="!editor.can().chain().focus().toggleBold().run()"
             :class="[editor.isActive('bold') ? 'is-active' : '', 'not-active']">
@@ -74,7 +74,7 @@
         </button>
     </div>
 
-    <div class="bg-black text-white">
+    <div class="bg-black text-white m-8 rounded-lg border-pink-400 border-2">
         <editor-content class="p-4 editor-field" :editor="editor" @click="updateMouseClickPosition($event)" />
     </div>
 

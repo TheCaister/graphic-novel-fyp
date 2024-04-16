@@ -1,6 +1,6 @@
 <template>
-    <div class="bg-white">
-        <SimpleEditor v-model="element.content" />
+    <div >
+        <SimpleEditor  v-model="element.content" />
 
     </div>
 </template>

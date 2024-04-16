@@ -40,13 +40,14 @@ export default {
             position: 'absolute',
             transform: `translate(-50%, -50%) translate(${path[1]}px,${path[2]}px)`,
         }">
+            <button class="text-white" @click="console.log(edge)">Testing</button>
+
             <button class="edgebutton text-white" @click="removeEdges(id)">×</button>
 
             <!-- Provide an area to edit text -->
 
             <div>
                 <textarea :rows="textAreaRows" type="text" v-model="edge.edge.data" class=" bg-white rounded-lg" placeholder="Type here" @mousedown.stop @wheel.stop/>
-                <!-- <button @click="console.log(edge)" class="text-white">Check props</button> -->
 
             </div>
         </div>
