@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <button class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
+        <button v-if="props.dropDownMenuOptions.length > 0" class="absolute top-0 right-0 text-white text-2xl mt-4 mr-4">
                 <span @click.prevent="switchSelectedContent(content.content_id);"
                     class="material-symbols-outlined text-pink-300 drop-shadow-[-2px_2px_0_rgba(0,0,0,1)]">
                     pending
@@ -40,7 +40,7 @@
                     </Transition>
                 </Teleport>
 
-            </button>
+        </button>
     </div>
     </Link>
 </template>
@@ -67,6 +67,8 @@ const props = defineProps({
     },
     dropDownMenuOptions: {
         type: Array,
+        default: [],
+        
     },
     showTag: {
         type: Boolean,
@@ -83,6 +85,7 @@ function switchSelectedContent(contentId) {
 }
 
 function handleMenuItemClicked(event) {
+    isCardMenuOpen.value = false;
     emits('menuItemClick', event);
 }
 

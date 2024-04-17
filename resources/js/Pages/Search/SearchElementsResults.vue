@@ -1,6 +1,6 @@
 <template>
     <div>
-       
+
         <div v-if="resultsList.length > 0" class="flex gap-6 p-8 flex-wrap justify-center">
 
             <div v-for="element in props.resultsList" :key="element.element_id" class="shadow-lg w-96">
@@ -12,7 +12,8 @@
                 }" :link="route('elements.show', element.element_id)"
                     :selected="element.element_id === selectedElement.element_id" :show-description="false"
                     :drop-down-menu-options="dropDownMenuOptions" @menu-item-click="handleMenuItemClicked"
-                    @switch-selected-content="switchSelectedContent" @click="emits('updateMouseClickPosition', $event)"  />
+                    @switch-selected-content="switchSelectedContent"
+                    @click="emits('updateMouseClickPosition', $event)" />
             </div>
         </div>
         <div v-else class="p-8">
@@ -24,6 +25,7 @@
 <script setup>
 import SearchCard from './SearchCard.vue';
 import { ref } from 'vue'
+import { router } from '@inertiajs/vue3'
 
 
 const emits = defineEmits(['updateMouseClickPosition'])
@@ -46,8 +48,9 @@ const selectedElement = ref({
 
 
 const dropDownMenuOptions = [
-    { id: 1, text: "Edit", eventName: "edit", needsAdmin: false },
-    { id: 2, text: "Delete", eventName: "delete", needsAdmin: false },
+    { id: 1, text: "Edit", eventName: "edit" },
+    { id: 2, text: "View Assigned Content", eventName: "viewAssignedContent" },
+    { id: 4, text: "Assign Element", eventName: "assignElement" },
 ]
 
 function getElementTypeText(text) {
@@ -68,14 +71,34 @@ function switchSelectedContent(contentId) {
 }
 
 function handleMenuItemClicked(eventName) {
-    console.log(eventName)
+    console.log('handleMenuItemClicked: ' + eventName)
     // switch
     switch (eventName) {
         case "edit":
+            router.visit(route('elements.show', selectedElement.value.element_id))
             break;
-        case "viewElements":
+        case "viewAssignedContent":
+            router.post(route('search', {
+                'searchType': 'content',
+            }), {
+                'advanced': {
+                    'includedElements': [
+                        {
+                            'label': selectedElement.value.element_name,
+                            'id': selectedElement.value.element_id
+                        }
+                    ]
+                },
+                'limit': 10
+            });
             break;
-        case "delete":
+        case "assignElement":
+            router.post(route('elements.assign.get-parent.post', {
+                type: selectedElement.value.pivot.elementable_type,
+                content_id: selectedElement.value.pivot.elementable_id
+            }), {
+                preSelectedElements: [selectedElement.value]
+            });
             break;
         default:
             break;

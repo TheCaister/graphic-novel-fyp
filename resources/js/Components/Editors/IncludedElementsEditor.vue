@@ -28,10 +28,10 @@ const props = defineProps({
     // modelValue: {
     //     type: Object,
     // },
-    includedElements: {
-        type: Array,
-        default: []
-    }
+    // includedElements: {
+    //     type: Array,
+    //     default: []
+    // }
 })
 
 const elementList = defineModel({
@@ -41,7 +41,10 @@ const elementList = defineModel({
 // const emits = defineEmits(['update:modelValue', 'addElement', 'removeElement'])
 const emits = defineEmits(['addMentionItem', 'removeMentionItem'])
 
-
+watch(() => elementList.value, (value) => {
+    console.log('elementList changed')
+    // console.log(value)
+}, { deep: true })
 
 const editor = ref(null)
 
@@ -228,26 +231,11 @@ onMounted(() => {
             // emits('update:modelValue', JSON.parse(JSON.stringify(editor.value.getJSON())))
         },
     })
-
-    // for loop over props.includedElements and add them to the editor
-    // props.includedElements.forEach((element) => {
-    //     console.log('inserting!!')
-    //     editor.value.commands.insertContentAt(editor.value.state.selection.$to, [
-    //         {
-    //             type: 'mention',
-    //             attrs: {
-    //                 id: {
-    //                     id: element.id,
-    //                     label: element.label
-    //                 }
-    //             }
-    //         },
-    //     ])
-    // })
 })
 
 onUpdated(() => {
 
+    console.log('updating included elements')
     editor.value.commands.setContent('', false)
 
     elementList.value.forEach(element => {

@@ -51,13 +51,17 @@
 <script setup>
 import TriCheckbox from './TriCheckbox.vue';
 import IncludedElementsEditor from '../../Components/Editors/IncludedElementsEditor.vue'
-import { defineEmits, ref } from 'vue';
+import { defineEmits, ref, watch } from 'vue';
 
 const emits = defineEmits(['updateAdvancedSearch'])
 
 const model = defineModel()
 
 const elementList = ref(model?.value?.includedElements || [])
+
+watch(() => model.value.includedElements, (value) => {
+    elementList.value = value
+})
 
 let contentTypes = []
 
