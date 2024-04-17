@@ -142,18 +142,18 @@ function back() {
         <!-- Buttons for saving, going back -->
         <div class="flex mb-8 w-full px-12">
             <div class="flex justify-between w-full">
-                <button @click="back" class="w-32 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                <PrimaryButton @click="back" class="w-32 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                     Back
-                </button>
+                </PrimaryButton>
                 <div class="flex gap-8">
-                    <button @click="saveElement()"
+                    <PrimaryButton @click="saveElement()"
                         class="w-32 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                         Save
-                    </button>
-                    <button @click="saveElement(true)"
+                    </PrimaryButton>
+                    <PrimaryButton @click="saveElement(true)"
                         class="w-32 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                         Assign
-                    </button>
+                    </PrimaryButton>
                 </div>
             </div>
             <!-- <div>

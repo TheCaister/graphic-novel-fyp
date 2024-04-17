@@ -35,6 +35,7 @@ const FilePond = vueFilePond(
 );
 
 const modal = ref(null)
+const filepondPages = ref(null)
 
 const form = useForm({
     series_id: '',
@@ -129,6 +130,13 @@ function handleFilePondPagesReorderFiles(files) {
     // console.log(files.map(file => file.serverId));
 }
 
+function addEmptyPage() {
+    console.log('Adding empty page...')
+    filepondPages.value.addFile('/assets/black_pixel.png')
+    // filepondPages.value.addFile()
+
+}
+
 function deleteTempThumbnail() {
 
     if (form.upload) {
@@ -192,22 +200,22 @@ onMounted(() => {
                         <file-pond stylePanelAspectRatio="1" name="upload" label-idle="Chapter Thumbnail"
                             accepted-file-types="image/jpeg, image/png" @processfile="handleFilePondThumbnailProcess"
                             @removefile="handleFilePondThumbnailRemove" :server="{
-                process: {
-                    url: '/upload?media=chapter_thumbnail',
-                },
-                // revert: {
-                //     url: '/api/chapter/' + form.upload + '/thumbnail',
-                // },
+                                process: {
+                                    url: '/upload?media=chapter_thumbnail',
+                                },
+                                // revert: {
+                                //     url: '/api/chapter/' + form.upload + '/thumbnail',
+                                // },
 
-                revert: {
-                    url: '/api/thumbnail?contentType=Chapter&serverId=' + form.upload + '&isTemp=true',
-                },
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken
-                }
-            }" />
+                                revert: {
+                                    url: '/api/thumbnail?contentType=Chapter&serverId=' + form.upload + '&isTemp=true',
+                                },
+                                headers: {
+                                    'X-CSRF-TOKEN': csrfToken
+                                }
+                            }" />
                     </div>
-                    <div class="flex flex-col justify-between w-1/2 ml-8 overflow-y-auto h-[32rem]">
+                    <div class="flex flex-col justify-between w-1/2 ml-8 overflow-y-auto h-[80vh]">
                         <div>
                             <InputLabel for="chapter_title" value="Chapter title:" />
                             <div class="flex">
@@ -240,26 +248,26 @@ onMounted(() => {
                             </div>
 
                             <div>
-                                <InputLabel for="admins" value="Pages:" />
-                                <file-pond id="test" name="upload" label-idle="Pages" allow-multiple="true"
-                                    allow-reorder="true"
-                                    @processfile="handleFilePondPagesProcess"
-                                    @reorderfiles="handleFilePondPagesReorderFiles"
-                                    accepted-file-types="image/jpeg, image/png"
-                                    
-                                    :server="{
-                url: '/upload?media=pages',
-                revert: (uniqueFileId, load, error) => {
-                    handleFilePondPagesRemoveFile(uniqueFileId)
+                                <PrimaryButton @click.prevent="addEmptyPage" class="my-4">
+                                Add Empty Page
+                            </PrimaryButton>
 
-                    // Should call the load method when done, no parameters required
-                    load();
-                    // error('oh my goodness');
-                },
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken,
-                }
-            }" styleItemPanelAspectRatio="1.414" />
+                                <file-pond id="test" ref="filepondPages" name="upload" label-idle="Pages" allow-multiple="true"
+                                    allow-reorder="true" @processfile="handleFilePondPagesProcess"
+                                    @reorderfiles="handleFilePondPagesReorderFiles"
+                                    accepted-file-types="image/jpeg, image/png" :server="{
+                                        url: '/upload?media=pages',
+                                        revert: (uniqueFileId, load, error) => {
+                                            handleFilePondPagesRemoveFile(uniqueFileId)
+
+                                            // Should call the load method when done, no parameters required
+                                            load();
+                                            // error('oh my goodness');
+                                        },
+                                        headers: {
+                                            'X-CSRF-TOKEN': csrfToken,
+                                        }
+                                    }" styleItemPanelAspectRatio="1.414" />
                             </div>
                         </div>
                         <div class="flex justify-end">

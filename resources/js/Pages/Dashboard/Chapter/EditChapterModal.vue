@@ -237,7 +237,7 @@ function handleFilePondPagesReorderFiles(files) {
     console.log(form.pages);
 }
 
-function addEmptyPage(){
+function addEmptyPage() {
     console.log('Adding empty page...')
     filepondPages.value.addFile('/assets/black_pixel.png')
     // filepondPages.value.addFile()
@@ -271,9 +271,10 @@ onMounted(() => {
 
                         <Label>Chapter Thumbnail</Label>
 
-                        <file-pond stylePanelAspectRatio="1" id="thumbnailpond" name="upload" label-idle="Chapter Thumbnail" accepted-file-types="image/jpeg, image/png"
-                            :files="files" @processfile="handleFilePondThumbnailProcess"
-                            @removefile="handleFilePondThumbnailRemove" :server="{
+                        <file-pond stylePanelAspectRatio="1" id="thumbnailpond" name="upload"
+                            label-idle="Chapter Thumbnail" accepted-file-types="image/jpeg, image/png" :files="files"
+                            @processfile="handleFilePondThumbnailProcess" @removefile="handleFilePondThumbnailRemove"
+                            :server="{
                                 process: {
                                     url: '/upload?media=chapter_thumbnail',
                                 },
@@ -293,11 +294,11 @@ onMounted(() => {
                                 }
                             }" />
                     </div>
-                    <div class="flex flex-col justify-between w-1/2 ml-8 overflow-y-auto h-[32rem]">
-                        <div class="flex flex-col gap-4">
-                         
+                    <div class="flex flex-col justify-between w-1/2 ml-8 overflow-y-auto h-[80vh]">
+                        <div class="flex flex-col gap-4 ">
+
                             <InputLabel for="chapter_title" value="Chapter title:" />
-                            <div class="flex">
+                            <div class="flex w-full">
 
                                 <div>
                                     <InputLabel for="chapter_number" value="Chapter number:" class="hidden" />
@@ -306,7 +307,7 @@ onMounted(() => {
                                         v-model="form.chapter_number" required autofocus />
                                     <InputError class="mt-2" message="" />
                                 </div>
-                                <div>
+                                <div class="w-full">
 
                                     <TextInput id="chapter_title" type="text" class="mt-1 block w-full"
                                         v-model="form.chapter_title" required autofocus />
@@ -318,7 +319,8 @@ onMounted(() => {
                             <div>
                                 <InputLabel for="chapter_notes" value="Description:" />
 
-                                    <TextAreaInput id="chapter_notes" class="mt-1 block w-full" v-model="form.chapter_notes"  autocomplete="chapter_notes"></TextAreaInput>
+                                <TextAreaInput id="chapter_notes" class="mt-1 block w-full" v-model="form.chapter_notes"
+                                    autocomplete="chapter_notes"></TextAreaInput>
                                 <InputError class="mt-2" message="" />
                             </div>
 
@@ -327,14 +329,13 @@ onMounted(() => {
                             </div>
 
                             <div>
-                                
-                          <PrimaryButton @click.prevent="addEmptyPage">
-                                Add Empty Page
-                            </PrimaryButton>
-                                <file-pond ref="filepondPages" id="pagepond" name="upload" label-idle="Pages" allow-multiple="true"
-                                    allow-reorder="true" :files="form.pages"
-                                    image-preview-markup-show="false"
-                                    @processfile="handleFilePondPagesProcess"
+
+                                <PrimaryButton @click.prevent="addEmptyPage" class="my-4">
+                                    Add Empty Page
+                                </PrimaryButton>
+                                <file-pond ref="filepondPages" id="pagepond" name="upload" label-idle="Pages"
+                                    allow-multiple="true" allow-reorder="true" :files="form.pages"
+                                    image-preview-markup-show="false" @processfile="handleFilePondPagesProcess"
                                     @reorderfiles="handleFilePondPagesReorderFiles"
                                     accepted-file-types="image/jpeg, image/png" :server="{
                                         process: {
@@ -380,7 +381,7 @@ onMounted(() => {
 
 <!-- <style> -->
 
-<style >
+<style>
 #pagepond .filepond--item {
     width: calc(33% - 0.5em);
 }
