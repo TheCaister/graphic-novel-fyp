@@ -2,12 +2,15 @@
 
     
 
-    <div class=" mt-8 overflow-auto">
+    <div v-if="elements.length > 0" class=" mt-8 overflow-auto">
         <TransitionGroup name="list" tag="ul" class="flex flex-col gap-4">
             <div v-for="element in elements" :key="element.element_id">
                 <TriCheckbox :label="element.element_name" :image="element.element_thumbnail" v-model:checked="element.checked" v-model:alreadyAttached="element.alreadyAttached"/>
             </div>
         </TransitionGroup>
+    </div>
+    <div v-else>
+        No elements.
     </div>
 </template>
 
