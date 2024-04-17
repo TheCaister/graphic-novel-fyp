@@ -132,8 +132,7 @@ function handleFilePondPagesReorderFiles(files) {
 
 function addEmptyPage() {
     console.log('Adding empty page...')
-    filepondPages.value.addFile('/assets/black_pixel.png')
-    // filepondPages.value.addFile()
+    filepondPages.value.addFile('/assets/black_pixel.png', {index: filepondPages.value.getFiles().length})    // filepondPages.value.addFile()
 
 }
 

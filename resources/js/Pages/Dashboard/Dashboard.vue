@@ -237,9 +237,7 @@ function updateSize(event) {
 
         </TabsWrapper>
 
-        <RecentsList class="w-1/5">
-
-        </RecentsList>
+        <RecentsList class="w-1/5"/>
 
 
     </div>
