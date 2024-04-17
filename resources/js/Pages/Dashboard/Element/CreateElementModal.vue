@@ -47,12 +47,12 @@ const submit = (elementType) => {
         form.contentType = props.parentContentType;
         form.contentId = props.parentContentId;
     }
-    else{
+    else {
         form.contentType = getParentContentType();
         form.contentId = parentContentId;
     }
 
-    
+
     form.post(route('elements.store'), {
         onFinish: () => {
             form.reset();
@@ -79,23 +79,51 @@ function getParentContentType() {
 
 <template>
     <div>
-        <div ref="modal" class="text-lg bg-black shadow-lg rounded-lg p-8 w-4/5">
+        <div ref="modal" class="text-lg bg-black shadow-lg rounded-lg p-8 w-4/5 h-5/6">
 
-            <div class="flex flex-col gap-10">
+            <div class="flex flex-col gap-10 h-full">
                 <h2 class="text-4xl font-bold text-white ">Select type of element to create:</h2>
 
-                <button @click="submit('SimpleText')"
-                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                    Simple Text
-                </button>
-                <button @click="submit('MindMap')"
-                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                    Mind Map
-                </button>
-                <button @click="submit('PanelPlanner')"
-                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                    Panel Planner
-                </button>
+                <div class="py-4 flex flex-wrap overflow-y-scroll gap-8 h-full  justify-center">
+                    <button @click="submit('SimpleText')"
+                        class="text-white font-bold py-2 px-4 rounded hover:scale-105  hover:shadow-[-7px_7px_0px_0px_rgba(255,255,255,0.8)] transition-all duration-200 relative
+                        "
+                        style="width: 33vw;">
+                        <img src="/assets/simpletext.jpg" alt="Simple Text"
+                            class="absolute inset-0 w-full h-full object-cover  opacity-40 rounded-lg">
+                        <span class="absolute inset-0 flex items-center justify-center w-full h-full  text-4xl font-thin">Simple Text</span>
+                    </button>
+                    <button @click="submit('MindMap')"
+                        class="text-white font-bold py-2 px-4 rounded hover:scale-105 
+                        hover:shadow-[-7px_7px_0px_0px_rgba(255,255,255,0.8)] transition-all duration-200 relative"
+                        style="width: 33vw;">
+                        <img src="/assets/mindmap.jpg" alt="Mind Map"
+                            class="absolute inset-0 w-full h-full object-cover  
+                           opacity-40 rounded-lg">
+                        <span class="absolute inset-0 flex items-center justify-center w-full h-full text-4xl font-thin">Mind Map</span>
+                    </button>
+
+                    <button @click="submit('PanelPlanner')"
+                        class="text-white font-bold py-2 px-4 rounded hover:scale-105 
+                        hover:shadow-[-7px_7px_0px_0px_rgba(255,255,255,0.8)] 
+                        transition-all duration-200 relative"
+                        style="width: 33vw;">
+                        <img src="/assets/panelplanner.jpg" alt="Panel Planner"
+                            class="absolute inset-0 w-full h-full object-cover  opacity-40 rounded-lg">
+                        <span class="absolute inset-0 flex items-center justify-center w-full h-full text-4xl font-thin">Panel Planner</span>
+                    </button>
+                    <!-- <button @click="submit('MindMap')"
+                        class="text-white font-bold py-2 px-4 rounded hover:scale-105 transition-all duration-200" style="width: 33vw;
+                        background-image: url('/assets/simpletext.jpg');"
+                        >
+                        Mind Map
+                    </button>
+                    <button @click="submit('PanelPlanner')"
+                        class="text-white font-bold py-2 px-4 rounded hover:scale-105 transition-all duration-200" style="width: 33vw;
+                        background-image: url('/assets/simpletext.jpg');">
+                        Panel Planner
+                    </button> -->
+                </div>
             </div>
 
         </div>
