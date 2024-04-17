@@ -201,16 +201,12 @@ class SearchController extends Controller
 
             $universes = $element->universes;
 
-            // dd($universeList);
-
 
             // in resultsList, filter out elements that are not in the same universe as the reference element
             
             $resultsList = $resultsList->filter(function ($resultElement) use ($universes) {
                 return $resultElement->universes->pluck('universe_id')->intersect($universes->pluck('universe_id'))->isNotEmpty();
             });
-
-            // dd($resultsList);
         }
 
 

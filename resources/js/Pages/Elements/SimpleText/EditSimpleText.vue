@@ -1,6 +1,6 @@
 <template>
     <div >
-        <SimpleEditor  v-model="element.content" />
+        <SimpleEditor  v-model="element.content" :reference-element-id="element.element_id" />
 
     </div>
 </template>

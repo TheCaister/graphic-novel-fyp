@@ -410,6 +410,12 @@ class ElementController extends Controller
             'hidden' => false,
         ]);
 
+        // add element_id to the element_name
+        $element->element_name = $element->element_name . ' ' . $element->element_id;
+
+        // save the element
+        $element->save();
+
 
         switch (request()->elementType) {
             case 'SimpleText':

@@ -103,6 +103,10 @@ const props = defineProps({
     modelValue: {
         type: Object,
     },
+    referenceElementId: {
+        type: Number,
+        default: null,
+    }
 })
 
 const emits = defineEmits(['update:modelValue'])
@@ -134,7 +138,8 @@ const CustomMention = Mention.extend({
                         limit: 5,
                         searchType: 'elements',
                         contentType: contentType,
-                        contentId: contentId
+                        contentId: contentId,
+                        referenceElementId: props.referenceElementId,
                     })
 
                     const mentionList = mentionItems.data.map(item => ({
