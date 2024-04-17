@@ -139,6 +139,7 @@ class ElementController extends Controller
      */
     public function update(Element $element)
     {
+        // dd(request()->all());
         $newElement = request()->element;
         $upload = request()->upload;
         $assign = request()->assign;
