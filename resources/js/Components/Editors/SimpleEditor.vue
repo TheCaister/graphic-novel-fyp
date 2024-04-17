@@ -142,6 +142,11 @@ const CustomMention = Mention.extend({
                         referenceElementId: props.referenceElementId,
                     })
 
+                    // convert mentionItems.data to array
+                    if(!Array.isArray(mentionItems.data)) {
+                        mentionItems.data = Object.values(mentionItems.data)
+                    }
+
                     const mentionList = mentionItems.data.map(item => ({
                         label: item.element_name,
                         id: item.element_id

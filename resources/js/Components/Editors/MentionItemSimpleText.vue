@@ -24,14 +24,14 @@ import { router } from '@inertiajs/vue3';
 const isGridMenuOpen = ref(false)
 
 function setElementName(element_id) {
-    APICalls.getElement(element_id).then(response => {
-        props.updateAttributes({
-            id: {
-                label: response.data.element_name,
-                id: response.data.element_id,
-            }
-        })
-    }).catch(error => console.log(error))
+    // APICalls.getElement(element_id).then(response => {
+    //     props.updateAttributes({
+    //         id: {
+    //             label: response.data.element_name,
+    //             id: response.data.element_id,
+    //         }
+    //     })
+    // }).catch(error => console.log(error))
 }
 
 const mouseClickX = ref(0)
