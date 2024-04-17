@@ -118,7 +118,8 @@
 
     <Teleport to="body">
         <Transition name="modal" class="z-50">
-            <search-element-modal v-if="isSearchElementModalOpen" @closeElementSearchModal="onCloseElementSearchModal"
+            <search-element-modal v-if="isSearchElementModalOpen"
+            :reference-element-id="element.element_id" @closeElementSearchModal="onCloseElementSearchModal"
                 class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60" />
         </Transition>
     </Teleport>

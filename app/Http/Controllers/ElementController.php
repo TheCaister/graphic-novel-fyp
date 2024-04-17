@@ -400,7 +400,7 @@ class ElementController extends Controller
 
     private function createElement()
     {
-        dd(request()->all());
+        // dd(request()->all());
         $content = $this->getElementable(request()->contentType, request()->contentId);
 
         $elementType = null;

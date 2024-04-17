@@ -1,14 +1,6 @@
 <template>
     <!-- Loop through the universes and display them in cards -->
     <div v-if="universeLoaded" class="w-full flex flex-wrap justify-center">
-        <!-- <PrimaryButton @click="console.log($page.props.auth.user.id)">
-            Test
-        </PrimaryButton>
-
-        <PrimaryButton @click="console.log(universes)">
-            Universes
-        </PrimaryButton> -->
-
         <div v-for="universe in universes" :key="universe.universe_id" class=" w-96 mx-2 mb-4 ">
             <ContentCard :content="{
                 content_id: universe.universe_id,

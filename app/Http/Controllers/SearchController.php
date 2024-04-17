@@ -195,6 +195,25 @@ class SearchController extends Controller
             $resultsList = $content->elements()->filter(request(['search']))->get();
         }
 
+        if (request()->has('referenceElementId')) {
+            // get the element using request()->referenceElementId
+            $element = Element::find(request()->referenceElementId);
+
+            $universes = $element->universes;
+
+            // dd($universeList);
+
+
+            // in resultsList, filter out elements that are not in the same universe as the reference element
+            
+            $resultsList = $resultsList->filter(function ($resultElement) use ($universes) {
+                return $resultElement->universes->pluck('universe_id')->intersect($universes->pluck('universe_id'))->isNotEmpty();
+            });
+
+            // dd($resultsList);
+        }
+
+
 
         // Depending on whether to include parent and child elements, concat the results with the parent and child elements
         // The most straightforward approach would be to get a list of all the elements, create another list of parent elements and child elements, then concat the results

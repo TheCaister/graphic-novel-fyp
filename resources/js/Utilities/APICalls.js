@@ -90,10 +90,11 @@ export default {
     getUniverseThumbnail(universeId) {
         return axios.get('/api/universes/' + universeId + '/thumbnail')
     },
-    searchElements(query, limit, searchType = 'elements') {
+    searchElements(query, limit, referenceElementId = null) {
         return axios.get('/api/search', {
             params: {
-                searchType: searchType,
+                searchType: 'elements',
+                referenceElementId: referenceElementId,
                 // userId: userId,
                 search: query,
                 limit: limit,

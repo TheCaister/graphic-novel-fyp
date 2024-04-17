@@ -1,6 +1,9 @@
 <template>
     <div>
         <div ref="modal" class="text-lg bg-gray-800 shadow-lg rounded-lg py-8 px-16 w-4/5">
+            <!-- <button @click="console.log(props.referenceElementId)">
+                test
+            </button> -->
             <!-- Search bar with X button -->
             <div class="flex gap-4">
                 <!-- <input type="text" v-model="searchQuery" placeholder="Search for elements" /> -->
@@ -55,7 +58,12 @@ const searchQuery = ref('')
 const elementResults = ref([])
 const timer = ref(null)
 
-
+const props = defineProps({
+    referenceElementId: {
+        type: Number,
+        default: null
+    }
+})
 
 onClickOutside(modal, () => {
     close()
@@ -72,7 +80,7 @@ watch(searchQuery, () => {
         // console.log('Making API call...')
 
         // Call the API
-        APICalls.searchElements(searchQuery.value, 8)
+        APICalls.searchElements(searchQuery.value, 8, props.referenceElementId)
             .then(response => {
                 // console.log(response.data)
                 elementResults.value = response.data
