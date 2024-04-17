@@ -1,6 +1,6 @@
 <template>
     <node-view-wrapper class="inline-block text-white">
-        <div class="p-2 rounded-lg bg-green-500">
+        <div class="p-2 rounded-lg bg-green-500 mx-2">
             {{ node.attrs.id.label }}
             <button class=" inline-block text-white" @click="removeElement">X</button>
         </div>

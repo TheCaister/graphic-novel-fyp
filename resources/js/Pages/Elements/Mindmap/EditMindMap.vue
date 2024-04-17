@@ -23,8 +23,11 @@ import TextNode from './TextNode.vue'
 import SearchElementModal from '../SearchElementModal.vue'
 import DashboardDropdownMenu from '@/Pages/Dashboard/DashboardDropdownMenu.vue'
 import { watch, onMounted } from 'vue'
+import { router } from '@inertiajs/vue3';
 
 const showAddElementButton = ref(false)
+const showNodeMenu = ref(false)
+const selectedNode = ref(null)
 const isSearchElementModalOpen = ref(false)
 const clickedMouseX = ref(0)
 const clickedMouseY = ref(0)
@@ -60,6 +63,10 @@ const dropDownMenuOptions = [
     { id: 2, text: "Add Text", eventName: "addText" },
 ]
 
+const dropDownMenuOptionsNode = [
+    { id: 1, text: "Visit Node", eventName: "visitNode" },
+]
+
 // https://vueflow.dev/typedocs/interfaces/Actions.html#addedges
 // Actions that can be listened to
 const { onConnect, addEdges, removeNodes, addNodes, onPaneClick, } = useVueFlow()
@@ -70,19 +77,36 @@ const { onConnect, addEdges, removeNodes, addNodes, onPaneClick, } = useVueFlow(
 // sourceHandle: Position.Bottom, // or Top, Left, Right,
 
 onPaneClick((params) => {
-    console.log('pane clicked')
     clickedMouseX.value = params.clientX
     clickedMouseY.value = params.clientY
     paneX.value = params.offsetX
     paneY.value = params.offsetY
 
+    showNodeMenu.value = false
+
     if (showAddElementButton.value == false) {
         showAddElementButton.value = true
+
     }
     else {
         showAddElementButton.value = false
     }
 })
+
+function onNodeClick(event) {
+    showAddElementButton.value = false
+
+    clickedMouseX.value = event.event.clientX
+    clickedMouseY.value = event.event.clientY
+
+    selectedNode.value = event.node
+    if (showNodeMenu.value == false) {
+        showNodeMenu.value = true
+    }
+    else {
+        showNodeMenu.value = false
+    }
+}
 
 onConnect((params) => {
     // console.log(params)
@@ -121,6 +145,13 @@ function handleMenuItemClicked(eventName) {
         case 'addText':
             insertTextNode()
             break
+        case 'visitNode':
+            let element = selectedNode.value.data
+            // console.log(selectedNode.value.data)
+            router.visit(route('elements.edit', element.element_id))
+            break
+        default:
+            break
     }
 
     showAddElementButton.value = false
@@ -145,12 +176,6 @@ function onCloseElementSearchModal(event) {
 }
 
 onMounted(() => {
-    // console.log(element.value.content)
-
-    // if (element.value.content === null || element.value.content === undefined) {
-    //     element.value.content = []
-    // }
-
     if (element.value.content !== null && element.value.content !== undefined) {
         nodesEdges.value = JSON.parse(JSON.stringify(element.value.content))
     }
@@ -178,7 +203,7 @@ onMounted(() => {
                 </Transition>
             </Teleport>
             <VueFlow v-model="nodesEdges" fit-view-on-init class=" vue-flow-basic-example" :default-zoom="1.5"
-                :min-zoom="0.2" :max-zoom="4" auto-connect >
+                :min-zoom="0.2" :max-zoom="4" auto-connect>
                 <Background pattern-color="#aaa" :gap="8" />
                 <MiniMap />
                 <Controls />
@@ -187,7 +212,7 @@ onMounted(() => {
                     <CustomNode v-bind="nodeProps" />
                 </template>
                 <template #node-element="nodeProps">
-                    <ElementNode v-bind="nodeProps" />
+                    <ElementNode v-bind="nodeProps" @test="console.log('element clicked'); onNodeClick($event)" />
                 </template>
                 <template #node-text="nodeProps">
                     <TextNode v-bind="nodeProps" />
@@ -210,8 +235,13 @@ onMounted(() => {
                 <Transition name="fade">
                     <DashboardDropdownMenu v-if="showAddElementButton" class="absolute z-40"
                         :style="{ position: 'fixed', top: clickedMouseY + 'px', left: clickedMouseX + 'px' }"
-                        :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked"
-                        @closeMenu="isCardMenuOpen = false" />
+                        :events="dropDownMenuOptions" @menuItemClick="handleMenuItemClicked" @closeMenu="" />
+                </Transition>
+
+                <Transition name="fade">
+                    <DashboardDropdownMenu v-if="showNodeMenu" class="absolute z-40"
+                        :style="{ position: 'fixed', top: clickedMouseY + 'px', left: clickedMouseX + 'px' }"
+                        :events="dropDownMenuOptionsNode" @menuItemClick="handleMenuItemClicked" @closeMenu="" />
                 </Transition>
             </VueFlow>
         </div>

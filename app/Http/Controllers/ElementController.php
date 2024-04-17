@@ -400,12 +400,13 @@ class ElementController extends Controller
 
     private function createElement()
     {
+        dd(request()->all());
         $content = $this->getElementable(request()->contentType, request()->contentId);
 
         $elementType = null;
 
         $element = Element::create([
-            'element_name' => 'New Element',
+            'element_name' => ucwords(str_replace(['SimpleText', 'MindMap', 'PanelPlanner'], ['Simple Text', 'Mindmap', 'Panel Planner'], request()->elementType)),
             'hidden' => false,
         ]);
 
