@@ -2,7 +2,55 @@
 
 # About Comic Forger
 
-Welcome to Comic Forger, the web application designed to assist comic and manga authors in planning their stories! Set up the project easily using Docker containers, which include Laravel Sail, MySQL, and phpMyAdmin to interface with MySQL databases.
+Welcome to Comic Forger, the web application designed to assist comic and manga authors in planning their stories! Set up the project easily using Docker containers, which include Laravel Sail, MySQL, and phpMyAdmin to interface with the MySQL database.
+
+# Features of Comic Forger
+Comic Forger offers a range of tools and features designed to assist comic and manga authors in planning and executing their stories. Below is a detailed list of the key functionalities that is available within the app.
+
+## Content Upload
+Allows authors to create and upload their comic series, chapters, and pages, organising content for easy management and access.
+
+![Content Dashboard View](/public/assets/content%20dashboard.png)
+
+![Chapter Edit](/public/assets/content%20edit.png)
+
+## Element Creation
+On top of content creation, Comic Forger provides authors with tools to create a diverse range of story elements that form the building blocks of their narratives.
+
+![Create Element](/public/assets/element%20create.png)
+
+### Simple Text
+A text document feature where authors can jot down detailed notes about characters, special items, locations, and other critical story elements.
+
+![Simple Text](/public/assets/simpletext.png)
+
+### Mind Map
+A panel that allows authors to visually map out relationships between characters, sequence of events, and other interconnected story aspects.
+
+![Mind Map](/public/assets/mindmap.png)
+
+### Panel Planner
+A tool that helps authors draft comic panels efficiently. It allows for descriptions of panels and the addition of pre-created elements to panels, ensuring clarity throughout the story.
+
+![Panel Planner](/public/assets/panel%20planner.png)
+
+## Element Assignment
+After creating your content and elements, you can attach them directly to each other to enhance your storytelling. This creates a unique referencing system that allows for precise organisation and tracking of story elements throughout your comic/manga.
+
+![Element Assign](/public/assets/element%20assign.png)
+
+![Search](/public/assets/search.png)
+
+# Online Prototype
+You can try out a live version of Comic Forger to see how it works in a real-world scenario by visiting the hosted prototype. Please note the following disclaimers before you proceed.
+
+Visit the prototype at: http://167.71.131.102
+
+## Disclaimers:
+
+- Security: The prototype is served over HTTP, which is not secure. Please avoid using any sensitive or personal information when filling in forms such as registering a new account.
+- Optimisation: This application is optimised for desktop use. It may not function or display properly on mobile devices.
+- Potential Issues: You may encounter errors when uploading or processing images, typically due to CSRF validation failures. If this happens, refreshing the page will usually resolve the issue.
 
 ## Pre-requisites
 - WSL 2
