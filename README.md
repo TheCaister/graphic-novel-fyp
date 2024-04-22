@@ -91,8 +91,8 @@ Follow these steps to set up the project on Windows using WSL:
 
    ![Docker Desktop Settings](https://i.ibb.co/ckJpCtf/Docker-Desktop-hi-Dg-Tax0-WD.png)
    ![Additional Docker Desktop Settings](https://i.ibb.co/9GmZT73/Docker-Desktop-k-BB1ud-Hh-W6.png)
-
-5. Install Composer dependencies:
+5. Set up your environment variables in `.env`. You can use `.env.example` to help you with this.
+6. Install Composer dependencies:
    ```bash
    docker run --rm \
        -u "$(id -u):$(id -g)" \
@@ -101,19 +101,19 @@ Follow these steps to set up the project on Windows using WSL:
        laravelsail/php82-composer:latest \
        composer install --ignore-platform-reqs
    ```
-6. Start the Sail application:
+7. Start the Sail application:
    ```bash
    ./vendor/bin/sail up
    ```
-7. Migrate the database:
+8. Migrate the database:
    ```bash
    ./vendor/bin/sail artisan migrate
    ```
-8. Optionally, seed the database with initial data:
+9. Optionally, seed the database with initial data:
    ```bash
    ./vendor/bin/sail artisan migrate:fresh --seed
    ```
-9. Install NPM modules and run the development build:
+10. Install NPM modules and run the development build:
    ```bash
    ./vendor/bin/sail npm install
    ./vendor/bin/sail npm run dev
